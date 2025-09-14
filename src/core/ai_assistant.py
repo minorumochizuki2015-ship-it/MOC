@@ -22,7 +22,7 @@ class AIAssistant:
         self.file_manager = file_manager
         self.code_executor = code_executor
         self.code_patterns = self._load_code_patterns()
-        self.completion_cache = {}
+        self.completion_cache: Dict[str, Any] = {}
 
     def _load_code_patterns(self) -> Dict[str, List[str]]:
         """コードパターンのテンプレートを読み込み"""
@@ -262,7 +262,7 @@ class AIAssistant:
             return {"success": False, "error": str(e), "code": code, "debug_info": ""}
 
     def _build_generation_prompt(
-        self, description: str, language: str, context: str, style: str
+        self, description: str, language: str, context: Optional[str], style: str
     ) -> str:
         """コード生成用のプロンプトを構築"""
         context_info = f"\n\nコンテキスト:\n{context}" if context else ""
@@ -285,7 +285,7 @@ class AIAssistant:
 """
 
     def _build_completion_prompt(
-        self, partial_code: str, language: str, context: Dict[str, Any]
+        self, partial_code: str, language: str, context: Optional[Dict[str, Any]]
     ) -> str:
         """コード補完用のプロンプトを構築"""
         context_info = ""
@@ -388,7 +388,7 @@ class AIAssistant:
 
     def _extract_classes(self, code: str, language: str) -> List[Dict[str, Any]]:
         """クラスを抽出"""
-        classes = []
+        classes: List[Dict[str, Any]] = []
 
         if language == "python":
             pattern = r"class\s+(\w+)"
@@ -406,7 +406,7 @@ class AIAssistant:
 
     def _extract_imports(self, code: str, language: str) -> List[Dict[str, Any]]:
         """インポート文を抽出"""
-        imports = []
+        imports: List[str] = []
 
         if language == "python":
             patterns = [r"import\s+(\w+)", r"from\s+(\w+)\s+import\s+([^#\n]+)"]

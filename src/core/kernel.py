@@ -56,8 +56,10 @@ def _dedup_clip(text: str, max_lines: int = 30) -> str:
     return "\n".join(out)
 
 
-def _max_tokens_for(task: str, fallback: int) -> int:
+def _max_tokens_for(task: Optional[str], fallback: int) -> int:
     """タスク別max_tokens取得"""
+    if task is None:
+        return fallback
     return _TOK_BY_TASK.get(task, fallback)
 
 
@@ -172,7 +174,7 @@ def _env_code_tasks() -> set[str]:
 
 
 # パフォーマンス最適化用キャッシュ
-_response_cache = {}
+_response_cache: Dict[str, Any] = {}
 _cache_lock = threading.Lock()  # 3分に延長
 
 # keep-alive + 再試行セッション
@@ -191,7 +193,7 @@ class Kernel:
         self._initialized = False
 
         # 性能最適化のためのキャッシュとメトリクス
-        self._response_cache = {}
+        self._response_cache: Dict[str, Any] = {}
         self._cache_lock = threading.Lock()
         self._performance_metrics = {
             "total_requests": 0,
@@ -224,6 +226,9 @@ class Kernel:
                 if i == retries:
                     raise
                 time.sleep(0.6 * (i + 1))  # 指数バックオフ
+
+        # この行は到達しないが、mypyのため
+        raise RuntimeError("Unexpected end of retry loop")
 
     def _ensure_initialized(self):
         """サーバー接続を確認し、必要に応じて初期化"""

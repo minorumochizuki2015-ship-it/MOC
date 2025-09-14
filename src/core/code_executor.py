@@ -19,8 +19,8 @@ class CodeExecutor:
 
     def __init__(self, workspace_root: str = None):
         self.workspace_root = Path(workspace_root) if workspace_root else Path.cwd()
-        self.execution_history = []
-        self.active_processes = {}
+        self.execution_history: List[Dict[str, Any]] = []
+        self.active_processes: Dict[str, Dict[str, Any]] = {}
 
     def execute_code(
         self,
@@ -391,7 +391,7 @@ class CodeExecutor:
                 return False
         return False
 
-    def get_active_processes(self) -> Dict[str, Any]:
+    def get_active_processes(self) -> Dict[str, Dict[str, Any]]:
         """実行中のプロセス一覧を取得"""
         active = {}
         for exec_id, process in self.active_processes.items():

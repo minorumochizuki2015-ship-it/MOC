@@ -26,7 +26,7 @@ class Kernel:
         self._initialized = False
 
         # 性能最適化のためのキャッシュとメトリクス
-        self._response_cache = {}
+        self._response_cache: Dict[str, Any] = {}
         self._cache_lock = threading.Lock()
         self._performance_metrics = {
             "total_requests": 0,
@@ -59,6 +59,9 @@ class Kernel:
                 if i == retries:
                     raise
                 time.sleep(0.6 * (i + 1))  # 指数バックオフ
+
+        # この行は到達しないが、mypyのため
+        raise RuntimeError("Unexpected end of retry loop")
 
     def _ensure_initialized(self):
         """サーバー接続を確認し、必要に応じて初期化"""
