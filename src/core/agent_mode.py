@@ -252,6 +252,8 @@ JSON形式で回答してください。
         operation = step.get("operation", "read")
         file_path = step.get("file_path", "")
 
+        result: Any = {}
+
         if operation == "read":
             result = self.file_manager.read_file(file_path)
         elif operation == "list":
@@ -261,7 +263,10 @@ JSON形式で回答してください。
             query = step.get("query", "")
             result = self.file_manager.search_in_files(query)
         else:
-            result = {"success": False, "error": f"Unknown operation: {operation}"}
+            result = {
+                "success": False,
+                "error": f"Unknown operation: {operation}",
+            }
 
         return {
             "step_id": step.get("id"),
