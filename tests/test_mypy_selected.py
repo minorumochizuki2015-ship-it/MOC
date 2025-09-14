@@ -1,6 +1,7 @@
 from pathlib import Path
-from mypy import api
+
 import pytest
+from mypy import api
 
 ROOT = Path(__file__).resolve().parents[1]
 FILES = [
@@ -11,6 +12,7 @@ FILES = [
     ROOT / "src/ui/modern_interface.py",
 ]
 ARGS = ["--config-file", str(ROOT / "pyproject.toml"), "--python-version=3.10"]
+
 
 @pytest.mark.parametrize("path", FILES)
 def test_mypy_file_passes(path: Path) -> None:

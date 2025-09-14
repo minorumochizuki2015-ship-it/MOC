@@ -406,7 +406,7 @@ class AIAssistant:
 
     def _extract_imports(self, code: str, language: str) -> List[Dict[str, Any]]:
         """インポート文を抽出"""
-        imports: List[str] = []
+        imports: List[Dict[str, Any]] = []
 
         if language == "python":
             patterns = [r"import\s+(\w+)", r"from\s+(\w+)\s+import\s+([^#\n]+)"]

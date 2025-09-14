@@ -108,7 +108,7 @@ class CursorAISystem:
 
         except Exception as e:
             execution_time = time.time() - start_time
-            performance_monitor.record_request(execution_time, False, success=False)
+            performance_monitor.record_request(execution_time, False)
 
             return {
                 "success": False,
@@ -380,7 +380,9 @@ class CursorAISystem:
             "workspace_root": str(self.workspace_root),
             "agent_running": self.agent_mode.is_agent_running(),
             "performance_metrics": performance_monitor.get_performance_summary(),
-            "active_tasks": len(self.agent_mode.get_tasks_by_status(TaskStatus.IN_PROGRESS)),
+            "active_tasks": len(
+                self.agent_mode.get_tasks_by_status(TaskStatus.IN_PROGRESS)
+            ),
         }
 
     def get_workspace_info(self) -> Dict[str, Any]:
@@ -422,8 +424,13 @@ class CursorAISystem:
         """エージェントタスクを実行"""
         try:
             # 優先度を変換
-            priority_map = {"low": TaskPriority.LOW, "medium": TaskPriority.NORMAL, "high": TaskPriority.HIGH, "critical": TaskPriority.CRITICAL}
-            priority_value = priority_map.get(priority.lower(), TaskPriority.NORMAL)
+            priority_map = {
+                "low": TaskPriority.LOW,
+                "medium": TaskPriority.MEDIUM,
+                "high": TaskPriority.HIGH,
+                "critical": TaskPriority.CRITICAL,
+            }
+            priority_value = priority_map.get(priority.lower(), TaskPriority.MEDIUM)
 
             # タスクを作成
             task_id = self.agent_mode.create_task(

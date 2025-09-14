@@ -11,6 +11,7 @@ import tempfile
 import threading
 import time
 from pathlib import Path
+from subprocess import Popen
 from typing import Any, Dict, List, Optional, Union
 
 
@@ -20,7 +21,7 @@ class CodeExecutor:
     def __init__(self, workspace_root: str = None):
         self.workspace_root = Path(workspace_root) if workspace_root else Path.cwd()
         self.execution_history: List[Dict[str, Any]] = []
-        self.active_processes: Dict[str, Dict[str, Any]] = {}
+        self.active_processes: Dict[int, Popen[str]] = {}
 
     def execute_code(
         self,
@@ -222,7 +223,8 @@ class CodeExecutor:
 
             # プロセスを記録
             if execution_id:
-                self.active_processes[execution_id] = process
+                pid = int(execution_id)
+                self.active_processes[pid] = process
 
             # 入力を送信
             if input_data:
@@ -271,8 +273,10 @@ class CodeExecutor:
 
         finally:
             # プロセスを記録から削除
-            if execution_id and execution_id in self.active_processes:
-                del self.active_processes[execution_id]
+            if execution_id:
+                pid = int(execution_id)
+                if pid in self.active_processes:
+                    del self.active_processes[pid]
 
     def execute_file(
         self, file_path: Union[str, Path], args: List[str] = None, timeout: int = 30
@@ -382,24 +386,16 @@ class CodeExecutor:
 
     def stop_execution(self, execution_id: str) -> bool:
         """実行中のプロセスを停止"""
-        if execution_id in self.active_processes:
-            try:
-                self.active_processes[execution_id].terminate()
-                del self.active_processes[execution_id]
+        try:
+            pid = int(execution_id)
+            if pid in self.active_processes:
+                self.active_processes[pid].terminate()
+                del self.active_processes[pid]
                 return True
-            except Exception:
-                return False
+        except (ValueError, KeyError):
+            pass
         return False
 
-    def get_active_processes(self) -> Dict[str, Dict[str, Any]]:
+    def get_active_processes(self) -> Dict[int, Popen[str]]:
         """実行中のプロセス一覧を取得"""
-        active = {}
-        for exec_id, process in self.active_processes.items():
-            try:
-                active[exec_id] = {
-                    "pid": process.pid,
-                    "status": "running" if process.poll() is None else "finished",
-                }
-            except Exception:
-                active[exec_id] = {"status": "unknown"}
-        return active
+        return self.active_processes.copy()

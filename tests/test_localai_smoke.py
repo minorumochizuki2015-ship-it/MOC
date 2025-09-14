@@ -1,8 +1,10 @@
 import os
+
 import pytest
 import requests
 
 BASE = os.getenv("OPENAI_COMPAT_BASE", "http://127.0.0.1:8080/v1")
+
 
 @pytest.mark.timeout(5)
 def test_models_endpoint():
@@ -13,7 +15,10 @@ def test_models_endpoint():
     if r.status_code != 200:
         pytest.skip(f"server unhealthy: {r.status_code}")
     data = r.json()
-    assert isinstance(data, dict) and "data" in data and data["data"], "no models listed"
+    assert (
+        isinstance(data, dict) and "data" in data and data["data"]
+    ), "no models listed"
+
 
 @pytest.mark.timeout(10)
 def test_chat_completion_minimal():
