@@ -1,0 +1,36 @@
+﻿{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "mypy",
+      "problemMatcher": {
+        "pattern": [
+          {
+            "column": 3,
+            "line": 2,
+            "message": 5,
+            "file": 1,
+            "regexp": "^(.*\\.py):(\\d+):(?:(\\d+):)?\\s*(error|note|warning):\\s*(.*)$",
+            "severity": 4
+          }
+        ],
+        "owner": "python"
+      },
+      "group": {
+        "isDefault": true,
+        "kind": "build"
+      },
+      "type": "shell",
+      "command": "C:\\Users\\User\\GoverningCore_v5_Slice\\.venv\\Scripts\\python.exe -m mypy . --show-column-numbers --hide-error-context --no-color-output --no-error-summary"
+    },
+    {
+      "label": "pytest -q",
+      "group": {
+        "isDefault": true,
+        "kind": "test"
+      },
+      "type": "shell",
+      "command": "C:\\Users\\User\\GoverningCore_v5_Slice\\.venv\\Scripts\\python.exe -m pytest -q"
+    }
+  ]
+}

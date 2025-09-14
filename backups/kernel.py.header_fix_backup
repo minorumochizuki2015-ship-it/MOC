@@ -1,0 +1,176 @@
+できます。
+下の「置き換え版 `kernel.py`」をそのまま保存すれば、以前の“便利 API”をだいたい復旧します（後方互換）。
+
+### 置き換え版 `kernel.py`
+
+```python
+# -*- coding: utf-8 -*-
+"""
+kernel.py — OpenAI互換APIラッパ + 後方互換ユーティリティ
+- generate(prompt) / chat(messages) / complete(text) を提供
+- healthcheck() / _model_id() / set_provider() / set_limits()
+- ガバナンスは存在すれば呼び出し、無ければ安全に無効化
+"""
+
+from __future__ import annotations
+import os, json, time, urllib.request, urllib.error
+from typing import List, Dict, Any, Iterable, Optional, Tuple
+
+# ========= 設定 =========
+OPENAI_BASE = os.environ.get("OPENAI_COMPAT_BASE") or os.environ.get("OPENAI_BASE") or "http://127.0.0.1:8080/v1"
+API_KEY     = os.environ.get("OPENAI_API_KEY"    ) or os.environ.get("API_KEY"    ) or "sk-local"
+TIMEOUT_S   = int(os.environ.get("TIMEOUT_S"     ) or 60)
+MAX_TOKENS  = int(os.environ.get("MAX_TOKENS"    ) or 256)
+SYSMSG      = os.environ.get("SYSTEM_PROMPT"     ) or None
+
+# ========= 任意: Governance(監査) の有無に応じて薄く統合 =========
+try:
+    from governance import Governance  # 以前のプロジェクト構成を想定
+    _GOV: Optional[Governance] = Governance()
+except Exception:
+    _GOV = None  # 無ければ完全に無視
+
+# ========= 内部ユーティリティ =========
+_model_cache: Optional[str] = None
+
+def _http(url: str, data: Optional[dict] = None, timeout: int = TIMEOUT_S) -> dict:
+    hdr = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    req = urllib.request.Request(url, data=(None if data is None else json.dumps(data).encode("utf-8")), headers=hdr)
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return json.loads(r.read().decode("utf-8"))
+
+def _http_retry(url: str, data: Optional[dict] = None, timeout: int = TIMEOUT_S, retries: int = 2) -> dict:
+    for i in range(retries + 1):
+        try:
+            return _http(url, data, timeout)
+        except Exception:
+            if i >= retries:
+                raise
+            time.sleep(0.6 * (i + 1))
+
+def _messages_from_prompt(prompt: str, system: Optional[str]) -> List[Dict[str, str]]:
+    msgs = []
+    if system:
+        msgs.append({"role": "system", "content": system})
+    msgs.append({"role": "user", "content": prompt})
+    return msgs
+
+# ========= 公開API =========
+def set_provider(base: str, key: Optional[str] = None) -> None:
+    """動的に接続先を切替"""
+    global OPENAI_BASE, API_KEY
+    OPENAI_BASE = base or OPENAI_BASE
+    if key:
+        API_KEY = key
+
+def set_limits(timeout_s: Optional[int] = None, max_tokens: Optional[int] = None) -> None:
+    """動的に制限を調整"""
+    global TIMEOUT_S, MAX_TOKENS
+    if timeout_s:
+        TIMEOUT_S = int(timeout_s)
+    if max_tokens:
+        MAX_TOKENS = int(max_tokens)
+
+def healthcheck() -> bool:
+    try:
+        data = _http_retry(f"{OPENAI_BASE}/models", timeout=10)
+        return bool(data.get("data"))
+    except Exception:
+        return False
+
+def _model_id() -> str:
+    global _model_cache
+    if _model_cache:
+        return _model_cache
+    data = _http_retry(f"{OPENAI_BASE}/models")
+    mid = (data.get("data") or [{}])[0].get("id") or ""
+    _model_cache = mid
+    return mid
+
+def chat(messages: List[Dict[str, str]],
+         max_tokens: Optional[int] = None,
+         stream: bool = False,
+         timeout: Optional[int] = None) -> str:
+    """
+    OpenAI互換 /chat/completions を薄くラップ（同期テキスト返し）。
+    messages: [{"role":"user","content":"..."}, ...]
+    """
+    body = {
+        "model": _model_id(),
+        "messages": messages,
+        "max_tokens": int(max_tokens or MAX_TOKENS),
+        "stream": False  # UIは同期想定。必要なら True を許容するがここでは固定。
+    }
+    res = _http_retry(f"{OPENAI_BASE}/chat/completions", body, timeout=(timeout or TIMEOUT_S))
+    ch  = (res.get("choices") or [{}])[0]
+    msg = ch.get("message") or {}
+    text = (msg.get("content") or ch.get("text") or "").strip()
+    return text
+
+def generate(prompt: str,
+             system: Optional[str] = SYSMSG,
+             max_tokens: Optional[int] = None) -> str:
+    """
+    既存互換: 単一プロンプトからの生成。
+    - 可能ならガバナンス監査を通し、失敗時は素通し。
+    """
+    # 監査（存在する場合のみ）
+    if _GOV:
+        try:
+            ok, _ = _GOV.audit_input(prompt)
+            if not ok:
+                # 監査NGでも落とさず短いメッセージ
+                return "入力がポリシーに適合しませんでした。"
+        except Exception:
+            pass
+
+    text = chat(_messages_from_prompt(prompt, system), max_tokens=max_tokens)
+
+    if _GOV:
+        try:
+            _GOV.audit_output(text)  # 監査に失敗しても出力は返す
+        except Exception:
+            pass
+
+    return text
+
+# 旧名の互換
+def complete(text: str, **kw) -> str:  # alias
+    return generate(text, **kw)
+
+def run(x: str, **kw) -> str:          # alias
+    return generate(x, **kw)
+
+__all__ = [
+    "generate", "chat", "complete", "run",
+    "healthcheck", "_model_id", "set_provider", "set_limits",
+    "OPENAI_BASE", "API_KEY", "TIMEOUT_S", "MAX_TOKENS"
+]
+```
+
+### 使い方（確認）
+
+```powershell
+# 1) サーバ稼働確認
+(Invoke-RestMethod "http://127.0.0.1:8080/v1/models" -TimeoutSec 5).data.Count
+
+# 2) カーネル単体テスト
+$env:OPENAI_COMPAT_BASE='http://127.0.0.1:8080/v1'
+$env:OPENAI_API_KEY='sk-local'
+python -c "import kernel; print(kernel.healthcheck(), kernel._model_id()); print(kernel.generate('5文字で挨拶'))"
+```
+
+### これで復旧する主な点
+
+* `generate/complete/run/chat` 後方互換API
+* 環境変数/動的切替（`set_provider`, `set_limits`）
+* タイムアウトと再試行、非依存（ガバナンスが無くても動く）
+* 監査モジュールがあれば自動で薄く連携（無ければ無視）
+
+不足分（さらに足すなら）
+
+* ストリーミングUI対応（必要なら `stream=True` 版を追加）
+* メトリクス/ログ出力
+* テーマ抽出など“進化”系ロジック
+
+まずはこの版を上書き保存→GUIで実行してみてください。動作したら、必要な拡張を順に足していきます。

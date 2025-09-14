@@ -1,0 +1,9 @@
+---
+description: Always use local .venv. All commands and code assume .\.venv\Scripts\python.exe
+globs: ["**/*.py","**/*.ps1","scripts/**"]
+alwaysApply: true
+---
+実行系は常に .\.venv\Scripts\python.exe を使用。pip も python -m pip で実行。
+例: .\.venv\Scripts\python.exe -m pip install -U ...
+例: & .\.venv\Scripts\python.exe main_modern.py
+グローバル python/pip を使わない。コマンド例は必ず .venv を明示。

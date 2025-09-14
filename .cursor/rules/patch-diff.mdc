@@ -1,0 +1,7 @@
+---
+description: Enforce minimal unified diff. No whole-file rewrites.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+出力は unified diff の最小差分のみ。全置換禁止。既存のエンコ/改行/空白を維持。無関係行の変更禁止。

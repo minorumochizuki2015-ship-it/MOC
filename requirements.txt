@@ -1,0 +1,13 @@
+# Core clients
+openai>=1.40.0
+requests>=2.31.0
+
+# Google AI provider
+google-generativeai>=0.7.2
+
+# Optional (使っていれば)
+numpy>=1.26.4
+qutip>=5.0.3
+fastapi>=0.110.0
+uvicorn>=0.27.0
+# httpx は未使用なら不要（残しても害なし）

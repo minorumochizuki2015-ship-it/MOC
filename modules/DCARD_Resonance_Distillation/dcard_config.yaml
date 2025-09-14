@@ -1,0 +1,16 @@
+dcard:
+  mode: resonance
+  phase_check: true
+  logging: verbose
+  entropy_threshold: 0.07
+  output:
+    save_dir: ./output
+    format: json
+    include_timestamp: true
+
+input_path: C:/Users/User/PhoenixCodex/GoverningCore_v5_Slice/DCARD_Resonance_Distillation/input_data.txt
+
+output_path: ./output_result.txt
+filters:
+  - "keyword1"
+  - "重要"

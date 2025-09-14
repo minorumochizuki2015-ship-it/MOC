@@ -1,0 +1,129 @@
+{
+  "base": "http://127.0.0.1:8080/v1",
+  "model": "C:\\models\\qwen2-7b-instruct-q4_k_m.gguf",
+  "max_tokens": 600,
+  "stream": false,
+  "rounds": 5,
+  "conc": 1,
+  "summary": {
+    "n": 10,
+    "ok": 8,
+    "err": 2,
+    "avg_tps": 9.491959119163116,
+    "p50": 9.679038034172457,
+    "p95": 10.09171398900869,
+    "trim_len": 0
+  },
+  "results": [
+    [
+      "short",
+      {
+        "ok": true,
+        "err": "",
+        "sec": 18.388331999987713,
+        "tps": 9.29937527776387,
+        "finish": "stop",
+        "tok": 171
+      }
+    ],
+    [
+      "short",
+      {
+        "ok": true,
+        "err": "",
+        "sec": 17.742651099993964,
+        "tps": 9.750515806516583,
+        "finish": "stop",
+        "tok": 173
+      }
+    ],
+    [
+      "short",
+      {
+        "ok": true,
+        "err": "",
+        "sec": 17.770361000002595,
+        "tps": 9.679038034172457,
+        "finish": "stop",
+        "tok": 172
+      }
+    ],
+    [
+      "short",
+      {
+        "ok": true,
+        "err": "",
+        "sec": 16.917147600004682,
+        "tps": 9.930752155874877,
+        "finish": "stop",
+        "tok": 168
+      }
+    ],
+    [
+      "short",
+      {
+        "ok": true,
+        "err": "",
+        "sec": 16.250956000003498,
+        "tps": 10.09171398900869,
+        "finish": "stop",
+        "tok": 164
+      }
+    ],
+    [
+      "long",
+      {
+        "ok": true,
+        "err": "",
+        "sec": 65.55762269999832,
+        "tps": 9.13700002120448,
+        "finish": "stop",
+        "tok": 599
+      }
+    ],
+    [
+      "long",
+      {
+        "ok": true,
+        "err": "",
+        "sec": 65.05513039999641,
+        "tps": 9.222946696299806,
+        "finish": "length",
+        "tok": 600
+      }
+    ],
+    [
+      "long",
+      {
+        "ok": true,
+        "err": "",
+        "sec": 67.99382319999859,
+        "tps": 8.824330972464164,
+        "finish": "length",
+        "tok": 600
+      }
+    ],
+    [
+      "long",
+      {
+        "ok": false,
+        "err": "('Connection aborted.', ConnectionResetError(10054, '既存の接続はリモート ホストに強制的に切断されました。', None, 10054, None))",
+        "sec": 0,
+        "tps": 0,
+        "finish": "error",
+        "tok": 0
+      }
+    ],
+    [
+      "long",
+      {
+        "ok": false,
+        "err": "HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: /v1/chat/completions (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x000001EC389584D0>: Failed to establish a new connection: [WinError 10061] 対象のコンピューターによって拒否されたため、接続できませんでした。'))",
+        "sec": 0,
+        "tps": 0,
+        "finish": "error",
+        "tok": 0
+      }
+    ]
+  ]
+}

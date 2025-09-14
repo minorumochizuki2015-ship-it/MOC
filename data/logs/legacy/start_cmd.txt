@@ -1,0 +1,1 @@
+RUN: C:\Users\User\AppData\Local\Programs\Python\Python310\python.exe -m llama_cpp.server --model C:\models\qwen2-7b-instruct-q4_k_m.gguf --host 127.0.0.1 --port 8080 --chat_format qwen

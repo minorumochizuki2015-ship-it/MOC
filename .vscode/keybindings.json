@@ -1,0 +1,12 @@
+﻿[
+  {
+    "key": "ctrl+alt+l",
+    "args": "QA: all checks",
+    "command": "workbench.action.tasks.runTask"
+  },
+  {
+    "key": "ctrl+alt+m",
+    "args": "QA: all checks",
+    "command": "workbench.action.tasks.runTask"
+  }
+]
