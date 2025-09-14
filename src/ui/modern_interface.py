@@ -84,7 +84,10 @@ def local_rag_snippets(text: str, fn_name: str, k=3, max_lines=30):
     pat = r"(^def\s+\w+\(.*?\):\n(?:[ \t]+.*\n)+)"
     for m in re.finditer(pat, text, flags=re.M | re.S):
         blk = m.group(1)
-        name = re.match(r"^def\s+(\w+)", blk).group(1)
+        match = re.match(r"^def\s+(\w+)", blk)
+        if match is None:
+            continue
+        name = match.group(1)
         if fn_name in blk or name == fn_name:
             blocks.append(blk)
     return ["\n".join(b.splitlines()[:max_lines]) for b in blocks[:k]]

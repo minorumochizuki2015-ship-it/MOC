@@ -57,8 +57,8 @@ class AgentMode:
         self.code_executor = code_executor
         self.ai_assistant = ai_assistant
 
-        self.tasks = {}
-        self.execution_history = []
+        self.tasks: Dict[str, Any] = {}
+        self.execution_history: List[Dict[str, Any]] = []
         self.current_plan = None
         self.is_running = False
 

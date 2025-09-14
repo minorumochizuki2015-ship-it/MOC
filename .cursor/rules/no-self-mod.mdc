@@ -1,0 +1,8 @@
+---
+description: Do not edit rules or checkpoint tool unless explicitly asked.
+globs:
+  - ".cursor/**"
+  - "tools/checkpoint.ps1"
+alwaysApply: true
+---
+これらは**明示依頼が無い限り変更禁止**。必要時は PLAN のみ提示。

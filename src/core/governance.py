@@ -9,7 +9,14 @@ from __future__ import annotations
 import json
 import os
 import re
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
+
+
+# ===== ヘルパー関数 =====
+def _to_float(x: Optional[float | int | str]) -> float:
+    """Noneを安全にfloatに変換"""
+    return float(x) if x is not None else 0.0
+
 
 # ===== 閾値 =====
 GOVERNANCE_THRESHOLDS: Dict[str, float] = {
@@ -149,13 +156,15 @@ class Governance:
 
         # 3) 量子メトリクス（与えられている場合のみ評価）
         rs = qm.get("resonance_score")
-        if _is_number(rs) and float(rs) < float(self.thresholds["RESONANCE_SCORE_MIN"]):
+        if _is_number(rs) and _to_float(rs) < _to_float(
+            self.thresholds["RESONANCE_SCORE_MIN"]
+        ):
             reasons.append(
                 f"Resonance score below threshold ({rs} < {self.thresholds['RESONANCE_SCORE_MIN']})"
             )
 
         ee = qm.get("entanglement_entropy")
-        if _is_number(ee) and float(ee) > float(
+        if _is_number(ee) and _to_float(ee) > _to_float(
             self.thresholds["ENTANGLEMENT_ENTROPY_MAX"]
         ):
             reasons.append(
@@ -163,7 +172,7 @@ class Governance:
             )
 
         cc = qm.get("coherence_confidence")
-        if _is_number(cc) and float(cc) < float(
+        if _is_number(cc) and _to_float(cc) < _to_float(
             self.thresholds["COHERENCE_CONFIDENCE_MIN"]
         ):
             reasons.append(
@@ -171,7 +180,7 @@ class Governance:
             )
 
         hr = qm.get("hallucination_risk")
-        if _is_number(hr) and float(hr) > float(
+        if _is_number(hr) and _to_float(hr) > _to_float(
             self.thresholds["HALLUCINATION_RISK_MAX"]
         ):
             reasons.append(

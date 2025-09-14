@@ -7,7 +7,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-from src.core.agent_mode import AgentMode
+from src.core.agent_mode import AgentMode, TaskPriority, TaskStatus
 from src.core.ai_assistant import AIAssistant
 from src.core.code_executor import CodeExecutor
 from src.core.file_manager import FileManager
@@ -108,7 +108,7 @@ class CursorAISystem:
 
         except Exception as e:
             execution_time = time.time() - start_time
-            performance_monitor.record_request(execution_time, False, error=True)
+            performance_monitor.record_request(execution_time, False, success=False)
 
             return {
                 "success": False,
@@ -379,8 +379,8 @@ class CursorAISystem:
             "session_id": self.session_id,
             "workspace_root": str(self.workspace_root),
             "agent_running": self.agent_mode.is_agent_running(),
-            "performance_metrics": performance_monitor.get_performance_metrics(),
-            "active_tasks": len(self.agent_mode.get_tasks_by_status("in_progress")),
+            "performance_metrics": performance_monitor.get_performance_summary(),
+            "active_tasks": len(self.agent_mode.get_tasks_by_status(TaskStatus.IN_PROGRESS)),
         }
 
     def get_workspace_info(self) -> Dict[str, Any]:
@@ -422,8 +422,8 @@ class CursorAISystem:
         """エージェントタスクを実行"""
         try:
             # 優先度を変換
-            priority_map = {"low": 1, "medium": 2, "high": 3, "critical": 4}
-            priority_value = priority_map.get(priority.lower(), 2)
+            priority_map = {"low": TaskPriority.LOW, "medium": TaskPriority.NORMAL, "high": TaskPriority.HIGH, "critical": TaskPriority.CRITICAL}
+            priority_value = priority_map.get(priority.lower(), TaskPriority.NORMAL)
 
             # タスクを作成
             task_id = self.agent_mode.create_task(

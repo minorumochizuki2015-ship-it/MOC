@@ -54,7 +54,7 @@ class PerformanceMonitor:
 
     def __init__(self, max_history: int = 1000):
         self.max_history = max_history
-        self._metrics_history = deque(maxlen=max_history)
+        self._metrics_history: deque[Dict[str, Any]] = deque(maxlen=max_history)
         self._lock = threading.Lock()
         self._start_time = time.time()
 

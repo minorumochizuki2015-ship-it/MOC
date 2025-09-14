@@ -6,7 +6,7 @@ import sys
 import threading
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
@@ -112,6 +112,9 @@ class Memory:
             self._create_genesis_block()
             last_block = self.get_last_block()
 
+        if last_block is None:
+            raise RuntimeError("Failed to create or retrieve last block")
+
         new_block_data = {
             "log_type": "INTERACTION",
             "prompt": prompt,
@@ -139,7 +142,7 @@ class Memory:
         # 新たなlog_idはブロックのハッシュ値そのものである
         return new_block["hash"]
 
-    def add_feedback_to_last_log(self, score: int) -> (bool, str):
+    def add_feedback_to_last_log(self, score: int) -> Tuple[bool, str]:
         """
         最後の対話ブロックに評価を追記する。
         注意: この操作はブロックを書き換えるため、後続ブロックのハッシュ検証を無効化する。
@@ -169,7 +172,7 @@ class Memory:
                     # 本来は後続もすべて再ハッシュが必要だが、ここでは簡略化
 
                 with open(self.log_file, "w", encoding="utf-8") as f:
-                    f.writelines(json.dump(chain, f, ensure_ascii=False, indent=4))
+                    json.dump(chain, f, ensure_ascii=False, indent=4)
                 return (
                     True,
                     f"評価を保存しました。Block {block['index']} が更新されました。",

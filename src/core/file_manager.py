@@ -15,8 +15,8 @@ class FileManager:
 
     def __init__(self, workspace_root: str = None):
         self.workspace_root = Path(workspace_root) if workspace_root else Path.cwd()
-        self.file_cache = {}
-        self.file_metadata = {}
+        self.file_cache: Dict[str, Dict[str, Any]] = {}
+        self.file_metadata: Dict[str, Dict[str, Any]] = {}
         self.supported_extensions = {
             ".py",
             ".js",
@@ -163,7 +163,7 @@ class FileManager:
 
     def _analyze_code(self, content: str, extension: str) -> Dict[str, Any]:
         """コードの構造を解析"""
-        analysis = {
+        analysis: Dict[str, Any] = {
             "functions": [],
             "classes": [],
             "imports": [],
@@ -187,7 +187,7 @@ class FileManager:
         """Pythonコードの解析"""
         import re
 
-        analysis = {
+        analysis: Dict[str, Any] = {
             "functions": [],
             "classes": [],
             "imports": [],
@@ -234,7 +234,7 @@ class FileManager:
         """JavaScript/TypeScriptコードの解析"""
         import re
 
-        analysis = {
+        analysis: Dict[str, Any] = {
             "functions": [],
             "classes": [],
             "imports": [],
@@ -287,7 +287,7 @@ class FileManager:
 
     def _analyze_json_code(self, content: str) -> Dict[str, Any]:
         """JSONファイルの解析"""
-        analysis = {
+        analysis: Dict[str, Any] = {
             "functions": [],
             "classes": [],
             "imports": [],
