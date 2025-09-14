@@ -1,0 +1,8 @@
+---
+description: mypy strict for src/**. backups/** is excluded.
+globs: ["src/**/*.py"]
+alwaysApply: true
+---
+型: mypy strict 前提。関数は型注釈必須、from __future__ import annotations 可。
+Optional/Noneの扱いを明示し、Anyの新規導入禁止。TypedDict/Protocol/dataclass を適切に使用。
+backups/** は型対象外（触れない/警告を出さない）。

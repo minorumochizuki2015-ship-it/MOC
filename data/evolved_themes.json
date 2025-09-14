@@ -1,0 +1,578 @@
+{
+    "themes": {
+        "理論": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 3,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "人間": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 3,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "能力": {
+            "count": 4,
+            "note_count": 0,
+            "pass_count": 4,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "データ": {
+            "count": 2,
+            "note_count": 0,
+            "pass_count": 2,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "学習": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 3,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "進化": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "今後": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "回答": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "統治核": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "システム": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "可能": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "機能": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "監視": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "理解": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "情報": {
+            "count": 2,
+            "note_count": 0,
+            "pass_count": 2,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "テクニック": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "方法": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "エラー": {
+            "count": 6,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "プロバイダー": {
+            "count": 5,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "発生": {
+            "count": 6,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "openai_compat": {
+            "count": 5,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "致命的": {
+            "count": 5,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "Empty": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "PhaseBreak": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "Triggered": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "理由": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "response": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "phoenix": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "チック": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "モデル": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "言語": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "テスト": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 3,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "具体的": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "性能": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "前回": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "質問": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 3,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "phoenixcodex": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "System": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "主権者": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "報告": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "自己": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "Assistant": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "アレニス": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "古代": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "大陸": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "物語": {
+            "count": 2,
+            "note_count": 1,
+            "pass_count": 2,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "作品": {
+            "count": 2,
+            "note_count": 1,
+            "pass_count": 2,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "迷路": {
+            "count": 2,
+            "note_count": 1,
+            "pass_count": 2,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "魔法": {
+            "count": 2,
+            "note_count": 1,
+            "pass_count": 2,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "清二": {
+            "count": 2,
+            "note_count": 1,
+            "pass_count": 2,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "一日": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 3,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "サポート": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "スタート": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 3,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "手伝": {
+            "count": 4,
+            "note_count": 0,
+            "pass_count": 4,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "提供": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "コンテキスト": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "必要": {
+            "count": 3,
+            "note_count": 0,
+            "pass_count": 3,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "場合": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "皮膚": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "鼻水": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "相談": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "llama_cpp": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "GPU": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "バージョン": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "モジュール": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "確認": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "コード": {
+            "count": 2,
+            "note_count": 0,
+            "pass_count": 2,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "エラーメッセージ": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "原因": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "ファイル": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "tempScriptFile": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "ショートカット": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "スクリプト": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "デスクトップ": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 0,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "使用": {
+            "count": 2,
+            "note_count": 0,
+            "pass_count": 2,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "irm": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "not": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "models": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "Invoke-WebRequest": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "コマンド": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "リクエスト": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "適切": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        }
+    }
+}

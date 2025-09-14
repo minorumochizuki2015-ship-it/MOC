@@ -1,0 +1,171 @@
+### **åé¡ã®ç¹å®**
+
+ãã®ã³ã¼ãã¯ãPowerShellã¹ã¯ãªããã¨Windows Formsã¢ããªã±ã¼ã·ã§ã³ã®çµã¿åãããä½¿ç¨ãã¦ãã¾ããããããä»¥ä¸ã®é¨åã«ããã¤ãã®åé¡ãããã¾ãï¼
+
+1. `__script:alive` ã¨ããå¤æ°ãå­å¨ããªãã®ã§ã`__script:alive` = $true ã®è¡ã§ã¨ã©ã¼ãå¼ãèµ·ããã¾ãã
+2. `.add_`é¢é£ã®ã³ã¼ãã¯Windows Formsã¢ããªã±ã¼ã·ã§ã³ã§ä½¿ç¨ãããã¹ãã§ããããã®ã¹ã¯ãªããã§ã¯é©åãªç°å¢ã«ãªããããä¸åãçºçããå¯è½æ§ãããã¾ãã
+3. `__ui_timer`ã®ã¤ã³ã¹ã¿ã³ã¹åã¨ã¹ã¿ã¼ãå¦çãWindows Formsã®ã³ã¼ãããã¦ãã¾ãã
+
+### **ãããã°ã³ã¼ã**
+
+ä»¥ä¸ã¯ãåé¨åãå¥ã®ã³ãã³ãã«åå²ãããããããåå¥ã«ç¢ºèªããããã«ä½¿ç¨ã§ãããããã°ã³ã¼ãã§ãï¼
+
+```powershell
+$rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+function __log([string]$m) {
+  Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
+}
+
+$__t0 = [DateTime]::UtcNow
+$__alive = $false
+
+try {
+  $__tm = [System.Threading.Timer]::new({ $__script:alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+
+  # === UI KeepAlive Guard (auto-injected) ===
+}
+catch {}
+
+# Windows Forms ã®ã³ã¼ãããããã¾ã
+try {
+  if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+    $__ui_start = [DateTime]::UtcNow
+    $__ui_alive = $false
+
+    try {
+      $__ui_timer = New-Object System.Windows.Forms.Timer
+      $__ui_timer.Interval = 250
+
+      # === UI KeepAlive Timer (auto-injected) ===
+      $__ui_timer.add_Tick({
+        if (([DateTime]::UtcNow - $__ui_start).TotalMilliseconds -ge 3000) {
+          $__ui_alive = $true
+          $__ui_timer.Stop(); $__ui_timer.Dispose()
+        }
+      })
+
+      $__ui_timer.Start()
+
+    }
+    catch {}
+  }
+}
+catch {}
+
+# PowerShellã®ã³ã¼ãããããã¾ã
+param([switch]$Smoke)
+```
+
+### **ä¿®æ­£ç**
+
+ãããã®åé¡ãè§£æ±ºããããã«ãWindows Formsã¨PowerShellã³ã¼ããåé¢ããããããã«é¨åã ããå«ãã¾ããä»¥ä¸ã¯ä¿®æ­£å¾ã®ã³ã¼ãã§ãï¼
+
+```powershell
+
+$rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -ご指定のコードを修正し、デバッグした結果を提供します。以下に、各ステップの詳しい説明と修正後コードを記載します。
+
+### 1. 問題の特定
+コード内の主要な問題は以下です：
+- `__script:alive` フラグの利用とデバッグ：これは `__script` というスコープ内のプロパティを直接使用していますが、正確な挙動が保証されません。`__script` フォルダが存在する場合でも、`__script:alive` プロパティが適切に利用できるわけではありません。代わりに、スクリプトスコープ内のフラグを利用する方法を改善します。
+- `System.Threading.Timer` の使用と Windows Forms の関連性：このコードは Windows Forms の部分で `System.Threading.Timer` を使用していますが、これは一般的には Windows Forms ではなく、Windows プログラムに用いられるスレッド関連の機能です。修正版では、Windows Forms のタイマーを使用するように修正します。
+
+### 2. デバッグコード
+デバッグコードは以下のように提供します：
+
+#### 修正版のコードと説明
+
+```powershell
+# Power shell part
+$rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+function __log([string]$m) {
+  Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
+}
+
+# Windows Forms part
+try {
+  if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+    $__ui_start = [DateTime]::UtcNow
+    $__ui_alive = $false
+
+    try {
+      $__ui_timer = New-Object System.Windows.Forms.Timer
+      $__ui_timer.Interval = 250
+
+      # Add Tick event handler
+      $__ui_timer.Add_Tick({
+        if (([DateTime]::UtcNow - $__ui_start).TotalMilliseconds -ge 3000) {
+          $__ui_alive = $true
+          $__ui_timer.Stop(); $__ui_timer.Dispose()
+        }
+      })
+
+      # Start timer
+      $__ui_timer.Start()
+
+      # Add event handlers to Windows Forms
+      .add_Load({ __log "Form.Load" })
+      .add_Shown({ __log "Form.Shown" })
+      .add_FormClosing({ param($s,$e) 
+        $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+        __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
+        if### **修正版のコードと説明**
+
+修正版のコードは以下のようになります：
+
+```powershell
+# Requires version 7.0
+param([switch]$Smoke)
+try {
+    $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+    function __log([string]$m){
+        Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
+    }
+
+    $__t0 = [DateTime]::UtcNow
+    $__alive = $false
+
+    # Create System.Threading.Timer for system level tasks
+    $__tm = [System.Threading.Timer]::new({ $__script:alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+
+    # Windows Forms code
+    try {
+        if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+            $__ui_start = [DateTime]::UtcNow
+            $__ui_alive = $false
+
+            # Create System.Windows.Forms.Timer for UI related tasks
+            $__ui_timer = New-Object System.Windows.Forms.Timer
+            $__ui_timer.Interval = 250
+
+            # Add Tick event handler for UI KeepAlive
+            $__ui_timer.add_Tick({
+                if (([DateTime]::UtcNow - $__ui_start).TotalMilliseconds -ge 3000) {
+                    $__ui_alive = $true
+                    $__ui_timer.Stop(); $__ui_timer.Dispose()
+                }
+            })
+
+            # Start the timer
+            $__ui_timer.Start()
+
+            # Add event handlers to Windows Forms
+            .add_Load({ __log "Form.Load" })
+            .add_Shown({ __log "Form.Shown" })
+            .add_FormClosing({ param($s,$e)
+                $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+                __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
+                if(-not $__alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive)" }
+            })
+            .add_FormClosed({ __log "FormClosed" })
+            [System.Windows.Forms.Application]::add_ApplicationExit({ __log "ApplicationExit" })
+            [System.Windows.Forms.Application]::add_ThreadExit({ __log "ThreadExit" })
+        }
+    } catch {}
+    # === UI KeepAlive Guard (auto-injected) ===
+    try {
+        # UI KeepAlive Guard for the main thread
+        if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+            $__ui_start = [DateTime]::UtcNow
+            $__ui_alive = $false
+
+            # Create UI Timer for UI

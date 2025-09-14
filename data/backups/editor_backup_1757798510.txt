@@ -1,0 +1,83 @@
+1. **問題の特定**:
+   - 以下の行は間違っています: `__script:alive = $true`。これはスクリプトオブジェクトにプロパティを設定するように指定されていますが、実際には `__tm`（Timer オブジェクト）にプロパティを設定しようとしています。
+   - `.add_` 関数の使用は適切ではありません。これは Windows Forms コードで定義された方法であり、スクリプトコード内では直接呼び出することはできません。
+
+2. **デバッグコード**:
+   以下のようなデバッグコードを使用して問題を特定します:
+
+   ```bash
+   Try {
+     $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+     Function __Log([String]$m) { Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
+
+     $__t0 = [DateTime]::UtcNow
+     $__alive = $false
+
+     # 正しいTimerオブジェクトを使用する
+     $__tm = New-Object System.Threading.Timer({ $__alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+
+     # イベントトレースのコードは問題点に影響しないので、スキップします。
+
+     # UI KeepAlive Guard のコードも同様にスキップします。
+   }
+   Catch {}
+   ```
+
+3. **修正版**:
+   以下のように修正した完全なコードが作成されます:
+
+   ```bash
+   $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+   Function __Log([String]$m) { Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
+
+   $__t0 = [DateTime]::UtcNow
+   $__alive = $false
+
+   # 正しいTimerオブジェクトを使用する
+   $__tm = New-Object System.Threading.Timer({ $__alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+   ```
+
+4. **説明**:
+   - `__script:alive = $true` を修正するため、タイマーオブジェクト（ここでは `$__tm`）に直接プロパティを設定しました。
+   - `.add_`関数の使用はスクリプトコードが適切ではありませんので、その部分の修正は行いません。代わりに問題のある部分を削除し、直接 Windows Forms の機能を使用して保持したい状態を実現するために、コード全体をスクリプトから完全な Windows Forms アプリケーションの開発フレームワークとして捉えることが必要です。
+
+上記の「修正版」が、この問題に対する最も適切で基本的な解決策になります。ただし、その上で、このスクリプトはWindows Forms コードと互換性を持つように設計されたものではなく、デバッグコードや例外処理を含む部分は通常 Windows Forms アプリケーションの内部のシナリオを操作するためのものではありません。
+
+したがって、以下のように修正を行うことは非効率的であり、スクリプト全体をWindows Forms アプリケーションのコンテクスト内で適切に動作するように再設計することが推奨されます。この場合、関連する部分は以下の通りになります：
+
+```bash
+#requires -Version 7.0
+param([switch]$Smoke)
+
+try {
+    $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+    function __Log([string]$m){
+        Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
+    }
+
+    # 3秒後にフラグを立てる（UIループに依存しない System.Threading.Timer）
+    $timer = New-Object System.Threading.Timer({
+        __Log "Timer activated"
+    }, $null, 3000, [System.Threading.Timeout]::Infinite)
+
+    # イベントトレースのコードも同様にスクリプトから外します。
+}
+catch {}
+
+# === UI KeepAlive Guard (auto-injected) ===
+try {
+    if (-not ([System.Windows.Forms.Application]::MessageLoop)) { 
+        $timer = New-Object System.Windows.Forms.Timer()
+        $timer.Interval = 250
+
+        # イベントトレースのコードもスクリプトから外します。
+    }
+}
+catch {}
+
+param([switch]$Smoke)
+```
+
+この修正では、タイマーとイベント追跡の関連部分を削除し、Windows Forms アプリケーションに直接適応したコードしか提供していません。具体的な機能は省略されていますので、必要な機能を再設計する必要があります。
+
+なお、元のスクリプトが実行したい機能が何であるかによりますが、それによって「修正」が必要となる部分や方法が異なるため、詳細な要件と目的を提供していただければより具体的なアドバイスができるかもしれません。

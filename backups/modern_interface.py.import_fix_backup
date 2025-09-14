@@ -1,0 +1,596 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+統治核AI - モダンUIインターフェース
+最新の視覚的UIを使用
+"""
+
+import json
+import threading
+import tkinter as tk
+import webbrowser
+from pathlib import Path
+from tkinter import filedialog, messagebox, scrolledtext, ttk
+from typing import Any, Dict, Optional
+
+import customtkinter as ctk
+
+from src.core.cursor_ai_system import CursorAISystem
+
+
+class ModernCursorAIInterface:
+    """モダンなCursor AIインターフェース"""
+
+    def __init__(self, parent=None):
+        # CustomTkinterの設定
+        ctk.set_appearance_mode("dark")  # ダークモード
+        ctk.set_default_color_theme("blue")  # ブルーテーマ
+
+        self.parent = parent or ctk.CTk()
+        self.cursor_ai = None
+        self.current_file = None
+        self.is_processing = False
+
+        self._setup_modern_ui()
+        self._initialize_cursor_ai()
+
+    def _setup_modern_ui(self):
+        """モダンUIをセットアップ"""
+        self.parent.title("統治核AI - モダンインターフェース")
+        self.parent.geometry("1600x1000")
+        self.parent.minsize(1200, 800)
+
+        # メインフレーム
+        main_frame = ctk.CTkFrame(self.parent)
+        main_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+        # ヘッダー
+        self._setup_header(main_frame)
+
+        # メインコンテンツエリア
+        content_frame = ctk.CTkFrame(main_frame)
+        content_frame.pack(fill="both", expand=True, pady=(10, 0))
+
+        # 左パネル（ファイルエクスプローラー）
+        self._setup_file_panel(content_frame)
+
+        # 中央パネル（エディター）
+        self._setup_editor_panel(content_frame)
+
+        # 右パネル（AI機能）
+        self._setup_ai_panel(content_frame)
+
+        # 下部パネル（実行結果）
+        self._setup_output_panel(main_frame)
+
+    def _setup_header(self, parent):
+        """ヘッダーをセットアップ"""
+        header_frame = ctk.CTkFrame(parent)
+        header_frame.pack(fill="x", pady=(0, 10))
+
+        # タイトル
+        title_label = ctk.CTkLabel(
+            header_frame,
+            text="統治核AI - モダンインターフェース",
+            font=ctk.CTkFont(size=24, weight="bold"),
+        )
+        title_label.pack(side="left", padx=20, pady=10)
+
+        # ステータス表示
+        self.status_label = ctk.CTkLabel(
+            header_frame, text="初期化中...", font=ctk.CTkFont(size=12)
+        )
+        self.status_label.pack(side="right", padx=20, pady=10)
+
+    def _setup_file_panel(self, parent):
+        """ファイルパネルをセットアップ"""
+        file_frame = ctk.CTkFrame(parent)
+        file_frame.pack(side="left", fill="both", expand=False, padx=(0, 5))
+        file_frame.configure(width=280)
+
+        # パネルタイトル
+        title_label = ctk.CTkLabel(
+            file_frame,
+            text="📁 ファイルエクスプローラー",
+            font=ctk.CTkFont(size=16, weight="bold"),
+        )
+        title_label.pack(pady=(10, 5))
+
+        # ファイルツリー
+        self.file_tree = ttk.Treeview(file_frame)
+        self.file_tree.pack(fill="both", expand=True, padx=10, pady=5)
+
+        # ファイル操作ボタン
+        button_frame = ctk.CTkFrame(file_frame)
+        button_frame.pack(fill="x", padx=10, pady=5)
+
+        ctk.CTkButton(
+            button_frame, text="📂 開く", command=self._open_file, width=60
+        ).pack(side="left", padx=2)
+
+        ctk.CTkButton(
+            button_frame, text="💾 保存", command=self._save_file, width=60
+        ).pack(side="left", padx=2)
+
+        ctk.CTkButton(
+            button_frame, text="📄 新規", command=self._new_file, width=60
+        ).pack(side="left", padx=2)
+
+        ctk.CTkButton(
+            button_frame, text="🔄 更新", command=self._refresh_files, width=60
+        ).pack(side="left", padx=2)
+
+    def _setup_editor_panel(self, parent):
+        """エディターパネルをセットアップ"""
+        editor_frame = ctk.CTkFrame(parent)
+        editor_frame.pack(side="left", fill="both", expand=True, padx=5)
+
+        # パネルタイトル
+        title_label = ctk.CTkLabel(
+            editor_frame, text="✏️ エディター", font=ctk.CTkFont(size=16, weight="bold")
+        )
+        title_label.pack(pady=(10, 5))
+
+        # タブコントロール
+        self.notebook = ttk.Notebook(editor_frame)
+        self.notebook.pack(fill="both", expand=True, padx=10, pady=5)
+
+        # デフォルトタブ
+        self._create_new_tab("新規ファイル")
+
+        # エディター操作ボタン
+        button_frame = ctk.CTkFrame(editor_frame)
+        button_frame.pack(fill="x", padx=10, pady=5)
+
+        ctk.CTkButton(
+            button_frame, text="▶️ 実行", command=self._run_code, width=80
+        ).pack(side="left", padx=2)
+
+        ctk.CTkButton(
+            button_frame, text="🐛 デバッグ", command=self._debug_code, width=80
+        ).pack(side="left", padx=2)
+
+        ctk.CTkButton(
+            button_frame, text="🎨 フォーマット", command=self._format_code, width=80
+        ).pack(side="left", padx=2)
+
+        ctk.CTkButton(
+            button_frame, text="🔍 分析", command=self._analyze_code, width=80
+        ).pack(side="left", padx=2)
+
+    def _setup_ai_panel(self, parent):
+        """AIパネルをセットアップ"""
+        ai_frame = ctk.CTkFrame(parent)
+        ai_frame.pack(side="right", fill="both", expand=False, padx=(5, 0))
+        ai_frame.configure(width=350)
+
+        # パネルタイトル
+        title_label = ctk.CTkLabel(
+            ai_frame, text="🤖 AI支援", font=ctk.CTkFont(size=16, weight="bold")
+        )
+        title_label.pack(pady=(10, 5))
+
+        # AI機能ボタン
+        button_frame = ctk.CTkFrame(ai_frame)
+        button_frame.pack(fill="x", padx=10, pady=5)
+
+        ctk.CTkButton(
+            button_frame,
+            text="✨ コード生成",
+            command=self._generate_code,
+            width=150,
+            height=35,
+        ).pack(fill="x", pady=2)
+
+        ctk.CTkButton(
+            button_frame,
+            text="🔧 コード補完",
+            command=self._complete_code,
+            width=150,
+            height=35,
+        ).pack(fill="x", pady=2)
+
+        ctk.CTkButton(
+            button_frame,
+            text="🔄 リファクタリング",
+            command=self._refactor_code,
+            width=150,
+            height=35,
+        ).pack(fill="x", pady=2)
+
+        ctk.CTkButton(
+            button_frame,
+            text="🎯 エージェントタスク",
+            command=self._agent_task,
+            width=150,
+            height=35,
+        ).pack(fill="x", pady=2)
+
+        # AI入力エリア
+        input_frame = ctk.CTkFrame(ai_frame)
+        input_frame.pack(fill="both", expand=True, padx=10, pady=5)
+
+        input_label = ctk.CTkLabel(
+            input_frame, text="AI入力", font=ctk.CTkFont(size=14, weight="bold")
+        )
+        input_label.pack(pady=(10, 5))
+
+        self.ai_input = ctk.CTkTextbox(
+            input_frame, height=120, font=ctk.CTkFont(size=12)
+        )
+        self.ai_input.pack(fill="both", expand=True, padx=10, pady=5)
+
+        # AI実行ボタン
+        ctk.CTkButton(
+            input_frame,
+            text="🚀 実行",
+            command=self._execute_ai_request,
+            height=40,
+            font=ctk.CTkFont(size=14, weight="bold"),
+        ).pack(fill="x", padx=10, pady=5)
+
+        # システム状態
+        status_frame = ctk.CTkFrame(ai_frame)
+        status_frame.pack(fill="x", padx=10, pady=5)
+
+        status_label = ctk.CTkLabel(
+            status_frame, text="システム状態", font=ctk.CTkFont(size=14, weight="bold")
+        )
+        status_label.pack(pady=(10, 5))
+
+        self.status_text = ctk.CTkTextbox(
+            status_frame, height=80, font=ctk.CTkFont(size=10)
+        )
+        self.status_text.pack(fill="both", expand=True, padx=10, pady=5)
+
+    def _setup_output_panel(self, parent):
+        """出力パネルをセットアップ"""
+        output_frame = ctk.CTkFrame(parent)
+        output_frame.pack(fill="x", pady=(10, 0))
+
+        # パネルタイトル
+        title_label = ctk.CTkLabel(
+            output_frame, text="📊 実行結果", font=ctk.CTkFont(size=16, weight="bold")
+        )
+        title_label.pack(pady=(10, 5))
+
+        self.output_text = ctk.CTkTextbox(
+            output_frame, height=150, font=ctk.CTkFont(size=12)
+        )
+        self.output_text.pack(fill="both", expand=True, padx=10, pady=5)
+
+    def _initialize_cursor_ai(self):
+        """Cursor AIシステムを初期化"""
+        try:
+            self.cursor_ai = CursorAISystem()
+            self._update_status("✅ Cursor AIシステム初期化完了")
+            self._refresh_files()
+        except Exception as e:
+            self._update_status(f"❌ 初期化エラー: {e}")
+            messagebox.showerror(
+                "エラー", f"Cursor AIシステムの初期化に失敗しました: {e}"
+            )
+
+    def _create_new_tab(self, title: str, content: str = ""):
+        """新しいタブを作成"""
+        tab_frame = ctk.CTkFrame(self.notebook)
+        self.notebook.add(tab_frame, text=title)
+
+        editor = ctk.CTkTextbox(tab_frame, font=ctk.CTkFont(size=12, family="Consolas"))
+        editor.pack(fill="both", expand=True, padx=5, pady=5)
+        editor.insert("1.0", content)
+
+        return editor
+
+    def _get_current_editor(self):
+        """現在のエディターを取得"""
+        current_tab = self.notebook.select()
+        if current_tab:
+            tab_index = self.notebook.index(current_tab)
+            tab_frame = self.notebook.nametowidget(current_tab)
+            for widget in tab_frame.winfo_children():
+                if isinstance(widget, ctk.CTkTextbox):
+                    return widget
+        return None
+
+    def _open_file(self):
+        """ファイルを開く"""
+        file_path = filedialog.askopenfilename(
+            title="ファイルを開く",
+            filetypes=[
+                ("Python files", "*.py"),
+                ("JavaScript files", "*.js"),
+                ("TypeScript files", "*.ts"),
+                ("HTML files", "*.html"),
+                ("CSS files", "*.css"),
+                ("JSON files", "*.json"),
+                ("Text files", "*.txt"),
+                ("All files", "*.*"),
+            ],
+        )
+
+        if file_path:
+            try:
+                with open(file_path, "r", encoding="utf-8") as f:
+                    content = f.read()
+
+                file_name = Path(file_path).name
+                editor = self._create_new_tab(file_name, content)
+                self.current_file = file_path
+                self._update_status(f"📂 ファイルを開きました: {file_name}")
+
+            except Exception as e:
+                messagebox.showerror("エラー", f"ファイルの読み込みに失敗しました: {e}")
+
+    def _save_file(self):
+        """ファイルを保存"""
+        editor = self._get_current_editor()
+        if not editor:
+            return
+
+        content = editor.get("1.0", "end-1c")
+
+        if self.current_file:
+            file_path = self.current_file
+        else:
+            file_path = filedialog.asksaveasfilename(
+                title="ファイルを保存",
+                defaultextension=".py",
+                filetypes=[
+                    ("Python files", "*.py"),
+                    ("JavaScript files", "*.js"),
+                    ("TypeScript files", "*.ts"),
+                    ("HTML files", "*.html"),
+                    ("CSS files", "*.css"),
+                    ("JSON files", "*.json"),
+                    ("Text files", "*.txt"),
+                    ("All files", "*.*"),
+                ],
+            )
+
+        if file_path:
+            try:
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+
+                self.current_file = file_path
+                self._update_status(
+                    f"💾 ファイルを保存しました: {Path(file_path).name}"
+                )
+
+            except Exception as e:
+                messagebox.showerror("エラー", f"ファイルの保存に失敗しました: {e}")
+
+    def _new_file(self):
+        """新規ファイルを作成"""
+        editor = self._create_new_tab("新規ファイル")
+        self.current_file = None
+        self._update_status("📄 新規ファイルを作成しました")
+
+    def _refresh_files(self):
+        """ファイル一覧を更新"""
+        if not self.cursor_ai:
+            return
+
+        try:
+            workspace_info = self.cursor_ai.get_workspace_info()
+            self._update_file_tree(workspace_info.get("file_tree", {}))
+        except Exception as e:
+            self._update_status(f"❌ ファイル一覧の更新に失敗しました: {e}")
+
+    def _update_file_tree(self, file_tree: Dict[str, Any]):
+        """ファイルツリーを更新"""
+        # 既存のアイテムをクリア
+        for item in self.file_tree.get_children():
+            self.file_tree.delete(item)
+
+        # ファイルツリーを構築
+        self._build_file_tree(file_tree, "")
+
+    def _build_file_tree(self, node: Dict[str, Any], parent_id: str):
+        """ファイルツリーを再帰的に構築"""
+        if node.get("type") == "directory":
+            item_id = self.file_tree.insert(
+                parent_id, "end", text=f"📁 {node['name']}", open=True
+            )
+            for child in node.get("children", []):
+                self._build_file_tree(child, item_id)
+        elif node.get("type") == "file":
+            icon = "🐍" if node["name"].endswith(".py") else "📄"
+            self.file_tree.insert(parent_id, "end", text=f"{icon} {node['name']}")
+
+    def _run_code(self):
+        """コードを実行"""
+        editor = self._get_current_editor()
+        if not editor:
+            return
+
+        code = editor.get("1.0", "end-1c").strip()
+        if not code:
+            return
+
+        self._execute_ai_request(
+            f"このコードを実行してください:\n```python\n{code}\n```"
+        )
+
+    def _debug_code(self):
+        """コードをデバッグ"""
+        editor = self._get_current_editor()
+        if not editor:
+            return
+
+        code = editor.get("1.0", "end-1c").strip()
+        if not code:
+            return
+
+        self._execute_ai_request(
+            f"このコードをデバッグしてください:\n```python\n{code}\n```"
+        )
+
+    def _format_code(self):
+        """コードをフォーマット"""
+        editor = self._get_current_editor()
+        if not editor:
+            return
+
+        code = editor.get("1.0", "end-1c").strip()
+        if not code:
+            return
+
+        self._execute_ai_request(
+            f"このコードをフォーマットしてください:\n```python\n{code}\n```"
+        )
+
+    def _analyze_code(self):
+        """コードを分析"""
+        editor = self._get_current_editor()
+        if not editor:
+            return
+
+        code = editor.get("1.0", "end-1c").strip()
+        if not code:
+            return
+
+        self._execute_ai_request(
+            f"このコードを分析してください:\n```python\n{code}\n```"
+        )
+
+    def _generate_code(self):
+        """コードを生成"""
+        description = self.ai_input.get("1.0", "end-1c").strip()
+        if not description:
+            messagebox.showwarning("警告", "コード生成の説明を入力してください")
+            return
+
+        self._execute_ai_request(f"コードを生成してください: {description}")
+
+    def _complete_code(self):
+        """コードを補完"""
+        editor = self._get_current_editor()
+        if not editor:
+            return
+
+        code = editor.get("1.0", "end-1c").strip()
+        if not code:
+            return
+
+        self._execute_ai_request(
+            f"このコードを補完してください:\n```python\n{code}\n```"
+        )
+
+    def _refactor_code(self):
+        """コードをリファクタリング"""
+        editor = self._get_current_editor()
+        if not editor:
+            return
+
+        code = editor.get("1.0", "end-1c").strip()
+        if not code:
+            return
+
+        self._execute_ai_request(
+            f"このコードをリファクタリングしてください:\n```python\n{code}\n```"
+        )
+
+    def _agent_task(self):
+        """エージェントタスクを実行"""
+        description = self.ai_input.get("1.0", "end-1c").strip()
+        if not description:
+            messagebox.showwarning("警告", "タスクの説明を入力してください")
+            return
+
+        self._execute_ai_request(f"エージェントタスクを実行してください: {description}")
+
+    def _execute_ai_request(self, request: str = None):
+        """AIリクエストを実行"""
+        if not self.cursor_ai:
+            messagebox.showerror("エラー", "Cursor AIシステムが初期化されていません")
+            return
+
+        if request is None:
+            request = self.ai_input.get("1.0", "end-1c").strip()
+
+        if not request:
+            return
+
+        if self.is_processing:
+            messagebox.showwarning("警告", "既に処理中です")
+            return
+
+        self.is_processing = True
+        self._update_status("🤖 AI処理中...")
+
+        # バックグラウンドで実行
+        thread = threading.Thread(target=self._process_ai_request, args=(request,))
+        thread.daemon = True
+        thread.start()
+
+    def _process_ai_request(self, request: str):
+        """AIリクエストを処理（バックグラウンド）"""
+        try:
+            result = self.cursor_ai.process_request(request)
+
+            # UIスレッドで結果を表示
+            self.parent.after(0, self._display_result, result)
+
+        except Exception as e:
+            self.parent.after(0, self._display_error, str(e))
+        finally:
+            self.parent.after(0, self._processing_finished)
+
+    def _display_result(self, result: Dict[str, Any]):
+        """結果を表示"""
+        self.output_text.delete("1.0", "end")
+
+        if result.get("success", False):
+            self.output_text.insert("end", "=== 実行結果 ===\n")
+
+            if "result" in result:
+                if isinstance(result["result"], dict):
+                    self.output_text.insert(
+                        "end",
+                        json.dumps(result["result"], ensure_ascii=False, indent=2),
+                    )
+                else:
+                    self.output_text.insert("end", str(result["result"]))
+
+            if "summary" in result:
+                self.output_text.insert(
+                    "end", f"\n\n=== サマリー ===\n{result['summary']}"
+                )
+
+            self._update_status("✅ AI処理完了")
+        else:
+            error = result.get("error", "不明なエラー")
+            self.output_text.insert("end", f"❌ エラー: {error}")
+            self._update_status(f"❌ AI処理エラー: {error}")
+
+    def _display_error(self, error: str):
+        """エラーを表示"""
+        self.output_text.delete("1.0", "end")
+        self.output_text.insert("end", f"❌ エラー: {error}")
+        self._update_status(f"❌ エラー: {error}")
+
+    def _processing_finished(self):
+        """処理完了"""
+        self.is_processing = False
+
+    def _update_status(self, message: str):
+        """ステータスを更新"""
+        self.status_label.configure(text=message)
+        self.status_text.delete("1.0", "end")
+        self.status_text.insert("1.0", message)
+
+    def run(self):
+        """インターフェースを実行"""
+        self.parent.mainloop()
+
+
+def main():
+    """メイン関数"""
+    app = ModernCursorAIInterface()
+    app.run()
+
+
+if __name__ == "__main__":
+    main()

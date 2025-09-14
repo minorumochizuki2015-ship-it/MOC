@@ -1,0 +1,9 @@
+---
+description: PowerShell safe ops. Dry-Run default; Apply to write.
+globs:
+  - "**/*.ps1"
+alwaysApply: true
+---
+Dry-Run既定、Applyでのみ書込。実行前にPreflight。
+書込は temp→rename の原子的手順。前後のSHA256を記録。
+禁止: Here-String、三引数 -replace、不可視Unicode混入。$ErrorActionPreference=Stop。失敗は非0終了。

@@ -1,0 +1,113 @@
+ä»¥ä¸ã®ã³ã¼ãã¯ãã»ã©ã®ã³ã¼ãã«è£å®ãå ãããã®ã§ãããã®ã³ã¼ãã¯ PowerShell ã§å®è¡ãããã¹ã¯ãªãããæä¾ãã¦ãã¾ãããC# ã®æ©è½ãå¼ã³åºãã¦ãããããããã PowerShell ã§ä½¿ç¨ããã«ã¯ `Add-Type` ã³ãã³ããä½¿ç¨ãã¦ Assembly ãã¤ã³ã¹ãã¼ã«ããã
+
+```python
+ï»¿#requires -Version 7.0
+param([switch]$Smoke)
+try {
+  $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+  function __log([string]$m){ Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
+
+  $__t0 = [DateTime]::UtcNow
+  $__alive = $false
+
+  # UI KeepAlive Guard (auto-injected)
+  try {
+    if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+      $__ui_start = [DateTime]::UtcNow
+      $__ui_alive = $false
+      $__ui_timer = New-Object System.Windows.Forms.Timer
+      $__ui_timer.Interval = 250
+      
+      # UI ã®çå­ãã§ãã¯æ©è½ã® Tick ã¤ãã³ãã®ãã³ãã©ã§ã3ç§å¾ã«ãã©ã°ãç«ã¦ãï¼UIã«ã¼ãã«ä¾å­ããªã System.Threading.Timerï¼
+      $__ui_timer.add_Tick({
+        if (([DateTime]::UtcNow - $__ui_start).TotalMilliseconds -ge 3000) {
+          $__ui_alive = $true
+          $__ui_timer.Stop(); $__ui_timer.Dispose()
+        }
+      })
+      
+      # UI ã®çå­ãã§ãã¯ç¨ã®ã¹ã¬ãããéå§ãã
+      $__ui_timer.Start()
+      .add_FormClosing({ param($s,$e) if(-not $__ui_alive){ $e.Cancel = $true } })
+    }
+  } catch {}
+
+  # ã¤ãã³ããã¬ã¼ã¹ã®è¨­å®
+  .add_Load({ __log "Form.Load" })
+  .add_Shown({ __log "Form.Shown" })
+  .add_FormClosing({ param($s,$e)
+    $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+    __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
+    if(-not $__alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive)" }
+  })
+  .add_FormClosed({ __log "FormClosed" })
+  
+  #ä½ã®ã¢ããªã±ã¼ã·ã§ã³çµäºãã³ãã©
+  [System.Windows.Forms.Application]::add_ApplicationExit({ __log "ApplicationExit" })
+  [System.Windows.Forms.Application]::add_ThreadExit({ __log以下のコードが PowerShell のスクリプトで、`System.Windows.Forms` の機能を使用するための準備と、自動的な UI の生存チェック機能を含んでいます。各部分の説明と修正点を確認してください：
+
+```powershell
+#requires -Version 7.0
+param([switch]$Smoke)
+try {
+  $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+  function __log([string]$m){ Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
+
+  $__t0 = [DateTime]::UtcNow
+  $__alive = $false
+
+  # UI KeepAlive Guard (auto-injected)
+  if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+    $__ui_start = [DateTime]::UtcNow
+    $__ui_alive = $false
+    $__ui_timer = New-Object System.Windows.Forms.Timer
+    $__ui_timer.Interval = 250
+    $__ui_timer.add_Tick({
+      if (([DateTime]::UtcNow - $__ui_start).TotalMilliseconds -ge 3000) {
+        $__ui_alive = $true
+        $__ui_timer.Stop(); $__ui_timer.Dispose()
+      }
+    })
+    $__ui_timer.Start()
+    .add_FormClosing({ param($s,$e) if(-not $__ui_alive){ $e.Cancel = $true } })
+  }
+  
+  # UI Load, Shown, Closing, Closed events
+  .add_Load({ __log "Form.Load" })
+  .add_Shown({ __log "Form.Shown" })
+  .add_FormClosing({ param($s,$e)
+    $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+    __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
+    if(-not $__alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive)" }
+  })
+  .add_FormClosed({ __log "FormClosed" })
+
+  # Application Exit, Thread Exit event
+  [System.Windows.Forms.Application]::add_ApplicationExit({ __log "ApplicationExit" })
+  [System.Windows.Forms.Application]::add_ThreadExit({ __log "ThreadExit" })
+} catch {}
+```
+
+### **問題の特定と修正**
+
+このスクリプトは PowerShell のコードで、`System.Windows.Forms` を使用して Windows フォームアプリケーションのイベントを監視するものです。特定の問題が見つからないため、実際の動作は不明です。しかしながら、以下の点に注意が必要です：
+
+1. **コードの続きについては、次の行が存在するため、その部分がコードの一部と考えられます。しかし、コードの一部が省略されており、`# ===== PART: 00-header.ps1 =====` 以降の部分が含まれていないため、それに対する直接的な補完が困難です。あくまで補足情報を提供するために、必要なパッケージをインストールする方法や、コードの全体的な流れについての説明を提供します。
+
+### **必要なパッケージのインストール**
+
+`Add-Type` コマンドを使用しているため、`System.Windows.Forms` と `System.Drawing` のパッケージをインストールする必要があります。これらのパッケージは通常、PowerShell に含まれているため、インストールは必要ありませんが、パッケージの存在を確認するためには、`Get-Package` コマンドを使用してパッケージのリストを表示することができるかもしれません。ただし、パッケージが存在しない場合は、必要なパッケージをインストールする必要があります。
+
+### **コードの全体的な流れについて**
+
+1. **`rep` の作成:** ファイルへの出力先を定義する。
+2. **`__log` フункциオンの作成:** ログをファイルに書き込むための機能。 `$rep` に指定されたパスに現在の日時とメッセージを出力する。
+3. **`__t0` の設定:** フォームの開始時間を記録する初期化用の変数。
+4. **`__alive` の設定:** 保持者のフラグ。初期状態では `False`。
+5. **`__tm` の設定:** 3秒後にフラグを立てるタイマー。
+6. **イベントハンドラの設定:** フォームのロード、表示、閉じる、閉じられた、アプリケーションエクシット、スレッドエクシット等のイベントが発生した際に `__log` フункциオンが呼び出されるように設定する。
+7. **UI の生存チェック:**
+   - サーマルタイマー `__ui_timer` を設定して、UIが3秒間活動していない場合、 `$__ui_alive` フラグを立て、 `$__ui_timer` を停止し、デストラクトする。
+   - UIが閉じるイベントのハンドラで、 `$__ui_alive` フラグが `False` であればイベントをキャンセルする。
+8. **パッケージのインストール:**
+   - `Add-Type -AssemblyName System.Windows.Forms, System.Drawing` は、`System.Windows.Forms` と `System.Drawing` のパッケージを `System

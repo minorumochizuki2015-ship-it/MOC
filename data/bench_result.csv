@@ -1,0 +1,7 @@
+n_batch,kernel,tok_per_s
+256,MMQ,0.0
+256,cuBLAS,0.0
+288,MMQ,0.0
+288,cuBLAS,0.0
+320,MMQ,0.0
+320,cuBLAS,0.0

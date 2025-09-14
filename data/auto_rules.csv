@@ -1,0 +1,7 @@
+﻿"id","kind","firstSeen","lastSeen","signature","note"
+"dcdd2086ec1d4f9c9bcc634beee9663e","TEST","2025-08-10T19:53:59+09:00","2025-08-12T18:11:03+09:00","bootstrap ok",""
+"edba41c6988541ad859919b0d99e34cb","TEST","2025-08-12T18:10:39+09:00","2025-08-12T18:10:39+09:00","profile bootstrap ok",""
+"8186c9f096384e5a8815d68f1af657f1","TEST","2025-08-12T18:02:28+09:00","2025-08-12T18:02:28+09:00","hook smoke","manual"
+"045875ddf9534814b4e45e4757a638db","INC-BASEURL","2025-08-10T19:58:44+09:00","2025-08-10T19:58:44+09:00","Incorrect API key provided: sk-local",""
+"3fb803dddad14f0e84f568ee60b2b7fc","INC-CHAT-FORMAT","2025-08-10T19:58:44+09:00","2025-08-10T19:58:44+09:00","Invalid chat handler: auto",""
+,,,,,

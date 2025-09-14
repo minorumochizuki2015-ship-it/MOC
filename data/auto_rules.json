@@ -1,0 +1,226 @@
+﻿{
+    "rules":  [
+                  {
+                      "e400f723be45":  {
+                                           "ctx":  {
+                                                       "component":  "network"
+                                                   },
+                                           "kind":  "INC-PROXY",
+                                           "last_seen":  "2025-08-10T10:23:29Z",
+                                           "signature":  "Proxy/環境変数が原因で127.0.0.1へ到達不可",
+                                           "count":  1,
+                                           "fix":  {
+                                                       "HTTPS_PROXY":  "",
+                                                       "HTTP_PROXY":  "",
+                                                       "NO_PROXY":  "127.0.0.1,localhost"
+                                                   },
+                                           "first_seen":  "2025-08-10T10:23:29Z"
+                                       },
+                      "b7d4144b528c929f":  {
+                                               "kind":  "INC-CONNECTION",
+                                               "signature":  "リモート サーバーに接続できません。",
+                                               "first_seen":  "2025-08-10T19:30:30Z",
+                                               "last_seen":  "2025-08-10T19:30:30Z",
+                                               "count":  1,
+                                               "meta":  null
+                                           },
+                      "84b4d4f1c993eed7":  {
+                                               "kind":  "BOOTSTRAP",
+                                               "signature":  "profile autoload smoke test",
+                                               "first_seen":  "2025-08-10T19:33:39Z",
+                                               "last_seen":  "2025-08-10T19:33:39Z",
+                                               "count":  1,
+                                               "meta":  null
+                                           },
+                      "ec51789c0c5a58a4":  {
+                                               "kind":  "TEST",
+                                               "signature":  "session hotfix ok",
+                                               "first_seen":  "2025-08-10T19:39:26Z",
+                                               "last_seen":  "2025-08-10T19:39:26Z",
+                                               "count":  1,
+                                               "meta":  null
+                                           },
+                      "59a4c7c6cb3c":  {
+                                           "ctx":  {
+                                                       "component":  "network"
+                                                   },
+                                           "kind":  "INC-CONNECTION",
+                                           "last_seen":  "2025-08-10T10:23:29Z",
+                                           "signature":  "リモート サーバーに接続できません",
+                                           "count":  1,
+                                           "fix":  {
+                                                       "start":  "llama_cpp.server 起動",
+                                                       "note":  "未起動/到達不能",
+                                                       "check":  "Test-NetConnection 127.0.0.1 -Port 8080"
+                                                   },
+                                           "first_seen":  "2025-08-10T10:23:29Z"
+                                       },
+                      "89d512da66634c20":  {
+                                               "kind":  "INC-BODY-FORMAT",
+                                               "signature":  "Input should be a valid dictionary or object (type: \u0027model_attributes_type\u0027)",
+                                               "first_seen":  "2025-08-10T19:30:30Z",
+                                               "last_seen":  "2025-08-10T19:30:30Z",
+                                               "count":  1,
+                                               "meta":  null
+                                           },
+                      "d040b3dfed1f":  {
+                                           "ctx":  {
+                                                       "component":  "client"
+                                                   },
+                                           "kind":  "INC-BASEURL",
+                                           "last_seen":  "2025-08-10T19:30:30Z",
+                                           "signature":  "Incorrect API key provided: sk-local",
+                                           "count":  2,
+                                           "fix":  {
+                                                       "note":  "本家OpenAIに誤送信の疑い／OPENAI_COMPAT_BASE確認",
+                                                       "base_url":  "http://127.0.0.1:8080/v1"
+                                                   },
+                                           "first_seen":  "2025-08-10T10:23:29Z"
+                                       },
+                      "c7fb492bbd1f":  {
+                                           "ctx":  {
+                                                       "pkg":  "llama-cpp-python",
+                                                       "component":  "server",
+                                                       "note":  "0.3.x"
+                                                   },
+                                           "kind":  "INC-CHAT-FORMAT",
+                                           "last_seen":  "2025-08-10T19:30:30Z",
+                                           "signature":  "Invalid chat handler: auto",
+                                           "count":  2,
+                                           "fix":  {
+                                                       "why":  "auto未対応系では明示が必要",
+                                                       "server_flag":  "--chat_format qwen"
+                                                   },
+                                           "first_seen":  "2025-08-10T10:23:29Z"
+                                       },
+                      "2a68237eb50f":  {
+                                           "ctx":  {
+                                                       "component":  "server",
+                                                       "pkg":  "llama-cpp-python"
+                                                   },
+                                           "kind":  "INC-COROUTINE",
+                                           "last_seen":  "2025-08-10T19:30:30Z",
+                                           "signature":  "\u0027coroutine\u0027 object is not callable (server app.py create_chat_completion)",
+                                           "count":  2,
+                                           "fix":  {
+                                                       "note":  "局所改変を戻し再インストール",
+                                                       "action":  "llama-cpp-pythonを安定版に固定または最新へ上げる"
+                                                   },
+                                           "first_seen":  "2025-08-10T10:23:29Z"
+                                       },
+                      "33c64d8576e8":  {
+                                           "ctx":  {
+                                                       "component":  "client",
+                                                       "api":  "openai-compat"
+                                                   },
+                                           "kind":  "INC-API-ROUTE",
+                                           "last_seen":  "2025-08-10T10:23:29Z",
+                                           "signature":  "404 Not Found - POST /v1/completions",
+                                           "count":  1,
+                                           "fix":  {
+                                                       "note":  "Chat Completions を使う",
+                                                       "route":  "/v1/chat/completions"
+                                                   },
+                                           "first_seen":  "2025-08-10T10:23:29Z"
+                                       },
+                      "59243c0dbf16":  {
+                                           "ctx":  {
+                                                       "component":  "client",
+                                                       "tool":  "PowerShell"
+                                                   },
+                                           "kind":  "INC-HEADERS",
+                                           "last_seen":  "2025-08-10T10:23:29Z",
+                                           "signature":  "PowerShell Invoke-WebRequestでAuthorizationヘッダ化失敗",
+                                           "count":  1,
+                                           "fix":  {
+                                                       "how":  "Invoke-RestMethod -Headers @{ Authorization=\u0027Bearer sk-local\u0027; \u0027Content-Type\u0027=\u0027application/json\u0027 }"
+                                                   },
+                                           "first_seen":  "2025-08-10T10:23:29Z"
+                                       },
+                      "5aac33a168b8":  {
+                                           "ctx":  {
+                                                       "component":  "client",
+                                                       "tool":  "PowerShell Invoke-RestMethod"
+                                                   },
+                                           "kind":  "INC-BODY-FORMAT",
+                                           "last_seen":  "2025-08-10T10:23:29Z",
+                                           "signature":  "Input should be a valid dictionary or object (type= \u0027model_attributes_type\u0027)",
+                                           "count":  1,
+                                           "fix":  {
+                                                       "powershell":  "ConvertTo-Json -Depth 5",
+                                                       "content_type":  "application/json",
+                                                       "note":  "JSONボディとContent-Typeを明示"
+                                                   },
+                                           "first_seen":  "2025-08-10T10:23:29Z"
+                                       },
+                      "08dad6f1710f":  {
+                                           "ctx":  {
+                                                       "component":  "client"
+                                                   },
+                                           "kind":  "INC-MODELS",
+                                           "last_seen":  "2025-08-10T10:23:29Z",
+                                           "signature":  "model id を直接フルパスで渡して失敗",
+                                           "count":  1,
+                                           "fix":  {
+                                                       "example":  "(irm /models -Headers ).data[0].id",
+                                                       "advice":  "まず /v1/models で id を取得その id を chat.completions に渡す"
+                                                   },
+                                           "first_seen":  "2025-08-10T10:23:29Z"
+                                       },
+                      "01d42a7da7dc":  {
+                                           "ctx":  {
+                                                       "component":  "console"
+                                                   },
+                                           "kind":  "INC-ENCODING",
+                                           "last_seen":  "2025-08-10T19:30:30Z",
+                                           "signature":  "文字化け(Mojibake)",
+                                           "count":  2,
+                                           "fix":  {
+                                                       "ps_console":  "[Console]::OutputEncoding=[Text.Encoding]::UTF8",
+                                                       "note":  "PowerShell出力をUTF-8へ"
+                                                   },
+                                           "first_seen":  "2025-08-10T10:23:29Z"
+                                       }
+                  },
+                  {
+                      "id":  "dcdd2086ec1d4f9c9bcc634beee9663e",
+                      "kind":  "TEST",
+                      "firstSeen":  "2025-08-10T19:53:59+09:00",
+                      "lastSeen":  "2025-08-12T18:11:03+09:00",
+                      "signature":  "bootstrap ok",
+                      "note":  ""
+                  },
+                  {
+                      "id":  "3fb803dddad14f0e84f568ee60b2b7fc",
+                      "kind":  "INC-CHAT-FORMAT",
+                      "firstSeen":  "2025-08-10T19:58:44+09:00",
+                      "lastSeen":  "2025-08-10T19:58:44+09:00",
+                      "signature":  "Invalid chat handler: auto",
+                      "note":  ""
+                  },
+                  {
+                      "id":  "045875ddf9534814b4e45e4757a638db",
+                      "kind":  "INC-BASEURL",
+                      "firstSeen":  "2025-08-10T19:58:44+09:00",
+                      "lastSeen":  "2025-08-10T19:58:44+09:00",
+                      "signature":  "Incorrect API key provided: sk-local",
+                      "note":  ""
+                  },
+                  {
+                      "id":  "8186c9f096384e5a8815d68f1af657f1",
+                      "kind":  "TEST",
+                      "firstSeen":  "2025-08-12T18:02:28+09:00",
+                      "lastSeen":  "2025-08-12T18:02:28+09:00",
+                      "signature":  "hook smoke",
+                      "note":  "manual"
+                  },
+                  {
+                      "id":  "edba41c6988541ad859919b0d99e34cb",
+                      "kind":  "TEST",
+                      "firstSeen":  "2025-08-12T18:10:39+09:00",
+                      "lastSeen":  "2025-08-12T18:10:39+09:00",
+                      "signature":  "profile bootstrap ok",
+                      "note":  ""
+                  }
+              ]
+}

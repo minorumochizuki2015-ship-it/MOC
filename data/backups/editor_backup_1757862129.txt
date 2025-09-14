@@ -1,0 +1,157 @@
+### **åé¡ã®ç¹å®**
+
+ãã®ã³ã¼ãã¯PowerShellã¹ã¯ãªããã§ãããWindows Formsã¢ããªã±ã¼ã·ã§ã³ãç£è¦ãã¦ç¹å®ã®ã¤ãã³ãã¨ã¿ã¤ã ã¢ã¦ããå¦çããããã®æ©è½ãæã¤å¯è½æ§ãããã¾ããåé¡ç¹ã¯ä»¥ä¸ã®éãã§ãï¼
+
+1. `__script:alive` ãã­ããã£ã®ä½¿ç¨ï¼ããã¯ã¹ã³ã¼ããä¸æãªãããã³ã¼ããæ­£ããåä½ããªãå¯è½æ§ãããã¾ãã
+2. `.add_`é¢æ°ã®ä½¿ç¨ï¼Windows Formsã§å©ç¨å¯è½ãªã¤ãã³ããã³ãã©ã§ã¯ãªããPowerShellã®æ©è½ãä½¿ç¨ãã¦ãã¾ãããã®é¨åã¯ä¿®æ­£ã§ãã
+3. `__ui_timer.add_Tick`æ¡ä»¶ï¼ã¹ã¬ãããã¼ã³ã¬ã¼ã·ã§ã³ã«ãã£ã¦ãå®éã®ã¿ã¤ã ã¢ã¦ããééã£ãã¿ã¤ãã³ã°ã§çºçããå¯è½æ§ãããã¾ãã
+
+### **ãããã°ã³ã¼ã**
+
+ä»¥ä¸ã«ãããã°ã³ã¼ããç¤ºãã¾ãï¼
+
+```powershell
+$rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+function __log([string]$m){
+    Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
+}
+
+$__t0 = [DateTime]::UtcNow
+$__alive = $false
+# 3ç§å¾ã«ãã©ã°ãç«ã¦ãï¼UIã«ã¼ãã«ä¾å­ããªã System.Threading.Timerï¼
+$__tm = [System.Threading.Timer]::new({ $__script:alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+
+# ã¤ãã³ãã®è¿½è·¡
+[System.Windows.Forms.Application]::add_Load({ __log "Form.Load" })
+[System.Windows.Forms.Application]::add_Shown({ __log "Form.Shown" })
+[System.Windows.Forms.Application]::add_FormClosing({
+    param($s,$e)
+    $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+    __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
+    if(-not $__alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive)" }
+})
+[System.Windows.Forms.Application]::add_FormClosed({ __log "FormClosed" })
+[System.Windows.Forms.Application]::add_ApplicationExit({ __log "ApplicationExit" })
+[System.Windows.Forms.Application]::add_ThreadExit({ __log "ThreadExit" })
+
+try {
+  if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+    $__ui_start = [DateTime]::UtcNow
+    $__ui_alive = $false
+    $__ui_timer = New-Object System.Windows.Forms.Timer
+    $__ui_timer.Interval = 250
+    $__ui_timer.add_Tick({
+      if (([DateTime]::Utc### **修正版のコードと説明**
+
+修正版のコードと詳細説明は以下の通りです：
+
+```powershell
+#requires -Version 7.0
+param([switch]$Smoke)
+try {
+    $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+    function __log([string]$m){
+        Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
+    }
+
+    $__t0 = [DateTime]::UtcNow
+    $__alive = $false
+
+    # 3秒後にフラグを立てる（UIループに依存しない System.Threading.Timer）
+    $__tm = [System.Threading.Timer]::new({ $__script:alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+
+    # イベントトレース
+    [System.Windows.Forms.Application]::add_Load({ __log "Form.Load" })
+    [System.Windows.Forms.Application]::add_Shown({ __log "Form.Shown" })
+    [System.Windows.Forms.Application]::add_FormClosing({
+        param($s,$e)
+        $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+        __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
+        if(-not $__alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive)" }
+    })
+    [System.Windows.Forms.Application]::add_FormClosed({ __log "FormClosed" })
+    [System.Windows.Forms.Application]::add_ApplicationExit({ __log "ApplicationExit" })
+    [System.Windows.Forms.Application]::add_ThreadExit({ __log "ThreadExit" })
+} catch {}
+
+# === UI KeepAlive Guard (auto-injected) ===
+try {
+    if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+        $__ui_start = [DateTime]::UtcNow
+        $__ui_alive = $false
+        $__ui_timer = New-Object System.Windows.Forms.Timer
+        $__ui_timer.Interval = 250
+        $__ui_timer.add_Tick({
+            if (([DateTime]::UtcNow - $__ui_start).TotalMilliseconds -ge 3000) {
+                $__ui_alive = $true
+                $__ui_timer.Stop(); $__ui_timer.Dispose()
+            }
+        })
+        $__ui_timer.Start()
+        [System.Windows.Forms.Application]::add_FormClosing({
+            param($s,$e)
+            if(-not $__ui_alive){ $e.Cancel = $true }
+        })
+    }
+} catch {}
+
+param([switch]$Smoke)
+```
+
+### **説### **修正版のコードと説明**
+
+修正版のコードと詳細説明は以下の通りです：
+
+```powershell
+#requires -Version 7.0
+param([switch]$Smoke)
+try {
+    $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+    function __log([string]$m){
+        Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
+    }
+
+    $__t0 = [DateTime]::UtcNow
+    $__alive = $false
+
+    # 3秒後にフラグを立てる（UIループに依存しない System.Threading.Timer）
+    $__tm = [System.Threading.Timer]::new({ $__script:alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+
+    # イベントトレース
+    [System.Windows.Forms.Application]::add_Load({ __log "Form.Load" })
+    [System.Windows.Forms.Application]::add_Shown({ __log "Form.Shown" })
+    [System.Windows.Forms.Application]::add_FormClosing({
+        param($s,$e)
+        $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+        __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
+        if(-not $__alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive)" }
+    })
+    [System.Windows.Forms.Application]::add_FormClosed({ __log "FormClosed" })
+    [System.Windows.Forms.Application]::add_ApplicationExit({ __log "ApplicationExit" })
+    [System.Windows.Forms.Application]::add_ThreadExit({ __log "ThreadExit" })
+} catch {}
+
+# === UI KeepAlive Guard (auto-injected) ===
+try {
+    if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+        $__ui_start = [DateTime]::UtcNow
+        $__ui_alive = $false
+        $__ui_timer = New-Object System.Windows.Forms.Timer
+        $__ui_timer.Interval = 250
+        $__ui_timer.add_Tick({
+            if (([DateTime]::UtcNow - $__ui_start).TotalMilliseconds -ge 3000) {
+                $__ui_alive = $true
+                $__ui_timer.Stop(); $__ui_timer.Dispose()
+            }
+        })
+        $__ui_timer.Start()
+        [System.Windows.Forms.Application]::add_FormClosing({
+            param($s,$e)
+            if(-not $__ui_alive){ $e.Cancel = $true }
+        })
+    }
+} catch {}
+param([switch]$Smoke)
+```
+
+### **説

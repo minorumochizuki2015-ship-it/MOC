@@ -1,0 +1,110 @@
+**åé¡ã®ç¹å®**: 
+
+ãã®ã³ã¼ãã¯ã`System.Windows.Forms` ãä½¿ç¨ãã¦ PowerShell ã¹ã¯ãªããã§ Windows ãã©ã¼ã ã¢ããªã±ã¼ã·ã§ã³ãå¶å¾¡ãããã¨ãã¦ãã¾ããããããã¹ã¯ãªãããç´æ¥ `.NET Framework` ã³ã³ãã¼ãã³ããä½¿ç¨ããããã«ã¯ã`Add-Type` ã³ãã³ãã§ãããã®ã¹ã¯ãªããã§ã¯ãããå­å¨ããªãå¯è½æ§ãããã¾ãã
+
+**ãããã°ã³ã¼ã**: 
+
+ããã§ã¯ã¹ã¯ãªããã®ã¨ã©ã¼ãç¹å®ããããã«ãããã°ç¨ã³ã¼ããä½æãã¾ããã¾ãã¯ãã³ã¼ããå®è¡ãããåé¨åãé©åã«åä½ãããã©ãããç¢ºèªããããã®ç°¡æçãªãã¹ãã¹ã¯ãªãããä½æãã¾ãï¼
+
+```powershell
+#requires -Version 7.0
+param([switch]$Smoke)
+
+try {
+    $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+    function __log([string]$m){ Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
+
+    $__t0 = [DateTime]::UtcNow
+    $__alive = $false
+
+    # ã¤ãã³ããã¬ã¼ã¹é¨åã®ãããã°ã³ã¼ãã¯ããã®ã¹ã¯ãªãããæ­£ç¢ºã«åä½ãããç¢ºèªããããã®ãã®ã§ããã¹ãã§ãã
+    # ããããããã¯ç¾å¨å®ããã¦ããªããããä»£ããã«ãã¤ãã³ããçºçããã¨ãã«ä½ãèµ·ãããã¨ããä»®å®ã«åºã¥ãã¦ãããã°ã³ã¼ããæ¸ããã¨ã«ãªãã¾ãã
+
+    .add_Load({ __log "Form.Load" }) | Out-Null
+    .add_Shown({ __log "Form.Shown" }) | Out-Null
+
+    # ããã¯ããã©ã¼ã ãéããããã¨ãã«ä½ãèµ·ããããã®ãã³ãã©ã§ãã
+    # å½¢å¼çã«ã¯ããã³ãã©ã®å®è¡ãç¢ºèªããããã®å¦çãå«ãã¹ãã§ãããããã¯ç¾å¨å®ããã¦ãã¾ããã
+    .add_FormClosing({ param($s,$e)
+        $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+        __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
+        if(-not $__alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive)" }
+    }) | Out-Null
+
+    .add_FormClosed({ __log "FormClosed" }) | Out-Null
+    [System.Windows.Forms.Application]::add_ApplicationExit({ __log "ApplicationExit" }) | Out-Null
+    [System.Windows.Forms.Application]::add_ThreadExit({ __log "ThreadExit" }) | Out-Null
+
+} catch {}
+
+# ===コードの最後の部分を引き続きデバッグ、修正、そして説明します。
+
+**修正版**：
+
+```powershell
+# === UI KeepAlive Guard (auto-injected) ===
+try {
+  if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+    $__ui_start = [DateTime]::UtcNow
+    $__ui_alive = $false
+    $__ui_timer = New-Object System.Windows.Forms.Timer
+    $__ui_timer.Interval = 250
+    $__ui_timer.add_Tick({
+      if (([DateTime]::UtcNow - $__ui_start).TotalMilliseconds -ge 3000) {
+        $__ui_alive = $true
+        $__ui_timer.Stop(); $__ui_timer.Dispose()
+      }
+    })
+    $__ui_timer.Start()
+    .add_FormClosing({ param($s,$e) if(-not $__ui_alive){ $e.Cancel = $true } })
+  }
+} catch {}
+
+param([switch]$Smoke)
+```
+
+**説明**：
+
+1. **問題の特定**: 
+
+    フォームが閉じるときに、`$__ui_alive`が`False`である場合の処理が見当たりません。`__ui_timer`が停止され、デストラクタが呼ばれるとき、フォームの閉鎖は通常正常に進行しますが、`$__ui_alive`が`False`である場合、閉鎖がキャンセルされない可能性があります。
+
+2. **デバッグコード**: 
+
+    このコードは、`System.Windows.Forms.Application`のメッセージループが存在しない（つまり、UIのループが実行中でない）場合に、`__ui_timer`が機能します。`__ui_timer`は250ミリ秒ごとに呼び出され、3000ミリ秒（つまり3秒）経過した場合に、`$__ui_alive`フラグが立てられ、`__ui_timer`は停止されます。
+
+3. **修正版**: 
+
+    修正版では、`add_FormClosing`のイベントハンドラに、`$__ui_alive`が`False`のときの動作を追加しました。これにより、`__ui_timer`が停止され、フォームの閉鎖がキャンセルされる可能性があるコードの部分を修正しました。
+
+4. **説明**:
+
+    修正は、UIが閉じたときに`__ui_timer`が停止し、`$__ui_alive`が`True`に更新されるようにします。しかし、このコードは、`System.Windows.Forms`の機能と PowerShell の相互作用の特定の点で複雑性を増加させ、実際の動作を予測しにくい可能性があります。特に、`System.Windows.Forms.Application`のメッセージループとその他の関連機能の動作については、`System.Windows.Formsコードの最後の部分についての詳細は、その部分が完全に提供されていないため正確には書けませんが、`# ===== PART: 00-header.ps1 =====` と指示されている部分が PowerShell のスクリプトで使用される可能性があるようです。これは通常、スクリプトのヘッダーとして機能し、スクリプトの基本的な設定と初期化を含みます。
+
+コードが不完全なため具体的な修正を提案するのには制限がありますが、一般的な PowerShell スクリプトのヘッダーは以下のような内容を含むことが多いです：
+
+1. `#requires -Version 7.0` の行はスクリプトの PowerShell のバージョンを指定します。この部分は既に適切に設定されています。
+
+2. `param([switch]$Smoke)` の行はスクリプトが受け取るパラメーターを定義します。`Smoke` パラメーターはスイッチとして指定されており、これはスクリプトが行う特定のアクションを制御するための手段です。
+
+3. `Set-StrictMode -Version Latest` の行は `StrictMode` フラグをオンにし、コードの安全性と信頼性を保つために警告を発生させます。
+
+4. `Add-Type -AssemblyName System.Windows.Forms, System.Drawing` の行は指定されたアセンブリ (`System.Windows.Forms` と `System.Drawing`) の参照をスクリプトに追加します。これは通常、スクリプトが Windows フォームアプリケーションの機能を使用する必要がある場合に使用されます。
+
+5. `#requires -Version 7.0` の行が繰り返し表示されている点、`param([switch]$Smoke)` が再度定義されている点、そして `Set-StrictMode`、`Add-Type` の行が存在する点などは、このスクリプトの構造が正しくない可能性があります。スクリプトのヘッダーは一回しか現れず、必要に応じてスクリプトの機能を定義するパラメーターを定義します。
+
+コードが完全である場合、`# ===== PART: 00-header.ps1 =====` の部分に以下のコードが含まれていたかもしれません：
+
+```powershell
+#requires -Version 7.0
+param([switch]$Smoke)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference='Stop'
+
+# Your code here
+
+Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+```
+
+ただし、この部分がスクリプトの完全なヘッダーであるわけではない可能性もあります。スクリプトの特定の部分が省略されている場合、スクリプトの実行時に

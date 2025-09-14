@@ -1,0 +1,27 @@
+cache_dir: ./resonance_cache
+cli_command: python dcard.py --config dcard_config.yaml --mode cli
+config_file: dcard_config.yaml
+core_modules:
+- lstm_predictor.py
+- resonance_cache.py
+- ipfs_handler.py
+- external_api.py
+- distillation_engine.py
+- gui_main.py
+dependencies:
+- torch
+- requests
+- scikit-learn
+- ipfshttpclient
+- PyQt5
+env_requirements:
+- .env (GROK_API_KEY)
+- IPFS daemon
+gui_command: python gui_main.py
+log_dir: ./logs
+main_entry: dcard.py
+modes:
+- CLI
+- GUI
+project: DCARD_Resonance_Distillation
+version: 1.0.0

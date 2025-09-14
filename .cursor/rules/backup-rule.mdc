@@ -1,0 +1,12 @@
+---
+description: 重要なファイル変更前の自動バックアップ
+globs:
+  - "src/ui/modern_interface.py"
+  - "src/core/code_executor.py"
+  - "main_modern.py"
+  - "start_modern_ui.bat"
+alwaysApply: true
+---
+【AUTO_BACKUP】重要ファイル変更前は必ずバックアップ作成。
+バックアップ先: .\backups\{filename}.backup_{timestamp}
+失敗時は即ロールバック。バックアップなしでの変更禁止。

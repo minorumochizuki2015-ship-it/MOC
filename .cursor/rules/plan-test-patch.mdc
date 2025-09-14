@@ -1,0 +1,14 @@
+---
+description: Plan→Test→Patch for code workflow with K=2–4 options.
+globs:
+  - "src/core/**"
+  - "src/ui/**"
+  - "agent_mode.py"
+  - "ai_assistant.py"
+  - "code_executor.py"
+alwaysApply: false
+---
+フロー: PLAN_JSON → run_tests() → PATCH_DIFF。
+PLAN_JSON={files,steps,tests,rollback}。必要ならK=2–4案を提案し、テスト根拠で選抜。思考は短く。
+run_tests() は {passed, failed, summary} のJSONを返す。
+

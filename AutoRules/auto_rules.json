@@ -1,0 +1,28 @@
+﻿{
+  "rules": [
+    {
+      "id": "env.scripts",
+      "type": "env",
+      "set": { "GC_SCRIPTS": "${workspaceFolder}\\scripts" }
+    },
+    {
+      "id": "server.start.cpu",
+      "type": "shell",
+      "name": "start:localai(cpu)",
+      "cmd": "pwsh",
+      "args": [
+        "-NoLogo","-NoProfile",
+        "-File","${workspaceFolder}\\scripts\\ops\\start_localai.ps1",
+        "-Port","8080","-Ctx","8192"
+      ]
+    },
+    {
+      "id": "server.health",
+      "type": "http",
+      "url": "http://127.0.0.1:8080/v1/models",
+      "retry": 30,
+      "interval_ms": 500,
+      "after": "server.start.cpu"
+    }
+  ]
+}
