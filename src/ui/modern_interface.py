@@ -677,41 +677,90 @@ class ModernCursorAIInterface:
             hover_color="#9A3412",
         ).pack(fill="x", pady=2)
 
-        # AI機能ボタン
+        # AI機能ボタン（統合版）
         button_frame = ctk.CTkFrame(ai_frame)
         button_frame.pack(fill="x", padx=10, pady=5)
 
-        ctk.CTkButton(
+        # 統合AI実行ボタン（モード切替）
+        self.ai_mode = ctk.StringVar(value="generate")
+        self.ai_mode_button = ctk.CTkButton(
             button_frame,
-            text="✨ コード生成",
-            command=self._generate_code,
+            text="✨ AI実行",
+            command=self._execute_ai_mode,
             width=150,
             height=35,
-        ).pack(fill="x", pady=2)
+        )
+        self.ai_mode_button.pack(fill="x", pady=2)
 
-        ctk.CTkButton(
-            button_frame,
-            text="🔧 コード補完",
-            command=self._complete_code,
-            width=150,
-            height=35,
-        ).pack(fill="x", pady=2)
+        # モード切替ボタン
+        mode_frame = ctk.CTkFrame(button_frame)
+        mode_frame.pack(fill="x", pady=2)
 
-        ctk.CTkButton(
-            button_frame,
-            text="🔄 リファクタリング",
-            command=self._refactor_code,
-            width=150,
-            height=35,
-        ).pack(fill="x", pady=2)
+        ctk.CTkRadioButton(
+            mode_frame,
+            text="生成",
+            variable=self.ai_mode,
+            value="generate",
+            command=self._update_ai_mode_button,
+            width=70,
+        ).pack(side="left", padx=2)
 
-        ctk.CTkButton(
-            button_frame,
-            text="🎯 エージェントタスク",
-            command=self._agent_task,
-            width=150,
-            height=35,
-        ).pack(fill="x", pady=2)
+        ctk.CTkRadioButton(
+            mode_frame,
+            text="補完",
+            variable=self.ai_mode,
+            value="complete",
+            command=self._update_ai_mode_button,
+            width=70,
+        ).pack(side="left", padx=2)
+
+        ctk.CTkRadioButton(
+            mode_frame,
+            text="リファクタ",
+            variable=self.ai_mode,
+            value="refactor",
+            command=self._update_ai_mode_button,
+            width=70,
+        ).pack(side="left", padx=2)
+
+    def _execute_ai_mode(self):
+        """統合AI実行ボタンのハンドラー"""
+        mode = self.ai_mode.get()
+        if mode == "generate":
+            self._generate_code()
+        elif mode == "complete":
+            self._complete_code()
+        elif mode == "refactor":
+            self._refactor_code()
+        else:
+            self._agent_task()
+
+    def _update_ai_mode_button(self):
+        """AIモードボタンのテキストを更新"""
+        mode = self.ai_mode.get()
+        mode_texts = {
+            "generate": "✨ AI生成",
+            "complete": "🔧 AI補完",
+            "refactor": "🔄 AIリファクタ",
+            "agent": "🎯 AIエージェント",
+        }
+        self.ai_mode_button.configure(text=mode_texts.get(mode, "✨ AI実行"))
+
+    def _execute_evolution_mode(self):
+        """統合進化実行ボタンのハンドラー"""
+        mode = self.evolution_mode.get()
+        if mode == "auto":
+            self._start_auto_evolution()
+        else:
+            self._run_evolution_cycle()
+
+    def _update_evolution_button(self):
+        """進化モードボタンのテキストを更新"""
+        mode = self.evolution_mode.get()
+        if mode == "auto":
+            self.evolution_button.configure(text="🚀 自動進化開始")
+        else:
+            self.evolution_button.configure(text="🔄 進化サイクル実行")
 
         # 新機能ボタン
         new_features_frame = ctk.CTkFrame(ai_frame)
@@ -767,54 +816,56 @@ class ModernCursorAIInterface:
         )
         genetic_label.pack(pady=(10, 5))
 
-        # 自動進化機能
-        auto_evolution_frame = ctk.CTkFrame(genetic_frame)
-        auto_evolution_frame.pack(fill="x", padx=5, pady=5)
+        # 統合進化機能
+        evolution_frame = ctk.CTkFrame(genetic_frame)
+        evolution_frame.pack(fill="x", padx=5, pady=5)
 
-        auto_label = ctk.CTkLabel(
-            auto_evolution_frame,
-            text="🤖 自動進化",
+        evolution_label = ctk.CTkLabel(
+            evolution_frame,
+            text="🧬 進化システム",
             font=ctk.CTkFont(size=12, weight="bold"),
         )
-        auto_label.pack(pady=(5, 5))
+        evolution_label.pack(pady=(5, 5))
 
-        ctk.CTkButton(
-            auto_evolution_frame,
-            text="🚀 自動進化開始",
-            command=self._start_auto_evolution,
-            width=150,
-            height=30,
+        # 進化モード選択
+        self.evolution_mode = ctk.StringVar(value="auto")
+        evolution_mode_frame = ctk.CTkFrame(evolution_frame)
+        evolution_mode_frame.pack(fill="x", pady=2)
+
+        ctk.CTkRadioButton(
+            evolution_mode_frame,
+            text="自動",
+            variable=self.evolution_mode,
+            value="auto",
+            command=self._update_evolution_button,
+            width=70,
         ).pack(side="left", padx=2)
 
-        ctk.CTkButton(
-            auto_evolution_frame,
-            text="⏸️ 自動進化停止",
-            command=self._stop_auto_evolution,
-            width=150,
-            height=30,
+        ctk.CTkRadioButton(
+            evolution_mode_frame,
+            text="手動",
+            variable=self.evolution_mode,
+            value="manual",
+            command=self._update_evolution_button,
+            width=70,
         ).pack(side="left", padx=2)
 
-        # 手動進化機能
-        manual_evolution_frame = ctk.CTkFrame(genetic_frame)
-        manual_evolution_frame.pack(fill="x", padx=5, pady=5)
-
-        manual_label = ctk.CTkLabel(
-            manual_evolution_frame,
-            text="🎯 手動進化",
-            font=ctk.CTkFont(size=12, weight="bold"),
+        # 統合進化実行ボタン
+        self.evolution_button = ctk.CTkButton(
+            evolution_frame,
+            text="🚀 進化開始",
+            command=self._execute_evolution_mode,
+            width=150,
+            height=30,
         )
-        manual_label.pack(pady=(5, 5))
+        self.evolution_button.pack(fill="x", pady=2)
+
+        # 進化制御ボタン
+        control_frame = ctk.CTkFrame(evolution_frame)
+        control_frame.pack(fill="x", pady=2)
 
         ctk.CTkButton(
-            manual_evolution_frame,
-            text="🔄 進化サイクル実行",
-            command=self._run_evolution_cycle,
-            width=100,
-            height=30,
-        ).pack(side="left", padx=2)
-
-        ctk.CTkButton(
-            manual_evolution_frame,
+            control_frame,
             text="📊 適応度表示",
             command=self._show_fitness_scores,
             width=100,
@@ -822,7 +873,7 @@ class ModernCursorAIInterface:
         ).pack(side="left", padx=2)
 
         ctk.CTkButton(
-            manual_evolution_frame,
+            control_frame,
             text="🎯 最適化実行",
             command=self._optimize_fitness,
             width=100,
@@ -830,7 +881,7 @@ class ModernCursorAIInterface:
         ).pack(side="left", padx=2)
 
         ctk.CTkButton(
-            manual_evolution_frame,
+            control_frame,
             text="📈 進化分析",
             command=self._evolution_analysis,
             width=100,
@@ -1893,10 +1944,8 @@ class ModernCursorAIInterface:
         """進化サイクルを実行"""
         try:
             from src.core.evolution import Evolution
-            from src.core.memory import Memory
 
-            memory = Memory()
-            evolution = Evolution(memory)
+            evolution = Evolution()
 
             self._update_status("🧬 進化サイクル実行中...")
 
