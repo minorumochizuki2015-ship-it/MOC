@@ -175,6 +175,12 @@ class ModernCursorAIInterface:
         self.server_online = False
         self.server_error = None
 
+        # ---- 安定化のための内部フラグ ----
+        self._ui_freeze: bool = False  # レイアウト凍結（処理中）
+        self._status_updating: bool = False  # ヘルス再入抑止
+        self._last_latency_ms = None  # 直近思考時間
+        self._last_btn_state = None  # ボタン状態キャッシュ
+
         self._setup_modern_ui()
 
         # バックグラウンドで会話履歴を読み込み
@@ -290,6 +296,12 @@ class ModernCursorAIInterface:
         )
         title_label.pack(side="left", padx=20, pady=10)
 
+        # 思考時間の常時表示（固定位置）
+        self.latency_label = ctk.CTkLabel(
+            header_frame, text="思考時間: -- s", font=ctk.CTkFont(size=12)
+        )
+        self.latency_label.pack(side="right", padx=20, pady=10)
+
         # 統合サーバー状態表示（重複を排除）
         self.server_status_label = ctk.CTkLabel(
             header_frame, text="🔴 サーバー状態確認中...", font=ctk.CTkFont(size=12)
@@ -300,11 +312,21 @@ class ModernCursorAIInterface:
         self.update_server_status()
 
     def update_server_status(self):
-        """サーバー状態を更新（リアルタイム・重複排除）"""
+        """サーバー状態を更新（再入抑止＋確定バッジ＋差分更新）"""
+        if self._status_updating:
+            return
+        self._status_updating = True
 
         def _render(text):
-            # UI更新はメインスレッドで
-            self.server_status_label.configure(text=text)
+            # 文字が変わる時だけ更新（レイアウト揺れ抑止）
+            try:
+                if (
+                    getattr(self.server_status_label, "cget")("text") != text
+                    and not self._ui_freeze
+                ):
+                    self.server_status_label.configure(text=text)
+            except Exception:
+                pass
 
         try:
             from ..utils.server_status import get_server_status
@@ -337,6 +359,19 @@ class ModernCursorAIInterface:
                 except ImportError:
                     pass
 
+            # バッジ確定
+            try:
+                if self.server_online:
+                    if hasattr(self, "status_badge"):
+                        self.status_badge.configure(text="稼働中", fg_color="#006400")
+                else:
+                    if hasattr(self, "status_badge"):
+                        self.status_badge.configure(
+                            text="サーバー未接続", fg_color="#444444"
+                        )
+            except Exception:
+                pass
+
             self.parent.after(0, lambda: _render(status_text))
 
         except Exception as e:
@@ -349,8 +384,34 @@ class ModernCursorAIInterface:
         else:
             update_interval = 2000 if getattr(self, "is_processing", False) else 20000
 
+        # ボタン状態を一括同期
+        self._sync_server_buttons()
+        self._status_updating = False
+
         # 次回更新をスケジュール
         self.parent.after(update_interval, self.update_server_status)
+
+    def _sync_server_buttons(self):
+        """起動・停止ボタン：1箇所で状態同期（多発configure抑止）"""
+        if self._ui_freeze:
+            return
+        try:
+            state = "on" if getattr(self, "server_online", False) else "off"
+            if state == self._last_btn_state:
+                return
+            self._last_btn_state = state
+            if state == "on":
+                if hasattr(self, "start_button"):
+                    self.start_button.configure(state="disabled")
+                if hasattr(self, "stop_button"):
+                    self.stop_button.configure(state="normal")
+            else:
+                if hasattr(self, "start_button"):
+                    self.start_button.configure(state="normal")
+                if hasattr(self, "stop_button"):
+                    self.stop_button.configure(state="disabled")
+        except Exception:
+            pass
 
     def _setup_file_panel(self, parent):
         """ファイルパネルをセットアップ"""
@@ -1285,11 +1346,16 @@ class ModernCursorAIInterface:
         if not request:
             return
 
-        if self.is_processing:
+        if self.is_processing or self._ui_freeze:
             messagebox.showwarning("警告", "既に処理中です")
             return
 
+        # 処理開始（二重押下防止＋凍結＋ストップウォッチ）
         self.is_processing = True
+        self._ui_freeze = True
+        import time
+
+        self._t_start = time.perf_counter()
         self._update_status("🤖 AI処理中...")
 
         # バックグラウンドで実行（タスクタイプを渡す）
@@ -1557,8 +1623,39 @@ class ModernCursorAIInterface:
         self._update_status(f"❌ エラー: {error}")
 
     def _processing_finished(self):
-        """処理完了"""
+        """処理完了: フラグ解除・思考時間更新・UI復帰"""
         self.is_processing = False
+        self._ui_freeze = False
+        # 思考時間
+        try:
+            import time
+
+            self._last_latency_ms = int(
+                (time.perf_counter() - getattr(self, "_t_start", time.perf_counter()))
+                * 1000
+            )
+            if hasattr(self, "latency_label"):
+                self.latency_label.configure(
+                    text=f"思考時間: {self._last_latency_ms/1000:.2f} s"
+                )
+            # ログ
+            import datetime
+            import json
+            import os
+
+            os.makedirs("data/logs/current", exist_ok=True)
+            with open("data/logs/current/latency.jsonl", "a", encoding="utf-8") as f:
+                f.write(
+                    json.dumps(
+                        {
+                            "ts": datetime.datetime.now().isoformat(),
+                            "latency_ms": self._last_latency_ms,
+                        }
+                    )
+                    + "\n"
+                )
+        except Exception:
+            pass
 
     def _check_server_with_retry(
         self, max_retries: int = 3, backoff_seconds: float = 2.0
@@ -3371,7 +3468,75 @@ class ModernCursorAIInterface:
 
     def run(self):
         """インターフェースを実行"""
+        # 自動進化機能を起動（多重起動防止）
+        self._start_auto_evolution()
         self.parent.mainloop()
+
+    def _start_auto_evolution(self):
+        """自動進化機能を開始"""
+        if hasattr(self, "_evo_running") and self._evo_running:
+            return
+        self._evo_running = True
+        self._evo_points = []
+        # 進化グラフ用のキャンバスを作成
+        try:
+            import tkinter as tk
+
+            self.evo_canvas = tk.Canvas(
+                self.parent, width=320, height=100, bg="#1e1e1e", highlightthickness=0
+            )
+            self.evo_canvas.pack(side="bottom", fill="x", padx=8, pady=6)
+        except Exception:
+            pass
+        # タイマー開始
+        self._evo_timer = self.parent.after(5000, self._evo_tick)
+
+    def _evo_tick(self):
+        """自動進化の定期実行"""
+        try:
+            # 思考時間を指標として簡易スコア化
+            val = float(self._last_latency_ms or 0.0)
+            self._evo_points = (self._evo_points + [val])[-200:]
+            self._draw_evo_graph()
+        finally:
+            if getattr(self, "_evo_running", False):
+                self._evo_timer = self.parent.after(5000, self._evo_tick)  # 5s
+
+    def _draw_evo_graph(self):
+        """進化グラフを描画"""
+        if not hasattr(self, "evo_canvas"):
+            return
+        try:
+            c = self.evo_canvas
+            c.delete("all")
+            if not getattr(self, "_evo_points", []):
+                return
+            w = int(c.cget("width"))
+            h = int(c.cget("height"))
+            pts = self._evo_points
+            mx = max(1.0, max(pts))
+            step = max(1, int(w / max(1, len(pts) - 1)))
+            for i in range(1, len(pts)):
+                x1 = (i - 1) * step
+                y1 = h - int(pts[i - 1] / mx * h)
+                x2 = i * step
+                y2 = h - int(pts[i] / mx * h)
+                c.create_line(x1, y1, x2, y2, fill="#00ff00", width=2)
+        except Exception:
+            pass
+
+    def _on_close(self):
+        """終了時にタイマー停止（多重登録/ゾンビ抑止）"""
+        try:
+            self._evo_running = False
+            if getattr(self, "_evo_timer", None):
+                self.parent.after_cancel(self._evo_timer)
+        except Exception:
+            pass
+        try:
+            self.parent.destroy()
+        except Exception:
+            pass
 
 
 def main():
