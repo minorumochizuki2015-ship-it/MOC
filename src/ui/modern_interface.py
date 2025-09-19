@@ -356,7 +356,7 @@ class ModernCursorAIInterface:
                     status_text = (
                         f"🤖 処理中 | CPU {cpu:.1f}% | MEM {mem:.1f}% | {tail}"
                     )
-                except ImportError:
+                except (ImportError, Exception):
                     pass
 
             # バッジ確定
@@ -1404,6 +1404,14 @@ class ModernCursorAIInterface:
         # 処理開始（二重押下防止＋凍結＋ストップウォッチ）
         self.is_processing = True
         self._ui_freeze = True
+
+        # UI要素を無効化（処理中）
+        try:
+            self.ai_mode_button.configure(state="disabled")
+            if hasattr(self, "evolution_button"):
+                self.evolution_button.configure(state="disabled")
+        except Exception:
+            pass
         import time
 
         self._t_start = time.perf_counter()
@@ -1677,6 +1685,14 @@ class ModernCursorAIInterface:
         """処理完了: フラグ解除・思考時間更新・UI復帰"""
         self.is_processing = False
         self._ui_freeze = False
+
+        # UI要素を有効化（処理完了）
+        try:
+            self.ai_mode_button.configure(state="normal")
+            if hasattr(self, "evolution_button"):
+                self.evolution_button.configure(state="normal")
+        except Exception:
+            pass
         # 思考時間
         try:
             import time
@@ -2964,9 +2980,17 @@ class ModernCursorAIInterface:
 
     def _update_status(self, message: str):
         """ステータスを更新（統合後）"""
-        self.server_status_label.configure(text=message)
-        self.status_text.delete("1.0", "end")
-        self.status_text.insert("1.0", message)
+        try:
+            self.server_status_label.configure(text=message)
+        except Exception:
+            pass
+
+        try:
+            if hasattr(self, "status_text") and self.status_text:
+                self.status_text.delete("1.0", "end")
+                self.status_text.insert("1.0", message)
+        except Exception:
+            pass
 
     def _start_server(self):
         """サーバーを起動"""
