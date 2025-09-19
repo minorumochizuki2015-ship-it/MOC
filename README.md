@@ -217,3 +217,4 @@ python -X utf8 -u main_modern.py
 
 ---
 *最終更新: 2025年1月15日*
+Cursor Git check: 2025-09-19T09:09:57+09:00
