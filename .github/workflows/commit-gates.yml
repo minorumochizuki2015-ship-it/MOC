@@ -1,7 +1,12 @@
 name: commit-gates
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [ master ]         # 対象を限定
+    paths:
+      - '**/*.md'
+      - '.githooks/**'
+      - '.codex/**'
+      - '.github/workflows/commit-gates.yml'
 jobs:
   dco:
     runs-on: ubuntu-latest
