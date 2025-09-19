@@ -34,7 +34,7 @@ function Remove-PyCache {
   param([switch]$WhatIf)
   
   $pattern = "__pycache__"
-  $dirs = Get-ChildItem -Recurse -Directory -Name $pattern -ErrorAction SilentlyContinue
+  $dirs = @(Get-ChildItem -Recurse -Directory -Name $pattern -ErrorAction SilentlyContinue)
   
   if ($dirs.Count -eq 0) {
     Write-Host "✓ __pycache__ディレクトリは見つかりませんでした"
@@ -53,7 +53,8 @@ function Remove-PyCache {
     try {
       Remove-Item -Path $_ -Recurse -Force -ErrorAction Stop
       Write-Host "✓ 削除完了: $_"
-    } catch {
+    }
+    catch {
       Write-Host "✗ 削除失敗: $_ - $($_.Exception.Message)"
     }
   }
@@ -87,7 +88,8 @@ function Remove-TempFiles {
     try {
       Remove-Item -Path $_ -Force -ErrorAction Stop
       Write-Host "✓ 削除完了: $_"
-    } catch {
+    }
+    catch {
       Write-Host "✗ 削除失敗: $_ - $($_.Exception.Message)"
     }
   }
@@ -100,7 +102,8 @@ function Invoke-TestSuite {
   Write-Host "1. スキーマ検証..."
   try {
     & .\.venv\Scripts\python.exe -c "import json; import yaml; print('✓ スキーマ検証: OK')"
-  } catch {
+  }
+  catch {
     Write-Host "✗ スキーマ検証: 失敗 - $($_.Exception.Message)"
     return $false
   }
@@ -109,7 +112,8 @@ function Invoke-TestSuite {
   Write-Host "2. Consistency-mini..."
   try {
     & .\.venv\Scripts\python.exe -c "print('Consistency-mini: 0')"
-  } catch {
+  }
+  catch {
     Write-Host "✗ Consistency-mini: 失敗 - $($_.Exception.Message)"
     return $false
   }
@@ -118,7 +122,8 @@ function Invoke-TestSuite {
   Write-Host "3. pytest実行..."
   try {
     & .\.venv\Scripts\python.exe -m pytest tests/test_localai_smoke.py -v
-  } catch {
+  }
+  catch {
     Write-Host "✗ pytest: 失敗 - $($_.Exception.Message)"
     return $false
   }
@@ -155,11 +160,13 @@ function Backup-ImportantFiles {
     
     if ($WhatIf) {
       Write-Host "Dry-Run: $file -> $backupPath"
-    } else {
+    }
+    else {
       try {
         Copy-Item -Path $file -Destination $backupPath -Force
         Write-Host "✓ バックアップ作成: $backupPath"
-      } catch {
+      }
+      catch {
         Write-Host "✗ バックアップ失敗: $file - $($_.Exception.Message)"
       }
     }
@@ -191,7 +198,8 @@ function Restore-LatestBackup {
   try {
     Copy-Item -Path $backupPath -Destination $originalName -Force
     Write-Host "✓ 復元完了: $originalName"
-  } catch {
+  }
+  catch {
     Write-Host "✗ 復元失敗: $($_.Exception.Message)"
   }
 }
@@ -203,7 +211,8 @@ function Test-Dependencies {
   try {
     $pythonVersion = & .\.venv\Scripts\python.exe --version
     Write-Host "✓ Python: $pythonVersion"
-  } catch {
+  }
+  catch {
     Write-Host "✗ Python: 利用不可"
     return $false
   }
@@ -212,7 +221,8 @@ function Test-Dependencies {
   try {
     $nodeVersion = & node --version
     Write-Host "✓ Node.js: $nodeVersion"
-  } catch {
+  }
+  catch {
     Write-Host "✗ Node.js: 利用不可"
     return $false
   }
@@ -221,7 +231,8 @@ function Test-Dependencies {
   try {
     $npmVersion = & npm --version
     Write-Host "✓ npm: $npmVersion"
-  } catch {
+  }
+  catch {
     Write-Host "✗ npm: 利用不可"
     return $false
   }
@@ -241,7 +252,8 @@ switch ($Action) {
   "run-tests" {
     if (-not $Apply) {
       Write-Host "Dry-Run: テストは実行されません（-Applyで実行）"
-    } else {
+    }
+    else {
       Invoke-TestSuite
     }
   }
@@ -251,7 +263,8 @@ switch ($Action) {
   "restore-backup" {
     if (-not $Apply) {
       Write-Host "Dry-Run: 復元は実行されません（-Applyで実行）"
-    } else {
+    }
+    else {
       Restore-LatestBackup
     }
   }
@@ -261,7 +274,8 @@ switch ($Action) {
   "schema-validate" {
     if (-not $Apply) {
       Write-Host "Dry-Run: スキーマ検証は実行されません（-Applyで実行）"
-    } else {
+    }
+    else {
       & .\.venv\Scripts\python.exe -c "import json; import yaml; print('✓ スキーマ検証: OK')"
     }
   }
