@@ -17,8 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - uses: actions/setup-node@v4
-        with: { node-version: '22.x' }
-      - run: npm i -D @commitlint/cli@^19 @commitlint/config-conventional@^19
-      - name: commitlint
-        run: npx --no -- commitlint --from origin/${{ github.base_ref }} --to HEAD
+      - name: Setup Node.js
+        run: |
+          curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+      - name: Install commitlint
+        run: |
+          npm init -y
+          npm install --save-dev @commitlint/cli@^19 @commitlint/config-conventional@^19
+      - name: Run commitlint
+        run: npx commitlint --from origin/${{ github.base_ref }} --to HEAD
