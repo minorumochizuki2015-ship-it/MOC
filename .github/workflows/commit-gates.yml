@@ -1,0 +1,24 @@
+name: commit-gates
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  dco:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: DCO check
+        run: |
+          git log --format=%B origin/${{ github.base_ref }}..HEAD \
+          | awk '/^Signed-off-by:\s+.+\s<[^>]+>\s*$/{ok++} END{exit ok==0}'
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 'lts/*', cache: 'npm' }
+      - run: npm i -D @commitlint/cli@^19 @commitlint/config-conventional@^19
+      - name: commitlint
+        run: npx --no -- commitlint --from origin/${{ github.base_ref }} --to HEAD

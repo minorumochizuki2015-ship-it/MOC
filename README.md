@@ -98,7 +98,13 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 2. モダンUI起動（推奨）
+### 2. Git Hooks設定（必須）
+```bash
+# Git Hooksを有効化
+git config --local core.hooksPath .githooks
+```
+
+### 3. モダンUI起動（推奨）
 ```bash
 # バッチファイル実行
 start_modern_ui.bat
@@ -107,7 +113,7 @@ start_modern_ui.bat
 python main_modern.py
 ```
 
-### 3. 従来UI起動
+### 4. 従来UI起動
 ```bash
 # バッチファイル実行
 起動_モダンUI.bat
@@ -116,7 +122,7 @@ python main_modern.py
 python main.py
 ```
 
-### 4. GPUサーバー起動
+### 5. GPUサーバー起動
 ```powershell
 # PowerShellで実行
 .\scripts\Start-LocalAI-GPU.ps1
