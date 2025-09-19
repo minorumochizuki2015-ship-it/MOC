@@ -1,0 +1,44 @@
+**問題の特定**:
+1. `__script:alive = $true` のシンタックスは正しくありません。これはPowerShellで使用するものです。
+2. 一部のWindows Forms関数 `.add_Load`, `.add_Shown` 等は、Windows Formsアプリケーション内で直接呼び出されなければなりません。 PowerShellからこれらの機能を直接呼び出すことは推奨されていません。
+
+**デバッグコード**:
+以下は、PowerShellとWindows Forms間の橋渡しを行うためのデバッグコードです。これは問題を理解するためのものです：
+
+```powershell
+#requires -Version 7.0
+param([switch]$Smoke)
+
+try {
+    # PowerShell内部でのWindows Formsコードにアクセスするための仮想的なブリッジ
+    $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+    
+    function __log([string]$m) { Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
+    
+    $__t0 = [DateTime]::UtcNow
+    $__alive = $false
+
+    # 3秒後にフラグを立てる（UIループに依存しない System.Threading.Timer）
+    $__tm = [System.Threading.Timer]::new({ $__script:alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+    
+    # イベントトレースの部分は、Windows Formsアプリケーション内で実行する必要があります。PowerShellでは直接呼び出せません。
+} catch {}
+# === UI KeepAlive Guard (auto-injected) ===
+try {
+    if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+        $__ui_start = [DateTime]::UtcNow
+        $__ui_alive = $false
+        
+        # PowerShellからWindows FormsのTimerを直接使用することは推奨されていません。
+        # 代わりに、PowerShellで新しいスレッドを作成し、その中でTimerを実行する方法を考える必要があります。  
+    }
+} catch {}
+```
+
+**修正版**:
+Windows Formsのコードは、その自身で実行され、PowerShellから直接アクセスすることは推奨されていません。したがって、この部分の修正には、Windows Formsアプリケーション自体を動作させるためのスクリプトが必要となります。しかし、それはここでは提供することができません。
+
+**説明**:
+修正内容は以下の通りです：
+1. `__script:alive = $true` のシンタックスを削除します。
+2. PowerShellからWindows Formsのコントロールや機能に直接アクセスする代わり

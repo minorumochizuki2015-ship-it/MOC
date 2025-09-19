@@ -1,15 +1,22 @@
 {
   "openai_base": "http://127.0.0.1:8080/v1",
   "api_key": "sk-local",
-  "model_id_coder": "qwen2.5-coder-7b-instruct",
-  "default_model_id": "qwen2.5-coder-7b-instruct",
-  "max_tokens": 4096,
-  "timeout_s": 30,
+  "model_id_coder": "/models/qwen2-7b-instruct-q4_k_m.gguf",
+  "default_model_id": "/models/qwen2-7b-instruct-q4_k_m.gguf",
+  "max_tokens": 2048,
+  "timeout_s": 60,
   "temperature": 0.25,
   "top_p": 0.95,
   "repeat_penalty": 1.1,
-  "context_size": 8192,
-  "gpu_layers": 22,
+  "context_size": 4096,
+  "gpu_layers": 35,
   "server_port": 8080,
-  "server_host": "127.0.0.1"
+  "server_host": "127.0.0.1",
+  "fallback_servers": [
+    "http://127.0.0.1:8080/v1",
+    "http://localhost:8080/v1"
+  ],
+  "auto_detect_server": true,
+  "connection_retry": 3,
+  "connection_timeout": 10
 }
