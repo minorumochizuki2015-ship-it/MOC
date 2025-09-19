@@ -89,6 +89,7 @@ GoverningCore_v5_Slice/
 ## 🚀 起動方法
 
 ### 1. 依存関係のインストール
+
 ```bash
 # 仮想環境の作成（推奨）
 python -m venv .venv
@@ -98,7 +99,15 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 2. モダンUI起動（推奨）
+### 2. Git Hooks設定（必須）
+
+```bash
+# Git Hooksを有効化
+git config --local core.hooksPath .githooks
+```
+
+### 3. モダンUI起動（推奨）
+
 ```bash
 # バッチファイル実行
 start_modern_ui.bat
@@ -107,7 +116,8 @@ start_modern_ui.bat
 python main_modern.py
 ```
 
-### 3. 従来UI起動
+### 4. 従来UI起動
+
 ```bash
 # バッチファイル実行
 起動_モダンUI.bat
@@ -116,7 +126,8 @@ python main_modern.py
 python main.py
 ```
 
-### 4. GPUサーバー起動
+### 5. GPUサーバー起動
+
 ```powershell
 # PowerShellで実行
 .\scripts\Start-LocalAI-GPU.ps1
@@ -125,6 +136,7 @@ python main.py
 ## ⚙️ 設定
 
 設定ファイル: `data/config/settings.json`
+
 ```json
 {
   "openai_base": "http://127.0.0.1:8080/v1",
@@ -137,17 +149,20 @@ python main.py
 ## 🔧 主要機能
 
 ### 🧠 コア機能
+
 - **Cursor AI同等システム**: 統合されたAIアシスタント
 - **統治監査**: 量子メトリクスによる品質監査
 - **進化学習**: 遺伝的アルゴリズムによる自己改善
 - **メモリ管理**: ブロックチェーン型の対話履歴
 
 ### 🎨 インターフェース
+
 - **モダンUI**: CustomTkinterベースの最新インターフェース
 - **Cursor AI同等UI**: 従来のtkinterベースUI
 - **フォールバック機能**: 自動的なUI切り替え
 
 ### 🔌 統合機能
+
 - **多プロバイダ対応**: OpenAI互換、Ollama、Google AI
 - **コード実行**: 安全なサンドボックス環境
 - **ファイル管理**: 統合されたファイル操作
@@ -162,6 +177,7 @@ python main.py
 ## 🛠️ 開発
 
 ### テスト実行
+
 ```bash
 # 全テスト実行
 python -m pytest tests/
@@ -171,6 +187,7 @@ python -m pytest tests/test_localai_smoke.py -v
 ```
 
 ### コード品質チェック
+
 ```bash
 # Black（コード整形）
 black --check .
@@ -186,6 +203,7 @@ python -m pytest tests/ && black --check . && isort --check-only . && mypy src/
 ```
 
 ### 文字化け対策
+
 ```bash
 # PowerShellでのUTF-8設定
 [Console]::OutputEncoding=[Text.Encoding]::UTF8
@@ -197,16 +215,19 @@ python -X utf8 -u main_modern.py
 ## 🐛 トラブルシューティング
 
 ### 文字化け問題
+
 - **原因**: PowerShellのエンコーディング設定不備
 - **解決**: `start_modern_ui.bat`を使用（UTF-8設定済み）
 - **手動設定**: `[Console]::OutputEncoding=[Text.Encoding]::UTF8`
 
 ### GPUサーバー起動失敗
+
 - **確認**: `Test-NetConnection 127.0.0.1 -Port 8080`
 - **起動**: `scripts/Start-LocalAI-GPU.ps1`
 - **ログ**: `data/logs/current/`を確認
 
 ### インポートエラー
+
 - **仮想環境**: `.venv\Scripts\activate`で有効化
 - **依存関係**: `pip install -r requirements.txt`
 - **PYTHONPATH**: 環境変数で設定済み
