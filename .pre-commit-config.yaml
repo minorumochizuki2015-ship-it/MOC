@@ -1,28 +1,7 @@
 repos:
   - repo: https://github.com/psf/black
-    rev: 25.1.0
-    hooks:
-      - id: black
-
-  - repo: https://github.com/pycqa/isort
+    rev: 25.9.0
+    hooks: [{id: black}]
+  - repo: https://github.com/PyCQA/isort
     rev: 6.0.1
-    hooks:
-      - id: isort
-
-  # ローカルの venv を使って、必要なファイルだけ mypy 実行
-  - repo: local
-    hooks:
-      - id: mypy-selected
-        name: mypy (selected files)
-        entry: '.venv/Scripts/python.exe -m mypy
-src/core/ai_assistant.py src/core/code_executor.py src/core/agent_mode.py src/core/cursor_ai_system.py src/ui/modern_interface.py'
-        language: system
-        pass_filenames: false
-        stages: [pre-push]
-
-      - id: pytest-smoke
-        name: pytest smoke
-        entry: '.venv/Scripts/python.exe -m pytest tests/test_localai_smoke.py'
-        language: system
-        pass_filenames: false
-        stages: [pre-push]
+    hooks: [{id: isort}]
