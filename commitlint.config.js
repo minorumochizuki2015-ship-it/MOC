@@ -26,14 +26,14 @@ module.exports = {
     ],
     // スコープの大文字小文字
     'scope-case': [2, 'always', 'lower-case'],
-    // 件名の大文字小文字
-    'subject-case': [2, 'always', 'lower-case'],
+    // 件名の大文字小文字（緩和）
+    'subject-case': [1, 'always', 'lower-case'],
     // 件名の末尾ピリオド禁止
     'subject-full-stop': [2, 'never', '.'],
     // 件名の空行禁止
     'subject-empty': [2, 'never'],
-    // 件名の最大長
-    'subject-max-length': [2, 'always', 50],
+    // 件名の最大長（緩和）
+    'subject-max-length': [1, 'always', 72],
     // 本文の行の最大長
     'body-max-line-length': [2, 'always', 100],
     // フッターの最大長
