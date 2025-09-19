@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -euo pipefail
+MSG="$1"
+if ! grep -Ei '^Signed-off-by:\s+.+\s<[^>]+>\s*$' "$MSG" >/dev/null; then
+  echo "❌ DCO missing: add Signed-off-by: Name <email>" 1>&2; exit 1;
+fi
+CL="./node_modules/.bin/commitlint"; if [ -x "$CL" ]; then "$CL" --config .codex/commitlint.config.js --edit "$MSG"; fi
+echo "✅ commit-msg OK"
