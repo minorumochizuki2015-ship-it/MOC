@@ -1,0 +1,27 @@
+{
+  "name": "governingcore_v5_slice",
+  "version": "1.0.0",
+  "description": "> **Cursor AI同等システム** - 統治核AI v5.0 モダン版",
+  "main": "commitlint.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/minorumochizuki2015-ship-it/MOC.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/minorumochizuki2015-ship-it/MOC/issues"
+  },
+  "homepage": "https://github.com/minorumochizuki2015-ship-it/MOC#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1"
+  }
+}
