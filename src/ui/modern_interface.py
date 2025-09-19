@@ -193,6 +193,11 @@ class ModernCursorAIInterface:
         thread.daemon = True
         thread.start()
 
+        # 進化グラフ用の変数初期化
+        self._evo_points = []
+        self._evo_running = False
+        self._evo_timer = None
+
         # UI表示後にCursor AIを初期化（遅延初期化）
         self.parent.after(1000, self._initialize_cursor_ai)
 
@@ -477,12 +482,28 @@ class ModernCursorAIInterface:
         button_frame = ctk.CTkFrame(editor_frame)
         button_frame.pack(fill="x", padx=10, pady=5)
 
+        # 単一実行ボタン＋モード切替（既定=実行）
+        self.run_mode = ctk.StringVar(value="run")
+        try:
+            seg = ctk.CTkSegmentedButton(
+                button_frame,
+                values=["実行", "デバッグ"],
+                command=lambda v: self.run_mode.set("run" if v == "実行" else "debug"),
+            )
+            seg.set("実行")
+            seg.pack(side="left", padx=2)
+        except Exception:
+            # フォールバック: ラジオ
+            rgrp = ctk.CTkFrame(button_frame)
+            rgrp.pack(side="left", padx=2)
+            ctk.CTkRadioButton(
+                rgrp, text="実行", variable=self.run_mode, value="run"
+            ).pack(side="left")
+            ctk.CTkRadioButton(
+                rgrp, text="デバッグ", variable=self.run_mode, value="debug"
+            ).pack(side="left")
         ctk.CTkButton(
-            button_frame, text="▶️ 実行", command=self._run_code, width=80
-        ).pack(side="left", padx=2)
-
-        ctk.CTkButton(
-            button_frame, text="🐛 デバッグ", command=self._debug_code, width=80
+            button_frame, text="▶ 実行", command=self._run_or_debug, width=80
         ).pack(side="left", padx=2)
 
         ctk.CTkButton(
@@ -677,51 +698,72 @@ class ModernCursorAIInterface:
             hover_color="#9A3412",
         ).pack(fill="x", pady=2)
 
-        # AI機能ボタン（統合版）
-        button_frame = ctk.CTkFrame(ai_frame)
-        button_frame.pack(fill="x", padx=10, pady=5)
-
-        # 統合AI実行ボタン（モード切替）
+        # AI機能（生成/補助タブ）
         self.ai_mode = ctk.StringVar(value="generate")
+        try:
+            import tkinter.ttk as ttk
+
+            nb = ttk.Notebook(ai_frame)
+            nb.pack(fill="x", padx=10, pady=5)
+            tab_gen = ctk.CTkFrame(nb)
+            tab_sup = ctk.CTkFrame(nb)
+            nb.add(tab_gen, text="生成")
+            nb.add(tab_sup, text="補助")
+        except Exception:
+            # フォールバック: 通常のフレーム
+            nb = ctk.CTkFrame(ai_frame)
+            nb.pack(fill="x", padx=10, pady=5)
+            tab_gen = ctk.CTkFrame(nb)
+            tab_sup = ctk.CTkFrame(nb)
+            tab_gen.pack(fill="x", pady=2)
+            tab_sup.pack(fill="x", pady=2)
+
+        # 共通 実行ボタン
         self.ai_mode_button = ctk.CTkButton(
-            button_frame,
+            ai_frame,
             text="✨ AI実行",
             command=self._execute_ai_mode,
             width=150,
             height=35,
         )
-        self.ai_mode_button.pack(fill="x", pady=2)
+        self.ai_mode_button.pack(fill="x", padx=10, pady=4)
+        self._update_ai_mode_button()
 
-        # モード切替ボタン
-        mode_frame = ctk.CTkFrame(button_frame)
-        mode_frame.pack(fill="x", pady=2)
-
+        # 生成タブ: 生成/リファクタ
+        ggrp = ctk.CTkFrame(tab_gen)
+        ggrp.pack(fill="x", padx=8, pady=6)
         ctk.CTkRadioButton(
-            mode_frame,
+            ggrp,
             text="生成",
             variable=self.ai_mode,
             value="generate",
             command=self._update_ai_mode_button,
-            width=70,
-        ).pack(side="left", padx=2)
-
+        ).pack(side="left", padx=4)
         ctk.CTkRadioButton(
-            mode_frame,
-            text="補完",
-            variable=self.ai_mode,
-            value="complete",
-            command=self._update_ai_mode_button,
-            width=70,
-        ).pack(side="left", padx=2)
-
-        ctk.CTkRadioButton(
-            mode_frame,
+            ggrp,
             text="リファクタ",
             variable=self.ai_mode,
             value="refactor",
             command=self._update_ai_mode_button,
-            width=70,
-        ).pack(side="left", padx=2)
+        ).pack(side="left", padx=4)
+
+        # 補助タブ: 補完/エージェント
+        sgrp = ctk.CTkFrame(tab_sup)
+        sgrp.pack(fill="x", padx=8, pady=6)
+        ctk.CTkRadioButton(
+            sgrp,
+            text="補完",
+            variable=self.ai_mode,
+            value="complete",
+            command=self._update_ai_mode_button,
+        ).pack(side="left", padx=4)
+        ctk.CTkRadioButton(
+            sgrp,
+            text="エージェント",
+            variable=self.ai_mode,
+            value="agent",
+            command=self._update_ai_mode_button,
+        ).pack(side="left", padx=4)
 
     def _execute_ai_mode(self):
         """統合AI実行ボタンのハンドラー"""
@@ -751,6 +793,10 @@ class ModernCursorAIInterface:
         mode = self.evolution_mode.get()
         if mode == "auto":
             self._start_auto_evolution()
+            # グラフタイマーを開始
+            if not self._evo_running:
+                self._evo_running = True
+                self._evo_timer = self.parent.after(5000, self._evo_tick)
         else:
             self._run_evolution_cycle()
 
@@ -761,6 +807,83 @@ class ModernCursorAIInterface:
             self.evolution_button.configure(text="🚀 自動進化開始")
         else:
             self.evolution_button.configure(text="🔄 進化サイクル実行")
+
+    def _run_or_debug(self):
+        """単一エントリで実行/デバッグを切替"""
+        mode = getattr(self, "run_mode", None)
+        mode = mode.get() if mode else "run"
+        if mode == "debug":
+            return self._debug_code()
+        return self._run_code()
+
+    def _draw_evo_graph(self):
+        """進化グラフを描画"""
+        try:
+            if not hasattr(self, "evo_canvas") or not self._evo_points:
+                return
+
+            canvas = self.evo_canvas
+            canvas.delete("all")
+
+            if len(self._evo_points) < 2:
+                return
+
+            # キャンバスサイズを取得
+            width = canvas.winfo_width()
+            height = canvas.winfo_height()
+
+            if width <= 1 or height <= 1:
+                return
+
+            # データの正規化
+            min_val = min(self._evo_points)
+            max_val = max(self._evo_points)
+            if max_val == min_val:
+                max_val = min_val + 1
+
+            # グラフを描画
+            points = []
+            for i, val in enumerate(self._evo_points):
+                x = (i / (len(self._evo_points) - 1)) * (width - 20) + 10
+                y = (
+                    height
+                    - 10
+                    - ((val - min_val) / (max_val - min_val)) * (height - 20)
+                )
+                points.extend([x, y])
+
+            if len(points) >= 4:
+                canvas.create_line(points, fill="#00ff00", width=2, smooth=True)
+
+            # 最新値を表示
+            if self._evo_points:
+                latest = self._evo_points[-1]
+                canvas.create_text(
+                    10, 10, text=f"最新: {latest:.1f}ms", fill="#ffffff", anchor="nw"
+                )
+
+        except Exception:
+            pass
+
+    def _evo_tick(self):
+        """進化グラフの定期更新"""
+        try:
+            if not self._evo_running:
+                return
+
+            # 思考時間を指標として使用
+            val = float(self._last_latency_ms or 0.0)
+            self._evo_points = (self._evo_points + [val])[-200:]  # 最新200点を保持
+
+            # グラフを描画
+            self._draw_evo_graph()
+
+        except Exception:
+            pass
+        finally:
+            # 次のタイマーを設定
+            if self._evo_running:
+                self._evo_timer = self.parent.after(5000, self._evo_tick)
 
         # 新機能ボタン
         new_features_frame = ctk.CTkFrame(ai_frame)
@@ -859,6 +982,21 @@ class ModernCursorAIInterface:
             height=30,
         )
         self.evolution_button.pack(fill="x", pady=2)
+
+        # 進化グラフキャンバス
+        try:
+            import tkinter as tk
+
+            self.evo_canvas = tk.Canvas(
+                evolution_frame,
+                width=320,
+                height=100,
+                bg="#1e1e1e",
+                highlightthickness=0,
+            )
+            self.evo_canvas.pack(fill="x", padx=8, pady=6)
+        except Exception:
+            pass
 
         # 進化制御ボタン
         control_frame = ctk.CTkFrame(evolution_frame)
