@@ -232,6 +232,72 @@ python -X utf8 -u main_modern.py
 - **依存関係**: `pip install -r requirements.txt`
 - **PYTHONPATH**: 環境変数で設定済み
 
+## 📋 Cursor作業標準フロー
+
+### 1. 環境準備
+
+* `.cursor/rules/`に追記したルール（small-rules, review-policy, spec-splitなど）をエディタで目視確認
+* ルール追加後は**Cursorを再起動**してキャッシュをクリア（Rulesが反映されやすくなる）
+* すべてのCLI実行は `.\\.venv\\Scripts\\python.exe -m ...` で実施（venv.mdcの徹底）
+
+### 2. ブランチ運用（patch-diff.mdc追記に基づく）
+
+* main/masterに直コミットせず、必ず`feature/xxx`や`rules-update`のような作業ブランチを切る
+* `git add/commit` → `git push` → GitHub上でPR作成 → CI結果を確認 → mainへマージ
+
+### 3. 作業ステップ
+
+* **Plan→Test→Patch**の順に行う：
+  * Plan: 設計や仕様（目的/前提/入出力/例）を先に書く（plan-test-patch.mdc）
+  * Test: pytestやスキーマ検証などでローカルテスト実行
+  * Patch: Test合格後に最小unified diffを作ってPRに出す
+
+### 4. 削除・大量操作系（ターミナルが固まりやすい箇所）
+
+* `Remove-Item`など大量ファイル操作はCursor内ターミナルより**外部PowerShell 7コンソール**で実行
+* `Get-ChildItem … | Remove-Item -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue` のように出力抑制＆エラー無視を併用すると固まりにくい
+* Dry-Run（`-WhatIf`）を必ず実施してから本番実行（powershell.mdcのDryRun-Apply契約）
+
+### 5. CIとGitHub Actions
+
+* PRを出したらGitHub Actionsが自動実行されることを確認
+* pytest・lintが通ってからレビュー→マージ
+
+### 6. 秘密鍵・外部API（security.mdc追記に基づく）
+
+* `OPENAI_COMPAT_BASE`と`API_KEY`以外の秘密はログ・PR・コメントに出さない
+* 外部APIを一時有効化したら、作業終了後にダミー鍵に戻す
+
+### 7. バックアップ・ロールバック
+
+* 重要ファイルに変更をかける前に、今回のPowerShellスクリプトのようにSHA256でバックアップを取り、失敗時は即ロールバック
+
+### 8. PowerShellテンプレート
+
+標準的な作業を自動化するPowerShellテンプレート（`cursor-workflow.ps1`）を提供：
+
+```powershell
+# 使用例
+pwsh -NoProfile -File .\cursor-workflow.ps1 -Action cleanup-cache -WhatIf
+pwsh -NoProfile -File .\cursor-workflow.ps1 -Action run-tests -Apply
+pwsh -NoProfile -File .\cursor-workflow.ps1 -Action backup-files -Apply
+```
+
+**利用可能なアクション:**
+- `cleanup-cache`: __pycache__ディレクトリを削除
+- `cleanup-temp`: 一時ファイルを削除  
+- `run-tests`: テストスイートを実行
+- `backup-files`: 重要ファイルをバックアップ
+- `restore-backup`: バックアップから復元
+- `check-deps`: 依存関係を確認
+- `schema-validate`: スキーマ検証を実行
+
+### 💡 ポイント
+
+* **一貫して「Dry-Run→Apply切替」**を守る
+* **最小unified diff＋例併記**でレビューしやすくする（guard.mdc追記に基づく）
+* **Cursorターミナルに過負荷な操作は外部PSへ逃がす**
+
 ## 📝 ライセンス
 
 統治核AIシステム v5.0 - Cursor AI同等システム
