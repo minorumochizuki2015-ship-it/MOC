@@ -1,0 +1,9 @@
+---
+description: Require a git checkpoint before multi-file or refactor changes.
+globs:
+  - "**/*"
+alwaysApply: true
+---
+複数ファイル変更やリファクタ前に Git チェックポイントを作成すること。
+例: `git add -A && git commit -m "checkpoint" --no-verify`
+未作成なら PLAN のみ返す。

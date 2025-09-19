@@ -1,0 +1,8 @@
+---
+description: UTF-8 (no BOM) + LF by default. Pre-commit runs Black/isort on commit.
+globs: ["**/*"]
+alwaysApply: true
+---
+エンコ/改行: 既定は UTF-8 (no BOM) + LF。既存EOLは無理由で変更しない。
+例外: .bat/.cmd はCRLFかつOEM依存（CP932）を維持（文字化け防止）。
+commit時は pre-commit で Black/isort を実行する前提。生成パッチはそれに合致させる（未整形の提出禁止）。

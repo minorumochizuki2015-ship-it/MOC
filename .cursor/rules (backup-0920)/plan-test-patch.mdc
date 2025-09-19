@@ -21,8 +21,3 @@ run_tests() は {passed, failed, summary} を返す。
 
 【Granularity】
 - 1回の PATCH_DIFF は**1ファイルのみ**。多ファイル一括は出さない。
-
-## spec-split
-- 仕様提示はテンプレ穴埋め（目的/前提/入出力/検証/失敗時ロールバック）で提出。
-- 設計(長推論)と実行(差分/テスト)を分離。設計は必要時のみ外部LLM、実行はローカルで再現。
-- Plan合格前のPatch生成は禁止。Test合格後のみPatchを許可。
