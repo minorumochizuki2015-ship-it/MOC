@@ -1,0 +1,9 @@
+---
+description: Python standards (3.10+, typing, logging, small funcs).
+globs:
+  - "**/*.py"
+alwaysApply: true
+---
+Python 3.10+、型注釈、標準logging、小さな純関数、グローバル禁止。
+ログは data/logs/current/（または src/utils/data/logs/current/）へ。生成は必要最小限の差分のみ。
+

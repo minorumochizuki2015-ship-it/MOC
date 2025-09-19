@@ -1,0 +1,7 @@
+---
+description: Black + isort on save. Code must already conform to Black/isort.
+globs: ["**/*.py"]
+alwaysApply: true
+---
+整形規約: Black（line-lengthは pyproject.toml に従う。未設定時は88）、isort（profile=black）。
+生成コードは整形済みで出力。import は stdlib→third-party→local の順。不要な空行/末尾スペース禁止。

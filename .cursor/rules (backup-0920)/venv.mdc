@@ -7,6 +7,3 @@ alwaysApply: true
 例: .\.venv\Scripts\python.exe -m pip install -U ...
 例: & .\.venv\Scripts\python.exe main_modern.py
 グローバル python/pip を使わない。コマンド例は必ず .venv を明示。
-
-## venv-enforce
-- すべてのCLIは `.\\.venv\\Scripts\\python.exe -m ...` で実行。グローバル実行を禁止。

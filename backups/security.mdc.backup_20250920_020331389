@@ -6,7 +6,3 @@ alwaysApply: true
 ---
 OPENAI_COMPAT_BASE と API_KEY のみ使用。秘密はログ禁止。新規ネットワークエンドポイントの追加禁止。オフライン動作を阻害しない。
 
-
-## secret-guard
-- 機密は`OPENAI_COMPAT_BASE`/`API_KEY`のみ利用可。ログ/PR/コメントへの出力を禁止。
-- 外部API利用時は一時有効化し、作業終了後にダミー鍵へ即戻す。
