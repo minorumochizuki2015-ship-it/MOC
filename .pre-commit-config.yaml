@@ -5,3 +5,28 @@ repos:
   - repo: https://github.com/PyCQA/isort
     rev: 6.0.1
     hooks: [{id: isort}]
+  - repo: local
+    hooks:
+      - id: guard-protected
+        name: Guard protected files
+        entry: .venv/Scripts/python.exe tools/check_protected.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: patch-one-file
+        name: One-file small diff
+        entry: .venv/Scripts/python.exe tools/check_onefile.py
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+      - id: ptp-commit-msg
+        name: Commit message requires Plan/Test/Patch
+        entry: .venv/Scripts/python.exe tools/check_commit_msg.py
+        language: system
+        stages: [commit-msg]
+      - id: quality-gate
+        name: Quality Gate (tests + mypy + UI)
+        entry: .venv/Scripts/python.exe tools/check_quality_gate.py
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
