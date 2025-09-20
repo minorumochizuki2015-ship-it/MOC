@@ -14,9 +14,7 @@ $py = Find-Python
 Write-Host "Nightly evaluation: agent mode with 45s timeout"
 
 # nightly用の重い評価（agent経由・45秒タイムアウト）
-& $py -X utf8 -u tools/mini_eval.py --mode agent --timeout 45 `
-  --baseline data/outputs/mini_eval_baseline.json `
-  --out data/outputs/mini_eval_nightly.json
+& $py -X utf8 -u tools/mini_eval.py --mode agent --timeout 45 --baseline data/outputs/mini_eval_baseline.json --out data/outputs/mini_eval_nightly.json
 
 if ($LASTEXITCODE -ne 0) { 
     Write-Warning "Nightly eval FAILED: Regression detected in agent mode"
