@@ -2532,6 +2532,9 @@ AIモード: {self.ai_mode.get()}
             if not self._evo_running:
                 self._evo_running = True
                 self._evo_points = []
+                # 既存のタイマーをキャンセル（多重防止）
+                if hasattr(self, "_evo_timer") and self._evo_timer:
+                    self.parent.after_cancel(self._evo_timer)
                 self._evo_timer = self.parent.after(5000, self._evo_tick)
             self._update_status("🚀 自動進化を開始しました")
             messagebox.showinfo(
@@ -2954,6 +2957,31 @@ AIモード: {self.ai_mode.get()}
             record = {"timestamp": time.time(), "latency_ms": latency_ms}
             with open(latency_file, "a", encoding="utf-8") as f:
                 f.write(json.dumps(record) + "\n")
+
+            # bo_trials.jsonlに記録（M4実装）
+            bo_trials_file = log_dir / "bo_trials.jsonl"
+            bo_record = {
+                "timestamp": time.time(),
+                "latency_ms": latency_ms,
+                "trial_type": "latency_measurement",
+                "status": "completed",
+            }
+            with open(bo_trials_file, "a", encoding="utf-8") as f:
+                f.write(json.dumps(bo_record) + "\n")
+
+            # SimpleBOフック（M4実装）
+            try:
+                from src.core.simple_bo import record_trial
+
+                # パフォーマンススコアとしてレイテンシの逆数を使用
+                performance_score = 1000.0 / max(latency_ms, 1.0)
+                record_trial(
+                    params={"latency_ms": latency_ms},
+                    result=performance_score,
+                    metadata={"task_type": "ai_request", "timestamp": time.time()},
+                )
+            except Exception as e:
+                print(f"SimpleBO記録エラー: {e}")
         except Exception:
             pass
 
@@ -3517,8 +3545,8 @@ AIモード: {self.ai_mode.get()}
 
     def run(self):
         """インターフェースを実行"""
-        # 自動進化機能は手動開始のみ（スレッド問題のため自動開始を無効化）
-        # self._start_auto_evolution()
+        # 自動進化機能を自動起動（M3実装）
+        self.parent.after(5000, self._start_auto_evolution)  # 5秒後に自動起動
         self.parent.mainloop()
 
     def _draw_evo_graph(self):
