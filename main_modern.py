@@ -4,6 +4,9 @@
 統治核AI - モダン版メインアプリケーション
 """
 
+from src.common.paths import activate
+activate()
+
 import logging
 import os
 import pathlib
