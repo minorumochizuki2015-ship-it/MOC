@@ -1,6 +1,13 @@
 from __future__ import annotations
-import os, sys, json, time, urllib.request
+
+import json
+import os
+import subprocess
+import sys
+import time
+import urllib.request
 from pathlib import Path
+from socket import socket
 
 EXIT_OK, EXIT_WARN, EXIT_ERR = 0, 1, 2
 
@@ -49,6 +56,32 @@ def _scan_kernel_for_double_v1():
     except Exception as e:
         return False, str(e)[:120]
 
+def _port_open(port=8080, host="127.0.0.1"):
+    try:
+        s = socket(); s.settimeout(0.2); s.connect((host, int(port))); s.close(); return True
+    except Exception:
+        return False
+
+def _load_settings():
+    try:
+        from src.common.paths import resolve_config
+        p = resolve_config("settings.json")
+        with open(p, "r", encoding="utf-8") as f:
+            json.load(f)
+        return True, str(p)
+    except Exception as e:
+        return False, str(e)[:200]
+
+def _gpu_info():
+    try:
+        out = subprocess.check_output(
+            ["nvidia-smi", "--query-gpu=name,memory.total", "--format=csv,noheader"],
+            stderr=subprocess.DEVNULL, timeout=1
+        )
+        return [ln.strip() for ln in out.decode(errors="ignore").splitlines() if ln.strip()]
+    except Exception:
+        return None
+
 def main():
     t0 = time.perf_counter()
     base = _base()
@@ -56,6 +89,9 @@ def main():
     srv_ok, srv_info = _ping_models(base)
     ui_ok, ui_err = _import_ui()
     k_ok, k_err = _scan_kernel_for_double_v1()
+    cfg_ok, cfg_info = _load_settings()
+    port_ok = _port_open(os.environ.get("LOCALAI_PORT","8080"))
+    gpu = _gpu_info()
     scripts_ok = any(_file_exists(p) for p in [
         "scripts/server/start_server_python_robust.bat",
         "start_server_python_robust.bat",
@@ -71,6 +107,10 @@ def main():
         "ui_import_err": ui_err,
         "kernel_double_v1_ok": k_ok,
         "kernel_scan_err": k_err,
+        "config_ok": cfg_ok,
+        "config_info": cfg_info,
+        "port_open": port_ok,
+        "gpu": gpu,
         "start_scripts_found": scripts_ok,
         "elapsed_ms": int((time.perf_counter()-t0)*1000),
     }
@@ -79,7 +119,7 @@ def main():
     # 判定
     if not env_ok or not k_ok:      # 危険設定/実装
         sys.exit(EXIT_ERR)
-    if not srv_ok or not ui_ok or not scripts_ok:
+    if not srv_ok or not ui_ok or not scripts_ok or not cfg_ok or not port_ok:
         sys.exit(EXIT_WARN)
     sys.exit(EXIT_OK)
 

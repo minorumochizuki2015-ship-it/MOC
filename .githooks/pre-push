@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
-python tools/robust_development.py || { echo "[GATE] smoke failed"; exit 1; }
+PY="${PYTHON:-python}"
+$PY -X utf8 -u tools/quick_diagnose.py
+ec=$?
+if [ $ec -eq 0 ]; then exit 0; fi
+if [ $ec -eq 1 ]; then echo "[WARN] quick_diagnose: 环境/依存に未解決あり"; exit 1; fi
+echo "[ERR] quick_diagnose: 危険設定/実装検出"; exit 2
