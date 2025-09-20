@@ -197,6 +197,8 @@ class ModernCursorAIInterface:
         self.parent.after(2000, self._check_server_status)
         # M6: 観測フック初期化
         self.parent.after(3000, self._initialize_observation_hooks)
+        # M7: 品質ゲート初期化
+        self.parent.after(4000, self._initialize_quality_gates)
 
         # ---- UI揺れ抑止用ベースライン ----
         self._ui_baselined = False
@@ -1618,6 +1620,45 @@ AIモード: {self.ai_mode.get()}
                 
         except Exception as e:
             print(f"進化グラフ描画エラー: {e}")
+
+    def _initialize_quality_gates(self):
+        """品質ゲートを初期化（M7）"""
+        try:
+            from src.core.quality_gates import QualityGates
+            self._quality_gates = QualityGates()
+            print("✓ 品質ゲート初期化完了")
+        except Exception as e:
+            print(f"品質ゲート初期化エラー: {e}")
+
+    def _run_quality_check(self):
+        """品質チェックを実行（M7）"""
+        if not hasattr(self, "_quality_gates"):
+            self._update_status("❌ 品質ゲートが初期化されていません")
+            return
+        
+        try:
+            self._update_status("🔍 品質チェック実行中...")
+            
+            # 品質チェック実行
+            results = self._quality_gates.run_full_quality_check()
+            
+            # 結果表示
+            if results["overall_success"]:
+                self._update_status("✅ 品質チェック完了 - すべて緑")
+            else:
+                self._update_status("❌ 品質チェック失敗 - 要修正")
+            
+            # レポート生成・表示
+            report = self._quality_gates.generate_quality_report(results)
+            print(report)
+            
+            # 結果を出力エリアに表示
+            if hasattr(self, "output_text"):
+                self.output_text.insert("end", f"\n{report}\n")
+                self.output_text.see("end")
+                
+        except Exception as e:
+            self._update_status(f"❌ 品質チェックエラー: {e}")
 
     @stabilize_button("execute_ai")
     def _execute_ai_request(
