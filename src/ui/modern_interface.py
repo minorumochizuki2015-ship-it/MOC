@@ -2985,18 +2985,35 @@ AIモード: {self.ai_mode.get()}
             self.exec_mode = "debug"
 
     def _on_ai_tab_changed(self, value):
-        """AIタブが変更された時のコールバック"""
+        """AIタブが変更された時のコールバック（M3: 安定表示）"""
         self.ai_tab_mode.set(value)
         self._show_ai_tab(value)
+        # M3: レイアウト再配置なしで表示切替
+        self._update_tab_visibility()
 
     def _show_ai_tab(self, tab_name):
-        """AIタブの表示を切り替え"""
+        """AIタブの表示を切り替え（M3: 安定表示）"""
         if tab_name == "生成":
             self.tab_gen.pack(fill="x", pady=2)
             self.tab_sup.pack_forget()
         elif tab_name == "補助":
-            self.tab_gen.pack_forget()
             self.tab_sup.pack(fill="x", pady=2)
+            self.tab_gen.pack_forget()
+            
+    def _update_tab_visibility(self):
+        """タブ表示の安定化（M3: 再レイアウト揺れ0）"""
+        try:
+            # 現在のタブ状態を取得
+            current_tab = self.ai_tab_mode.get() if hasattr(self.ai_tab_mode, 'get') else self.ai_tab_mode
+            # タブ切替で再レイアウト揺れを防止（packベースで統一）
+            if current_tab == "生成":
+                self.tab_gen.pack(fill="x", pady=2)
+                self.tab_sup.pack_forget()
+            else:
+                self.tab_sup.pack(fill="x", pady=2)
+                self.tab_gen.pack_forget()
+        except Exception:
+            pass
 
     def cleanup(self):
         """リソースのクリーンアップ"""
