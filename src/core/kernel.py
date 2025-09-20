@@ -221,7 +221,23 @@ class Kernel:
             try:
                 req = urllib.request.Request(url, data=body, headers=headers)
                 with urllib.request.urlopen(req, timeout=timeout) as r:
-                    return json.loads(r.read().decode("utf-8"))
+                    # 文字化け対策: 複数のエンコーディングを試行
+                    raw_data = r.read()
+                    try:
+                        # UTF-8を試行
+                        decoded_data = raw_data.decode("utf-8")
+                    except UnicodeDecodeError:
+                        try:
+                            # Shift_JISを試行
+                            decoded_data = raw_data.decode("shift_jis")
+                        except UnicodeDecodeError:
+                            try:
+                                # CP932を試行
+                                decoded_data = raw_data.decode("cp932")
+                            except UnicodeDecodeError:
+                                # 最後の手段: エラーを置換
+                                decoded_data = raw_data.decode("utf-8", errors="replace")
+                    return json.loads(decoded_data)
             except Exception as e:
                 if i == retries:
                     raise
@@ -323,12 +339,26 @@ class Kernel:
                 "stream": False,
             }
             resp = self._req(self.v1 + "/chat/completions", body)
-            text = (
+            raw_text = (
                 (resp.get("choices") or [{}])[0]
                 .get("message", {})
                 .get("content", "")
-                .strip()
             )
+            
+            # 文字化け対策: 応答テキストのエンコーディング修正
+            if isinstance(raw_text, str):
+                try:
+                    # Unicode正規化
+                    import unicodedata
+                    text = unicodedata.normalize('NFC', raw_text)
+                    # 制御文字を除去
+                    text = ''.join(char for char in text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
+                except Exception:
+                    text = raw_text
+            else:
+                text = str(raw_text) if raw_text else ""
+            
+            text = text.strip()
             gov = Governance().summarize_governance_analysis(text, None)
 
             result = {"response_text": text, "governance_analysis": gov}
