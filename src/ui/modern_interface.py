@@ -440,7 +440,8 @@ class ModernCursorAIInterface:
                 self.parent.after(0, update_buttons)
 
             # 常に幅を再固定（他所のconfigureで解かれるのを防止）
-            self._fix_uniform_button_widths()
+            if hasattr(self, "_button_groups"):
+                self._fix_uniform_button_widths()
 
         except Exception as e:
             print(f"DEBUG: _sync_server_buttons エラー: {e}")
