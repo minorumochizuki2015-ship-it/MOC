@@ -644,11 +644,33 @@ def generate_chat(
             # 非ストリーミング
             r = _sess.post(url, json=body, headers=hdr, timeout=(5, READ_TIMEOUT))
             r.raise_for_status()
-            data = r.json()
+            
+            # 文字化け対策: レスポンスの文字エンコーディングを明示的に処理
+            r.encoding = 'utf-8'
+            try:
+                data = r.json()
+            except Exception:
+                # JSON解析に失敗した場合、テキストとして処理
+                raw_text = r.text
+                # 文字化け修正
+                import unicodedata
+                normalized_text = unicodedata.normalize('NFC', raw_text)
+                # 制御文字を除去
+                clean_text = ''.join(char for char in normalized_text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
+                data = {"choices": [{"message": {"content": clean_text}, "finish_reason": "stop"}]}
+            
             choice = (data.get("choices") or [{}])[0]
-            full_text = choice.get("message", {}).get("content", "") or choice.get(
-                "text", ""
-            )
+            raw_content = choice.get("message", {}).get("content", "") or choice.get("text", "")
+            
+            # 文字化け対策: コンテンツの文字エンコーディング修正
+            if isinstance(raw_content, str):
+                import unicodedata
+                full_text = unicodedata.normalize('NFC', raw_content)
+                # 制御文字を除去
+                full_text = ''.join(char for char in full_text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
+            else:
+                full_text = str(raw_content) if raw_content else ""
+            
             finish_reason = choice.get("finish_reason")
 
         # --- 自動継続（lengthで切れたら追い取得） ---
@@ -682,8 +704,13 @@ def generate_chat(
         if SAVE_LAST:
             try:
                 os.makedirs(os.path.dirname(SAVE_PATH), exist_ok=True)
+                # 文字化け対策: 保存前にテキストを正規化
+                import unicodedata
+                normalized_text = unicodedata.normalize('NFC', full_text)
+                # 制御文字を除去
+                clean_text = ''.join(char for char in normalized_text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
                 with open(SAVE_PATH, "w", encoding="utf-8") as f:
-                    f.write(full_text)
+                    f.write(clean_text)
                 print(f"LOG_SUM: saved result -> {SAVE_PATH}")
             except Exception as e:
                 print(f"LOG_SUM: save failed: {e}")
