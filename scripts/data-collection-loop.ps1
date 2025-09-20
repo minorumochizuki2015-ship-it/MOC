@@ -19,8 +19,26 @@ $safe_tasks = @(
     "Create summary of docs/README.md and save to data/outputs/summary_$timestamp.md",
     "List Python files in src/core/ directory and save to data/outputs/core_files_$timestamp.txt",
     "Create description of tools/ directory functions and save to data/outputs/tools_desc_$timestamp.md",
-    "List project config files and save to data/outputs/config_files_$timestamp.txt"
+    "List project config files and save to data/outputs/config_files_$timestamp.txt",
+    "Analyze recent mini_eval results and save to data/outputs/eval_analysis_$timestamp.md",
+    "Create project structure overview and save to data/outputs/structure_$timestamp.md"
 )
+
+# 重複率チェック（直近5回のmini_eval履歴を確認）
+$historyFile = Join-Path $PSScriptRoot '..\data\logs\current\mini_eval_history.jsonl'
+if (Test-Path $historyFile) {
+    $recent = Get-Content $historyFile -Tail 5 | ForEach-Object { $_ | ConvertFrom-Json }
+    $perfectScores = ($recent | Where-Object { $_.score -eq $_.total }).Count
+    if ($perfectScores -eq 5) {
+        Write-Host "All recent mini_eval scores are perfect (5/5), running in lightweight mode"
+        # 軽量モード: 収集のみ、SFT再生成はスキップ
+        $lightweightMode = $true
+    } else {
+        $lightweightMode = $false
+    }
+} else {
+    $lightweightMode = $false
+}
 
 # ランダムにタスクを選択
 $task = $safe_tasks | Get-Random
@@ -31,18 +49,23 @@ Write-Host "Selected task: $task"
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Task completed successfully"
-    
-    # SFT再生成
+} else {
+    Write-Warning "Task execution failed"
+}
+
+# 軽量モードでない場合のみSFT再生成
+if (-not $lightweightMode) {
     Write-Host "Regenerating SFT dataset..."
-    & $py -X utf8 -u tools/export_sft_dataset.py --min_chars 8 --split 0.9
+    & $py -X utf8 -u tools/export_sft_dataset.py --min_chars 16 --split 0.9
     
     if ($LASTEXITCODE -eq 0) {
         Write-Host "SFT regeneration completed"
     } else {
-        Write-Warning "SFT regeneration failed"
+        Write-Error "SFT regeneration failed"
+        exit 1
     }
 } else {
-    Write-Warning "Task execution failed"
+    Write-Host "Lightweight mode: skipping SFT regeneration"
 }
 
 Write-Host "Data collection loop completed"

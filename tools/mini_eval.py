@@ -20,11 +20,15 @@ except Exception:
     pass
 
 CASES = [
-  {"tool":"list_dir","args":{"path":"docs","limit":50}},
-  {"tool":"read_file","args":{"path":"docs/README.md"}},
-  {"tool":"search","args":{"path":"src","keyword":"def ", "limit":20}},
-  {"tool":"read_file","args":{"path":"data/outputs/dummy_old.txt"}},
-  {"tool":"search","args":{"keyword":"def main","limit":10}},
+    {"tool":"list_dir","args":{"path":"docs","limit":50}},
+    {"tool":"read_file","args":{"path":"docs/README.md"}},
+    {"tool":"search","args":{"path":"src","keyword":"def ", "limit":20}},
+    {"tool":"read_file","args":{"path":"data/outputs/dummy_old.txt"}},
+    {"tool":"search","args":{"keyword":"def main","limit":10}},
+    # 複合ケース: 検索→編集
+    {"tool":"search","args":{"keyword":"class ", "limit":5}, "composite": True, "follow_up": "edit_file"},
+    # 巨大差分プレビュー
+    {"tool":"read_file","args":{"path":"docs/README.md"}, "composite": True, "follow_up": "diff_preview"},
 ]
 
 PY = os.path.join(".venv","Scripts","python.exe") if os.name=="nt" else sys.executable

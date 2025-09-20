@@ -26,9 +26,9 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("--src", default="data/logs/current")
     p.add_argument("--out", default="data/sft")
-    p.add_argument("--split", type=float, default=0.95)
+    p.add_argument("--split", type=float, default=0.9)
     p.add_argument("--max_len", type=int, default=2048)
-    p.add_argument("--min_chars", type=int, default=48)
+    p.add_argument("--min_chars", type=int, default=16)
     args = p.parse_args()
 
     Path(args.out).mkdir(parents=True, exist_ok=True)
@@ -42,8 +42,17 @@ def main():
                     continue
                 inp = _norm(j.get("prompt") or j.get("input") or j.get("instruction") or "")
                 out = _norm(j.get("output") or j.get("response") or j.get("answer") or "")
-                if not inp or not out:
+                rationale = _norm(j.get("rationale") or j.get("reason") or j.get("error") or "")
+                
+                # 失敗タスクもrationaleがあればSFTに含める
+                if not inp:
                     continue
+                if not out and not rationale:
+                    continue
+                
+                # 失敗タスクの場合はrationaleをoutputとして使用
+                if not out and rationale:
+                    out = f"[FAILED] {rationale}"
                 if len(inp)+len(out) < args.min_chars:
                     continue
                 key = hashlib.sha1((inp+"\n###\n"+out).encode("utf-8")).hexdigest()
