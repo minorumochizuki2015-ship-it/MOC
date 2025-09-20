@@ -2632,7 +2632,7 @@ AIモード: {self.ai_mode.get()}
                 "エラー", f"クリップボードへのコピーに失敗しました: {e}"
             )
     def _update_status(self, message: str):
-        """ステータスを更新（統合後）"""
+        """ステータスを更新（M0修正版）"""
         try:
             self.server_status_label.configure(text=message)
         except Exception:
@@ -3027,11 +3027,12 @@ AIモード: {self.ai_mode.get()}
         except Exception as e:
             self._update_status(f"❌ サーバー状態確認エラー: {e}")
     def _check_server_connection(self) -> bool:
-        """サーバー接続を確認"""
+        """サーバー接続を確認（M0修正版）"""
         try:
             import requests
             response = requests.get("http://127.0.0.1:8080/v1/models", timeout=5)
             if response.status_code == 200:
+                # 成功時に必ず状態を上書き
                 self.server_online = True
                 self.server_error = None
                 self.parent.after(0, self._update_status_badge)
