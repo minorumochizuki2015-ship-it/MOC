@@ -1,4 +1,6 @@
-import subprocess, shlex
+import shlex
+import subprocess
+
 
 def commit(message: str = "chore: agent commit") -> dict:
     try:

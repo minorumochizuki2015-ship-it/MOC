@@ -1,4 +1,6 @@
-import subprocess, sys
+import subprocess
+import sys
+
 
 def run(cmd: str = "") -> dict:
     """

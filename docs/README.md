@@ -197,6 +197,70 @@ python main.py
 - **進化データ**: `data/genetic/evolutionary_genome.json`
 - **テーマ分析**: `data/evolved_themes.json`
 
+## 🚀 小回し強化パイプライン（2025年9月20日 完成）
+
+### 概要
+完全ローカル学習→評価→置換の自動化パイプライン。Agent経由のpytest実行による詰まりを機械的に防止し、高速回帰チェックを実現。
+
+### 主要ツール
+
+#### 1. ミニ評価（`tools/mini_eval.py`）
+```bash
+# 高速回帰: tools直呼び・短Timeout（推奨）
+python tools/mini_eval.py --mode tools --timeout 12 \
+  --baseline data/outputs/mini_eval_baseline.json \
+  --out data/outputs/mini_eval.json
+
+# 重い評価: agent経由（pytest実行リスク）
+python tools/mini_eval.py --mode agent --timeout 60
+```
+
+#### 2. ローカル学習（`tools/train_local.py`）
+```bash
+# 学習計画生成
+python tools/train_local.py --plan-only
+
+# 実学習実行
+python tools/train_local.py --trainer-cmd "python scripts/train_lora_local.py --train {train} --val {val} --out {outdir}"
+```
+
+#### 3. 自己データ収集（`tools/agent_cli.py`）
+```bash
+# 単発実行
+python tools/agent_cli.py --goal "READMEを要約しdocs/summary.mdへ" --apply
+
+# 自己データ収集ループ（N回）
+python tools/agent_cli.py --goal "タスクを実行" --selfplay 3
+```
+
+#### 4. SFTデータセット生成（`tools/export_sft_dataset.py`）
+```bash
+# ログからSFTデータセット生成
+python tools/export_sft_dataset.py --min_chars 8 --split 0.9
+```
+
+### 環境変数設定
+```bash
+# ミニ評価のデフォルト設定
+set MINI_EVAL_MODE=tools          # tools直呼び（高速）
+set MINI_EVAL_TIMEOUT=15          # タイムアウト15秒
+
+# ローカル学習のトレーナー設定
+set LOCAL_LORA_TRAINER="python scripts/train_lora_local.py --train {train} --val {val} --out {outdir}"
+```
+
+### 自動化フロー
+1. **データ収集**: `agent_cli.py --selfplay N`
+2. **SFT生成**: `export_sft_dataset.py`
+3. **学習実行**: `train_local.py`
+4. **回帰評価**: `mini_eval.py --mode tools`
+5. **失敗時自動停止**: 回帰検出で即中断
+
+### 品質ゲート
+- **pre-push**: 超高速回帰チェック（tools直呼び・12秒）
+- **CI/CD**: 完全回帰チェック（agent経由・60秒）
+- **手動**: 環境変数で柔軟な設定
+
 ## 🛠️ 開発
 
 ### テスト実行

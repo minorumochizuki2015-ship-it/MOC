@@ -1,20 +1,21 @@
 # agent_mode.py
 # 統治核AI - Agent Mode（計画-実行フロー）システム
 
+import importlib
 import json
 import time
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from src.core.ai_assistant import AIAssistant
 from src.core.code_executor import CodeExecutor
 from src.core.file_manager import FileManager
 from src.core.kernel import Kernel
+
 from . import code_executor
-from .tools_fs import list_dir, read_file, write_file, modify_file, search
-from pathlib import Path
-import importlib
+from .tools_fs import list_dir, modify_file, read_file, search, write_file
 
 
 class TaskStatus(Enum):

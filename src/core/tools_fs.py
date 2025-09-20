@@ -1,7 +1,11 @@
 from __future__ import annotations
-import os, io, json, fnmatch
+
+import fnmatch
+import io
+import json
+import os
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 # ルート固定（ワークスペース外アクセス禁止）
 ROOT = Path(os.environ.get("GC_WORKSPACE", ".")).resolve()

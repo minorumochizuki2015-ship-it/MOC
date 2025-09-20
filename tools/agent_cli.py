@@ -75,6 +75,38 @@ def main():
     else:
         res = run(args.goal)
     print(json.dumps({"ok": True, "result": res}, ensure_ascii=False))
+    return True
 
 if __name__ == "__main__":
-    main()
+    # 追加: 自己データ収集ループ (--selfplay)
+    import argparse
+    import json
+    import pathlib
+    import subprocess
+    import sys
+    import time
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--goal", default=None)
+    ap.add_argument("--selfplay", type=int, default=0)
+    ap.add_argument("--dry-run", default="1")
+    ap.add_argument("--timeout", default="60")
+    args, unknown = ap.parse_known_args()
+
+    def _once():
+        # 既存の単発実行ハンドラを再利用
+        return main()
+    
+    if args.selfplay<=0:
+        result = _once()
+        sys.exit(0 if result else 1)
+    # ループ: 実行→SFT→評価→判定
+    for i in range(args.selfplay):
+        ok = _once()
+        # SFT再生成
+        subprocess.check_call([sys.executable, "tools/export_sft_dataset.py", "--min_chars","8","--split","0.9"], shell=False)
+        # ミニ評価（ゲート）
+        r = subprocess.call([sys.executable, "tools/mini_eval.py", "--baseline","data/outputs/mini_eval_baseline.json", "--out","data/outputs/mini_eval.json"], shell=False)
+        if r != 0:
+            print(f"SELFPLAY STOP at round {i+1} (regression)"); sys.exit(1)
+    print("SELFPLAY OK")
+    sys.exit(0)

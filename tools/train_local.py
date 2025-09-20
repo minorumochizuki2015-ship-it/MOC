@@ -62,4 +62,32 @@ def main():
     print(json.dumps(plan, ensure_ascii=False, indent=2))
 
 if __name__ == "__main__":
-    main()
+    # 追加: 実学習ランチャ（完全ローカルのみ）
+    import argparse, json, os, subprocess, time, pathlib, sys
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--plan-only", action="store_true")
+    ap.add_argument("--trainer-cmd", default=os.environ.get("LOCAL_LORA_TRAINER",""))
+    ap.add_argument("--train", default="data/sft/train.jsonl")
+    ap.add_argument("--val", default="data/sft/val.jsonl")
+    ap.add_argument("--outdir", default="dist/lora")
+    args = ap.parse_args()
+    outdir = pathlib.Path(args.outdir); outdir.mkdir(parents=True, exist_ok=True)
+    plan = {"train":args.train, "val":args.val, "epochs":1, "lr":2e-4, "r":8, "bf16":False}
+    (outdir/"train_plan.json").write_text(json.dumps(plan,indent=2), encoding="utf-8")
+    if args.plan_only:
+        sys.exit(0)
+    # ローカル専用ガード
+    for k in ("OPENAI_API_KEY","ANTHROPIC_API_KEY","AZURE_OPENAI_KEY"):
+        if os.environ.get(k): print(f"ERROR: {k} must be unset for local-only"); sys.exit(2)
+    # 実学習（外部フレームワークがローカルにある前提でコマンド実行）
+    if not args.trainer_cmd:
+        print("INFO: trainer-cmd missing. Plan generated only."); sys.exit(0)
+    state = outdir/"state"; state.mkdir(exist_ok=True, parents=True)
+    logf = outdir/"train_stdout.log"
+    cmd = args.trainer_cmd.format(train=args.train, val=args.val, outdir=str(outdir))
+    t0=time.time()
+    with open(logf, "a", encoding="utf-8") as lf:
+        ret = subprocess.call(cmd, shell=True, stdout=lf, stderr=lf)
+    run = {"ts":int(time.time()), "elapsed_sec":int(time.time()-t0), "cmd":cmd, "ret":ret}
+    (outdir/"last_run.json").write_text(json.dumps(run,indent=2), encoding="utf-8")
+    sys.exit(ret)
