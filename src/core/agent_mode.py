@@ -11,6 +11,7 @@ from src.core.ai_assistant import AIAssistant
 from src.core.code_executor import CodeExecutor
 from src.core.file_manager import FileManager
 from src.core.kernel import Kernel
+from src.core.sandbox_tools import SandboxTools
 
 
 class TaskStatus(Enum):
@@ -51,16 +52,19 @@ class AgentMode:
         file_manager: FileManager,
         code_executor: CodeExecutor,
         ai_assistant: AIAssistant,
+        sandbox_tools: SandboxTools = None,
     ):
         self.kernel = kernel
         self.file_manager = file_manager
         self.code_executor = code_executor
         self.ai_assistant = ai_assistant
+        self.sandbox_tools = sandbox_tools or SandboxTools()  # M5: サンドボックツール
 
         self.tasks: Dict[str, Any] = {}
         self.execution_history: List[Dict[str, Any]] = []
         self.current_plan = None
         self.is_running = False
+        self.tools_used: List[str] = []  # M5: 使用ツール追跡
 
     def plan_and_execute(
         self, user_request: str, context: Dict[str, Any] = None
@@ -82,6 +86,7 @@ class AgentMode:
                 "plan": plan,
                 "execution": execution_result,
                 "summary": self._generate_summary(analysis, plan, execution_result),
+                "tools_used": self._get_tools_used(),  # M5: 使用ツール情報
             }
 
         except Exception as e:
@@ -91,6 +96,7 @@ class AgentMode:
                 "analysis": None,
                 "plan": None,
                 "execution": None,
+                "tools_used": [],  # M5: エラー時も空リスト
             }
 
     def _analyze_request(
@@ -446,3 +452,22 @@ JSON形式で回答してください。
             self.is_running = False
             return True
         return False
+    
+    def _get_tools_used(self) -> List[str]:
+        """使用したツールのリストを取得（M5）"""
+        return self.tools_used.copy()
+    
+    def _execute_tool(self, tool_name: str, **kwargs) -> Dict[str, Any]:
+        """ツールを実行（M5: 安全なファイル操作）"""
+        try:
+            self.tools_used.append(tool_name)
+            
+            if tool_name == "list_dir":
+                return self.sandbox_tools.list_dir(kwargs.get("path", ""))
+            elif tool_name == "read_file":
+                return self.sandbox_tools.read_file(kwargs.get("path", ""))
+            else:
+                return {"error": f"未知のツール: {tool_name}", "success": False}
+                
+        except Exception as e:
+            return {"error": f"ツール実行エラー: {str(e)}", "success": False}
