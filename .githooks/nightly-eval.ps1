@@ -21,5 +21,13 @@ if ($LASTEXITCODE -ne 0) {
     exit 1 
 }
 
-Write-Host "Nightly evaluation: PASSED"
+# スコア確認（5未満なら停止）
+$result = Get-Content data/outputs/mini_eval_nightly.json | ConvertFrom-Json
+$score = $result.score
+if ($score -lt 5) {
+    Write-Warning "Nightly eval FAILED: Score $score < 5"
+    exit 1
+}
+
+Write-Host "Nightly evaluation: PASSED (Score: $score/5)"
 exit 0
