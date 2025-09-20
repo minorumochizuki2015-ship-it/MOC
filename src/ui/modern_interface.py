@@ -194,6 +194,18 @@ class ModernCursorAIInterface:
         # 初期化時にサーバー状態をチェック
         self.parent.after(2000, self._check_server_status)
 
+        # ---- UI揺れ抑止用ベースライン ----
+        self._ui_baselined = False
+        self._button_groups = []  # 揃える対象のボタン配列を後で詰める
+        # ラベルは固定幅化（実サイズは_init_layout_baselineで最終決定）
+        try:
+            self.status_badge.configure(width=88)  # 固定バッジ幅
+            self.server_status_label.configure(width=520, anchor="w")  # 固定表示欄
+        except Exception:
+            pass
+        # 初回描画後に基準幅を測って固定
+        self.parent.after(80, self._init_layout_baseline)
+
     def load_conversation_history(self):
         """会話履歴を読み込み（最新10件まで）"""
         try:
@@ -318,13 +330,14 @@ class ModernCursorAIInterface:
         self._status_updating = True
 
         def _render(text):
-            # 文字が変わる時だけ更新（レイアウト揺れ抑止）
+            # 長文は切り詰めて幅不変にする
+            t = self._truncate(text, 80)
             try:
                 if (
-                    getattr(self.server_status_label, "cget")("text") != text
+                    getattr(self.server_status_label, "cget")("text") != t
                     and not self._ui_freeze
                 ):
-                    self.server_status_label.configure(text=text)
+                    self.server_status_label.configure(text=t)
             except Exception:
                 pass
 
@@ -356,16 +369,14 @@ class ModernCursorAIInterface:
                     )
                 except (ImportError, Exception):
                     pass
-            # バッジ確定
+            # バッジは色だけ変更（文言は固定で幅不変）
             try:
                 if self.server_online:
                     if hasattr(self, "status_badge"):
-                        self.status_badge.configure(text="稼働中", fg_color="#006400")
+                        self.status_badge.configure(fg_color="#006400")
                 else:
                     if hasattr(self, "status_badge"):
-                        self.status_badge.configure(
-                            text="サーバー未接続", fg_color="#444444"
-                        )
+                        self.status_badge.configure(fg_color="#444444")
             except Exception:
                 pass
             self.parent.after(0, lambda: _render(status_text))
@@ -393,13 +404,8 @@ class ModernCursorAIInterface:
             current_state = "on" if getattr(self, "server_online", False) else "off"
 
             # 状態が変わった場合のみ更新
-            if (
-                hasattr(self, "_last_btn_state")
-                and current_state == self._last_btn_state
-            ):
-                return
-
-            self._last_btn_state = current_state
+            if current_state != getattr(self, "_last_btn_state", None):
+                self._last_btn_state = current_state
 
             # メインスレッドで安全に更新
             def update_buttons():
@@ -433,9 +439,68 @@ class ModernCursorAIInterface:
             if hasattr(self, "parent") and self.parent.winfo_exists():
                 self.parent.after(0, update_buttons)
 
+            # 常に幅を再固定（他所のconfigureで解かれるのを防止）
+            self._fix_uniform_button_widths()
+
         except Exception as e:
             print(f"DEBUG: _sync_server_buttons エラー: {e}")
             pass
+
+    # ---------- レイアウト揺れ抑止の補助 ----------
+    def _truncate(self, s: str, max_chars: int) -> str:
+        try:
+            return s if len(s) <= max_chars else (s[: max_chars - 1] + "…")
+        except Exception:
+            return s
+
+    def _init_layout_baseline(self) -> None:
+        """初回描画後にボタン群の最大幅を採寸→固定。以降は固定幅で表示。"""
+        if self._ui_baselined:
+            return
+        self._ui_baselined = True
+        # 1) 揃える対象の登録（存在するものだけ）
+        groups = []
+        try:
+            groups.append(
+                [
+                    self.start_button,
+                    self.stop_button,
+                    self.status_button,
+                    self.docker_button,
+                ]
+            )
+        except Exception:
+            pass
+        try:
+            groups.append(
+                [
+                    self.btn_codegen,
+                    self.btn_predict,
+                    self.btn_style,
+                    self.btn_analyze,
+                    self.btn_security,
+                ]
+            )
+        except Exception:
+            pass
+        # 欠損を除去
+        self._button_groups = [
+            [w for w in g if hasattr(w, "cget")] for g in groups if g
+        ]
+        self._fix_uniform_button_widths()
+
+    def _fix_uniform_button_widths(self) -> None:
+        """各グループ内でボタン幅を最大値に合わせる"""
+        for grp in self._button_groups:
+            try:
+                base = max(int(w.winfo_width() or w.cget("width") or 0) for w in grp)
+                base = max(base, 120)  # 安全最小値
+                for w in grp:
+                    # 高さは触らず幅のみ固定
+                    if int(w.cget("width") or 0) != base:
+                        w.configure(width=base)
+            except Exception:
+                continue
 
     def _setup_file_panel(self, parent):
         """ファイルパネルをセットアップ"""
