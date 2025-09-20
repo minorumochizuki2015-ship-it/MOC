@@ -103,8 +103,8 @@ def _stream_generate_chat(url, body, headers):
         ) as resp:
             resp.raise_for_status()
             # 文字化け対策: ストリーミングレスポンスのエンコーディングを明示的に設定
-            resp.encoding = 'utf-8'
-            
+            resp.encoding = "utf-8"
+
             for line in resp.iter_lines(decode_unicode=True):
                 # 無通信監視
                 now = time.time()
@@ -135,8 +135,13 @@ def _stream_generate_chat(url, body, headers):
                     # 文字化け対策: ストリーミングコンテンツの文字エンコーディング修正
                     if isinstance(content, str):
                         import unicodedata
-                        content = unicodedata.normalize('NFC', content)
-                        content = ''.join(char for char in content if unicodedata.category(char)[0] != 'C' or char in '\n\t')
+
+                        content = unicodedata.normalize("NFC", content)
+                        content = "".join(
+                            char
+                            for char in content
+                            if unicodedata.category(char)[0] != "C" or char in "\n\t"
+                        )
                     chunks.append(content)
 
                 fr = j.get("choices", [{}])[0].get("finish_reason")
@@ -245,7 +250,9 @@ class Kernel:
                                 decoded_data = raw_data.decode("cp932")
                             except UnicodeDecodeError:
                                 # 最後の手段: エラーを置換
-                                decoded_data = raw_data.decode("utf-8", errors="replace")
+                                decoded_data = raw_data.decode(
+                                    "utf-8", errors="replace"
+                                )
                     return json.loads(decoded_data)
             except Exception as e:
                 if i == retries:
@@ -349,24 +356,27 @@ class Kernel:
             }
             resp = self._req(self.v1 + "/chat/completions", body)
             raw_text = (
-                (resp.get("choices") or [{}])[0]
-                .get("message", {})
-                .get("content", "")
+                (resp.get("choices") or [{}])[0].get("message", {}).get("content", "")
             )
-            
+
             # 文字化け対策: 応答テキストのエンコーディング修正
             if isinstance(raw_text, str):
                 try:
                     # Unicode正規化
                     import unicodedata
-                    text = unicodedata.normalize('NFC', raw_text)
+
+                    text = unicodedata.normalize("NFC", raw_text)
                     # 制御文字を除去
-                    text = ''.join(char for char in text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
+                    text = "".join(
+                        char
+                        for char in text
+                        if unicodedata.category(char)[0] != "C" or char in "\n\t"
+                    )
                 except Exception:
                     text = raw_text
             else:
                 text = str(raw_text) if raw_text else ""
-            
+
             text = text.strip()
             gov = Governance().summarize_governance_analysis(text, None)
 
@@ -565,7 +575,7 @@ def generate_chat(
         if task_type in code_tasks:
             # コード生成専用モデル
             model_id = MODEL_ID_CODER
-            print(f"DEBUG: コード生成タスク用モデル使用: {model_id}")
+            # デバッグ出力を削除
         else:
             # デフォルトモデル（GET使用）
             try:
@@ -575,9 +585,9 @@ def generate_chat(
                 if "data" not in models_resp or not models_resp["data"]:
                     raise Exception("利用可能なモデルが見つかりません")
                 model_id = models_resp["data"][0]["id"]
-                print(f"DEBUG: デフォルトモデル使用: {model_id}")
+                # デバッグ出力を削除
             except Exception as e:
-                print(f"DEBUG: モデル取得エラー: {e}")
+                # デバッグ出力を削除
                 model_id = DEFAULT_MODEL_ID
 
         mid = model_id
@@ -633,7 +643,7 @@ def generate_chat(
         SAVE_PATH = os.getenv("LLM_SAVE_LAST_PATH", "data/outputs/last_reply.txt")
 
         print(
-            f"DEBUG: リクエスト送信 - モデル: {mid}, メッセージ数: {len(msgs)}, max_tokens: {max_tokens}"
+            # デバッグ出力を削除
         )
 
         url = f"{OPENAI_BASE}/v1/chat/completions"
@@ -653,56 +663,72 @@ def generate_chat(
             # 非ストリーミング
             r = _sess.post(url, json=body, headers=hdr, timeout=(5, READ_TIMEOUT))
             r.raise_for_status()
-            
+
             # 文字化け対策: レスポンスの文字エンコーディングを明示的に処理
-            r.encoding = 'utf-8'
-            
+            r.encoding = "utf-8"
+
             # 生のレスポンスデータを取得
             raw_response = r.content
-            print(f"DEBUG: 生レスポンス長: {len(raw_response)} bytes")
-            
+            # デバッグ出力を削除
+
             # 複数のエンコーディングを試行
             decoded_text = None
-            for encoding in ['utf-8', 'utf-8-sig', 'cp932', 'shift_jis', 'euc-jp']:
+            for encoding in ["utf-8", "utf-8-sig", "cp932", "shift_jis", "euc-jp"]:
                 try:
                     decoded_text = raw_response.decode(encoding)
-                    print(f"DEBUG: エンコーディング成功: {encoding}")
+                    # デバッグ出力を削除
                     break
                 except UnicodeDecodeError:
                     continue
-            
+
             if decoded_text is None:
                 # 最後の手段: エラーを置換
-                decoded_text = raw_response.decode('utf-8', errors='replace')
-                print("DEBUG: エラー置換でデコード")
-            
+                decoded_text = raw_response.decode("utf-8", errors="replace")
+                # デバッグ出力を削除
+
             try:
                 data = json.loads(decoded_text)
             except Exception as e:
-                print(f"DEBUG: JSON解析失敗: {e}")
+                # デバッグ出力を削除
                 # JSON解析に失敗した場合、テキストとして処理
                 import unicodedata
-                normalized_text = unicodedata.normalize('NFC', decoded_text)
+
+                normalized_text = unicodedata.normalize("NFC", decoded_text)
                 # 制御文字を除去
-                clean_text = ''.join(char for char in normalized_text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
-                data = {"choices": [{"message": {"content": clean_text}, "finish_reason": "stop"}]}
-            
+                clean_text = "".join(
+                    char
+                    for char in normalized_text
+                    if unicodedata.category(char)[0] != "C" or char in "\n\t"
+                )
+                data = {
+                    "choices": [
+                        {"message": {"content": clean_text}, "finish_reason": "stop"}
+                    ]
+                }
+
             choice = (data.get("choices") or [{}])[0]
-            raw_content = choice.get("message", {}).get("content", "") or choice.get("text", "")
-            
+            raw_content = choice.get("message", {}).get("content", "") or choice.get(
+                "text", ""
+            )
+
             # 文字化け対策: コンテンツの文字エンコーディング修正（強化版）
             if isinstance(raw_content, str):
                 import unicodedata
+
                 # Unicode正規化
-                full_text = unicodedata.normalize('NFC', raw_content)
+                full_text = unicodedata.normalize("NFC", raw_content)
                 # 制御文字を除去
-                full_text = ''.join(char for char in full_text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
+                full_text = "".join(
+                    char
+                    for char in full_text
+                    if unicodedata.category(char)[0] != "C" or char in "\n\t"
+                )
                 # 追加の文字化け修正
-                full_text = full_text.encode('utf-8', errors='ignore').decode('utf-8')
-                print(f"DEBUG: 最終テキスト長: {len(full_text)} 文字")
+                full_text = full_text.encode("utf-8", errors="ignore").decode("utf-8")
+                # デバッグ出力を削除
             else:
                 full_text = str(raw_content) if raw_content else ""
-            
+
             finish_reason = choice.get("finish_reason")
 
         # --- 自動継続（lengthで切れたら追い取得） ---
@@ -738,9 +764,14 @@ def generate_chat(
                 os.makedirs(os.path.dirname(SAVE_PATH), exist_ok=True)
                 # 文字化け対策: 保存前にテキストを正規化
                 import unicodedata
-                normalized_text = unicodedata.normalize('NFC', full_text)
+
+                normalized_text = unicodedata.normalize("NFC", full_text)
                 # 制御文字を除去
-                clean_text = ''.join(char for char in normalized_text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
+                clean_text = "".join(
+                    char
+                    for char in normalized_text
+                    if unicodedata.category(char)[0] != "C" or char in "\n\t"
+                )
                 with open(SAVE_PATH, "w", encoding="utf-8") as f:
                     f.write(clean_text)
                 print(f"LOG_SUM: saved result -> {SAVE_PATH}")
@@ -772,7 +803,7 @@ def generate_chat(
         return result_text.strip()
 
     except Exception as e:
-        print(f"DEBUG: generate_chat エラー: {e}")
+        # デバッグ出力を削除
         # エラー時のベンチマーク終了
         benchmark_logger.end_benchmark(benchmark_id, "", 0, "error", str(e))
         raise Exception(f"チャット生成エラー: {e}")
@@ -950,7 +981,7 @@ def _model_id():
             data = r.json()
             _model_id_cache = data["data"][0]["id"]
         except Exception as e:
-            print(f"DEBUG: モデルID取得エラー: {e}")
+            # デバッグ出力を削除
             _model_id_cache = "qwen2-7b-instruct"  # フォールバック
     return _model_id_cache
 

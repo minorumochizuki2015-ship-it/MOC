@@ -36,7 +36,7 @@ class Evolution:
             return result
 
         except Exception as e:
-            print(f"DEBUG: 進化サイクルエラー: {e}")
+            # デバッグ出力を削除
             return {
                 "new_themes": 0,
                 "optimized_params": 0,
@@ -76,4 +76,5 @@ class Evolution:
                 f.write(f"{json.dumps(result, ensure_ascii=False)}\n")
 
         except Exception as e:
-            print(f"DEBUG: 進化ログ保存エラー: {e}")
+            # デバッグ出力を削除
+            pass

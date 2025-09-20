@@ -7,8 +7,8 @@ UI安定化システム（M0強化版）
 
 import threading
 import time
-from typing import Any, Callable
 from collections import defaultdict
+from typing import Any, Callable
 
 
 class UIStabilizer:
@@ -29,15 +29,15 @@ class UIStabilizer:
     ):
         """ボタンクリックを安定化（M0強化版）"""
         current_time = time.time()
-        
+
         # レート制限チェック
         if self._is_rate_limited(button_name, current_time):
             return  # レート制限により無視
-        
+
         # デバウンスチェック
         if self._is_debounced(button_name, current_time):
             return  # デバウンスにより無視
-            
+
         # 既に処理中の場合
         if button_name in self._button_locks:
             return  # 既に処理中
@@ -50,13 +50,13 @@ class UIStabilizer:
             try:
                 # レイアウト位置を記録
                 self._record_layout_position(button_name)
-                
+
                 # UI更新をキューに追加
                 self._queue_update(lambda: callback(*args, **kwargs))
-                
+
                 # レイアウト変動をチェック
                 self._check_layout_stability(button_name)
-                
+
             except Exception as e:
                 print(f"UI安定化エラー ({button_name}): {e}")
                 # 例外ダイアログを表示しない（M0要件）
@@ -93,8 +93,8 @@ class UIStabilizer:
         try:
             # ボタンの位置を記録（実装は簡略化）
             self._layout_positions[button_name] = {
-                'timestamp': time.time(),
-                'position': 'recorded'  # 実際の位置取得は複雑なため簡略化
+                "timestamp": time.time(),
+                "position": "recorded",  # 実際の位置取得は複雑なため簡略化
             }
         except Exception:
             pass
@@ -106,7 +106,8 @@ class UIStabilizer:
             # 実際の実装では、ウィジェットの位置を正確に測定
             # ここでは簡略化してログ出力のみ
             if button_name in self._layout_positions:
-                print(f"DEBUG: レイアウト安定性チェック - {button_name}")
+                # デバッグ出力を削除
+                pass
         except Exception:
             pass
 
@@ -146,9 +147,9 @@ class UIStabilizer:
     def get_click_stats(self) -> dict:
         """クリック統計を取得"""
         return {
-            'button_counts': dict(self._button_click_counts),
-            'last_click_times': dict(self._last_click_times),
-            'layout_positions': len(self._layout_positions)
+            "button_counts": dict(self._button_click_counts),
+            "last_click_times": dict(self._last_click_times),
+            "layout_positions": len(self._layout_positions),
         }
 
     def reset_stats(self):

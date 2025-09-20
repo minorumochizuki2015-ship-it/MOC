@@ -433,7 +433,8 @@ class ModernCursorAIInterface:
                         ):
                             self.stop_button.configure(state="disabled")
                 except Exception as e:
-                    print(f"DEBUG: ボタン更新エラー: {e}")
+                    # デバッグ出力を削除
+                    pass
 
             # メインスレッドで実行
             if hasattr(self, "parent") and self.parent.winfo_exists():
@@ -447,7 +448,7 @@ class ModernCursorAIInterface:
                 self._layout_fixed = True
 
         except Exception as e:
-            print(f"DEBUG: _sync_server_buttons エラー: {e}")
+            # デバッグ出力を削除
             pass
 
     # ---------- レイアウト揺れ抑止の補助 ----------
@@ -1520,12 +1521,12 @@ AIモード: {self.ai_mode.get()}
             # ユーザー入力の制限
             if len(request) > user_msg_limit:
                 request = request[:user_msg_limit]
-                print(f"DEBUG: ユーザー入力を{user_msg_limit}文字に制限しました")
+                # デバッグ出力を削除
             # RAG挿入箇所がある場合は "Context:" 以降を制限
             if "Context:" in request:
                 head, ctx = request.split("Context:", 1)
                 request = head + "Context:" + ctx[:rag_chars_limit]
-                print(f"DEBUG: RAGコンテキストを{rag_chars_limit}文字に制限しました")
+                # デバッグ出力を削除
             total_length = (
                 len(system_prompt)
                 + len(request)
@@ -1605,7 +1606,7 @@ AIモード: {self.ai_mode.get()}
             import traceback
 
             error_msg = f"AI処理エラー: {str(e)}"
-            print(f"DEBUG: {error_msg}\n{traceback.format_exc()}")  # デバッグ出力
+            # デバッグ出力を削除
             # より詳細なエラー情報を提供
             if "timed out" in str(e).lower():
                 error_msg = "⏰ タイムアウトエラー: 生成に時間がかかりすぎています。\n\n解決方法:\n1. より短いプロンプトで再試行\n2. サーバーの負荷を確認\n3. ネットワーク接続を確認\n4. タイムアウト設定を180秒に延長済み\n\n🔗 詳細ログ: エラーログを確認してください"
@@ -2543,7 +2544,7 @@ AIモード: {self.ai_mode.get()}
             )
         except Exception as e:
             self._update_status(f"❌ 自動進化開始エラー: {e}")
-            print(f"DEBUG: 自動進化開始エラー: {e}")
+            # デバッグ出力を削除
             import traceback
 
             traceback.print_exc()
@@ -2592,7 +2593,7 @@ AIモード: {self.ai_mode.get()}
                         )
                     except Exception as e:
                         current_fitness = 0.0
-                        print(f"DEBUG: 適応度計算エラー: {e}")
+                        # デバッグ出力を削除
                     # 結果を表示
                     result_text = f"""🤖 自動進化サイクル #{cycle_count} 完了
 進化結果:
@@ -2613,11 +2614,11 @@ AIモード: {self.ai_mode.get()}
                     self.parent.after(
                         0, self._update_status, f"❌ 自動進化サイクルエラー: {e}"
                     )
-                    print(f"DEBUG: 自動進化サイクルエラー: {e}")
+                    # デバッグ出力を削除
                     time.sleep(10)  # エラー時は10秒待機
         except Exception as e:
             self.parent.after(0, self._update_status, f"❌ 自動進化ループエラー: {e}")
-            print(f"DEBUG: 自動進化ループエラー: {e}")
+            # デバッグ出力を削除
             import traceback
 
             traceback.print_exc()
@@ -2891,12 +2892,13 @@ AIモード: {self.ai_mode.get()}
                                 text="サーバー未接続", fg_color="#444444"
                             )
                     except Exception as e:
-                        print(f"DEBUG: バッジ更新エラー: {e}")
+                        # デバッグ出力を削除
+                        pass
 
                 if hasattr(self, "parent") and self.parent.winfo_exists():
                     self.parent.after(0, update_badge)
         except Exception as e:
-            print(f"DEBUG: _update_status_badge エラー: {e}")
+            # デバッグ出力を削除
             pass
 
     def _on_exec_mode_changed(self, value):

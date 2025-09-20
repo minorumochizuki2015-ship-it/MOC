@@ -48,5 +48,5 @@ class FitnessCalculator:
             return fitness
 
         except Exception as e:
-            print(f"DEBUG: 適応度計算エラー: {e}")
+            # デバッグ出力を削除
             return 0.5

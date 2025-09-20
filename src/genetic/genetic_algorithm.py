@@ -28,7 +28,7 @@ class GeneticAlgorithm:
             return result
 
         except Exception as e:
-            print(f"DEBUG: 遺伝的実験エラー: {e}")
+            # デバッグ出力を削除
             return {
                 "generations": 0,
                 "individuals": 0,
