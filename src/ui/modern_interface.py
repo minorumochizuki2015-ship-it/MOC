@@ -203,8 +203,8 @@ class ModernCursorAIInterface:
             self.server_status_label.configure(width=520, anchor="w")  # 固定表示欄
         except Exception:
             pass
-        # 初回描画後に基準幅を測って固定
-        self.parent.after(80, self._init_layout_baseline)
+        # 初回描画後に基準幅を測って固定（遅延を延長）
+        self.parent.after(500, self._init_layout_baseline)
 
     def load_conversation_history(self):
         """会話履歴を読み込み（最新10件まで）"""
@@ -388,7 +388,7 @@ class ModernCursorAIInterface:
             )
             update_interval = 10000
         else:
-            update_interval = 10000 if getattr(self, "is_processing", False) else 30000
+            update_interval = 30000 if getattr(self, "is_processing", False) else 60000
         # ボタン状態を一括同期
         self._sync_server_buttons()
         self._status_updating = False
@@ -439,9 +439,12 @@ class ModernCursorAIInterface:
             if hasattr(self, "parent") and self.parent.winfo_exists():
                 self.parent.after(0, update_buttons)
 
-            # 常に幅を再固定（他所のconfigureで解かれるのを防止）
-            if hasattr(self, "_button_groups"):
+            # レイアウト処理は初回のみ実行（重さ防止）
+            if hasattr(self, "_button_groups") and not getattr(
+                self, "_layout_fixed", False
+            ):
                 self._fix_uniform_button_widths()
+                self._layout_fixed = True
 
         except Exception as e:
             print(f"DEBUG: _sync_server_buttons エラー: {e}")
@@ -3299,17 +3302,13 @@ AIモード: {self.ai_mode.get()}
         try:
             import requests
 
-            print(f"DEBUG: サーバー接続確認開始")
             response = requests.get("http://127.0.0.1:8080/v1/models", timeout=5)
-            print(
-                f"DEBUG: レスポンス受信 - ステータス: {response.status_code}, 長さ: {len(response.text)}"
-            )
 
             if response.status_code == 200:
                 # 成功時に必ず状態を上書き
                 self.server_online = True
                 self.server_error = None
-                print(f"DEBUG: サーバー接続成功 - server_online=True")
+                # デバッグ出力を削減
                 self.parent.after(0, self._update_status_badge)
                 return True
             else:
@@ -3320,7 +3319,7 @@ AIモード: {self.ai_mode.get()}
         except Exception as e:
             self.server_online = False
             self.server_error = str(e)
-            print(f"DEBUG: サーバー接続例外 - {e}")
+            # デバッグ出力を削減
             return False
 
     def _start_docker_desktop(self):
