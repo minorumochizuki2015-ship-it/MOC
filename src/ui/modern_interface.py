@@ -1123,14 +1123,22 @@ AIモード: {self.ai_mode.get()}
                     except UnicodeDecodeError:
                         continue
                 if content is None:
-                    # バイナリファイルの場合は16進数表示
+                    # バイナリファイルの場合は制限付き16進数表示
                     with open(file_path, "rb") as f:
                         binary_content = f.read()
-                    content = (
-                        f"# バイナリファイル (サイズ: {len(binary_content)} bytes)\n"
-                    )
+                    
+                    # バイナリファイルの場合は制限付きプレビュー
+                    max_preview_size = 1024  # 1KBまで
+                    preview_content = binary_content[:max_preview_size]
+                    
+                    content = f"# バイナリファイル (サイズ: {len(binary_content)} bytes)\n"
+                    content += f"# プレビュー表示 (最初の {len(preview_content)} bytes):\n"
                     content += "# 16進数表示:\n"
-                    content += binary_content.hex()
+                    content += preview_content.hex()
+                    
+                    if len(binary_content) > max_preview_size:
+                        content += f"\n# ... (残り {len(binary_content) - max_preview_size} bytes は省略)"
+                    
                     used_encoding = "binary"
                 file_name = Path(file_path).name
                 editor = self._create_new_tab(file_name, content)
