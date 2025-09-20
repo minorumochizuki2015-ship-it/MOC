@@ -1,21 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-最小コミットユーティリティ（Agentから呼び出し可）
-"""
-import subprocess
-import sys
+import subprocess, shlex
 
-
-def main():
-    msg = sys.argv[1] if len(sys.argv) > 1 else "agent: update"
+def commit(message: str = "chore: agent commit") -> dict:
     try:
-        subprocess.check_call(["git", "add", "-A"])
-        subprocess.check_call(["git", "commit", "-m", msg])
-        print(f"committed: {msg}")
+        subprocess.check_call(shlex.split("git add -A"))
+        subprocess.check_call(shlex.split(f'git commit -m "{message}"'))
+        return {"ok": True, "message": message}
     except subprocess.CalledProcessError as e:
-        print(f"git commit failed: {e}")
-        sys.exit(1)
-
-if __name__ == "__main__":
-    main()
+        return {"ok": False, "error": str(e)}

@@ -13,6 +13,8 @@ from src.core.file_manager import FileManager
 from src.core.kernel import Kernel
 from . import code_executor
 from .tools_fs import list_dir, read_file, write_file, modify_file, search
+from pathlib import Path
+import importlib
 
 
 class TaskStatus(Enum):
@@ -171,6 +173,9 @@ class AgentMode:
         tool = (plan or {}).get("tool")
         args = (plan or {}).get("args", {})
         try:
+            # エイリアス吸収
+            if tool == "think":
+                return {"success": True, "result": {"ok": True, "note": "reflect-only; no action"}}
             if tool == "list_dir":
                 return {"success": True, "result": list_dir(**args)}
             if tool == "read_file":
@@ -181,17 +186,12 @@ class AgentMode:
                 return {"success": True, "result": modify_file(**args)}
             if tool == "search":
                 return {"success": True, "result": search(**args)}
-            if tool == "run_tests":
-                ce = code_executor.CodeExecutor(workspace_root=".")
-                ok, out = ce.run_tests()
-                return {"success": ok, "result": out}
             if tool == "git_commit":
-                from pathlib import Path, PurePath
-                import subprocess, shlex
-                msg = args.get("message","agent: update")
-                subprocess.check_call(shlex.split(f'git add -A'))
-                subprocess.check_call(shlex.split(f'git commit -m "{msg}"'))
-                return {"success": True, "result": "committed"}
+                mod = importlib.import_module("tools.git_commit")
+                return {"success": True, "result": mod.commit(**args)}
+            if tool == "run_tests":
+                mod = importlib.import_module("tools.run_tests")
+                return {"success": True, "result": mod.run(**args)}
             # 不明ツールはプランのみ返す
             return {"success": False, "error": f"unknown tool: {tool}", "plan": plan}
         except Exception as e:

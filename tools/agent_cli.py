@@ -57,6 +57,20 @@ def main():
     
     if args.tool:
         tool_args = json.loads(args.tool_args)
+        # 型補正: "200"→200 / "true"→True
+        def _coerce(v):
+            if isinstance(v, str):
+                lv = v.lower().strip()
+                if lv in ("true","false"):
+                    return lv == "true"
+                try:
+                    if lv.isdigit():
+                        return int(lv)
+                except Exception:
+                    pass
+            return v
+        if isinstance(tool_args, dict):
+            tool_args = {k: _coerce(v) for k, v in tool_args.items()}
         res = agent.step(json.dumps({"tool": args.tool, "args": tool_args}))
     else:
         res = run(args.goal)
