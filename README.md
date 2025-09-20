@@ -298,10 +298,144 @@ pwsh -NoProfile -File .\cursor-workflow.ps1 -Action backup-files -Apply
 * **最小unified diff＋例併記**でレビューしやすくする（guard.mdc追記に基づく）
 * **Cursorターミナルに過負荷な操作は外部PSへ逃がす**
 
+## 🤖 AI共有・引継ぎ情報
+
+### 📊 現在の実装状況（2025年1月20日時点）
+
+#### ✅ **完了済み機能**
+
+1. **進化アルゴリズムシステム**
+   - 遺伝的アルゴリズム（`src/genetic/genetic_algorithm.py`）
+   - 適応度計算器（`src/genetic/fitness_calculator.py`）
+   - 進化エンジン（`src/core/evolution.py`）
+   - ベイジアン最適化（`src/core/simple_bo.py`）
+
+2. **エージェント機能**
+   - AgentMode（`src/core/agent_mode.py`）
+   - 計画-実行フロー
+   - タスク管理システム
+   - UI統合（`src/ui/modern_interface.py`）
+
+3. **UI安定化システム**
+   - レイアウト変動抑制（≦2px）
+   - ボタン幅統一機能
+   - テキスト切り詰め機能
+   - エラーハンドリング改善
+
+4. **サーバー接続管理**
+   - 接続状態監視
+   - 自動再接続
+   - エラー処理改善
+   - パフォーマンス最適化
+
+#### ⚠️ **現在の課題**
+
+1. **SimpleBO履歴読み込みエラー**: `'result'`キーエラー（修正済み）
+2. **psutilエラー表示**: UIでのエラー表示（修正済み）
+3. **文字化け問題**: 一部で発生（Unicode正規化で対応済み）
+
+#### 技術スタック
+
+- **Python**: 3.10+
+- **UI**: CustomTkinter + Tkinter
+- **AI**: OpenAI互換API、Ollama
+- **進化**: 遺伝的アルゴリズム + ベイジアン最適化
+- **メモリ**: ブロックチェーン型対話履歴
+- **品質管理**: mypy + black + isort + pytest
+
+#### 📁 **重要ファイル**
+
+```
+src/
+├── core/
+│   ├── cursor_ai_system.py     # メインシステム統合
+│   ├── kernel.py               # AIカーネル
+│   ├── agent_mode.py           # エージェント機能
+│   ├── evolution.py            # 進化エンジン
+│   └── simple_bo.py            # ベイジアン最適化
+├── genetic/
+│   ├── genetic_algorithm.py    # 遺伝的アルゴリズム
+│   └── fitness_calculator.py   # 適応度計算
+└── ui/
+    └── modern_interface.py     # モダンUI
+```
+
+#### 起動方法
+
+```bash
+# 1. 仮想環境有効化
+.venv\Scripts\activate
+
+# 2. モダンUI起動
+python main_modern.py
+
+# 3. バッチファイル起動（推奨）
+start_modern_ui.bat
+```
+
+#### 🔄 **新セッションでの引継ぎ手順**
+
+1. **環境確認**
+   ```bash
+   # 仮想環境確認
+   .venv\Scripts\python.exe --version
+   
+   # 依存関係確認
+   pip list | findstr "customtkinter psutil requests"
+   ```
+
+2. **設定確認**
+   ```bash
+   # 設定ファイル確認
+   type data\config\settings.json
+   ```
+
+3. **動作確認**
+   ```bash
+   # サーバー接続確認
+   python -c "import requests; print(requests.get('http://127.0.0.1:8080/v1/models').status_code)"
+   ```
+
+4. **起動テスト**
+   ```bash
+   # モダンUI起動
+   python main_modern.py
+   ```
+
+#### 開発ルール（絶対的ルール）
+
+1. **差分比較必須**: 修正前後で差分を比較し、既存機能を保護
+2. **段階的実装**: 小さな変更を段階的に実施し、各段階で動作確認
+3. **実地テスト必須**: 修正後は必ず実地テストを実行し、動作を確認
+4. **既存機能保護**: 修正時に既存機能を破損させないことを最優先
+5. **ロールバック準備**: 問題発生時は即座にロールバック可能な状態を維持
+
+#### 🐛 **既知の問題と解決策**
+
+1. **SimpleBO履歴読み込みエラー**
+   - 原因: 混合ログ形式での`'result'`キー不足
+   - 解決: `src/core/simple_bo.py`でフィルタリング実装済み
+
+2. **psutilエラー表示**
+   - 原因: UIでのエラーハンドリング不適切
+   - 解決: `src/ui/modern_interface.py`で例外処理改善済み
+
+3. **文字化け問題**
+   - 原因: エンコーディング設定不備
+   - 解決: Unicode正規化と制御文字除去で対応済み
+
+#### パフォーマンス指標
+
+- **UI安定性**: レイアウト変動≦2px ✅
+- **サーバー接続**: 正常動作 ✅
+- **進化アルゴリズム**: 正常動作 ✅
+- **エージェント機能**: 正常動作 ✅
+- **文字化け**: 解決済み ✅
+
 ## 📝 ライセンス
 
 統治核AIシステム v5.0 - Cursor AI同等システム
 
 ---
-*最終更新: 2025年1月15日*
+*最終更新: 2025年1月20日*
 Cursor Git check: 2025-09-19T09:09:57+09:00
