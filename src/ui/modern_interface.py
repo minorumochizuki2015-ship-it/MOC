@@ -206,6 +206,30 @@ class ModernCursorAIInterface:
         # 初回描画後に基準幅を測って固定（遅延を延長）
         self.parent.after(500, self._init_layout_baseline)
 
+        # 初期化時にサーバー状態を確認
+        self.parent.after(1000, self._initial_server_check)
+
+    def _initial_server_check(self):
+        """初期化時のサーバー状態確認"""
+        try:
+            # サーバー接続を確認して状態を同期
+            if self._check_server_connection():
+                self.server_online = True
+                self.server_error = None
+                self._update_status("✅ サーバー接続確認完了")
+            else:
+                self.server_online = False
+                self.server_error = "初期接続失敗"
+                self._update_status("ℹ️ サーバー未接続")
+
+            # ボタン状態を同期
+            self._sync_server_buttons()
+            self._update_status_badge()
+        except Exception as e:
+            self.server_online = False
+            self.server_error = str(e)[:60]
+            self._update_status(f"❌ 初期接続確認エラー: {self.server_error}")
+
     def load_conversation_history(self):
         """会話履歴を読み込み（最新10件まで）"""
         try:
@@ -3509,24 +3533,29 @@ AIモード: {self.ai_mode.get()}
     def _show_server_logs(self):
         """サーバーログを表示"""
         try:
-            if hasattr(self, "server_container_id") and self.server_container_id:
-                import subprocess
+            # サーバー状態を正しく判定
+            if getattr(self, "server_online", False):
+                if hasattr(self, "server_container_id") and self.server_container_id:
+                    import subprocess
 
-                result = subprocess.run(
-                    ["docker", "logs", self.server_container_id],
-                    capture_output=True,
-                    text=True,
-                    timeout=10,
-                )
-                if result.returncode == 0:
-                    logs = result.stdout + result.stderr
-                    self._show_log_window(logs)
+                    result = subprocess.run(
+                        ["docker", "logs", self.server_container_id],
+                        capture_output=True,
+                        text=True,
+                        timeout=10,
+                    )
+                    if result.returncode == 0:
+                        logs = result.stdout + result.stderr
+                        self._show_log_window(logs)
+                    else:
+                        messagebox.showerror("エラー", f"ログ取得失敗: {result.stderr}")
                 else:
-                    messagebox.showerror("エラー", f"ログ取得失敗: {result.stderr}")
+                    # サーバーは稼働中だがコンテナIDがない場合
+                    self._update_status("ℹ️ コンテナIDが不明です")
             else:
-                messagebox.showinfo("情報", "サーバーが起動していません")
+                self._update_status("ℹ️ サーバーは起動していません")
         except Exception as e:
-            messagebox.showerror("エラー", f"ログ表示エラー: {e}")
+            self._update_status(f"❌ ログ表示エラー: {e}")
 
     def _show_log_window(self, logs):
         """ログウィンドウを表示"""
