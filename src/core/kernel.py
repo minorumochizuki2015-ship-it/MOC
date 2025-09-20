@@ -102,6 +102,9 @@ def _stream_generate_chat(url, body, headers):
             stream=True,
         ) as resp:
             resp.raise_for_status()
+            # 文字化け対策: ストリーミングレスポンスのエンコーディングを明示的に設定
+            resp.encoding = 'utf-8'
+            
             for line in resp.iter_lines(decode_unicode=True):
                 # 無通信監視
                 now = time.time()
@@ -128,7 +131,13 @@ def _stream_generate_chat(url, body, headers):
                     "choices", [{}]
                 )[0].get("message", {})
                 if "content" in delta:
-                    chunks.append(delta["content"])
+                    content = delta["content"]
+                    # 文字化け対策: ストリーミングコンテンツの文字エンコーディング修正
+                    if isinstance(content, str):
+                        import unicodedata
+                        content = unicodedata.normalize('NFC', content)
+                        content = ''.join(char for char in content if unicodedata.category(char)[0] != 'C' or char in '\n\t')
+                    chunks.append(content)
 
                 fr = j.get("choices", [{}])[0].get("finish_reason")
                 if fr:
@@ -647,14 +656,33 @@ def generate_chat(
             
             # 文字化け対策: レスポンスの文字エンコーディングを明示的に処理
             r.encoding = 'utf-8'
+            
+            # 生のレスポンスデータを取得
+            raw_response = r.content
+            print(f"DEBUG: 生レスポンス長: {len(raw_response)} bytes")
+            
+            # 複数のエンコーディングを試行
+            decoded_text = None
+            for encoding in ['utf-8', 'utf-8-sig', 'cp932', 'shift_jis', 'euc-jp']:
+                try:
+                    decoded_text = raw_response.decode(encoding)
+                    print(f"DEBUG: エンコーディング成功: {encoding}")
+                    break
+                except UnicodeDecodeError:
+                    continue
+            
+            if decoded_text is None:
+                # 最後の手段: エラーを置換
+                decoded_text = raw_response.decode('utf-8', errors='replace')
+                print("DEBUG: エラー置換でデコード")
+            
             try:
-                data = r.json()
-            except Exception:
+                data = json.loads(decoded_text)
+            except Exception as e:
+                print(f"DEBUG: JSON解析失敗: {e}")
                 # JSON解析に失敗した場合、テキストとして処理
-                raw_text = r.text
-                # 文字化け修正
                 import unicodedata
-                normalized_text = unicodedata.normalize('NFC', raw_text)
+                normalized_text = unicodedata.normalize('NFC', decoded_text)
                 # 制御文字を除去
                 clean_text = ''.join(char for char in normalized_text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
                 data = {"choices": [{"message": {"content": clean_text}, "finish_reason": "stop"}]}
@@ -662,12 +690,16 @@ def generate_chat(
             choice = (data.get("choices") or [{}])[0]
             raw_content = choice.get("message", {}).get("content", "") or choice.get("text", "")
             
-            # 文字化け対策: コンテンツの文字エンコーディング修正
+            # 文字化け対策: コンテンツの文字エンコーディング修正（強化版）
             if isinstance(raw_content, str):
                 import unicodedata
+                # Unicode正規化
                 full_text = unicodedata.normalize('NFC', raw_content)
                 # 制御文字を除去
                 full_text = ''.join(char for char in full_text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
+                # 追加の文字化け修正
+                full_text = full_text.encode('utf-8', errors='ignore').decode('utf-8')
+                print(f"DEBUG: 最終テキスト長: {len(full_text)} 文字")
             else:
                 full_text = str(raw_content) if raw_content else ""
             
