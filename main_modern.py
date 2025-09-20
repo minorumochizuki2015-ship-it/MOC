@@ -5,6 +5,7 @@
 """
 
 from src.common.paths import activate
+
 activate()
 
 import logging

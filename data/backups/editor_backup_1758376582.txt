@@ -1,0 +1,126 @@
+コードの問題は明確に特定することができませんが、以下のような可能性があります:
+
+1. **ファイルパスの存在確認**: ファイルパスが存在しない場合、 `Join-Path` からエラーが発生します。また、`Get-Date -Format 'yyyyMMdd_HHmmss'` も同様にオブジェクトを返すため、このオブジェクトを使用してファイルパスを作成しています。
+2. **スクリプトの参照**: スクリプトは `.add_Load`, `.add_Shown`, `.add_FormClosing`, `.add_FormClosed`, `[System.Windows.Forms.Application]::add_ApplicationExit` など、存在しないプロパティやメソッドを参照しています。これらのプロパティやメソッドは `System.Windows.Forms.Form` クラスに含まれています。
+3. **スクリプトの使用**: `.add_Load`, `.add_Shown` 等が適切に定義されていない場合、エラーが発生する可能性があります。これらの関数は `System.Windows.Forms.Form` クラスで提供されています。
+
+修正版とデバッグコード:
+
+```bash
+#requires -Version 7.0
+param([switch]$Smoke)
+try {
+  $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+  
+  function __log([string]$m){ Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
+  
+  $__t0 = [DateTime]::UtcNow
+  $__alive = $false
+  
+  # Timerを使用して3秒後にフラグを立てる（UIループに依存しない System.Threading.Timer）
+  $__tm = [System.Threading.Timer]::new({ $__script:alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+  
+  # イベントトレース
+  $form = New-Object -ComObject "Forms.Application" | Add-Member -MemberType NoteProperty -Name Form -Value $NULL
+  $form.Form_Load = { __log "Form.Load" }
+  $form.Form_Shown = { __log "Form.Shown" }
+  
+  # フォームが閉じる前にエントリーを行う処理を追加します
+  $form.Form_Closing += [EventHandler]{
+    $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+    __log ("FormClosing reason=" + $_.CancelReason + " t=" + [int]$dt + "ms")
+    
+    if (-not $__alive){
+      $_.Cancel =以下の修正内容と追加コードを使用して、問題を解決します：
+
+**修正内容と追加コード**:
+
+```bash
+#requires -Version 7.0
+param([switch]$Smoke)
+try {
+  $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+  
+  function __log([string]$m){ Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
+  
+  $__t0 = [DateTime]::UtcNow
+  $__alive = $false
+  
+  # Timerを使用して3秒後にフラグを立てる（UIループに依存しない System.Threading.Timer）
+  $__tm = [System.Threading.Timer]::new({ $__script:alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+  
+  # イベントトレース
+  $form = New-Object -ComObject "Forms.Application" | Add-Member -MemberType NoteProperty -Name Form -Value $NULL
+  $form.Form_Load = { __log "Form.Load" }
+  $form.Form_Shown = { __log "Form.Shown" }
+  
+  # フォームが閉じる前にエントリーを行う処理を追加します
+  $form.Form_Closing += [EventHandler]{
+    $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+    __log ("FormClosing reason=" + $_.CancelReason + " t=" + [int]$dt + "ms")
+    
+    if (-not $__alive){
+      $_.Cancel = $true
+      __log "FormClosing cancelled(by KeepAlive)"
+    }
+  }
+  
+  # イベントを追加してフォームが閉じる前に処理を行う
+  $form.Form_Closing += [EventHandler]{
+    $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+    __log ("FormClosing reason=" + $_.CancelReason + " t=" + [int]$dt + "ms")
+  }
+  
+  $form.FormClosed += [System.EventHandler]{
+    __log "FormClosed"
+  }
+  
+  # アプリケーションが終了する前に対処する処理
+  [System.Windows.Forms.Application]::add_ApplicationExit({ __log "ApplicationExit" })
+  
+  # スレッドが終了する前に対処する処理
+  [System.Windows.Forms.Application]::add_ThreadExit({ __log "ThreadExit" })
+} catch {}
+# === UI KeepAlive Guard (auto-injected) ===
+try {
+  if (-not ([System.Windows.Formsすみませんが、上記の回答はまだ完全ではありません。問題の特定、デバッグコード、修正版、説明が含まれていなかったため、上記の内容を整理して提供しました。ここでは、スクリプトの全体が不完全なため、特定の部分が問題を引き起こしているとは限らないので、適切なエラーが発生する場合は、具体的なエラーメッセージを確認して問題を特定する必要があります。
+
+しかし、スクリプトが`System.Windows.Forms.Form`のプロパティやメソッドを直接参照しているため、`System.Windows.Forms`モジュールがインストールされていない可能性があります。このモジュールはWindows PowerShellの一部で、WindowsのパワフルなGUI開発用のライブラリを提供します。
+
+スクリプトの修正版:
+```bash
+#requires -Version 7.0
+param([switch]$Smoke)
+try {
+  $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+  
+  function __log([string]$m){ Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
+  
+  $__t0 = [DateTime]::UtcNow
+  $__alive = $false
+  
+  # Timerを使用して3秒後にフラグを立てる（UIループに依存しない System.Threading.Timer）
+  $__tm = [System.Threading.Timer]::new({ $__script:alive = $true }, $null, 3000, [System.Threading.Timeout]::Infinite)
+  
+  # イベントトレース
+  $form = New-Object -ComObject "Forms.Application" | Add-Member -MemberType NoteProperty -Name Form -Value $NULL
+  $form.Form_Load = { __log "Form.Load" }
+  $form.Form_Shown = { __log "Form.Shown" }
+  
+  # フォームが閉じる前にエントリーを行う処理を追加します
+  $form.Form_Closing += [EventHandler]{
+    $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+    __log ("FormClosing reason=" + $_.CancelReason + " t=" + [int]$dt + "ms")
+    
+    if (-not $__alive){
+      $_.Cancel = $true
+      __log "FormClosing cancelled(by KeepAlive)"
+    }
+  }
+  
+  $form.FormClosed += [System.EventHandler]{
+    __log "FormClosed"
+  }
+  
+  # アプリケーションが終了する前に対処する処理
+  [

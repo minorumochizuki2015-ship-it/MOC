@@ -167,6 +167,17 @@ def _approx_tokens_from_text(s: str) -> int:
 
 # 設定値の直接定義
 OPENAI_BASE = os.environ.get("OPENAI_COMPAT_BASE", "http://127.0.0.1:8080")
+
+def _assert_local(base: str) -> None:
+    from urllib.parse import urlparse
+    u = urlparse(base)
+    host = (u.hostname or "").lower()
+    if host not in ("127.0.0.1", "localhost"):
+        raise RuntimeError(f"Remote endpoint blocked: {base}")
+
+_assert_local(OPENAI_BASE)
+V1 = f"{OPENAI_BASE}/v1"
+
 API_KEY = os.environ.get("OPENAI_API_KEY", "sk-local")
 MAX_TOKENS = 15000
 TIMEOUT_S = 180.0
@@ -495,7 +506,7 @@ def generate(prompt: str, max_tokens: int = 128) -> str:
             "max_tokens": max_tokens,
             "stream": False,
         }
-        res = _http(f"{OPENAI_BASE}/v1/chat/completions", body, timeout=120)
+        res = _http(f"{V1}/chat/completions", body, timeout=120)
 
         if not res.get("ok"):
             raise Exception(f"推論実行失敗: {res.get('err', 'Unknown error')}")
@@ -646,7 +657,7 @@ def generate_chat(
             # デバッグ出力を削除
         )
 
-        url = f"{OPENAI_BASE}/v1/chat/completions"
+        url = f"{V1}/chat/completions"
         hdr = {
             "Authorization": f"Bearer {API_KEY}",
             "Content-Type": "application/json",

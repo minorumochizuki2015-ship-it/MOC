@@ -84,7 +84,28 @@ def _gpu_info():
 
 def main():
     t0 = time.perf_counter()
+    force_local = os.environ.get("OPENAI_FORCE_LOCAL","1") == "1"
     base = _base()
+    
+    # 非ローカル禁止
+    from urllib.parse import urlparse
+    host = (urlparse(base).hostname or "").lower()
+    local_only = host in ("127.0.0.1","localhost")
+    
+    # API鍵の存在を警告/禁止
+    leaked = [k for k in ("OPENAI_API_KEY","AZURE_OPENAI_KEY","ANTHROPIC_API_KEY","GOOGLE_API_KEY")
+              if os.environ.get(k)]
+    
+    if force_local and not local_only:
+        result = {"base": base, "local_only": local_only, "error": "REMOTE_ENDPOINT_BLOCKED"}
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        sys.exit(EXIT_ERR)
+    
+    if force_local and leaked:
+        result = {"base": base, "local_only": local_only, "api_keys_present": leaked, "error": f"API_KEYS_PRESENT:{','.join(leaked)}"}
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        sys.exit(EXIT_ERR)
+    
     env_ok = not (os.environ.get("OPENAI_COMPAT_BASE","").rstrip("/").endswith("/v1"))
     srv_ok, srv_info = _ping_models(base)
     ui_ok, ui_err = _import_ui()
@@ -100,6 +121,8 @@ def main():
 
     result = {
         "base": base,
+        "local_only": local_only,
+        "api_keys_present": leaked,
         "env_has_trailing_v1": not env_ok,
         "server_ok": srv_ok,
         "server_info": srv_info,

@@ -1,0 +1,154 @@
+**問題の特定:**
+コードは多分パラメータ `$Smoke` を受け取るよう設計されているが、その使用例が見当たりません。さらに、ファイルパス `reports\ui_trace_{0}.log` における `{0}` の挿入部分に型変換エラーが発生し、関連する関数やプロパティの正しくない使用も確認できます。
+
+**デバッグコード:**
+```python
+try {
+    # Debugging purposes only - remove or comment out before deployment.
+    if ($Smoke) { Write-Host "Smoke mode active" }
+}
+```
+
+**修正版:**
+```python
+# === UI KeepAlive Guard (auto-injected) ===
+try {
+    # 1. 無効な文字列や変数名を直す。
+    # 2. $rep のパスの構成に正しく `r`n が含まれていることを確認する。
+    # 3. パラメータ `$Smoke` の使用例を追加する。
+
+    $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+    
+    if ($Smoke) {
+        Write-Host "Smoke mode active"
+    }
+    
+    function __log([string]$m){ Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
+
+    # 元のコードは間違っており、UIループに依存する System.Threading.Timer の使用を避けるべきです。
+    # この例では、直接 `System.Windows.Forms.Application` を使用してイベントハンドラを設定します。
+
+    [System.Windows.Forms.Form]::add_Load({ __log "Form.Load" })
+    [System.Windows.Forms.Form]::add_Shown({ __log "Form.Shown" })
+    [System.Windows.Forms.Form]::add_FormClosing({
+        param($s,$e)
+        $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
+        __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
+        if(-not $__alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive)" }
+    })
+    [System.Windows.Forms.Application]::add_ApplicationExit({ __log "ApplicationExit" })
+    [System.Windows.Forms.Application]::add_ThreadExit({ __log "ThreadExit" })
+
+} catch {}
+
+# === UI KeepAlive Guard (auto-injected) ===
+try {
+    if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+        # 修正: `New-Object` は PowerShell の機能で、.以下の修正版は、主な問題を解決し、コードの機能を再構築します。特に、 `$Smoke` パラメータを使用するための追加のコード、関数 `__log` に対するリファクタリング、`System.Windows.Forms.Form` クラスの使用により、`add_Load`、`add_Shown`、`add_FormClosing` などのイベントハンドラを設定する部分が修正されています。
+
+```python
+# === UI KeepAlive Guard (auto-injected) ===
+try {
+    if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+        $ui_start = [DateTime]::UtcNow
+        $ui_alive = $false
+        $ui_timer = New-Object System.Windows.Forms.Timer
+        $ui_timer.Interval = 250
+        $ui_timer.add_Tick({
+            if (([DateTime]::UtcNow - $ui_start).TotalMilliseconds -ge 3000) {
+                $ui_alive = $true
+                $ui_timer.Stop(); $ui_timer.Dispose()
+            }
+        })
+        $ui_timer.Start()
+        [System.Windows.Forms.Form]::add_FormClosing({
+            param($s,$e)
+            if(-not $ui_alive){ $e.Cancel = $true }
+        })
+    }
+} catch {}
+
+if ($Smoke) {
+    Write-Host "Smoke mode active"
+}
+
+# === Debugging purposes only - remove or comment out before deployment ===
+if ($Smoke) {
+    Write-Host "Smoke mode active"
+}
+
+# === Logging mechanism ===
+function __log([string]$m){
+    $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+    Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
+}
+
+# === Main code to be debugged ===
+try {
+    # 修正: `$rep` の定義を移動する。
+    # 修正: `__log` は `$rep` に依存しているため、この位置に配置する。
+
+    [System.Windows.Forms.Form]::add_Load({
+        __log "Form.Load"
+    })
+    [System.Windows.Forms.Form]::add_Shown({
+        __log "Form.Shown"
+    })
+    [System.Windows.Forms.Form]::add_FormClosing({
+        param($s,$e)
+        $dt = ([DateTime]::UtcNow - $time_start).TotalMilliseconds
+        __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
+        if(-not $alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive**修正版:**
+
+```python
+# === UI KeepAlive Guard (auto-injected) ===
+try {
+    if (-not ([System.Windows.Forms.Application]::MessageLoop)) {
+        $ui_start = [DateTime]::UtcNow
+        $ui_alive = $false
+        $ui_timer = New-Object System.Windows.Forms.Timer
+        $ui_timer.Interval = 250
+        $ui_timer.add_Tick({
+            if (([DateTime]::UtcNow - $ui_start).TotalMilliseconds -ge 3000) {
+                $ui_alive = $true
+                $ui_timer.Stop(); $ui_timer.Dispose()
+            }
+        })
+        $ui_timer.Start()
+        [System.Windows.Forms.Form]::add_FormClosing({
+            param($s,$e)
+            if(-not $ui_alive){ $e.Cancel = $true }
+        })
+    }
+} catch {}
+
+# === Debugging purposes only - remove or comment out before deployment ===
+if ($Smoke) {
+    Write-Host "Smoke mode active"
+}
+
+# === Logging mechanism ===
+function __log([string]$m){
+    $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+    Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
+}
+
+# === Main code to be debugged ===
+try {
+    # 修正: `$rep` の定義を移動する。
+    # 修正: `__log` は `$rep` に依存しているため、この位置に配置する。
+
+    $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
+
+    function __log([string]$m){
+        Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
+    }
+
+    # 修正: `$__t0` と `$__alive` の初期値を設定する。また、`__script` は未定義であるため、使用を避けるべきです。
+
+    $time_start = [DateTime]::UtcNow
+    $alive = $false
+
+    # 修正: `$__tm` は `System.Threading.Timer` を使用して作成する代わりに、直接 `$__t0` を使用して `$__alive` が設定されるように `System.Windows.Forms.Form` クラスの使用で再定義します。
+
+    [System.Windows.Forms.Timer]::new({ $alive = $true }, $null, 300

@@ -260,36 +260,43 @@ python -X utf8 -u main_modern.py
 ### 完了した段階
 
 #### **M0: ルート検出レイヤ導入** ✅
+
 - **コミット**: `64505e3`
 - **内容**: パス解決レイヤの堅牢化
 - **ファイル**: `src/common/paths.py`, `main_modern.py`
 
 #### **M1: サーバー起動スクリプト移動** ✅
+
 - **コミット**: `4869950`
 - **内容**: サーバー起動スクリプトの整理
 - **移動**: `start_server_*.bat` → `scripts/server/`
 
 #### **M2: 文書と設定の移動** ✅
+
 - **コミット**: `700c2c5`
 - **内容**: 文書・設定ファイルの整理
 - **移動**: `README.md` → `docs/`, `settings.json` → `config/`
 
 #### **参照の穴埋め** ✅
+
 - **コミット**: `7aaea66`
 - **内容**: 設定ファイル解決機能追加
 - **機能**: `resolve_config()` 関数
 
 #### **ヘッドレス診断コマンド** ✅
+
 - **コミット**: `5e9ca0d`
 - **内容**: 1秒診断システム構築
 - **ファイル**: `tools/quick_diagnose.py`, `scripts/ops/quick-diagnose.ps1`
 
 #### **push前ブロック機能** ✅
+
 - **コミット**: `d1051b3`
 - **内容**: push前自動チェック機能
 - **ファイル**: `.githooks/pre-push.ps1`, `.githooks/pre-push.bat`
 
 #### **最終ハードニング** ✅
+
 - **コミット**: `979ade3`
 - **内容**: ダイアログ完全回避・堅牢化
 - **機能**: Python自動検出・フォールバック
@@ -297,6 +304,7 @@ python -X utf8 -u main_modern.py
 ### 現在の安定状態
 
 #### **診断結果**
+
 ```json
 {
   "base": "http://127.0.0.1:8080",
@@ -317,11 +325,13 @@ python -X utf8 -u main_modern.py
 ```
 
 #### **品質保証システム**
+
 - **pre-commit**: コード整形・型チェック・品質ゲート
 - **pre-push**: ヘッドレス診断・push前ブロック
 - **commit-msg**: PTPルール・DCO検証
 
 #### **使用方法**
+
 ```powershell
 # 手動診断
 .\.venv\Scripts\python.exe -X utf8 -u tools/quick_diagnose.py
@@ -333,10 +343,12 @@ git push
 ### ロールバック用チェックポイント
 
 #### **安定ポイント**
+
 - **`b04f72c`**: checkpoint_20250920_211752（基本安定状態）
 - **`979ade3`**: 最終ハードニング完了（現在のHEAD）
 
 #### **ロールバック方法**
+
 ```bash
 # 基本安定状態に戻る
 git reset --hard b04f72c

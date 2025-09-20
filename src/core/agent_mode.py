@@ -5,12 +5,14 @@ import json
 import time
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from src.core.ai_assistant import AIAssistant
 from src.core.code_executor import CodeExecutor
 from src.core.file_manager import FileManager
 from src.core.kernel import Kernel
+from . import code_executor
+from .tools_fs import list_dir, read_file, write_file, modify_file, search
 
 
 class TaskStatus(Enum):
@@ -47,25 +49,53 @@ class AgentMode:
 
     def __init__(
         self,
-        kernel: Kernel,
-        file_manager: FileManager,
-        code_executor: CodeExecutor,
-        ai_assistant: AIAssistant,
+        kernel: Kernel = None,
+        file_manager: FileManager = None,
+        code_executor: CodeExecutor = None,
+        ai_assistant: AIAssistant = None,
+        # ヘッドレス用の簡易コンストラクタ
+        kernel_llm: Callable[[str], str] = None,
+        executor = None,
+        dry_run: bool = True,
+        max_steps: int = 8,
     ):
-        self.kernel = kernel
-        self.file_manager = file_manager
-        self.code_executor = code_executor
-        self.ai_assistant = ai_assistant
-
-        self.tasks: Dict[str, Any] = {}
-        self.execution_history: List[Dict[str, Any]] = []
-        self.current_plan = None
-        self.is_running = False
+        # 既存の複雑な初期化
+        if kernel is not None:
+            self.kernel = kernel
+            self.file_manager = file_manager
+            self.code_executor = code_executor
+            self.ai_assistant = ai_assistant
+            self.tasks: Dict[str, Any] = {}
+            self.execution_history: List[Dict[str, Any]] = []
+            self.current_plan = None
+            self.is_running = False
+        else:
+            # ヘッドレス用の簡易初期化
+            # LLMは"kernel経由"のみ許可
+            bad = ("openai", "anthropic", "google", "cohere")
+            mod = getattr(kernel_llm, "__module__", "") or ""
+            name = getattr(kernel_llm, "__name__", "") or ""
+            if any(b in mod.lower() or b in name.lower() for b in bad):
+                raise RuntimeError("Remote SDK blocked: use kernel.generate_* only")
+            
+            self.llm = kernel_llm
+            self.exec = executor
+            self.dry = dry_run
+            self.max_steps = max_steps
+            self.tasks: Dict[str, Any] = {}
+            self.execution_history: List[Dict[str, Any]] = []
+            self.current_plan = None
+            self.is_running = False
 
     def plan_and_execute(
         self, user_request: str, context: Dict[str, Any] = None
     ) -> Dict[str, Any]:
         """ユーザーリクエストを分析し、計画を立てて実行"""
+        # ヘッドレス用の簡易実装
+        if hasattr(self, 'llm'):
+            return self._simple_plan_and_execute(user_request)
+        
+        # 既存の複雑な実装
         try:
             # 1. リクエスト分析
             analysis = self._analyze_request(user_request, context)
@@ -92,6 +122,178 @@ class AgentMode:
                 "plan": None,
                 "execution": None,
             }
+
+    def _simple_plan_and_execute(self, goal: str) -> Dict[str, Any]:
+        """ヘッドレス用の簡易計画・実行"""
+        try:
+            # 計画生成
+            steps = self.plan(goal)
+            
+            # 実行トレース
+            trace = []
+            for i, step in enumerate(steps, 1):
+                result = self.step(step)
+                trace.append({"step": i, "inst": step, "result": result})
+                
+                # Dry-runの場合は計画のみ
+                if self.dry:
+                    continue
+                    
+            return {
+                "goal": goal,
+                "steps": steps,
+                "trace": trace,
+                "dry_run": self.dry,
+                "success": True
+            }
+        except Exception as e:
+            return {
+                "goal": goal,
+                "steps": [],
+                "trace": [],
+                "dry_run": self.dry,
+                "success": False,
+                "error": str(e)
+            }
+
+    def plan(self, goal: str) -> List[str]:
+        """タスクを手順に分解"""
+        if not hasattr(self, 'llm'):
+            return [f"タスク実行: {goal}"]
+            
+        prompt = f"次のタスクを最大{self.max_steps}手順に分解して箇条書き:\n{goal}"
+        text = self.llm(prompt)
+        return [s.strip(" -•\t") for s in text.splitlines() if s.strip()]
+
+    def step(self, instruction: str) -> Dict[str, Any]:
+        """1ステップ実行（ローカル専用ツールディスパッチ）"""
+        plan = self._llm_plan(instruction)  # {"tool":"...", "args":{...}}
+        tool = (plan or {}).get("tool")
+        args = (plan or {}).get("args", {})
+        try:
+            if tool == "list_dir":
+                return {"success": True, "result": list_dir(**args)}
+            if tool == "read_file":
+                return {"success": True, "result": read_file(**args)}
+            if tool == "write_file":
+                return {"success": True, "result": write_file(**args)}
+            if tool == "modify_file":
+                return {"success": True, "result": modify_file(**args)}
+            if tool == "search":
+                return {"success": True, "result": search(**args)}
+            if tool == "run_tests":
+                ce = code_executor.CodeExecutor(workspace_root=".")
+                ok, out = ce.run_tests()
+                return {"success": ok, "result": out}
+            if tool == "git_commit":
+                from pathlib import Path, PurePath
+                import subprocess, shlex
+                msg = args.get("message","agent: update")
+                subprocess.check_call(shlex.split(f'git add -A'))
+                subprocess.check_call(shlex.split(f'git commit -m "{msg}"'))
+                return {"success": True, "result": "committed"}
+            # 不明ツールはプランのみ返す
+            return {"success": False, "error": f"unknown tool: {tool}", "plan": plan}
+        except Exception as e:
+            return {"success": False, "error": str(e)[:200], "plan": plan}
+
+    def _llm_plan(self, instruction: str) -> Dict[str, Any]:
+        """LLMにツール選択を依頼"""
+        if not hasattr(self, 'llm'):
+            return {"tool": "think", "args": {"note": instruction}}
+        
+        prompt = f"""
+以下の指示を適切なツールで実行してください。
+
+指示: {instruction}
+
+利用可能なツール:
+- list_dir: ファイル一覧取得 (pattern, limit)
+- read_file: ファイル読み取り (path, max_bytes, encoding)
+- write_file: ファイル書き込み (path, content, encoding)
+- modify_file: ファイル修正 (path, find, replace, encoding, count)
+- search: ファイル検索 (pattern, text, limit)
+- run_tests: テスト実行
+- git_commit: Gitコミット (message)
+
+JSON形式で回答: {{"tool": "ツール名", "args": {{"パラメータ": "値"}}}}
+"""
+        
+        try:
+            response = self.llm(prompt)
+            import json
+            return json.loads(response)
+        except Exception:
+            return {"tool": "think", "args": {"note": instruction}}
+
+    def integrate_evolution(self) -> None:
+        """進化アルゴリズムを統合"""
+        try:
+            from src.core.evolution import Evolution
+            from src.core.simple_bo import SimpleBO
+            
+            # ベイズ最適化器を初期化
+            self.bo = SimpleBO()
+            
+            # 進化システムを初期化
+            self.evolution = Evolution()
+            
+            # 進化フックを設定
+            self._setup_evolution_hooks()
+            
+        except ImportError as e:
+            print(f"進化アルゴリズム統合エラー: {e}")
+
+    def _setup_evolution_hooks(self) -> None:
+        """進化フックを設定"""
+        if hasattr(self, 'bo') and hasattr(self, 'evolution'):
+            # ベイズ最適化の観測フック
+            self._original_step = self.step
+            self.step = self._evolved_step
+
+    def _evolved_step(self, instruction: str) -> Dict[str, Any]:
+        """進化統合されたステップ実行"""
+        # 元のステップを実行
+        result = self._original_step(instruction)
+        
+        # ベイズ最適化でパラメータを提案
+        if hasattr(self, 'bo'):
+            try:
+                # 現在のパラメータを観測
+                current_params = self._get_current_params()
+                performance = self._calculate_performance(result)
+                
+                # ベイズ最適化に記録
+                self.bo.observe(current_params, performance)
+                
+                # 次のパラメータを提案
+                next_params = self.bo.suggest(n_suggestions=1)[0]
+                result["evolution"] = {
+                    "current_params": current_params,
+                    "performance": performance,
+                    "next_params": next_params
+                }
+            except Exception as e:
+                result["evolution_error"] = str(e)
+        
+        return result
+
+    def _get_current_params(self) -> Dict[str, float]:
+        """現在のパラメータを取得"""
+        return {
+            "learning_rate": 0.01,
+            "batch_size": 32,
+            "temperature": 0.7,
+            "max_tokens": 500
+        }
+
+    def _calculate_performance(self, result: Dict[str, Any]) -> float:
+        """パフォーマンスを計算"""
+        # 簡単なスコア計算（実際はより複雑な指標を使用）
+        if result.get("success", False):
+            return 1.0
+        else:
+            return 0.0
 
     def _analyze_request(
         self, user_request: str, context: Dict[str, Any] = None

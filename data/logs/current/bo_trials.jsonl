@@ -12,3 +12,62 @@
 {"timestamp": 1758346939.2185397, "params": {"latency_ms": 4088.226318359375}, "result": 0.2446048535789733, "metadata": {"task_type": "ai_request", "timestamp": 1758346939.2185397}, "trial_id": 6}
 {"timestamp": 1758368024.5795853, "latency_ms": 7193.338871002197, "trial_type": "latency_measurement", "status": "completed"}
 {"timestamp": 1758368024.5816493, "params": {"latency_ms": 7193.338871002197}, "result": 0.13901750187679912, "metadata": {"task_type": "ai_request", "timestamp": 1758368024.5816493}, "trial_id": 7}
+{"timestamp": 1758375381.737003, "latency_ms": 4538.433790206909, "trial_type": "latency_measurement", "status": "completed"}
+{"timestamp": 1758375381.7379982, "params": {"latency_ms": 4538.433790206909}, "result": 0.2203403302165194, "metadata": {"task_type": "ai_request", "timestamp": 1758375381.7379982}, "trial_id": 8}
+{"timestamp": 1758375841.0814779, "latency_ms": 263021.41094207764, "trial_type": "latency_measurement", "status": "completed"}
+{"timestamp": 1758375841.082119, "params": {"latency_ms": 263021.41094207764}, "result": 0.0038019718486728793, "metadata": {"task_type": "ai_request", "timestamp": 1758375841.082119}, "trial_id": 9}
+{"timestamp": 1758376282.716191, "latency_ms": 109937.44540214539, "trial_type": "latency_measurement", "status": "completed"}
+{"timestamp": 1758376282.716191, "params": {"latency_ms": 109937.44540214539}, "result": 0.00909608183401072, "metadata": {"task_type": "ai_request", "timestamp": 1758376282.716191}, "trial_id": 10}
+{"timestamp": 1758376582.4531982, "latency_ms": 272691.43629074097, "trial_type": "latency_measurement", "status": "completed"}
+{"timestamp": 1758376582.4531982, "params": {"latency_ms": 272691.43629074097}, "result": 0.0036671485309638023, "metadata": {"task_type": "ai_request", "timestamp": 1758376582.4531982}, "trial_id": 11}
+{"timestamp": 1758377218.6857176, "latency_ms": 108663.84100914001, "trial_type": "latency_measurement", "status": "completed"}
+{"timestamp": 1758377218.6857176, "params": {"latency_ms": 108663.84100914001}, "result": 0.009202693285210554, "metadata": {"task_type": "ai_request", "timestamp": 1758377218.6857176}, "trial_id": 12}
+{"timestamp": 1758377293.6342099, "latency_ms": 7022.312164306641, "trial_type": "latency_measurement", "status": "completed"}
+{"timestamp": 1758377293.6394258, "params": {"latency_ms": 7022.312164306641}, "result": 0.1424032393607977, "metadata": {"task_type": "ai_request", "timestamp": 1758377293.6394258}, "trial_id": 13}
+{"timestamp": 1758377718.1547742, "latency_ms": 4459.383249282837, "trial_type": "latency_measurement", "status": "completed"}
+{"timestamp": 1758377718.1568387, "params": {"latency_ms": 4459.383249282837}, "result": 0.2242462565111041, "metadata": {"task_type": "ai_request", "timestamp": 1758377718.1568387}, "trial_id": 14}
+{"timestamp": 1758379214.295692, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758379214.2977087, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 2}
+{"timestamp": 1758379214.3008122, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 3}
+{"timestamp": 1758379214.3008122, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 4}
+{"timestamp": 1758379214.304282, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 5}
+{"timestamp": 1758379214.304282, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 6}
+{"timestamp": 1758379234.4949567, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758379234.4964693, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 2}
+{"timestamp": 1758379234.4964693, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 3}
+{"timestamp": 1758379234.4992354, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 4}
+{"timestamp": 1758380274.1916418, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758380274.1926408, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 2}
+{"timestamp": 1758380274.1950285, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 3}
+{"timestamp": 1758380292.478263, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758380292.478263, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 2}
+{"timestamp": 1758380317.4288125, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758380317.4288125, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 2}
+{"timestamp": 1758380317.4316447, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 3}
+{"timestamp": 1758380789.720619, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758380789.7226255, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 2}
+{"timestamp": 1758380789.7246103, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 3}
+{"timestamp": 1758380981.265638, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758380995.1863685, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758381008.6555223, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758381022.5698478, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758381039.8085313, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758381056.499636, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758381072.0667024, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758381101.782764, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758381112.7108564, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 2}
+{"timestamp": 1758381124.916371, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 3}
+{"timestamp": 1758381144.908467, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 4}
+{"timestamp": 1758381181.7069166, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758381191.8003113, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 2}
+{"timestamp": 1758381202.23141, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 3}
+{"timestamp": 1758381224.4983912, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 4}
+{"timestamp": 1758381521.8931248, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758381561.3121834, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 1}
+{"timestamp": 1758381581.8262935, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 2}
+{"timestamp": 1758381602.1873055, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 3}
+{"timestamp": 1758381622.465828, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 4}
+{"timestamp": 1758381633.818827, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 5}
+{"timestamp": 1758381646.4100037, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 1.0, "metadata": {}, "trial_id": 6}
+{"timestamp": 1758381666.928122, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 7}
+{"timestamp": 1758381686.9534657, "params": {"learning_rate": 0.01, "batch_size": 32, "temperature": 0.7, "max_tokens": 500}, "result": 0.0, "metadata": {}, "trial_id": 8}
