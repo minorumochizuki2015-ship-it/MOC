@@ -14,3 +14,5 @@
 {"timestamp": 1758348788.5702686, "params": {"latency_ms": 3888.5655403137207}, "result": 0.2571642395203971, "metadata": {"task_type": "ai_request", "timestamp": 1758348788.5702686}, "trial_id": 7}
 {"timestamp": 1758348844.8984993, "latency_ms": 3476.408004760742, "trial_type": "latency_measurement", "status": "completed"}
 {"timestamp": 1758348844.8984993, "params": {"latency_ms": 3476.408004760742}, "result": 0.287653232483229, "metadata": {"task_type": "ai_request", "timestamp": 1758348844.8984993}, "trial_id": 8}
+{"timestamp": 1758349263.1405337, "params": {"learning_rate": 0.01}, "result": 0.85, "metadata": {"test": true}, "trial_id": 9}
+{"timestamp": 1758349263.1421115, "params": {"learning_rate": 0.01}, "result": 0.85, "metadata": {"test": true}}

@@ -187,12 +187,16 @@ class ModernCursorAIInterface:
         self._evo_points = []
         self._evo_running = False
         self._evo_timer = None
+        # M6: 観測フック初期化
+        self._observation_hooks = None
         # 実行モード管理
         self.exec_mode = "run"  # "run" or "debug"
         # UI表示後にCursor AIを初期化（遅延初期化）
         self.parent.after(1000, self._initialize_cursor_ai)
         # 初期化時にサーバー状態をチェック
         self.parent.after(2000, self._check_server_status)
+        # M6: 観測フック初期化
+        self.parent.after(3000, self._initialize_observation_hooks)
 
         # ---- UI揺れ抑止用ベースライン ----
         self._ui_baselined = False
@@ -1552,6 +1556,68 @@ AIモード: {self.ai_mode.get()}
                 
         except Exception as e:
             print(f"エージェントログ記録エラー: {e}")
+
+    def _initialize_observation_hooks(self):
+        """観測フックを初期化（M6）"""
+        try:
+            from src.core.observation_hooks import ObservationHooks
+            self._observation_hooks = ObservationHooks()
+            print("✓ 観測フック初期化完了")
+        except Exception as e:
+            print(f"観測フック初期化エラー: {e}")
+
+    def _record_latency(self, operation: str, latency_ms: float, metadata: dict = None):
+        """レイテンシーを記録（M6）"""
+        if self._observation_hooks:
+            self._observation_hooks.record_latency(operation, latency_ms, metadata)
+
+    def _get_evolution_suggestions(self, n_suggestions: int = 1):
+        """進化器からパラメータ提案を取得（M6）"""
+        if self._observation_hooks:
+            return self._observation_hooks.get_evolution_suggestions(n_suggestions)
+        return []
+
+    def _generate_evolution_graph(self):
+        """進化グラフを生成（M6）"""
+        if not self._observation_hooks:
+            return
+        
+        try:
+            graph_data = self._observation_hooks.generate_evolution_graph_data()
+            
+            # 進化グラフをUIに表示（簡易版）
+            if hasattr(self, "evo_canvas"):
+                self._draw_evolution_graph(graph_data)
+                
+        except Exception as e:
+            print(f"進化グラフ生成エラー: {e}")
+
+    def _draw_evolution_graph(self, graph_data: dict):
+        """進化グラフを描画（M6）"""
+        try:
+            if not hasattr(self, "evo_canvas"):
+                return
+            
+            # 簡易的な進化グラフ描画
+            canvas = self.evo_canvas
+            canvas.delete("all")
+            
+            # グラフタイトル
+            canvas.create_text(150, 20, text="進化グラフ", font=("Arial", 12, "bold"))
+            
+            # レイテンシー統計表示
+            if "latency_stats" in graph_data and "error" not in graph_data["latency_stats"]:
+                stats = graph_data["latency_stats"]
+                canvas.create_text(150, 50, text=f"平均レイテンシー: {stats['avg_latency_ms']:.1f}ms", font=("Arial", 10))
+            
+            # 進化統計表示
+            if "evolution_stats" in graph_data and "error" not in graph_data["evolution_stats"]:
+                stats = graph_data["evolution_stats"]
+                canvas.create_text(150, 70, text=f"最良結果: {stats['best_result']:.3f}", font=("Arial", 10))
+                canvas.create_text(150, 90, text=f"試行回数: {stats['total_trials']}", font=("Arial", 10))
+                
+        except Exception as e:
+            print(f"進化グラフ描画エラー: {e}")
 
     @stabilize_button("execute_ai")
     def _execute_ai_request(
