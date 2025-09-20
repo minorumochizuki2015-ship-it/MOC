@@ -777,21 +777,51 @@ class ModernCursorAIInterface:
         )
         self.ai_input.pack(fill="both", expand=True, padx=10, pady=5)
 
-        # Alt+Enterでデバッグモード実行
+        # Alt+Enterでデバッグモード実行（M2）
         self.ai_input.bind(
             "<Alt-Return>", lambda e: self._execute_ai_request(mode="debug")
         )
 
-        # 共通 実行ボタン
-        self.ai_mode_button = ctk.CTkButton(
+        # M2: 単一実行ボタン＋モード切替
+        self.exec_mode = ctk.StringVar(value="run")
+        self.exec_mode_segmented = ctk.CTkSegmentedButton(
             ai_frame,
-            text="✨ AI実行",
-            command=self._execute_ai_mode,
+            values=["実行", "デバッグ"],
+            variable=self.exec_mode,
+            command=self._on_exec_mode_changed,
+            width=200,
+        )
+        self.exec_mode_segmented.pack(fill="x", padx=10, pady=5)
+        
+        # 統合実行ボタン
+        self.execute_button = ctk.CTkButton(
+            ai_frame,
+            text="▶️ 実行",
+            command=self._execute_ai_request,
             width=150,
             height=35,
         )
-        self.ai_mode_button.pack(fill="x", padx=10, pady=4)
-        self._update_ai_mode_button()
+        self.execute_button.pack(fill="x", padx=10, pady=4)
+        self._update_execute_button()
+        
+    def _on_exec_mode_changed(self, value):
+        """実行モード切替時の処理（M2）"""
+        self.exec_mode = value
+        self._update_execute_button()
+        
+    def _update_execute_button(self):
+        """実行ボタンの表示を更新（M2）"""
+        if not hasattr(self, "execute_button"):
+            return
+        try:
+            mode = self.exec_mode.get() if hasattr(self.exec_mode, 'get') else self.exec_mode
+            if mode == "debug":
+                self.execute_button.configure(text="🐛 デバッグ実行")
+            else:
+                self.execute_button.configure(text="▶️ 実行")
+        except Exception:
+            pass
+        
         # 生成タブ: 生成/予測/作成/思考/スタイル
         ggrp = ctk.CTkFrame(self.tab_gen)
         ggrp.pack(fill="x", padx=8, pady=6)
@@ -1476,7 +1506,7 @@ AIモード: {self.ai_mode.get()}
             return
         # 実行モードの決定（引数 > UI > 既定の順）
         if mode is None:
-            mode = self.exec_mode
+            mode = self.exec_mode.get() if hasattr(self.exec_mode, 'get') else self.exec_mode
         if self.is_processing or self._ui_freeze:
             self._update_status("⚠️ 既に処理中です")
             return
@@ -1485,7 +1515,8 @@ AIモード: {self.ai_mode.get()}
         self._ui_freeze = True
         # UI要素を無効化（処理中）
         try:
-            self.ai_mode_button.configure(state="disabled")
+            if hasattr(self, "execute_button"):
+                self.execute_button.configure(state="disabled")
             if hasattr(self, "evolution_button"):
                 self.evolution_button.configure(state="disabled")
         except Exception:
