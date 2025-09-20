@@ -3342,7 +3342,7 @@ AIモード: {self.ai_mode.get()}
             else:
                 self.server_online = False
                 self.server_error = f"HTTP {response.status_code}"
-                print(f"DEBUG: サーバー接続失敗 - HTTP {response.status_code}")
+                # デバッグ出力を削減
                 return False
         except Exception as e:
             self.server_online = False
