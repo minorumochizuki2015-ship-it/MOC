@@ -1,20 +1,21 @@
 {
-    "persona_update_threshold": {
-        "description": "自己規定を更新するために必要な、テーマの平均評価スコアの閾値。値が低いほど、AIは新しい専門性を獲得しやすくなります。",
-        "current_value": 4.445574125147711,
-        "min": 3.5,
-        "max": 5.0
-    },
-    "high_score_weight": {
-        "description": "適応度計算における、最高評価（スコア5）の対話の重み。値が高いほど、AIは最高評価を得ることを強く目指します。",
-        "current_value": 2.4928346145367186,
-        "min": 1.0,
-        "max": 2.5
-    },
-    "knowledge_retrieval_scope": {
-        "description": "思考時に参照する、過去の高評価な対話の最大数。値が高いほど、AIはより多くの過去の成功事例から学びますが、思考が遅くなる可能性があります。",
-        "current_value": 3.556638531286125,
-        "min": 1,
-        "max": 4
-    }
+  "learning_rate": 0.03563722656241062,
+  "temperature": 0.7018670099808779,
+  "max_tokens": 1432,
+  "timeout": 99.26698316705114,
+  "persona_update_threshold": {
+    "min": 3.5,
+    "max": 5.0,
+    "current_value": 3.8180791299865007
+  },
+  "high_score_weight": {
+    "min": 1.0,
+    "max": 2.5,
+    "current_value": 1.8614853696721207
+  },
+  "knowledge_retrieval_scope": {
+    "min": 1,
+    "max": 4,
+    "current_value": 4
+  }
 }

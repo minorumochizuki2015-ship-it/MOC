@@ -139,7 +139,9 @@ class SimpleBO:
                     for line in f:
                         if line.strip():
                             trial = json.loads(line.strip())
-                            self.trial_history.append(trial)
+                            # resultキーがあるレコードのみを履歴に追加
+                            if "result" in trial:
+                                self.trial_history.append(trial)
 
                 # 最良結果を更新
                 if self.trial_history:

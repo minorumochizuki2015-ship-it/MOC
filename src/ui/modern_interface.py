@@ -391,7 +391,8 @@ class ModernCursorAIInterface:
                     status_text = (
                         f"🤖 処理中 | CPU {cpu:.1f}% | MEM {mem:.1f}% | {tail}"
                     )
-                except (ImportError, Exception):
+                except (ImportError, Exception) as e:
+                    # psutilエラーをログに記録するが、UIには表示しない
                     pass
             # バッジは色だけ変更（文言は固定で幅不変）
             try:
