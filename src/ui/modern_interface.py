@@ -459,59 +459,7 @@ class ModernCursorAIInterface:
         # ctk.CTkButton(
         #     button_frame, text="🔍 分析", command=self._analyze_code, width=80
         # ).pack(side="left", padx=2)
-        # 革新的エディター機能
-        advanced_frame = ctk.CTkFrame(editor_frame)
-        advanced_frame.pack(fill="x", padx=10, pady=5)
-        advanced_label = ctk.CTkLabel(
-            advanced_frame,
-            text="🚀 革新的機能",
-            font=ctk.CTkFont(size=14, weight="bold"),
-        )
-        advanced_label.pack(pady=(10, 5))
-        advanced_buttons = ctk.CTkFrame(advanced_frame)
-        advanced_buttons.pack(fill="x", padx=5, pady=5)
-        ctk.CTkButton(
-            advanced_buttons,
-            text="🧠 AI補完",
-            command=self._ai_complete,
-            width=80,
-            height=30,
-        ).pack(side="left", padx=2)
-        ctk.CTkButton(
-            advanced_buttons,
-            text="🔮 予測生成",
-            command=self._predictive_generate,
-            width=80,
-            height=30,
-        ).pack(side="left", padx=2)
-        ctk.CTkButton(
-            advanced_buttons,
-            text="🎨 スタイル変換",
-            command=self._style_transform,
-            width=80,
-            height=30,
-        ).pack(side="left", padx=2)
-        ctk.CTkButton(
-            advanced_buttons,
-            text="🔍 コード検索",
-            command=self._smart_search,
-            width=80,
-            height=30,
-        ).pack(side="left", padx=2)
-        ctk.CTkButton(
-            advanced_buttons,
-            text="📈 パフォーマンス分析",
-            command=self._performance_analysis,
-            width=80,
-            height=30,
-        ).pack(side="left", padx=2)
-        ctk.CTkButton(
-            advanced_buttons,
-            text="🛡️ セキュリティスキャン",
-            command=self._security_scan,
-            width=80,
-            height=30,
-        ).pack(side="left", padx=2)
+        # 革新的機能は削除済み（使い物にならないため）
         # 外部エディター連携
         external_frame = ctk.CTkFrame(editor_frame)
         external_frame.pack(fill="x", padx=10, pady=5)
