@@ -29,6 +29,8 @@ _FN_DEF_PAT = re.compile(
     r"(^def\s+{name}\s*\(.*?\):\n(?:[ \t].*\n)+)",
     flags=re.M | re.S,
 )
+
+
 def replace_function(src_text: str, fn_name: str, new_func_def: str) -> tuple[str, str]:
     """
     関数を丸ごと置換。存在しなければ追記。戻り値: (新テキスト, 'replace'|'append')
@@ -46,6 +48,8 @@ def replace_function(src_text: str, fn_name: str, new_func_def: str) -> tuple[st
         return body + new_func_def.rstrip() + "\n", "append"
     s, e = m.span(1)
     return src_text[:s] + new_func_def.rstrip() + "\n" + src_text[e:], "replace"
+
+
 def apply_function_edit(
     file_path: str, fn_name: str, new_func_def: str, dryrun: bool = False
 ) -> str:
@@ -72,6 +76,8 @@ def apply_function_edit(
     p.write_text(new_text, encoding="utf-8")
     print(f"LOG_SUM extra: file={p} fn={fn_name} mode={mode}")
     return mode
+
+
 def local_rag_snippets(text: str, fn_name: str, k=3, max_lines=30):
     """RAGを局所に限定（誤拡張防止）"""
     blocks = []
@@ -85,6 +91,8 @@ def local_rag_snippets(text: str, fn_name: str, k=3, max_lines=30):
         if fn_name in blk or name == fn_name:
             blocks.append(blk)
     return ["\n".join(b.splitlines()[:max_lines]) for b in blocks[:k]]
+
+
 def _is_probably_python(code: str) -> bool:
     """言語推定。Pythonっぽくなければ False。"""
     s = code.strip()
@@ -112,6 +120,8 @@ def _is_probably_python(code: str) -> bool:
     # Pythonの手掛かり
     py_hits = sum(k in s for k in ("def ", "class ", "import ", "from "))
     return py_hits >= 1
+
+
 def auto_self_test(generated_code: str) -> bool:
     """Pythonコードのみ構文チェック。非Pythonはスキップ=成功扱い。"""
     if not _is_probably_python(generated_code):
@@ -132,8 +142,11 @@ def auto_self_test(generated_code: str) -> bool:
                 os_mod.unlink(tmp)
             except Exception:
                 pass
+
+
 class ModernCursorAIInterface:
     """モダンなCursor AIインターフェース"""
+
     def __init__(self, parent=None):
         # CustomTkinterの設定
         ctk.set_appearance_mode("dark")  # ダークモード
@@ -163,8 +176,10 @@ class ModernCursorAIInterface:
         self._setup_modern_ui()
         # バックグラウンドで会話履歴を読み込み
         import threading
+
         def load_history():
             self.load_conversation_history()
+
         thread = threading.Thread(target=load_history)
         thread.daemon = True
         thread.start()
@@ -178,6 +193,7 @@ class ModernCursorAIInterface:
         self.parent.after(1000, self._initialize_cursor_ai)
         # 初期化時にサーバー状態をチェック
         self.parent.after(2000, self._check_server_status)
+
     def load_conversation_history(self):
         """会話履歴を読み込み（最新10件まで）"""
         try:
@@ -195,6 +211,7 @@ class ModernCursorAIInterface:
         except Exception as e:
             print(f"⚠️ 会話履歴読み込みエラー: {e}")
             self.conversation_history = []
+
     def save_conversation_history(self, user_message: str, assistant_message: str):
         """会話履歴を保存（最新20件まで）"""
         try:
@@ -215,6 +232,7 @@ class ModernCursorAIInterface:
                     f.write(json.dumps(msg, ensure_ascii=False) + "\n")
         except Exception as e:
             print(f"⚠️ 会話履歴保存エラー: {e}")
+
     def get_selected_file_paths(self):
         """選択されたファイルパスを取得"""
         selected_paths = []
@@ -231,6 +249,7 @@ class ModernCursorAIInterface:
         except Exception as e:
             print(f"⚠️ ファイル選択取得エラー: {e}")
         return selected_paths
+
     def _setup_modern_ui(self):
         """モダンUIをセットアップ"""
         self.parent.title("統治核AI - モダンインターフェース")
@@ -252,6 +271,7 @@ class ModernCursorAIInterface:
         self._setup_ai_panel(content_frame)
         # 下部パネル（実行結果）
         self._setup_output_panel(main_frame)
+
     def _setup_header(self, parent):
         """ヘッダーをセットアップ"""
         header_frame = ctk.CTkFrame(parent)
@@ -274,7 +294,7 @@ class ModernCursorAIInterface:
             self.exec_mode_frame,
             values=["実行", "デバッグ"],
             command=self._on_exec_mode_changed,
-            width=120
+            width=120,
         )
         self.exec_mode_segmented.set("実行")
         self.exec_mode_segmented.pack(side="left", padx=(0, 10))
@@ -290,11 +310,13 @@ class ModernCursorAIInterface:
         self.server_status_label.pack(side="right", padx=20, pady=10)
         # サーバー状態更新タイマー（リアルタイム更新）
         self.update_server_status()
+
     def update_server_status(self):
         """サーバー状態を更新（再入抑止＋確定バッジ＋差分更新）"""
         if self._status_updating:
             return
         self._status_updating = True
+
         def _render(text):
             # 文字が変わる時だけ更新（レイアウト揺れ抑止）
             try:
@@ -305,8 +327,10 @@ class ModernCursorAIInterface:
                     self.server_status_label.configure(text=text)
             except Exception:
                 pass
+
         try:
             from ..utils.server_status import get_server_status
+
             is_online, status_text = get_server_status()
             # 状態管理変数を更新（成功時はエラーフラグをクリア）
             if is_online:
@@ -319,6 +343,7 @@ class ModernCursorAIInterface:
             if getattr(self, "is_processing", False):
                 try:
                     import psutil
+
                     cpu = psutil.cpu_percent(interval=0.0)
                     mem = psutil.virtual_memory().percent
                     tail = (
@@ -342,7 +367,7 @@ class ModernCursorAIInterface:
                             text="サーバー未接続", fg_color="#444444"
                         )
             except Exception:
-                    pass
+                pass
             self.parent.after(0, lambda: _render(status_text))
         except Exception as e:
             self.server_online = False
@@ -352,12 +377,13 @@ class ModernCursorAIInterface:
             )
             update_interval = 10000
         else:
-            update_interval = 2000 if getattr(self, "is_processing", False) else 20000
+            update_interval = 10000 if getattr(self, "is_processing", False) else 30000
         # ボタン状態を一括同期
         self._sync_server_buttons()
         self._status_updating = False
         # 次回更新をスケジュール
         self.parent.after(update_interval, self.update_server_status)
+
     def _sync_server_buttons(self):
         """起動・停止ボタン：1箇所で状態同期（更新ズレ修正版）"""
         if self._ui_freeze:
@@ -365,36 +391,52 @@ class ModernCursorAIInterface:
         try:
             # 現在の状態を正確に取得
             current_state = "on" if getattr(self, "server_online", False) else "off"
-            
+
             # 状態が変わった場合のみ更新
-            if hasattr(self, "_last_btn_state") and current_state == self._last_btn_state:
+            if (
+                hasattr(self, "_last_btn_state")
+                and current_state == self._last_btn_state
+            ):
                 return
-                
+
             self._last_btn_state = current_state
-            
+
             # メインスレッドで安全に更新
             def update_buttons():
                 try:
                     if current_state == "on":
-                        if hasattr(self, "start_button") and self.start_button.winfo_exists():
+                        if (
+                            hasattr(self, "start_button")
+                            and self.start_button.winfo_exists()
+                        ):
                             self.start_button.configure(state="disabled")
-                        if hasattr(self, "stop_button") and self.stop_button.winfo_exists():
+                        if (
+                            hasattr(self, "stop_button")
+                            and self.stop_button.winfo_exists()
+                        ):
                             self.stop_button.configure(state="normal")
                     else:
-                        if hasattr(self, "start_button") and self.start_button.winfo_exists():
+                        if (
+                            hasattr(self, "start_button")
+                            and self.start_button.winfo_exists()
+                        ):
                             self.start_button.configure(state="normal")
-                        if hasattr(self, "stop_button") and self.stop_button.winfo_exists():
+                        if (
+                            hasattr(self, "stop_button")
+                            and self.stop_button.winfo_exists()
+                        ):
                             self.stop_button.configure(state="disabled")
                 except Exception as e:
                     print(f"DEBUG: ボタン更新エラー: {e}")
-            
+
             # メインスレッドで実行
             if hasattr(self, "parent") and self.parent.winfo_exists():
                 self.parent.after(0, update_buttons)
-                
+
         except Exception as e:
             print(f"DEBUG: _sync_server_buttons エラー: {e}")
             pass
+
     def _setup_file_panel(self, parent):
         """ファイルパネルをセットアップ"""
         file_frame = ctk.CTkFrame(parent)
@@ -428,6 +470,7 @@ class ModernCursorAIInterface:
         ctk.CTkButton(
             button_frame, text="🔍 検索", command=self._search_files, width=60
         ).pack(side="left", padx=2)
+
     def _setup_editor_panel(self, parent):
         """エディターパネルをセットアップ"""
         editor_frame = ctk.CTkFrame(parent)
@@ -506,6 +549,7 @@ class ModernCursorAIInterface:
             width=100,
             height=30,
         ).pack(side="left", padx=2)
+
     def _setup_ai_panel(self, parent):
         """AIパネルをセットアップ"""
         ai_frame = ctk.CTkFrame(parent)
@@ -590,7 +634,7 @@ class ModernCursorAIInterface:
             ai_frame,
             values=["生成", "補助"],
             command=self._on_ai_tab_changed,
-            width=200
+            width=200,
         )
         self.ai_tab_segmented.set("生成")
         self.ai_tab_segmented.pack(fill="x", padx=10, pady=5)
@@ -607,20 +651,22 @@ class ModernCursorAIInterface:
         # AI入力エリア
         input_frame = ctk.CTkFrame(ai_frame)
         input_frame.pack(fill="both", expand=True, padx=10, pady=5)
-        
+
         input_label = ctk.CTkLabel(
             input_frame, text="AI入力", font=ctk.CTkFont(size=14, weight="bold")
         )
         input_label.pack(pady=(10, 5))
-        
+
         self.ai_input = ctk.CTkTextbox(
             input_frame, height=120, font=ctk.CTkFont(size=12)
         )
         self.ai_input.pack(fill="both", expand=True, padx=10, pady=5)
-        
+
         # Alt+Enterでデバッグモード実行
-        self.ai_input.bind("<Alt-Return>", lambda e: self._execute_ai_request(mode="debug"))
-        
+        self.ai_input.bind(
+            "<Alt-Return>", lambda e: self._execute_ai_request(mode="debug")
+        )
+
         # 共通 実行ボタン
         self.ai_mode_button = ctk.CTkButton(
             ai_frame,
@@ -707,11 +753,12 @@ class ModernCursorAIInterface:
             value="scan",
             command=self._update_ai_mode_button,
         ).pack(side="left", padx=4)
+
     def _execute_ai_mode(self):
         """統合AI実行ボタンのハンドラー"""
         mode = self.ai_mode.get()
         exec_mode = getattr(self, "exec_mode", "run")
-        
+
         if mode == "generate":
             self._generate_code()
         elif mode == "complete":
@@ -734,7 +781,7 @@ class ModernCursorAIInterface:
             self._scan_code()
         else:
             self._agent_task()
-        
+
         # デバッグモードの場合は追加情報を表示
         if exec_mode == "debug":
             self._show_debug_info()
@@ -742,31 +789,31 @@ class ModernCursorAIInterface:
     def _predict_code(self):
         """コード予測を実行"""
         self._execute_ai_request(task_type="predict")
-    
+
     def _create_code(self):
         """コード作成を実行"""
         self._execute_ai_request(task_type="create")
-    
+
     def _think_code(self):
         """思考処理を実行"""
         self._execute_ai_request(task_type="think")
-    
+
     def _style_code(self):
         """スタイル変換を実行"""
         self._execute_ai_request(task_type="style")
-    
+
     def _search_code(self):
         """コード検索を実行"""
         self._execute_ai_request(task_type="search")
-    
+
     def _analyze_code(self):
         """コード解析を実行"""
         self._execute_ai_request(task_type="analyze")
-    
+
     def _scan_code(self):
         """セキュリティスキャンを実行"""
         self._execute_ai_request(task_type="scan")
-    
+
     def _show_debug_info(self):
         """デバッグ情報を表示"""
         try:
@@ -781,6 +828,7 @@ AIモード: {self.ai_mode.get()}
             self.output_text.insert("end", debug_info)
         except Exception as e:
             self.output_text.insert("end", f"デバッグ情報取得エラー: {e}")
+
     def _update_ai_mode_button(self):
         """AIモードボタンのテキストを更新"""
         mode = self.ai_mode.get()
@@ -798,6 +846,7 @@ AIモード: {self.ai_mode.get()}
             "agent": "🎯 AIエージェント",
         }
         self.ai_mode_button.configure(text=mode_texts.get(mode, "✨ AI実行"))
+
     def _execute_evolution_mode(self):
         """統合進化実行ボタンのハンドラー"""
         mode = self.evolution_mode.get()
@@ -809,6 +858,7 @@ AIモード: {self.ai_mode.get()}
                 self._evo_timer = self.parent.after(5000, self._evo_tick)
         else:
             self._run_evolution_cycle()
+
     def _update_evolution_button(self):
         """進化モードボタンのテキストを更新"""
         mode = self.evolution_mode.get()
@@ -816,6 +866,7 @@ AIモード: {self.ai_mode.get()}
             self.evolution_button.configure(text="🚀 自動進化開始")
         else:
             self.evolution_button.configure(text="🔄 進化サイクル実行")
+
     def _run_or_debug(self):
         """単一エントリで実行/デバッグを切替"""
         mode = getattr(self, "run_mode", None)
@@ -823,6 +874,7 @@ AIモード: {self.ai_mode.get()}
         if mode == "debug":
             return self._debug_code()
         return self._run_code()
+
     def _draw_evo_graph(self):
         """進化グラフを描画"""
         try:
@@ -862,6 +914,7 @@ AIモード: {self.ai_mode.get()}
                 )
         except Exception:
             pass
+
     def _evo_tick(self):
         """進化グラフの定期更新"""
         try:
@@ -878,6 +931,7 @@ AIモード: {self.ai_mode.get()}
             # 次のタイマーを設定（多重登録防止）
             if self._evo_running:
                 self._evo_timer = self.parent.after(5000, self._evo_tick)
+
     def _setup_output_panel(self, parent):
         """出力パネルをセットアップ"""
         output_frame = ctk.CTkFrame(parent)
@@ -891,11 +945,13 @@ AIモード: {self.ai_mode.get()}
             output_frame, height=150, font=ctk.CTkFont(size=12)
         )
         self.output_text.pack(fill="both", expand=True, padx=10, pady=5)
+
     def _initialize_cursor_ai(self):
         """Cursor AIシステムを初期化"""
         try:
             # バックグラウンドで初期化
             import threading
+
             def init_ai():
                 try:
                     self.cursor_ai = CursorAISystem()
@@ -911,6 +967,7 @@ AIモード: {self.ai_mode.get()}
                         "エラー",
                         f"Cursor AIシステムの初期化に失敗しました: {e}",
                     )
+
             thread = threading.Thread(target=init_ai)
             thread.daemon = True
             thread.start()
@@ -920,6 +977,7 @@ AIモード: {self.ai_mode.get()}
             messagebox.showerror(
                 "エラー", f"Cursor AIシステムの初期化に失敗しました: {e}"
             )
+
     def _create_new_tab(self, title: str, content: str = ""):
         """新しいタブを作成"""
         tab_frame = ctk.CTkFrame(self.notebook)
@@ -928,6 +986,7 @@ AIモード: {self.ai_mode.get()}
         editor.pack(fill="both", expand=True, padx=5, pady=5)
         editor.insert("1.0", content)
         return editor
+
     def _get_current_editor(self):
         """現在のエディターを取得"""
         current_tab = self.notebook.select()
@@ -938,6 +997,7 @@ AIモード: {self.ai_mode.get()}
                 if isinstance(widget, ctk.CTkTextbox):
                     return widget
         return None
+
     def _open_file(self):
         """ファイルを開く"""
         file_path = filedialog.askopenfilename(
@@ -985,6 +1045,7 @@ AIモード: {self.ai_mode.get()}
                 )
             except Exception as e:
                 messagebox.showerror("エラー", f"ファイルの読み込みに失敗しました: {e}")
+
     def _save_file(self):
         """ファイルを保存"""
         editor = self._get_current_editor()
@@ -1018,11 +1079,13 @@ AIモード: {self.ai_mode.get()}
                 )
             except Exception as e:
                 messagebox.showerror("エラー", f"ファイルの保存に失敗しました: {e}")
+
     def _new_file(self):
         """新規ファイルを作成"""
         editor = self._create_new_tab("新規ファイル")
         self.current_file = None
         self._update_status("📄 新規ファイルを作成しました")
+
     def _refresh_files(self):
         """ファイル一覧を更新"""
         if not self.cursor_ai:
@@ -1045,6 +1108,7 @@ AIモード: {self.ai_mode.get()}
             self._update_status(f"❌ ファイル一覧の更新に失敗しました: {e}")
             # フォールバック: 簡単なファイル一覧を表示
             self._update_simple_file_tree()
+
     def _update_simple_file_tree(self):
         """簡単なファイルツリーを表示"""
         # 既存のアイテムをクリア
@@ -1054,6 +1118,7 @@ AIモード: {self.ai_mode.get()}
         try:
             import os
             from pathlib import Path
+
             # 除外するディレクトリ
             exclude_dirs = {
                 ".git",
@@ -1065,12 +1130,14 @@ AIモード: {self.ai_mode.get()}
                 "backup",
                 "backups",
             }
+
             def scan_directory(path, parent="", level=0):
                 if level > 3:  # 深さ制限
                     return
                 try:
                     items = []
                     import os as os_mod
+
                     for item in os_mod.listdir(path):
                         if item in exclude_dirs:
                             continue
@@ -1102,12 +1169,14 @@ AIモード: {self.ai_mode.get()}
                             scan_directory(item_path, folder_id, level + 1)
                 except PermissionError:
                     pass  # アクセス権限がない場合はスキップ
+
             # ルートディレクトリをスキャン
             scan_directory(".")
             self._update_status("✅ フォルダー全体をスキャンしました")
         except Exception as e:
             self.file_tree.insert("", "end", text=f"❌ エラー: {e}")
             self._update_status(f"❌ ファイルスキャンエラー: {e}")
+
     def _update_file_tree(self, file_tree: Dict[str, Any]):
         """ファイルツリーを更新"""
         # 既存のアイテムをクリア
@@ -1115,6 +1184,7 @@ AIモード: {self.ai_mode.get()}
             self.file_tree.delete(item)
         # ファイルツリーを構築
         self._build_file_tree(file_tree, "")
+
     def _build_file_tree(self, node: Dict[str, Any], parent_id: str):
         """ファイルツリーを再帰的に構築"""
         if node.get("type") == "directory":
@@ -1126,9 +1196,11 @@ AIモード: {self.ai_mode.get()}
         elif node.get("type") == "file":
             icon = "🐍" if node["name"].endswith(".py") else "📄"
             self.file_tree.insert(parent_id, "end", text=f"{icon} {node['name']}")
+
     def _execute_code(self):
         """コード実行（エイリアス）"""
         self._run_code()
+
     def _run_code(self):
         """コードを実行"""
         editor = self._get_current_editor()
@@ -1166,6 +1238,7 @@ AIモード: {self.ai_mode.get()}
                 f"このコードを実行してください:\n```python\n{code}\n```",
                 target="editor",
             )
+
     def _debug_code(self):
         """コードをデバッグ（デバッグコード提示機能付き）"""
         editor = self._get_current_editor()
@@ -1185,6 +1258,7 @@ AIモード: {self.ai_mode.get()}
 {code}
 ```"""
         self._execute_ai_request(debug_prompt, target="editor", task_type="debug")
+
     def _format_code(self):
         """コードをフォーマット"""
         editor = self._get_current_editor()
@@ -1197,6 +1271,7 @@ AIモード: {self.ai_mode.get()}
             f"このコードをフォーマットしてください:\n```python\n{code}\n```",
             target="editor",
         )
+
     def _analyze_code(self):
         """コードを分析（詳細分析機能付き）"""
         editor = self._get_current_editor()
@@ -1219,6 +1294,7 @@ AIモード: {self.ai_mode.get()}
 {code}
 ```"""
         self._execute_ai_request(analysis_prompt, target="editor", task_type="analyze")
+
     def _generate_code(self):
         """コードを生成（GPT提案に従ってタスクタイプ指定）"""
         description = self.ai_input.get("1.0", "end-1c").strip()
@@ -1230,6 +1306,7 @@ AIモード: {self.ai_mode.get()}
             target="editor",
             task_type="generate",
         )
+
     def _complete_code(self):
         """コードを補完（GPT提案に従ってタスクタイプ指定）"""
         editor = self._get_current_editor()
@@ -1243,6 +1320,7 @@ AIモード: {self.ai_mode.get()}
             target="editor",
             task_type="complete",
         )
+
     def _refactor_code(self):
         """コードをリファクタリング（GPT提案に従ってタスクタイプ指定）"""
         editor = self._get_current_editor()
@@ -1256,6 +1334,7 @@ AIモード: {self.ai_mode.get()}
             target="editor",
             task_type="refactor",
         )
+
     def _agent_task(self):
         """エージェントタスクを実行"""
         description = self.ai_input.get("1.0", "end-1c").strip()
@@ -1263,9 +1342,14 @@ AIモード: {self.ai_mode.get()}
             messagebox.showwarning("警告", "タスクの説明を入力してください")
             return
         self._execute_ai_request(f"エージェントタスクを実行してください: {description}")
+
     @stabilize_button("execute_ai")
     def _execute_ai_request(
-        self, request: str = None, target: str = "output", task_type: str = None, mode: str = None
+        self,
+        request: str = None,
+        target: str = "output",
+        task_type: str = None,
+        mode: str = None,
     ):
         """AIリクエストを実行（GPT提案に従ってタスクタイプ対応）"""
         if not self.cursor_ai:
@@ -1292,12 +1376,13 @@ AIモード: {self.ai_mode.get()}
         except Exception:
             pass
         import time
+
         self._t_start = time.perf_counter()
         self._update_status("🤖 AI処理中...")
-        
+
         # 処理状況表示を開始
         self._start_processing_display()
-        
+
         # 実行開始時刻を記録
         self._record_latency_start()
         # バックグラウンドで実行（タスクタイプを渡す）
@@ -1306,15 +1391,18 @@ AIモード: {self.ai_mode.get()}
         )
         thread.daemon = True
         thread.start()
+
     def _process_ai_request(
         self, request: str, target: str = "output", task_type: str = None
     ):
         """AIリクエストを処理（バックグラウンド、GPT提案に従ってタスクタイプ対応）"""
         try:
             import time
+
             start_time = time.time()
             # 新機能を使用したAI処理
             from src.core.kernel import generate_chat, healthcheck, read_paths
+
             # サーバー接続確認（リトライ機能付き）
             if not self._check_server_with_retry():
                 raise Exception(
@@ -1332,6 +1420,7 @@ AIモード: {self.ai_mode.get()}
             if rag_context:
                 # RAG去重＋30行クリップ（安定化v2）
                 import os as os_mod
+
                 rag_limit = int(os_mod.environ.get("LLM_RAG_CHARS", "500"))
                 deduped_rag = _dedup_clip(rag_context, 30)
                 limited_rag = (
@@ -1356,6 +1445,7 @@ AIモード: {self.ai_mode.get()}
             # プロンプトの長さをチェック（GPT提案のパッチ2対応）
             # 環境変数から制限値を取得
             import os as os_mod
+
             user_msg_limit = int(os_mod.environ.get("LLM_USER_CHARS", "2000"))
             rag_chars_limit = int(os_mod.environ.get("LLM_RAG_CHARS", "500"))
             # ユーザー入力の制限
@@ -1413,6 +1503,7 @@ AIモード: {self.ai_mode.get()}
                     current_content = editor.get("1.0", "end-1c")
                     backup_file = f"data/backups/editor_backup_{int(time.time())}.txt"
                     import os as os_mod
+
                     os_mod.makedirs(os_mod.path.dirname(backup_file), exist_ok=True)
                     with open(backup_file, "w", encoding="utf-8") as f:
                         f.write(current_content)
@@ -1443,6 +1534,7 @@ AIモード: {self.ai_mode.get()}
             self.parent.after(0, self._display_result, result)
         except Exception as e:
             import traceback
+
             error_msg = f"AI処理エラー: {str(e)}"
             print(f"DEBUG: {error_msg}\n{traceback.format_exc()}")  # デバッグ出力
             # より詳細なエラー情報を提供
@@ -1466,6 +1558,7 @@ AIモード: {self.ai_mode.get()}
             self.parent.after(0, self._display_error, error_msg)
         finally:
             self.parent.after(0, self._processing_finished)
+
     def _display_result(self, result: Dict[str, Any]):
         """結果を表示"""
         self.output_text.delete("1.0", "end")
@@ -1483,17 +1576,22 @@ AIモード: {self.ai_mode.get()}
                     try:
                         # 文字化けを修正
                         if isinstance(result_text, bytes):
-                            result_text = result_text.decode('utf-8', errors='replace')
+                            result_text = result_text.decode("utf-8", errors="replace")
                         elif not isinstance(result_text, str):
                             result_text = str(result_text)
-                        
+
                         # 追加の文字化け修正
                         import unicodedata
-                        result_text = unicodedata.normalize('NFC', result_text)
-                        
+
+                        result_text = unicodedata.normalize("NFC", result_text)
+
                         # 不正な文字を除去
-                        result_text = ''.join(char for char in result_text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
-                        
+                        result_text = "".join(
+                            char
+                            for char in result_text
+                            if unicodedata.category(char)[0] != "C" or char in "\n\t"
+                        )
+
                         self.output_text.insert("end", result_text)
                     except Exception as e:
                         # エラー時は安全な文字列を表示
@@ -1516,6 +1614,7 @@ AIモード: {self.ai_mode.get()}
             error = result.get("error", "不明なエラー")
             self.output_text.insert("end", f"❌ エラー: {error}")
             self._update_status(f"❌ AI処理エラー: {error}")
+
     def _display_error(self, error: str):
         """エラーを表示"""
         self.output_text.delete("1.0", "end")
@@ -1548,6 +1647,7 @@ AIモード: {self.ai_mode.get()}
         else:
             self.output_text.insert("end", f"❌ エラー: {error}")
         self._update_status(f"❌ エラー: {error}")
+
     def _processing_finished(self):
         """処理完了: フラグ解除・思考時間更新・UI復帰"""
         self.is_processing = False
@@ -1562,6 +1662,7 @@ AIモード: {self.ai_mode.get()}
         # 思考時間
         try:
             import time
+
             self._last_latency_ms = int(
                 (time.perf_counter() - getattr(self, "_t_start", time.perf_counter()))
                 * 1000
@@ -1574,6 +1675,7 @@ AIモード: {self.ai_mode.get()}
             import datetime
             import json
             import os
+
             os.makedirs("data/logs/current", exist_ok=True)
             with open("data/logs/current/latency.jsonl", "a", encoding="utf-8") as f:
                 f.write(
@@ -1587,6 +1689,7 @@ AIモード: {self.ai_mode.get()}
                 )
         except Exception:
             pass
+
     def _check_server_with_retry(
         self, max_retries: int = 3, backoff_seconds: float = 2.0
     ) -> bool:
@@ -1594,6 +1697,7 @@ AIモード: {self.ai_mode.get()}
         import time
 
         from src.core.kernel import healthcheck
+
         for attempt in range(max_retries):
             try:
                 if healthcheck():
@@ -1608,6 +1712,7 @@ AIモード: {self.ai_mode.get()}
                 backoff_seconds *= 1.5  # 指数バックオフ
         print("❌ サーバー接続に失敗しました")
         return False
+
     def _enable_all_buttons(self):
         """すべてのUIボタンを有効にする（GPT提案）"""
         try:
@@ -1627,6 +1732,7 @@ AIモード: {self.ai_mode.get()}
             print("✓ すべてのUIボタンを有効化しました")
         except Exception as e:
             print(f"⚠️ ボタン有効化エラー: {e}")
+
     def _get_rag_context(self) -> str:
         """RAG機能: 編集中ファイルから関数とDocstringを抽出（GPT提案）"""
         try:
@@ -1638,6 +1744,7 @@ AIモード: {self.ai_mode.get()}
                 return ""
             # 関数とDocstringを抽出
             import re
+
             # 関数定義を抽出
             function_pattern = r"def\s+(\w+)\s*\([^)]*\):.*?(?=\n\s*(?:def|\w+\s*=|\Z))"
             functions = re.findall(function_pattern, content, re.DOTALL)
@@ -1686,12 +1793,14 @@ AIモード: {self.ai_mode.get()}
         except Exception as e:
             print(f"⚠️ RAGコンテキスト取得エラー: {e}")
             return ""
+
     def _self_test_code(self, code: str, task_type: str) -> str:
         """生成コードの自己テスト（GPT提案）"""
         try:
             import os
             import subprocess
             import tempfile
+
             # 一時ファイルにコードを保存
             with tempfile.NamedTemporaryFile(
                 mode="w", suffix=".py", delete=False, encoding="utf-8"
@@ -1715,6 +1824,7 @@ AIモード: {self.ai_mode.get()}
                     error_prompt = f"以下のコードに構文エラーがあります。修正してください:\n\n{code}\n\nエラー:\n{result.stderr}"
                     # 再生成（1回のみ）
                     from src.core.kernel import generate_chat
+
                     fixed_code = generate_chat(
                         [], error_prompt, max_tokens=2000, task_type=task_type
                     )
@@ -1724,12 +1834,14 @@ AIモード: {self.ai_mode.get()}
                 # 一時ファイルを削除
                 try:
                     import os as os_mod
+
                     os_mod.unlink(temp_file)
                 except:
                     pass
         except Exception as e:
             print(f"⚠️ 自己テストエラー: {e}")
             return code  # エラー時は元のコードを返す
+
     def _update_editor_content(self, content: str):
         """エディターの内容を更新"""
         editor = self._get_current_editor()
@@ -1737,6 +1849,7 @@ AIモード: {self.ai_mode.get()}
             editor.delete("1.0", "end")
             editor.insert("1.0", content)
             self._update_status("✅ エディターを更新しました")
+
     def _show_conversation_history(self):
         """会話履歴を表示"""
         if not self.conversation_history:
@@ -1752,9 +1865,11 @@ AIモード: {self.ai_mode.get()}
             )
             history_text += f"{i}. {role}: {content}\n"
         messagebox.showinfo("会話履歴", history_text)
+
     def _analyze_file(self):
         """ファイル分析（エイリアス）"""
         self._analyze_selected_files()
+
     def _analyze_selected_files(self):
         """選択されたファイルを分析"""
         selected_files = self.get_selected_file_paths()
@@ -1763,9 +1878,11 @@ AIモード: {self.ai_mode.get()}
             return
         request = f"選択されたファイルを分析してください: {', '.join(selected_files)}"
         self._execute_ai_request(request)
+
     def _show_thinking_time(self):
         """思考時間表示（エイリアス）"""
         self._show_thinking_info()
+
     def _show_thinking_info(self):
         """思考時間情報を表示"""
         info_text = "=== 思考時間情報 ===\n"
@@ -1774,17 +1891,21 @@ AIモード: {self.ai_mode.get()}
         info_text += "• ファイル読み込み時間も含まれます\n"
         info_text += "• 会話継続により処理が最適化されます"
         messagebox.showinfo("思考時間表示", info_text)
+
     def _execute_evolution_cycle(self):
         """進化サイクル実行（エイリアス）"""
         self._run_evolution_cycle()
+
     def _run_evolution_cycle(self):
         """進化サイクルを実行"""
         try:
             from src.core.evolution import Evolution
+
             evolution = Evolution()
             self._update_status("🧬 進化サイクル実行中...")
             # バックグラウンドで進化サイクルを実行
             import threading
+
             def run_evolution():
                 try:
                     summary, stats = evolution.run_evolution_cycle()
@@ -1793,19 +1914,23 @@ AIモード: {self.ai_mode.get()}
                     self.parent.after(
                         0, self._display_error, f"進化サイクルエラー: {e}"
                     )
+
             thread = threading.Thread(target=run_evolution)
             thread.daemon = True
             thread.start()
         except Exception as e:
             messagebox.showerror("エラー", f"進化サイクルの実行に失敗しました: {e}")
+
     def _display_adaptability(self):
         """適応度表示（エイリアス）"""
         self._show_fitness_scores()
+
     def _show_fitness_scores(self):
         """適応度スコアを表示"""
         try:
             from src.genetic.fitness_calculator import calculate_fitness
             from src.genetic.genetic_algorithm import run_ga_cycle
+
             # サンプルゲノム定義
             genome_definition = {
                 "high_score_weight": {"min": 0.5, "max": 2.0, "current_value": 1.0},
@@ -1829,11 +1954,13 @@ AIモード: {self.ai_mode.get()}
             self._update_status("📊 適応度スコアを表示しました")
         except Exception as e:
             messagebox.showerror("エラー", f"適応度スコアの取得に失敗しました: {e}")
+
     def _manage_evolution_themes(self):
         """進化テーマを管理"""
         try:
             import json
             from pathlib import Path
+
             themes_file = Path("data/evolved_themes.json")
             if themes_file.exists():
                 with open(themes_file, "r", encoding="utf-8") as f:
@@ -1856,6 +1983,7 @@ AIモード: {self.ai_mode.get()}
                 messagebox.showinfo("情報", "進化テーマファイルが見つかりません")
         except Exception as e:
             messagebox.showerror("エラー", f"進化テーマの管理に失敗しました: {e}")
+
     def _configure_genetic_params(self):
         """遺伝的パラメータを設定"""
         # パラメータ設定ダイアログを表示
@@ -1869,6 +1997,7 @@ AIモード: {self.ai_mode.get()}
         self.output_text.delete("1.0", "end")
         self.output_text.insert("1.0", param_text)
         self._update_status("⚙️ 遺伝的パラメータを表示しました")
+
     def _display_evolution_result(self, summary: str, stats: dict):
         """進化結果を表示"""
         result_text = f"=== 進化サイクル結果 ===\n{summary}\n\n"
@@ -1882,6 +2011,7 @@ AIモード: {self.ai_mode.get()}
         self.output_text.delete("1.0", "end")
         self.output_text.insert("1.0", result_text)
         self._update_status("🧬 進化サイクル完了")
+
     def _stream_generate_chat(
         self,
         history: list,
@@ -1896,6 +2026,7 @@ AIモード: {self.ai_mode.get()}
             import time
 
             from src.core.kernel import generate_chat
+
             # タイムアウト設定を延長
             start_time = time.time()
             timeout_seconds = 180  # 3分に延長
@@ -1921,6 +2052,7 @@ AIモード: {self.ai_mode.get()}
                 )
                 return result_text if "result_text" in locals() else ""
             raise Exception(f"ストリーミング生成エラー: {e}")
+
     def _search_files(self):
         """ファイル検索機能"""
         try:
@@ -1968,6 +2100,7 @@ AIモード: {self.ai_mode.get()}
                 )
         except Exception as e:
             messagebox.showerror("エラー", f"ファイル検索に失敗しました: {e}")
+
     # 革新的エディター機能
     def _ai_autocomplete(self):
         """AI自動補完機能"""
@@ -1981,6 +2114,7 @@ AIモード: {self.ai_mode.get()}
             f"このコードを高度に補完してください:\n```python\n{code}\n```",
             target="editor",
         )
+
     def _predictive_generation(self):
         """予測的コード生成"""
         editor = self._get_current_editor()
@@ -1993,9 +2127,11 @@ AIモード: {self.ai_mode.get()}
             f"このコードの続きを予測して生成してください:\n```python\n{code}\n```",
             target="editor",
         )
+
     def _ai_completion(self):
         """AI補完（エイリアス）"""
         self._ai_complete()
+
     def _ai_complete(self):
         """AI補完機能"""
         editor = self._get_current_editor()
@@ -2007,6 +2143,7 @@ AIモード: {self.ai_mode.get()}
         self._execute_ai_request(
             f"このコードをAI補完してください:\n```python\n{code}\n```", target="editor"
         )
+
     def _predictive_generate(self):
         """予測生成機能"""
         editor = self._get_current_editor()
@@ -2019,9 +2156,11 @@ AIモード: {self.ai_mode.get()}
             f"このコードの続きを予測して生成してください:\n```python\n{code}\n```",
             target="editor",
         )
+
     def _style_conversion(self):
         """スタイル変換（エイリアス）"""
         self._style_transform()
+
     def _style_transform(self):
         """コードスタイル変換"""
         editor = self._get_current_editor()
@@ -2034,9 +2173,11 @@ AIモード: {self.ai_mode.get()}
             f"このコードをより読みやすく、効率的なスタイルに変換してください:\n```python\n{code}\n```",
             target="editor",
         )
+
     def _code_search(self):
         """コード検索（エイリアス）"""
         self._smart_search()
+
     def _smart_search(self):
         """スマートコード検索"""
         editor = self._get_current_editor()
@@ -2048,6 +2189,7 @@ AIモード: {self.ai_mode.get()}
         self._execute_ai_request(
             f"このコードに関連するコードを検索してください:\n```python\n{code}\n```"
         )
+
     def _performance_analysis(self):
         """パフォーマンス分析"""
         editor = self._get_current_editor()
@@ -2059,6 +2201,7 @@ AIモード: {self.ai_mode.get()}
         self._execute_ai_request(
             f"このコードのパフォーマンスを分析し、最適化提案をしてください:\n```python\n{code}\n```"
         )
+
     def _security_scan(self):
         """セキュリティスキャン"""
         editor = self._get_current_editor()
@@ -2070,6 +2213,7 @@ AIモード: {self.ai_mode.get()}
         self._execute_ai_request(
             f"このコードのセキュリティ脆弱性をスキャンしてください:\n```python\n{code}\n```"
         )
+
     def _continue_conversation(self):
         """会話を継続"""
         # 会話履歴を表示して選択可能にする
@@ -2078,6 +2222,7 @@ AIモード: {self.ai_mode.get()}
             return
         # 会話履歴選択ダイアログ
         self._show_conversation_history_dialog()
+
     def _show_conversation_history_dialog(self):
         """会話履歴選択ダイアログを表示"""
         dialog = ctk.CTkToplevel(self.parent)
@@ -2110,6 +2255,7 @@ AIモード: {self.ai_mode.get()}
         # ボタンフレーム
         button_frame = ctk.CTkFrame(dialog)
         button_frame.pack(fill="x", padx=10, pady=10)
+
         def continue_selected():
             selection = history_listbox.curselection()
             if selection:
@@ -2126,18 +2272,21 @@ AIモード: {self.ai_mode.get()}
                 dialog.destroy()
             else:
                 messagebox.showwarning("警告", "会話を選択してください。")
+
         def clear_history():
             if messagebox.askyesno("確認", "会話履歴をクリアしますか？"):
                 self.conversation_history.clear()
                 self.save_conversation_history("", "")  # 履歴をクリア
                 dialog.destroy()
                 self._update_status("✅ 会話履歴をクリアしました")
+
         def new_session():
             if messagebox.askyesno("確認", "新しいセッションを開始しますか？"):
                 self.conversation_history.clear()
                 self.save_conversation_history("", "")  # 履歴をクリア
                 dialog.destroy()
                 self._update_status("✅ 新しいセッションを開始しました")
+
         ctk.CTkButton(
             button_frame, text="選択した会話を継続", command=continue_selected
         ).pack(side="left", padx=5)
@@ -2150,15 +2299,18 @@ AIモード: {self.ai_mode.get()}
         ctk.CTkButton(button_frame, text="閉じる", command=dialog.destroy).pack(
             side="right", padx=5
         )
+
     # 画期的な遺伝的進化機能
     def _execute_optimization(self):
         """最適化実行（エイリアス）"""
         self._optimize_fitness()
+
     def _optimize_fitness(self):
         """適応度最適化"""
         try:
             from src.core.evolution import Evolution
             from src.genetic.fitness_calculator import FitnessCalculator
+
             evolution = Evolution()
             fitness_calc = FitnessCalculator()
             # 現在の適応度を計算
@@ -2182,6 +2334,7 @@ AIモード: {self.ai_mode.get()}
             self._update_status("🎯 適応度最適化完了")
         except Exception as e:
             self._update_status(f"❌ 適応度最適化エラー: {e}")
+
     def _run_fitness_optimization(self, evolution, fitness_calc):
         """適応度最適化を実行"""
         # 遺伝的アルゴリズムで最適化
@@ -2207,10 +2360,12 @@ AIモード: {self.ai_mode.get()}
                 best_fitness = fitness
                 best_genome = genome.copy()
         return best_genome or evolution.get_current_genome()
+
     def _accelerate_evolution(self):
         """進化加速"""
         try:
             from src.core.evolution import Evolution
+
             evolution = Evolution()
             # 進化加速プロセス
             result = evolution.run_evolution_cycle(accelerated=True)
@@ -2227,10 +2382,12 @@ AIモード: {self.ai_mode.get()}
             self._update_status("🚀 進化加速完了")
         except Exception as e:
             self._update_status(f"❌ 進化加速エラー: {e}")
+
     def _genetic_experiment(self):
         """遺伝子実験"""
         try:
             from src.genetic.genetic_algorithm import GeneticAlgorithm
+
             ga = GeneticAlgorithm()
             # 実験的な遺伝子操作
             experiment_results = ga.run_experiment()
@@ -2247,13 +2404,16 @@ AIモード: {self.ai_mode.get()}
             self._update_status("🧪 遺伝子実験完了")
         except Exception as e:
             self._update_status(f"❌ 遺伝子実験エラー: {e}")
+
     def _analyze_evolution(self):
         """進化分析（エイリアス）"""
         self._evolution_analysis()
+
     def _evolution_analysis(self):
         """進化分析"""
         try:
             from src.core.evolution import Evolution
+
             evolution = Evolution()
             # 進化の詳細分析
             analysis = evolution.analyze_evolution_history()
@@ -2278,6 +2438,7 @@ AIモード: {self.ai_mode.get()}
             self._update_status("📊 進化分析完了")
         except Exception as e:
             self._update_status(f"❌ 進化分析エラー: {e}")
+
     # 自動進化機能
     def _start_auto_evolution(self):
         """自動進化を開始"""
@@ -2312,7 +2473,9 @@ AIモード: {self.ai_mode.get()}
             self._update_status(f"❌ 自動進化開始エラー: {e}")
             print(f"DEBUG: 自動進化開始エラー: {e}")
             import traceback
+
             traceback.print_exc()
+
     def _stop_auto_evolution(self):
         """自動進化を停止"""
         try:
@@ -2321,14 +2484,17 @@ AIモード: {self.ai_mode.get()}
             messagebox.showinfo("自動進化停止", "自動進化が停止されました。")
         except Exception as e:
             self._update_status(f"❌ 自動進化停止エラー: {e}")
+
     def _auto_evolution_loop(self):
         """自動進化ループ"""
         try:
             import time  # timeモジュールをインポート
+
             # 進化モジュールのインポートを安全に実行
             try:
                 from src.core.evolution import Evolution
                 from src.genetic.fitness_calculator import FitnessCalculator
+
                 evolution = Evolution()
                 fitness_calc = FitnessCalculator()
             except ImportError as e:
@@ -2381,21 +2547,26 @@ AIモード: {self.ai_mode.get()}
             self.parent.after(0, self._update_status, f"❌ 自動進化ループエラー: {e}")
             print(f"DEBUG: 自動進化ループエラー: {e}")
             import traceback
+
             traceback.print_exc()
+
     def _display_auto_evolution_result(self, result_text):
         """自動進化結果を表示"""
         self.output_text.delete("1.0", "end")
         self.output_text.insert("1.0", result_text)
+
     def _show_detailed_logs(self):
         """詳細ログを表示"""
         try:
             import glob
             import os
             from datetime import datetime
+
             # ログファイルを検索
             log_files = []
             log_dirs = ["data/logs", "logs", "."]
             import os as os_mod
+
             for log_dir in log_dirs:
                 if os_mod.path.exists(log_dir):
                     log_files.extend(glob.glob(os_mod.path.join(log_dir, "*.log")))
@@ -2434,6 +2605,7 @@ AIモード: {self.ai_mode.get()}
             log_content += f"=== システム情報 ===\n"
             log_content += f"Python バージョン: {sys.version}\n"
             import os as os_mod
+
             log_content += f"作業ディレクトリ: {os_mod.getcwd()}\n"
             log_content += f"環境変数 OPENAI_COMPAT_BASE: {os_mod.environ.get('OPENAI_COMPAT_BASE', '未設定')}\n"
             log_text.insert("1.0", log_content)
@@ -2442,6 +2614,7 @@ AIモード: {self.ai_mode.get()}
             close_button.pack(pady=10)
         except Exception as e:
             messagebox.showerror("エラー", f"ログの表示に失敗しました: {e}")
+
     def _show_solution_guide(self):
         """解決方法ガイドを表示"""
         try:
@@ -2497,9 +2670,11 @@ AIモード: {self.ai_mode.get()}
             close_button.pack(pady=10)
         except Exception as e:
             messagebox.showerror("エラー", f"解決方法ガイドの表示に失敗しました: {e}")
+
     def _clear_history(self):
         """会話履歴をクリア（エイリアス）"""
         self._clear_conversation_history()
+
     def _clear_conversation_history(self):
         """会話履歴をクリア"""
         try:
@@ -2522,10 +2697,12 @@ AIモード: {self.ai_mode.get()}
         except Exception as e:
             self._update_status(f"❌ 履歴クリアエラー: {e}")
             messagebox.showerror("エラー", f"履歴のクリアに失敗しました: {e}")
+
     # 外部エディター連携機能
     def _open_with_vscode(self):
         """VS Codeで開く（エイリアス）"""
         self._open_in_vscode()
+
     def _open_in_vscode(self):
         """VS Codeで開く"""
         editor = self._get_current_editor()
@@ -2540,6 +2717,7 @@ AIモード: {self.ai_mode.get()}
             import os
             import subprocess
             import tempfile
+
             # 一時ファイルを作成
             with tempfile.NamedTemporaryFile(
                 mode="w", suffix=".py", delete=False, encoding="utf-8"
@@ -2553,10 +2731,12 @@ AIモード: {self.ai_mode.get()}
             except (subprocess.CalledProcessError, FileNotFoundError):
                 # VS Codeが見つからない場合、デフォルトエディターで開く
                 import os as os_mod
+
                 os_mod.startfile(temp_file)
                 self._update_status("✅ デフォルトエディターで開きました")
         except Exception as e:
             messagebox.showerror("エラー", f"VS Codeで開けませんでした: {e}")
+
     def _save_to_file(self):
         """ファイルに保存"""
         editor = self._get_current_editor()
@@ -2589,6 +2769,7 @@ AIモード: {self.ai_mode.get()}
                 messagebox.showinfo("保存完了", f"ファイルに保存しました:\n{file_path}")
         except Exception as e:
             messagebox.showerror("エラー", f"ファイルの保存に失敗しました: {e}")
+
     def _copy_to_clipboard(self):
         """クリップボードにコピー"""
         editor = self._get_current_editor()
@@ -2608,6 +2789,7 @@ AIモード: {self.ai_mode.get()}
             messagebox.showerror(
                 "エラー", f"クリップボードへのコピーに失敗しました: {e}"
             )
+
     def _update_status(self, message: str):
         """ステータスを更新（M0修正版）"""
         try:
@@ -2620,6 +2802,7 @@ AIモード: {self.ai_mode.get()}
                 self.status_text.insert("1.0", message)
         except Exception:
             pass
+
     def _update_status_badge(self):
         """ステータスバッジを更新（同期改善版）"""
         try:
@@ -2628,27 +2811,34 @@ AIモード: {self.ai_mode.get()}
                 def update_badge():
                     try:
                         if self.server_online:
-                            self.status_badge.configure(text="稼働中", fg_color="#006400")
+                            self.status_badge.configure(
+                                text="稼働中", fg_color="#006400"
+                            )
                         else:
-                            self.status_badge.configure(text="サーバー未接続", fg_color="#444444")
+                            self.status_badge.configure(
+                                text="サーバー未接続", fg_color="#444444"
+                            )
                     except Exception as e:
                         print(f"DEBUG: バッジ更新エラー: {e}")
-                
+
                 if hasattr(self, "parent") and self.parent.winfo_exists():
                     self.parent.after(0, update_badge)
         except Exception as e:
             print(f"DEBUG: _update_status_badge エラー: {e}")
             pass
+
     def _on_exec_mode_changed(self, value):
         """実行モードが変更された時のコールバック"""
         if value == "実行":
             self.exec_mode = "run"
         elif value == "デバッグ":
             self.exec_mode = "debug"
+
     def _on_ai_tab_changed(self, value):
         """AIタブが変更された時のコールバック"""
         self.ai_tab_mode.set(value)
         self._show_ai_tab(value)
+
     def _show_ai_tab(self, tab_name):
         """AIタブの表示を切り替え"""
         if tab_name == "生成":
@@ -2657,6 +2847,7 @@ AIモード: {self.ai_mode.get()}
         elif tab_name == "補助":
             self.tab_gen.pack_forget()
             self.tab_sup.pack(fill="x", pady=2)
+
     def cleanup(self):
         """リソースのクリーンアップ"""
         try:
@@ -2670,27 +2861,28 @@ AIモード: {self.ai_mode.get()}
                 self.auto_evolution_running = False
         except Exception:
             pass
+
     def _record_latency_start(self):
         """実行開始時刻を記録"""
         try:
             import time
+
             self._latency_start_time = time.time()
         except Exception:
             pass
+
     def _record_latency_end(self, latency_ms: float):
         """実行終了時刻とレイテンシを記録"""
         try:
             import json
             import time
             from pathlib import Path
+
             # latency.jsonlに記録
             log_dir = Path("data/logs/current")
             log_dir.mkdir(parents=True, exist_ok=True)
             latency_file = log_dir / "latency.jsonl"
-            record = {
-                "timestamp": time.time(),
-                "latency_ms": latency_ms
-            }
+            record = {"timestamp": time.time(), "latency_ms": latency_ms}
             with open(latency_file, "a", encoding="utf-8") as f:
                 f.write(json.dumps(record) + "\n")
         except Exception:
@@ -2703,7 +2895,7 @@ AIモード: {self.ai_mode.get()}
             import time
 
             import psutil
-            
+
             def update_display():
                 while self.is_processing:
                     try:
@@ -2714,11 +2906,12 @@ AIモード: {self.ai_mode.get()}
                         time.sleep(1)
                     except Exception:
                         break
-            
+
             thread = threading.Thread(target=update_display, daemon=True)
             thread.start()
         except Exception:
             pass
+
     @stabilize_button("start_server")
     def _start_server(self):
         """サーバーを起動"""
@@ -2726,6 +2919,7 @@ AIモード: {self.ai_mode.get()}
             # 起動前に既存8080をチェック（多重起動回避）
             try:
                 import socket
+
                 s = socket.socket()
                 s.settimeout(0.3)
                 try:
@@ -2766,6 +2960,7 @@ AIモード: {self.ai_mode.get()}
             # バックグラウンドでサーバー起動
             import subprocess
             import threading
+
             def start_server_process():
                 try:
                     # 直接Dockerコマンドを実行（文字化けを避ける）
@@ -2843,10 +3038,12 @@ AIモード: {self.ai_mode.get()}
                     self.parent.after(
                         0, self._update_status, "⏳ サーバー初期化待機中..."
                     )
+
                     # 1〜3秒でヘルス再試行し確定
                     def _probe():
                         try:
                             import requests
+
                             r = requests.get(
                                 "http://127.0.0.1:8080/v1/models", timeout=1.5
                             )
@@ -2872,6 +3069,7 @@ AIモード: {self.ai_mode.get()}
                             self.server_error = str(e)[:60]
                         finally:
                             self.update_server_status()
+
                     # 段階的に接続確認（最大180秒 - モデル読み込みに時間がかかる）
                     for i in range(180):
                         time.sleep(1)
@@ -2946,16 +3144,19 @@ AIモード: {self.ai_mode.get()}
                     self.parent.after(
                         0, lambda: self.server_status_label.configure(text="🔴 エラー")
                     )
+
             thread = threading.Thread(target=start_server_process)
             thread.daemon = True
             thread.start()
         except Exception as e:
             self._update_status(f"❌ サーバー起動エラー: {e}")
             messagebox.showerror("エラー", f"サーバー起動に失敗しました: {e}")
+
     def _check_docker_available(self) -> bool:
         """Dockerが利用可能かチェック"""
         try:
             import subprocess
+
             # まずdockerコマンドが存在するかチェック
             result = subprocess.run(
                 ["docker", "--version"], capture_output=True, text=True, timeout=5
@@ -2969,10 +3170,12 @@ AIモード: {self.ai_mode.get()}
             return result.returncode == 0
         except:
             return False
+
     def _check_model_available(self) -> bool:
         """モデルファイルが存在するかチェック"""
         model_path = Path("C:/models/qwen2-7b-instruct-q4_k_m.gguf")
         return model_path.exists()
+
     @stabilize_button("stop_server")
     def _stop_server(self):
         """サーバーを停止"""
@@ -2980,6 +3183,7 @@ AIモード: {self.ai_mode.get()}
             if hasattr(self, "server_container_id") and self.server_container_id:
                 # Dockerコンテナを停止
                 import subprocess
+
                 result = subprocess.run(
                     ["docker", "stop", self.server_container_id],
                     capture_output=True,
@@ -3003,6 +3207,7 @@ AIモード: {self.ai_mode.get()}
         except Exception as e:
             self._update_status(f"❌ サーバー停止エラー: {e}")
             messagebox.showerror("エラー", f"サーバー停止に失敗しました: {e}")
+
     def _check_server_status(self):
         """サーバー状態を確認（M0修正版）"""
         try:
@@ -3022,14 +3227,18 @@ AIモード: {self.ai_mode.get()}
             self._update_status(f"❌ サーバー状態確認エラー: {e}")
             self.server_online = False
             self._update_status_badge()
+
     def _check_server_connection(self) -> bool:
         """サーバー接続を確認（デバッグ強化版）"""
         try:
             import requests
+
             print(f"DEBUG: サーバー接続確認開始")
             response = requests.get("http://127.0.0.1:8080/v1/models", timeout=5)
-            print(f"DEBUG: レスポンス受信 - ステータス: {response.status_code}, 長さ: {len(response.text)}")
-            
+            print(
+                f"DEBUG: レスポンス受信 - ステータス: {response.status_code}, 長さ: {len(response.text)}"
+            )
+
             if response.status_code == 200:
                 # 成功時に必ず状態を上書き
                 self.server_online = True
@@ -3047,6 +3256,7 @@ AIモード: {self.ai_mode.get()}
             self.server_error = str(e)
             print(f"DEBUG: サーバー接続例外 - {e}")
             return False
+
     def _start_docker_desktop(self):
         """Docker Desktopを起動"""
         try:
@@ -3062,6 +3272,7 @@ AIモード: {self.ai_mode.get()}
             # Docker Desktopの起動を試行
             import subprocess
             import threading
+
             def start_docker():
                 try:
                     # Docker Desktopの起動パスを検索（より多くのパスを試行）
@@ -3132,11 +3343,11 @@ AIモード: {self.ai_mode.get()}
                             0,
                             lambda: messagebox.showerror(
                                 "エラー",
-                            "Docker Desktopが見つかりません。\n\n"
-                            "以下の手順で手動起動してください：\n"
-                            "1. スタートメニューから「Docker Desktop」を検索\n"
-                            "2. Docker Desktopをクリックして起動\n"
-                            "3. 起動後、状態確認ボタンをクリック\n\n"
+                                "Docker Desktopが見つかりません。\n\n"
+                                "以下の手順で手動起動してください：\n"
+                                "1. スタートメニューから「Docker Desktop」を検索\n"
+                                "2. Docker Desktopをクリックして起動\n"
+                                "3. 起動後、状態確認ボタンをクリック\n\n"
                                 "または、Docker Desktopをインストールしてください。",
                             ),
                         )
@@ -3158,7 +3369,7 @@ AIモード: {self.ai_mode.get()}
                                 0,
                                 lambda: messagebox.showinfo(
                                     "成功",
-                                "Docker Desktopが起動しました！\n"
+                                    "Docker Desktopが起動しました！\n"
                                     "サーバー起動ボタンをクリックしてサーバーを起動してください。",
                                 ),
                             )
@@ -3177,8 +3388,8 @@ AIモード: {self.ai_mode.get()}
                         0,
                         lambda: messagebox.showwarning(
                             "警告",
-                        "Docker Desktopの起動に時間がかかっています。\n"
-                        "手動でDocker Desktopの状態を確認してください。\n"
+                            "Docker Desktopの起動に時間がかかっています。\n"
+                            "手動でDocker Desktopの状態を確認してください。\n"
                             "起動後、状態確認ボタンをクリックしてください。",
                         ),
                     )
@@ -3192,17 +3403,20 @@ AIモード: {self.ai_mode.get()}
                             "エラー", f"Docker Desktop起動に失敗しました: {e}"
                         ),
                     )
+
             thread = threading.Thread(target=start_docker)
             thread.daemon = True
             thread.start()
         except Exception as e:
             self._update_status(f"❌ Docker起動エラー: {e}")
             messagebox.showerror("エラー", f"Docker Desktop起動に失敗しました: {e}")
+
     def _show_server_logs(self):
         """サーバーログを表示"""
         try:
             if hasattr(self, "server_container_id") and self.server_container_id:
                 import subprocess
+
                 result = subprocess.run(
                     ["docker", "logs", self.server_container_id],
                     capture_output=True,
@@ -3218,6 +3432,7 @@ AIモード: {self.ai_mode.get()}
                 messagebox.showinfo("情報", "サーバーが起動していません")
         except Exception as e:
             messagebox.showerror("エラー", f"ログ表示エラー: {e}")
+
     def _show_log_window(self, logs):
         """ログウィンドウを表示"""
         log_window = ctk.CTkToplevel(self.parent)
@@ -3234,11 +3449,13 @@ AIモード: {self.ai_mode.get()}
             log_window, text="閉じる", command=log_window.destroy, width=100
         )
         close_button.pack(pady=10)
+
     def run(self):
         """インターフェースを実行"""
         # 自動進化機能は手動開始のみ（スレッド問題のため自動開始を無効化）
         # self._start_auto_evolution()
         self.parent.mainloop()
+
     def _draw_evo_graph(self):
         """進化グラフを描画"""
         if not hasattr(self, "evo_canvas"):
@@ -3261,6 +3478,7 @@ AIモード: {self.ai_mode.get()}
                 c.create_line(x1, y1, x2, y2, fill="#00ff00", width=2)
         except Exception:
             pass
+
     def _on_close(self):
         """終了時にタイマー停止（多重登録/ゾンビ抑止）"""
         try:
@@ -3273,11 +3491,13 @@ AIモード: {self.ai_mode.get()}
             self.parent.destroy()
         except Exception:
             pass
+
+
 def main():
     """メイン関数"""
     app = ModernCursorAIInterface()
     app.run()
+
+
 if __name__ == "__main__":
     main()
-
-
