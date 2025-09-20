@@ -2736,7 +2736,7 @@ AIモード: {self.ai_mode.get()}
     def _start_server(self):
         """サーバーを起動"""
         try:
-            # 起動前に既存8080をブロック（多重起動回避）
+            # 起動前に既存8080をチェック（多重起動回避）
             try:
                 import socket
                 s = socket.socket()
@@ -2746,10 +2746,8 @@ AIモード: {self.ai_mode.get()}
                     s.close()
                     self.server_online = True
                     self.server_error = None
-                    self._safe_text_display(
-                        "既に稼働中（8080）。新規起動はスキップ。",
-                        self.server_status_label,
-                    )
+                    self._update_status("✅ 既に稼働中（8080）")
+                    self.server_status_label.configure(text="🟢 稼働中")
                     return
                 except Exception:
                     pass
