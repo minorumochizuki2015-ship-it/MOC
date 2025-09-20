@@ -1,10 +1,16 @@
 $ErrorActionPreference='Stop'
-.\.venv\Scripts\python.exe -X utf8 -u tools/quick_diagnose.py
-$ec = $LASTEXITCODE
-if($ec -eq 0){ exit 0 }
-if($ec -eq 1){ 
-    Write-Warning "[WARN] quick_diagnose: Environment/dependencies unresolved"
-    exit 1 
+function Find-Python {
+  $candidates = @(
+    (Join-Path $PSScriptRoot '..\.venv\Scripts\python.exe'),
+    $env:PYTHON, 'py -3', 'python'
+  ) | Where-Object { $_ -and $_ -ne '' }
+  foreach ($p in $candidates) {
+    try { & $p -V *> $null; return $p } catch {}
+  }
+  throw "Python not found."
 }
-Write-Error "[ERR] quick_diagnose: Dangerous configuration/implementation detected"
-exit 2
+$py = Find-Python
+& $py -X utf8 -u tools/quick_diagnose.py
+if ($LASTEXITCODE -eq 0) { exit 0 }
+if ($LASTEXITCODE -eq 1) { Write-Error "Diagnosis WARNING: Fix before push"; exit 1 }
+Write-Error "Diagnosis ERROR: Dangerous configuration/implementation"; exit 2
