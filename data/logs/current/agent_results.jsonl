@@ -1,0 +1,1 @@
+{"timestamp": 1758349126.1656828, "success": true, "summary": "README要約が正常に作成されました", "analysis": {"type": "documentation"}, "plan": {"steps": ["読み込み", "要約", "保存"]}, "execution": {"status": "completed"}}

@@ -1481,12 +1481,77 @@ AIモード: {self.ai_mode.get()}
         )
 
     def _agent_task(self):
-        """エージェントタスクを実行"""
+        """エージェントタスクを実行（M4: agent_mode統合）"""
         description = self.ai_input.get("1.0", "end-1c").strip()
         if not description:
             messagebox.showwarning("警告", "タスクの説明を入力してください")
             return
-        self._execute_ai_request(f"エージェントタスクを実行してください: {description}")
+        
+        # M4: agent_mode.run/plan_and_execute直結
+        try:
+            from src.core.agent_mode import AgentMode
+            from src.core.kernel import Kernel
+            from src.core.memory import Memory
+            
+            # エージェントモードを初期化
+            memory = Memory()
+            kernel = Kernel(memory)
+            agent = AgentMode(kernel)
+            
+            # エージェントタスクを実行
+            result = agent.plan_and_execute(description)
+            
+            # 結果を表示
+            if result.get("success"):
+                self._display_agent_result(result)
+                self._log_agent_result(result)
+            else:
+                self._update_status(f"❌ エージェントエラー: {result.get('error', 'Unknown error')}")
+                
+        except Exception as e:
+            self._update_status(f"❌ エージェント初期化エラー: {e}")
+            # フォールバック: 通常のAI実行
+            self._execute_ai_request(f"エージェントタスクを実行してください: {description}")
+
+    def _display_agent_result(self, result: dict):
+        """エージェント結果を表示（M4）"""
+        try:
+            # 結果を出力エリアに表示
+            if hasattr(self, "output_text"):
+                summary = result.get("summary", "タスク完了")
+                self.output_text.insert("end", f"\n🤖 エージェント結果:\n{summary}\n")
+                self.output_text.see("end")
+            
+            # ステータス更新
+            self._update_status("✅ エージェントタスク完了")
+            
+        except Exception as e:
+            self._update_status(f"❌ 結果表示エラー: {e}")
+
+    def _log_agent_result(self, result: dict):
+        """エージェント結果をログに記録（M4）"""
+        try:
+            import json
+            from pathlib import Path
+            
+            # agent_results.jsonlに追記
+            log_file = Path("data/logs/current/agent_results.jsonl")
+            log_file.parent.mkdir(parents=True, exist_ok=True)
+            
+            log_entry = {
+                "timestamp": time.time(),
+                "success": result.get("success", False),
+                "summary": result.get("summary", ""),
+                "analysis": result.get("analysis", {}),
+                "plan": result.get("plan", {}),
+                "execution": result.get("execution", {}),
+            }
+            
+            with open(log_file, "a", encoding="utf-8") as f:
+                f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
+                
+        except Exception as e:
+            print(f"エージェントログ記録エラー: {e}")
 
     @stabilize_button("execute_ai")
     def _execute_ai_request(
