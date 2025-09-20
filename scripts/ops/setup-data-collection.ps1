@@ -36,7 +36,7 @@ $command = "powershell -ExecutionPolicy Bypass -File `"$scriptPath`""
 $schedule = if ($Interval -lt 60) { "MINUTE" } else { "HOURLY" }
 $modifier = if ($Interval -lt 60) { $Interval } else { [math]::Floor($Interval / 60) }
 
-schtasks /Create /TN $taskName /TR $command /SC $schedule /MO $modifier /RU SYSTEM /RP "" /F /WD $workingDir
+    schtasks /Create /TN $taskName /TR $command /SC $schedule /MO $modifier /RU SYSTEM /RP "" /F
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "✅ データ収集タスク作成完了" -ForegroundColor Green

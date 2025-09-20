@@ -29,6 +29,8 @@ CASES = [
     {"tool":"search","args":{"keyword":"class ", "limit":5}, "composite": True, "follow_up": "edit_file"},
     # 巨大差分プレビュー
     {"tool":"read_file","args":{"path":"docs/README.md"}, "composite": True, "follow_up": "diff_preview"},
+    # 長鎖ケース: 検索→編集→差分確認
+    {"tool":"search","args":{"keyword":"def ", "limit":3}, "composite": True, "follow_up": "edit_file", "chain": ["search", "edit", "diff"]},
 ]
 
 PY = os.path.join(".venv","Scripts","python.exe") if os.name=="nt" else sys.executable
