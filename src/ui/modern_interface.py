@@ -1263,12 +1263,13 @@ AIモード: {self.ai_mode.get()}
             messagebox.showwarning("警告", "タスクの説明を入力してください")
             return
         self._execute_ai_request(f"エージェントタスクを実行してください: {description}")
+    @stabilize_button("execute_ai")
     def _execute_ai_request(
         self, request: str = None, target: str = "output", task_type: str = None, mode: str = None
     ):
         """AIリクエストを実行（GPT提案に従ってタスクタイプ対応）"""
         if not self.cursor_ai:
-            messagebox.showerror("エラー", "Cursor AIシステムが初期化されていません")
+            self._update_status("❌ Cursor AIシステムが初期化されていません")
             return
         if request is None:
             request = self.ai_input.get("1.0", "end-1c").strip()
@@ -1278,7 +1279,7 @@ AIモード: {self.ai_mode.get()}
         if mode is None:
             mode = self.exec_mode
         if self.is_processing or self._ui_freeze:
-            messagebox.showwarning("警告", "既に処理中です")
+            self._update_status("⚠️ 既に処理中です")
             return
         # 処理開始（二重押下防止＋凍結＋ストップウォッチ）
         self.is_processing = True
@@ -2718,6 +2719,7 @@ AIモード: {self.ai_mode.get()}
             thread.start()
         except Exception:
             pass
+    @stabilize_button("start_server")
     def _start_server(self):
         """サーバーを起動"""
         try:
@@ -2971,6 +2973,7 @@ AIモード: {self.ai_mode.get()}
         """モデルファイルが存在するかチェック"""
         model_path = Path("C:/models/qwen2-7b-instruct-q4_k_m.gguf")
         return model_path.exists()
+    @stabilize_button("stop_server")
     def _stop_server(self):
         """サーバーを停止"""
         try:
