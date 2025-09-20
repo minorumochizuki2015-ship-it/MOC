@@ -15,9 +15,7 @@ if ($LASTEXITCODE -eq 0) { exit 0 }
 if ($LASTEXITCODE -eq 1) { Write-Error "Diagnosis WARNING: Fix before push"; exit 1 }
 
 # mini eval（tools直呼び＋短Timeoutで高速回帰）
-& $py -X utf8 -u tools/mini_eval.py --mode tools --timeout 12 `
-    --baseline data/outputs/mini_eval_baseline.json `
-    --out data/outputs/mini_eval.json
+& $py -X utf8 -u tools/mini_eval.py --mode tools --timeout 12 --baseline data/outputs/mini_eval_baseline.json --out data/outputs/mini_eval.json
 if ($LASTEXITCODE -ne 0) { Write-Error "Mini eval FAILED: Regression detected"; exit 1 }
 
 # リモートAPI痕跡の静的検査
