@@ -23,6 +23,8 @@ CASES = [
   {"tool":"list_dir","args":{"path":"docs","limit":50}},
   {"tool":"read_file","args":{"path":"docs/README.md"}},
   {"tool":"search","args":{"path":"src","keyword":"def ", "limit":20}},
+  {"tool":"read_file","args":{"path":"data/outputs/dummy_old.txt"}},
+  {"tool":"search","args":{"keyword":"def main","limit":10}},
 ]
 
 PY = os.path.join(".venv","Scripts","python.exe") if os.name=="nt" else sys.executable
@@ -48,6 +50,19 @@ def main():
     with open("data/outputs/mini_eval.json","w",encoding="utf-8") as f:
         json.dump(out,f,ensure_ascii=False,indent=2)
     print(json.dumps(out,ensure_ascii=False,indent=2))
+    
+    # 履歴ログに追記
+    log_entry = {
+        "timestamp": int(time.time()),
+        "score": score,
+        "total": len(results),
+        "success": score == len(results),
+        "elapsed_ms": sum(r["ms"] for r in results)
+    }
+    Path("data/logs/current").mkdir(parents=True, exist_ok=True)
+    with open("data/logs/current/mini_eval_history.jsonl","a",encoding="utf-8") as f:
+        f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
+    
     return score == len(results)
 
 if __name__=="__main__":
