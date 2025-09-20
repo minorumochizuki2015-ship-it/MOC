@@ -204,11 +204,23 @@ python main.py
 完全ローカル学習→評価→置換の自動化パイプライン。Agent経由のpytest実行による詰まりを機械的に防止し、高速回帰チェックを実現。
 
 ### ✅ 最終受け入れチェック結果（2025年9月21日）
+
 - **基本機能**: 全項目PASS（5/5スコア、10-15秒実行）
 - **Git設定**: hooksPath設定済み（`.githooks`）
 - **運用基盤**: 統合スクリプト群完成
 - **パフォーマンス**: ヘルス1.18秒、回帰10-11秒
 - **判定**: **GO** - 完全自走可能
+
+## Final Acceptance (2025-09-20)
+- Health: **1.18s** / OK (RTX3050, port_open=true)
+- Mini eval: **5/5** (tools mode, timeout=15s, ~54s total)
+- Gates: pre-commit / pre-push / nightly wired
+- Rollback: `git checkout mini-eval-ok-20250920`
+
+Quick check:
+```powershell
+.\scripts\ops\quick-health.ps1
+```
 
 ### 主要ツール
 
