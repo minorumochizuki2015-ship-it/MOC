@@ -3047,23 +3047,29 @@ AIモード: {self.ai_mode.get()}
             self.server_online = False
             self._update_status_badge()
     def _check_server_connection(self) -> bool:
-        """サーバー接続を確認（M0修正版）"""
+        """サーバー接続を確認（デバッグ強化版）"""
         try:
             import requests
+            print(f"DEBUG: サーバー接続確認開始")
             response = requests.get("http://127.0.0.1:8080/v1/models", timeout=5)
+            print(f"DEBUG: レスポンス受信 - ステータス: {response.status_code}, 長さ: {len(response.text)}")
+            
             if response.status_code == 200:
                 # 成功時に必ず状態を上書き
                 self.server_online = True
                 self.server_error = None
+                print(f"DEBUG: サーバー接続成功 - server_online=True")
                 self.parent.after(0, self._update_status_badge)
                 return True
             else:
                 self.server_online = False
                 self.server_error = f"HTTP {response.status_code}"
+                print(f"DEBUG: サーバー接続失敗 - HTTP {response.status_code}")
                 return False
         except Exception as e:
             self.server_online = False
             self.server_error = str(e)
+            print(f"DEBUG: サーバー接続例外 - {e}")
             return False
     def _start_docker_desktop(self):
         """Docker Desktopを起動"""
