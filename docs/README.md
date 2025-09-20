@@ -211,15 +211,24 @@ python main.py
 - **パフォーマンス**: ヘルス1.18秒、回帰10-11秒
 - **判定**: **GO** - 完全自走可能
 
-## Final Acceptance (2025-09-20)
+## Final Acceptance (2025-09-21)
+
 - Health: **1.18s** / OK (RTX3050, port_open=true)
 - Mini eval: **5/5** (tools mode, timeout=15s, ~54s total)
 - Gates: pre-commit / pre-push / nightly wired
 - Rollback: `git checkout mini-eval-ok-20250920`
+- **小回し強化**: ログ質↑・データ自走粒度↑・学習本格化・安全置換・メトリクス拡張
 
 Quick check:
+
 ```powershell
 .\scripts\ops\quick-health.ps1
+```
+
+Weekly report:
+
+```powershell
+.\scripts\weekly-report.ps1
 ```
 
 ### 主要ツール
