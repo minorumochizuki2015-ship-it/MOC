@@ -10,3 +10,7 @@
 {"timestamp": 1758345971.4591, "params": {"latency_ms": 14701.964378356934}, "result": 0.06801812154246005, "metadata": {"task_type": "ai_request", "timestamp": 1758345971.4125326}, "trial_id": 5}
 {"timestamp": 1758346939.2175426, "latency_ms": 4088.226318359375, "trial_type": "latency_measurement", "status": "completed"}
 {"timestamp": 1758346939.2185397, "params": {"latency_ms": 4088.226318359375}, "result": 0.2446048535789733, "metadata": {"task_type": "ai_request", "timestamp": 1758346939.2185397}, "trial_id": 6}
+{"timestamp": 1758348788.5702686, "latency_ms": 3888.5655403137207, "trial_type": "latency_measurement", "status": "completed"}
+{"timestamp": 1758348788.5702686, "params": {"latency_ms": 3888.5655403137207}, "result": 0.2571642395203971, "metadata": {"task_type": "ai_request", "timestamp": 1758348788.5702686}, "trial_id": 7}
+{"timestamp": 1758348844.8984993, "latency_ms": 3476.408004760742, "trial_type": "latency_measurement", "status": "completed"}
+{"timestamp": 1758348844.8984993, "params": {"latency_ms": 3476.408004760742}, "result": 0.287653232483229, "metadata": {"task_type": "ai_request", "timestamp": 1758348844.8984993}, "trial_id": 8}

@@ -478,10 +478,14 @@ class ModernCursorAIInterface:
 
     # ---------- レイアウト揺れ抑止の補助 ----------
     def _truncate(self, s: str, max_chars: int) -> str:
+        """テキスト切り詰め（M1: 固定幅対応）"""
         try:
-            return s if len(s) <= max_chars else (s[: max_chars - 1] + "…")
+            if not s or len(s) <= max_chars:
+                return s
+            # 固定幅に合わせた切り詰め
+            return s[: max_chars - 1] + "…"
         except Exception:
-            return s
+            return str(s)[:max_chars] if s else ""
 
     def _init_layout_baseline(self) -> None:
         """初回描画後にボタン群の最大幅を採寸→固定。以降は固定幅で表示。"""
@@ -520,17 +524,33 @@ class ModernCursorAIInterface:
         self._fix_uniform_button_widths()
 
     def _fix_uniform_button_widths(self) -> None:
-        """各グループ内でボタン幅を最大値に合わせる"""
-        for grp in self._button_groups:
-            try:
-                base = max(int(w.winfo_width() or w.cget("width") or 0) for w in grp)
-                base = max(base, 120)  # 安全最小値
-                for w in grp:
-                    # 高さは触らず幅のみ固定
-                    if int(w.cget("width") or 0) != base:
-                        w.configure(width=base)
-            except Exception:
+        """各グループ内でボタン幅を最大値に合わせる（M1: 完全固定化）"""
+        if not hasattr(self, "_button_groups"):
+            return
+        
+        # 固定幅を設定（M1要件: レイアウト変動≦2px）
+        FIXED_BUTTON_WIDTH = 120  # 固定幅
+        FIXED_BUTTON_HEIGHT = 32  # 固定高さ
+        
+        for group in self._button_groups:
+            if not group:
                 continue
+            for widget in group:
+                try:
+                    if hasattr(widget, "configure"):
+                        # 幅と高さを完全固定
+                        widget.configure(width=FIXED_BUTTON_WIDTH, height=FIXED_BUTTON_HEIGHT)
+                        # テキストを固定幅に合わせて切り詰め
+                        if hasattr(widget, "cget"):
+                            try:
+                                text = widget.cget("text")
+                                if text and len(text) > 12:  # 固定幅に合わせた文字数制限
+                                    widget.configure(text=self._truncate(text, 12))
+                            except Exception:
+                                pass
+                except Exception:
+                    pass
+        # 旧コードを削除（M1: 完全固定化により不要）
 
     def _setup_file_panel(self, parent):
         """ファイルパネルをセットアップ"""

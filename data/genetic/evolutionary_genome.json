@@ -1,21 +1,21 @@
 {
-  "learning_rate": 0.03563722656241062,
-  "temperature": 0.7018670099808779,
-  "max_tokens": 1432,
-  "timeout": 99.26698316705114,
+  "learning_rate": 0.022671199807452993,
+  "temperature": 0.987618316483586,
+  "max_tokens": 1329,
+  "timeout": 122.01918457839277,
   "persona_update_threshold": {
     "min": 3.5,
     "max": 5.0,
-    "current_value": 3.8180791299865007
+    "current_value": 3.876895335382581
   },
   "high_score_weight": {
     "min": 1.0,
     "max": 2.5,
-    "current_value": 1.8614853696721207
+    "current_value": 2.359548961965188
   },
   "knowledge_retrieval_scope": {
     "min": 1,
     "max": 4,
-    "current_value": 4
+    "current_value": 2
   }
 }
