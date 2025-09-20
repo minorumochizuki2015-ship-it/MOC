@@ -176,6 +176,8 @@ class ModernCursorAIInterface:
         self.exec_mode = "run"  # "run" or "debug"
         # UI表示後にCursor AIを初期化（遅延初期化）
         self.parent.after(1000, self._initialize_cursor_ai)
+        # 初期化時にサーバー状態をチェック
+        self.parent.after(2000, self._check_server_status)
     def load_conversation_history(self):
         """会話履歴を読み込み（最新10件まで）"""
         try:
@@ -3016,16 +3018,24 @@ AIモード: {self.ai_mode.get()}
             self._update_status(f"❌ サーバー停止エラー: {e}")
             messagebox.showerror("エラー", f"サーバー停止に失敗しました: {e}")
     def _check_server_status(self):
-        """サーバー状態を確認"""
+        """サーバー状態を確認（M0修正版）"""
         try:
             if self._check_server_connection():
                 self._update_status("✅ サーバー接続中")
                 self.server_status_label.configure(text="🟢 サーバー接続中")
+                # 成功時に必ず状態を上書き
+                self.server_online = True
+                self.server_error = None
+                self._update_status_badge()
             else:
                 self._update_status("❌ サーバー未接続")
                 self.server_status_label.configure(text="🔴 サーバー未接続")
+                self.server_online = False
+                self._update_status_badge()
         except Exception as e:
             self._update_status(f"❌ サーバー状態確認エラー: {e}")
+            self.server_online = False
+            self._update_status_badge()
     def _check_server_connection(self) -> bool:
         """サーバー接続を確認（M0修正版）"""
         try:
