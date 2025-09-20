@@ -1,7 +1,9 @@
 # src/common/paths.py
 from __future__ import annotations
+
+import os
+import sys
 from pathlib import Path
-import os, sys
 
 MARKERS = ("pyproject.toml", "main_modern.py", ".git")
 
@@ -22,11 +24,20 @@ def _discover_root(start: Path | None = None) -> Path:
         return up2
     return Path.cwd().resolve()
 
-ROOT = _discover_root()
-SRC  = ROOT / "src"
-DATA = ROOT / "data"
-LOGS = DATA / "logs" / "current"
-DOCS = ROOT / "docs"
+ROOT   = _discover_root()
+SRC    = ROOT / "src"
+DATA   = ROOT / "data"
+LOGS   = DATA / "logs" / "current"
+DOCS   = ROOT / "docs"
+CONFIG = ROOT / "config"            # 新配置
+
+def resolve_config(name: str):
+    """config/ 優先。無ければ data/config/ を後方互換で参照。"""
+    p = CONFIG / name
+    if p.exists():
+        return p
+    legacy = ROOT / "data" / "config" / name
+    return legacy
 
 def activate() -> None:
     r = str(ROOT)
