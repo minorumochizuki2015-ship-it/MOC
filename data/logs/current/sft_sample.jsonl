@@ -1,0 +1,10 @@
+{"instruction": "docsフォルダの内容を確認し、READMEファイルの概要をまとめてdata/outputs/docs_summary.txtに保存", "output": "1. docsフォルダの内容を確認\n2. READMEファイルを読み取り\n3. 概要をまとめてファイルに保存"}
+{"instruction": "src/coreフォルダ内のPythonファイルを検索し、関数定義の数をカウント", "output": "1. src/coreフォルダ内のPythonファイルを検索\n2. 各ファイルで関数定義をカウント\n3. 結果をファイルに保存"}
+{"instruction": "ファイルを作成して内容を書き込む", "output": "write_fileツールを使用してファイルを作成し、指定された内容を書き込む"}
+{"instruction": "ファイルの内容を読み取る", "output": "read_fileツールを使用してファイルの内容を読み取り、結果を返す"}
+{"instruction": "ディレクトリの内容を一覧表示する", "output": "list_dirツールを使用してディレクトリの内容を一覧表示する"}
+{"instruction": "コードを検索して特定のキーワードを見つける", "output": "searchツールを使用してコードベース内で特定のキーワードを検索する"}
+{"instruction": "ファイルの内容を修正する", "output": "modify_fileツールを使用してファイルの内容を検索・置換する"}
+{"instruction": "テストを実行する", "output": "run_testsツールを使用してテストスイートを実行し、結果を返す"}
+{"instruction": "Gitコミットを実行する", "output": "git_commitツールを使用して変更をコミットする"}
+{"instruction": "プロジェクトの構造を分析する", "output": "list_dirとsearchツールを組み合わせてプロジェクトの構造を分析する"}

@@ -1,0 +1,24 @@
+{
+  "score": 3,
+  "total": 3,
+  "results": [
+    {
+      "ok": true,
+      "ms": 10283,
+      "stdout": "LOG_SUM: health ok via /v1/models\n{\"ok\": true, \"result\": {\"success\": false, \"error\": \"list_dir() got an unexpected keyword argument 'path'\", \"plan\": {\"tool\": \"list_dir\", \"args\": {\"path\": \"docs\", \"limit\": 50}}, \"evolution\": {\"current_params\": {\"learning_rate\": 0.01, \"batch_size\": 32, \"temperature\": 0.7, \"max_tokens\": 500}, \"performance\": 0.0, \"next_params\": {\"learning_rate\": 0.06069552438107189, \"batch_size\": 22, \"temperature\": 0.8188670853108618, \"max_tokens\": 539}}}}",
+      "stderr": ""
+    },
+    {
+      "ok": true,
+      "ms": 9625,
+      "stdout": "LOG_SUM: health ok via /v1/models\n{\"ok\": true, \"result\": {\"success\": true, \"result\": {\"path\": \"C:\\\\Users\\\\User\\\\GoverningCore_v5_Slice\\\\docs\\\\README.md\", \"kind\": \"text\", \"content\": \"# GoverningCore v5 - 統治核AIシステム\\n\\n> **Cursor AI同等システム** - 統治核AI v5.0 モダン版\\n\\n## 🏗️ アーキテクチャ概要\\n\\n```\\n┌─────────────────────────────────────────────────────────────┐\\n│                   統治核AI v5.0 システム                    │\\n├─────────────────────────────────────────────────────────────┤\\n│  🎯 メインエントリーポイント                                │\\n│  ├── main_modern.py          # モダン版（推奨）            │\\n│  └── main.py                 # 従来版（フォールバック）     │\\n├─────────────────────────────────────────────────────────────┤\\n│  🧠 コアシステム層                                         │\\n│  ├── cursor_ai_system.py     # Cursor AI同等システム統合   │\\n│  ├── kernel.py               # AIカーネル（API統合）       │\\n│  ├── memory.py               # ブロックチェーン型メモリ     │\\n│  ├── agent_mode.py           # エージェントモード          │\\n│  └── governance.py           # 統治監査システム            │\\n├─────────────────────────────────────────────────────────────┤\\n│  🎨 UI層                                                   │\\n│  ├── modern_interface.py     # モダンインターフェース      │\\n│  └── cursor_ai_interface.py  # Cursor AI同等UI            │\\n├─────────────────────────────────────────────────────────────┤\\n│  🔧 ユーティリティ層                                       │\\n│  ├── genetic/                # 遺伝的アルゴリズム          │\\n│  ├── utils/                  # 設定・自動マッチング        │\\n│  └── legacy/                 # レガシーサポート             │\\n└─────────────────────────────────────────────────────────────┘\\n```\\n\\n## 📁 プロジェクト構造（2025年9月20日 整理完了）\\n\\n```\\nGoverningCore_v5_Slice/\\n├── 📁 src/                          # メインソースコード\\n│   ├── 📁 core/                     # コア機能\\n│   │   ├── cursor_ai_system.py     # Cursor AI同等システム統合\\n│   │   ├── kernel.py               # AIカーネル（API統合）\\n│   │   ├── memory.py               # ブロックチェーン型メモリ\\n│   │   ├── agent_mode.py           # エージェントモード\\n│   ",
+      "stderr": ""
+    },
+    {
+      "ok": true,
+      "ms": 11724,
+      "stdout": "LOG_SUM: health ok via /v1/models\n{\"ok\": true, \"result\": {\"success\": true, \"result\": [], \"evolution\": {\"current_params\": {\"learning_rate\": 0.01, \"batch_size\": 32, \"temperature\": 0.7, \"max_tokens\": 500}, \"performance\": 1.0, \"next_params\": {\"learning_rate\": 0.05351205179691457, \"batch_size\": 21, \"temperature\": 0.34313429756240976, \"max_tokens\": 763}}}}",
+      "stderr": ""
+    }
+  ]
+}

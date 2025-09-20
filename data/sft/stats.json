@@ -1,0 +1,9 @@
+{
+  "total": 6,
+  "train": 5,
+  "val": 1,
+  "max_len": 2048,
+  "min_chars": 48,
+  "src": "data\\logs\\current",
+  "ts": 1758384260
+}
