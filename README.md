@@ -139,7 +139,7 @@ python main.py
 
 ```json
 {
-  "openai_base": "http://127.0.0.1:8080/v1",
+  "openai_base": "http://127.0.0.1:8080",
   "api_key": "sk-local",
   "max_tokens": 1024,
   "timeout_s": 300
@@ -236,41 +236,41 @@ python -X utf8 -u main_modern.py
 
 ### 1. 環境準備
 
-* `.cursor/rules/`に追記したルール（small-rules, review-policy, spec-splitなど）をエディタで目視確認
-* ルール追加後は**Cursorを再起動**してキャッシュをクリア（Rulesが反映されやすくなる）
-* すべてのCLI実行は `.\\.venv\\Scripts\\python.exe -m ...` で実施（venv.mdcの徹底）
+- `.cursor/rules/`に追記したルール（small-rules, review-policy, spec-splitなど）をエディタで目視確認
+- ルール追加後は**Cursorを再起動**してキャッシュをクリア（Rulesが反映されやすくなる）
+- すべてのCLI実行は `.\\.venv\\Scripts\\python.exe -m ...` で実施（venv.mdcの徹底）
 
 ### 2. ブランチ運用（patch-diff.mdc追記に基づく）
 
-* main/masterに直コミットせず、必ず`feature/xxx`や`rules-update`のような作業ブランチを切る
-* `git add/commit` → `git push` → GitHub上でPR作成 → CI結果を確認 → mainへマージ
+- main/masterに直コミットせず、必ず`feature/xxx`や`rules-update`のような作業ブランチを切る
+- `git add/commit` → `git push` → GitHub上でPR作成 → CI結果を確認 → mainへマージ
 
 ### 3. 作業ステップ
 
-* **Plan→Test→Patch**の順に行う：
-  * Plan: 設計や仕様（目的/前提/入出力/例）を先に書く（plan-test-patch.mdc）
-  * Test: pytestやスキーマ検証などでローカルテスト実行
-  * Patch: Test合格後に最小unified diffを作ってPRに出す
+- **Plan→Test→Patch**の順に行う：
+  - Plan: 設計や仕様（目的/前提/入出力/例）を先に書く（plan-test-patch.mdc）
+  - Test: pytestやスキーマ検証などでローカルテスト実行
+  - Patch: Test合格後に最小unified diffを作ってPRに出す
 
 ### 4. 削除・大量操作系（ターミナルが固まりやすい箇所）
 
-* `Remove-Item`など大量ファイル操作はCursor内ターミナルより**外部PowerShell 7コンソール**で実行
-* `Get-ChildItem … | Remove-Item -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue` のように出力抑制＆エラー無視を併用すると固まりにくい
-* Dry-Run（`-WhatIf`）を必ず実施してから本番実行（powershell.mdcのDryRun-Apply契約）
+- `Remove-Item`など大量ファイル操作はCursor内ターミナルより**外部PowerShell 7コンソール**で実行
+- `Get-ChildItem … | Remove-Item -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue` のように出力抑制＆エラー無視を併用すると固まりにくい
+- Dry-Run（`-WhatIf`）を必ず実施してから本番実行（powershell.mdcのDryRun-Apply契約）
 
 ### 5. CIとGitHub Actions
 
-* PRを出したらGitHub Actionsが自動実行されることを確認
-* pytest・lintが通ってからレビュー→マージ
+- PRを出したらGitHub Actionsが自動実行されることを確認
+- pytest・lintが通ってからレビュー→マージ
 
 ### 6. 秘密鍵・外部API（security.mdc追記に基づく）
 
-* `OPENAI_COMPAT_BASE`と`API_KEY`以外の秘密はログ・PR・コメントに出さない
-* 外部APIを一時有効化したら、作業終了後にダミー鍵に戻す
+- `OPENAI_COMPAT_BASE`と`API_KEY`以外の秘密はログ・PR・コメントに出さない
+- 外部APIを一時有効化したら、作業終了後にダミー鍵に戻す
 
 ### 7. バックアップ・ロールバック
 
-* 重要ファイルに変更をかける前に、今回のPowerShellスクリプトのようにSHA256でバックアップを取り、失敗時は即ロールバック
+- 重要ファイルに変更をかける前に、今回のPowerShellスクリプトのようにSHA256でバックアップを取り、失敗時は即ロールバック
 
 ### 8. PowerShellテンプレート
 
@@ -284,6 +284,7 @@ pwsh -NoProfile -File .\cursor-workflow.ps1 -Action backup-files -Apply
 ```
 
 **利用可能なアクション:**
+
 - `cleanup-cache`: __pycache__ディレクトリを削除
 - `cleanup-temp`: 一時ファイルを削除  
 - `run-tests`: テストスイートを実行
@@ -294,9 +295,9 @@ pwsh -NoProfile -File .\cursor-workflow.ps1 -Action backup-files -Apply
 
 ### 💡 ポイント
 
-* **一貫して「Dry-Run→Apply切替」**を守る
-* **最小unified diff＋例併記**でレビューしやすくする（guard.mdc追記に基づく）
-* **Cursorターミナルに過負荷な操作は外部PSへ逃がす**
+- **一貫して「Dry-Run→Apply切替」**を守る
+- **最小unified diff＋例併記**でレビューしやすくする（guard.mdc追記に基づく）
+- **Cursorターミナルに過負荷な操作は外部PSへ逃がす**
 
 ## 🤖 AI共有・引継ぎ情報
 
@@ -376,6 +377,7 @@ start_modern_ui.bat
 #### 🔄 **新セッションでの引継ぎ手順**
 
 1. **環境確認**
+
    ```bash
    # 仮想環境確認
    .venv\Scripts\python.exe --version
@@ -385,18 +387,21 @@ start_modern_ui.bat
    ```
 
 2. **設定確認**
+
    ```bash
    # 設定ファイル確認
    type data\config\settings.json
    ```
 
 3. **動作確認**
+
    ```bash
    # サーバー接続確認
    python -c "import requests; print(requests.get('http://127.0.0.1:8080/v1/models').status_code)"
    ```
 
 4. **起動テスト**
+
    ```bash
    # モダンUI起動
    python main_modern.py
@@ -409,6 +414,35 @@ start_modern_ui.bat
 3. **実地テスト必須**: 修正後は必ず実地テストを実行し、動作を確認
 4. **既存機能保護**: 修正時に既存機能を破損させないことを最優先
 5. **ロールバック準備**: 問題発生時は即座にロールバック可能な状態を維持
+
+#### 自動ゲート（機械的ルール違反防止）
+
+**自動ゲート3点**でルール違反を機械的に阻止：
+
+1. **保護ファイル改変ブロック** (`tools/check_protected.py`)
+   - `main_modern.py`と`start_modern_ui.bat`の変更を自動ブロック
+   - 変更時は`[GUARD]`エラーでコミット拒否
+
+2. **1コミット=1ファイル小差分** (`tools/check_onefile.py`)
+   - 1回のコミットで1ファイルのみ変更（400行以内）
+   - 複数ファイル変更時は`[PATCH]`エラーでコミット拒否
+
+3. **コミットメッセージにPlan→Test→Patch必須** (`tools/check_commit_msg.py`)
+   - コミットメッセージに`Plan:`、`Test:`、`Patch:`セクション必須
+   - 不足時は`[PTP]`エラーでコミット拒否
+
+**運用フロー**:
+
+```bash
+# 1. チェックポイント作成
+powershell -ExecutionPolicy Bypass -File tools/new_checkpoint.ps1 -Apply
+
+# 2. Plan→Test→Patch実行
+git add <1ファイルのみ>
+git commit -m "Plan: <要約>
+Test: <実施と結果>
+Patch: <対象ファイル名>"
+```
 
 #### 🐛 **既知の問題と解決策**
 

@@ -21,25 +21,45 @@
 | 11  | `python.mdc` | Pythonスタイルガイド強制 | ✅ Always Apply | 純関数＋logging＋型 |
 | 12  | `security.mdc` | 秘密漏洩対策（API_KEY等） | ✅ Always Apply | ログへの出力禁止 |
 | 13  | `venv.mdc` | `.venv/Scripts/python.exe` 強制 | ✅ Always Apply | グローバル実行禁止 |
+| 14  | `auto-gate.mdc` | 自動ゲート3点でルール違反防止 | ✅ Always Apply | 機械的チェック強制 |
+| 15  | `rule-priority.mdc` | ルール優先順位の明確化 | ✅ Always Apply | 判断プロセス統一 |
+| 16  | `quality-gate.mdc` | 品質保証プロセスの強化 | ✅ Always Apply | 必須チェックリスト |
 
 ---
 
 ### 🛡️ ルール補足（重要ルール解説）
 
 #### 📌 `backup-rule.mdc`
+
 重要ファイル（`main_modern.py`, `start_modern_ui.bat` 等）を変更する前に、`backups/` に自動保存します。失敗時は変更をロールバックし、安全性を担保。
 
 #### 📌 `guard.mdc`
+
 保護ファイルに対して直接変更はできず、**Plan → Apply** の承認ステップが必要です。Plan中に DryRun、Apply時は atomic write（原子的書込）が必須です。
 
 #### 📌 `format.mdc`
+
 保存と同時に `black` と `isort` により整形され、未整形コードは保存できません。
 
 #### 📌 `mypy.mdc`
+
 型注釈・strict チェックを全コードに適用。`Optional` や `Any` の使用も明示が必要です。
 
 #### 📌 `plan-test-patch.mdc`
+
 開発サイクルは `Plan → Test → Patch` の 3段階で構成され、テストパスが確認されるまで PATCH 出力は拒否されます。
+
+#### 📌 `auto-gate.mdc`
+
+自動ゲート3点（保護ファイルブロック、1ファイル制限、コミットメッセージチェック）により、ルール違反を機械的に阻止します。pre-commitフックとして自動実行され、違反時は即座にコミット拒否されます。
+
+#### 📌 `rule-priority.mdc`
+
+ルール優先順位を明確化し、判断プロセスを統一します。安全ルール > 技術的ルール > ユーザー指示の順で優先し、ルール違反時はPlanのみ返します。
+
+#### 📌 `quality-gate.mdc`
+
+品質保証プロセスを強化し、必須チェックリストを提供します。変更前・中・後の各段階で必要な確認項目を明示し、テスト合格前の実装を禁止します。
 
 ---
 

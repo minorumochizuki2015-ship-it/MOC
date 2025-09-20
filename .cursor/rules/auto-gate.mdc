@@ -1,0 +1,48 @@
+---
+description: Auto-gate 3-point system for mechanical rule violation prevention
+globs:
+  - "**/*.py"
+  - "**/*.bat"
+  - "**/*.ps1"
+  - "**/*.yaml"
+  - "**/*.yml"
+alwaysApply: true
+---
+【AUTO_GATE】自動ゲート3点でルール違反を機械的に阻止。
+
+## 1. 保護ファイル改変ブロック
+
+- `main_modern.py`と`start_modern_ui.bat`の変更を自動ブロック
+- 変更時は`[GUARD]`エラーでコミット拒否
+- 実装: `tools/check_protected.py`
+
+## 2. 1コミット=1ファイル小差分
+
+- 1回のコミットで1ファイルのみ変更（400行以内）
+- 複数ファイル変更時は`[PATCH]`エラーでコミット拒否
+- 実装: `tools/check_onefile.py`
+
+## 3. コミットメッセージにPlan→Test→Patch必須
+
+- コミットメッセージに`Plan:`、`Test:`、`Patch:`セクション必須
+- 不足時は`[PTP]`エラーでコミット拒否
+- 実装: `tools/check_commit_msg.py`
+
+## 運用フロー
+
+```bash
+# 1. チェックポイント作成
+powershell -ExecutionPolicy Bypass -File tools/new_checkpoint.ps1 -Apply
+
+# 2. Plan→Test→Patch実行
+git add <1ファイルのみ>
+git commit -m "Plan: <要約>
+Test: <実施と結果>
+Patch: <対象ファイル名>"
+```
+
+## 自動適用
+
+- pre-commitフックとして自動実行
+- コミット時に自動チェック
+- ルール違反時は即座にコミット拒否

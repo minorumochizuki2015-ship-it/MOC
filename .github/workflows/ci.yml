@@ -1,53 +1,13 @@
 name: CI
-
-on:
-  push:
-    branches: [ main, dev ]
-  pull_request:
-    branches: [ main ]
+on: [pull_request]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    
+  gate:
+    runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        npm install
-    
-    - name: Schema validation
-      run: |
-        python -c "import json; import yaml; print('Schema validation passed')"
-    
-    - name: Consistency-mini
-      run: |
-        python -c "print('Consistency-mini: 0')"
-    
-    - name: Unit tests
-      run: |
-        python -m pytest --cov=. --cov-report=xml
-        npm test
-    
-    - name: Check diff-plan.json
-      run: |
-        if [ -f diff-plan.json ]; then
-          echo "diff-plan.json found"
-        else
-          echo "diff-plan.json not found"
-        fi
-    
-    - name: Verify signatures
-      run: |
-        echo "Signature verification passed"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install -U pip pytest mypy pre-commit
+      - run: pre-commit run --all-files
+      - run: python tools/check_quality_gate.py
