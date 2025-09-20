@@ -11,6 +11,7 @@ import sys
 import time
 from pathlib import Path
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--plan", required=True, help="Training plan JSON file")

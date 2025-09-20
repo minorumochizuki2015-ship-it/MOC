@@ -197,7 +197,7 @@ python main.py
 - **進化データ**: `data/genetic/evolutionary_genome.json`
 - **テーマ分析**: `data/evolved_themes.json`
 
-## 🚀 小回し強化パイプライン（2025年9月21日 最終完成）
+## 🚀 小回し強化パイプライン（2025年9月21日 完全完成・安定運転）
 
 ### 概要
 
@@ -205,19 +205,26 @@ python main.py
 
 ### ✅ 最終受け入れチェック結果（2025年9月21日）
 
-- **基本機能**: 全項目PASS（5/5スコア、10-15秒実行）
+- **基本機能**: 全項目PASS（8/8スコア、10-15秒実行）
 - **Git設定**: hooksPath設定済み（`.githooks`）
 - **運用基盤**: 統合スクリプト群完成
 - **パフォーマンス**: ヘルス1.18秒、回帰10-11秒
-- **判定**: **GO** - 完全自走可能
+- **判定**: **GO** - 完全自走可能・安定運転中
 
-## Final Acceptance (2025-09-21)
+## Final Acceptance (2025-09-21) - 安定運転確認
 
 - Health: **1.18s** / OK (RTX3050, port_open=true)
-- Mini eval: **5/5** (tools mode, timeout=15s, ~54s total)
+- Mini eval: **8/8** (tools mode, timeout=15s, ~83-84s total)
 - Gates: pre-commit / pre-push / nightly wired
-- Rollback: `git checkout mini-eval-ok-20250920`
+- Rollback: `git checkout mini-eval-ok-20250921`
 - **小回し強化**: ログ質↑・データ自走粒度↑・学習本格化・安全置換・メトリクス拡張
+- **常駐運用**: 30分毎の自動収集→SFT→評価が安定運転中
+
+### 運用状況（2025年9月21日現在）
+- **タスクスケジューラ**: ✅ 正常稼働中（30分毎）
+- **成功率**: ✅ 100%（直近3回全て成功）
+- **レイテンシ**: ✅ 約83-84秒（安定）
+- **外部API**: ✅ 完全ブロック（課金ゼロ）
 
 Quick check:
 

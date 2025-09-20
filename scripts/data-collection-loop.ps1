@@ -1,72 +1,65 @@
+# Robust data-collection-loop (create log first, then cd)
 $ErrorActionPreference = 'Stop'
-function Find-Python {
-    $candidates = @(
-        (Join-Path $PSScriptRoot '..\.venv\Scripts\python.exe'),
-        $env:PYTHON, 'py -3', 'python'
-    ) | Where-Object { $_ -and $_ -ne '' }
-    foreach ($p in $candidates) {
-        try { & $p -V *> $null; return $p } catch {}
+
+# Paths (repo = .. from this script)
+$here = Split-Path -Parent $PSCommandPath
+$repo = (Resolve-Path (Join-Path $here '..')).Path
+
+# Log first (even if cd fails)
+$logDir = Join-Path $repo 'data\logs\current'
+$log = Join-Path $logDir 'gc-data-loop.log'
+New-Item -Path $logDir -ItemType Directory -Force | Out-Null
+"=== $(Get-Date -Format o) START ===" | Out-File -FilePath $log -Append -Encoding utf8
+
+$exit = 1
+try {
+    Set-Location -LiteralPath $repo
+    "repo=$repo" | Out-File $log -Append
+
+    $py = Join-Path $repo '.venv\Scripts\python.exe'
+    if (-not (Test-Path $py)) { throw "python not found: $py" }
+
+    # 1) quick diagnose
+    & "$py" -X utf8 -u tools\quick_diagnose.py *>> $log
+    $qd_rc = $LASTEXITCODE; $qd_ok = ($qd_rc -eq 0)
+    "qd_ok=$qd_ok rc=$qd_rc" | Out-File $log -Append
+
+    # 2) mini eval (tools mode, short timeout)
+    $mode = $env:MINI_EVAL_MODE; if (-not $mode) { $mode = 'tools' }
+    $to = $env:MINI_EVAL_TIMEOUT; if (-not $to) { $to = 15 }
+  
+    # 直前に保存
+    $prevEAP = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+  
+    & "$py" -W ignore::SyntaxWarning -X utf8 -u tools\mini_eval.py --mode $mode --timeout $to --baseline data\outputs\mini_eval_baseline.json --out data\outputs\mini_eval.json *>> $log
+  
+    $me_rc = $LASTEXITCODE; $me_ok = ($me_rc -eq 0)
+    "mini_eval_ok=$me_ok rc=$me_rc" | Out-File $log -Append
+  
+    # 元に戻す
+    $ErrorActionPreference = $prevEAP
+
+    # 3) files appear with slight delay under scheduler → retry
+    $qd_path = Join-Path $repo 'data\outputs\quick_diagnose.json'
+    $hist_path = Join-Path $repo 'data\logs\current\mini_eval_history.jsonl'
+    $files_ok = $false
+    foreach ($i in 1..10) {
+        if ((Test-Path $qd_path) -and (Test-Path $hist_path)) { $files_ok = $true; break }
+        Start-Sleep -Milliseconds 250
     }
-    throw "Python not found."
+    "files_ok=$files_ok qd=$(Test-Path $qd_path) hist=$(Test-Path $hist_path)" | Out-File $log -Append
+
+    if ($qd_ok -and $me_ok -and $files_ok) { $exit = 0 }
+    elseif (-not $qd_ok) { $exit = 10 }
+    elseif (-not $me_ok) { $exit = 11 }
+    else { $exit = 12 }
 }
-
-$py = Find-Python
-Write-Host "Data collection loop: safe task execution"
-
-# 安全タスクのリスト（30分毎に1つずつ実行）
-$timestamp = Get-Date -Format 'yyyyMMdd_HHmm'
-$safe_tasks = @(
-    "Create summary of docs/README.md and save to data/outputs/summary_$timestamp.md",
-    "List Python files in src/core/ directory and save to data/outputs/core_files_$timestamp.txt",
-    "Create description of tools/ directory functions and save to data/outputs/tools_desc_$timestamp.md",
-    "List project config files and save to data/outputs/config_files_$timestamp.txt",
-    "Analyze recent mini_eval results and save to data/outputs/eval_analysis_$timestamp.md",
-    "Create project structure overview and save to data/outputs/structure_$timestamp.md"
-)
-
-# 重複率チェック（直近5回のmini_eval履歴を確認）
-$historyFile = Join-Path $PSScriptRoot '..\data\logs\current\mini_eval_history.jsonl'
-if (Test-Path $historyFile) {
-    $recent = Get-Content $historyFile -Tail 5 | ForEach-Object { $_ | ConvertFrom-Json }
-    $perfectScores = ($recent | Where-Object { $_.score -eq $_.total }).Count
-    if ($perfectScores -eq 5) {
-        Write-Host "All recent mini_eval scores are perfect (5/5), running in lightweight mode"
-        # 軽量モード: 収集のみ、SFT再生成はスキップ
-        $lightweightMode = $true
-    } else {
-        $lightweightMode = $false
-    }
-} else {
-    $lightweightMode = $false
+catch {
+    "ERROR: $($_.Exception.Message)" | Out-File $log -Append
+    $exit = 9
 }
-
-# ランダムにタスクを選択
-$task = $safe_tasks | Get-Random
-Write-Host "Selected task: $task"
-
-# 安全タスク実行（max-steps 1で制限）
-& $py -X utf8 -u tools/agent_cli.py --goal $task --apply --max-steps 1
-
-if ($LASTEXITCODE -eq 0) {
-    Write-Host "Task completed successfully"
-} else {
-    Write-Warning "Task execution failed"
+finally {
+    "END exit=$exit" | Out-File $log -Append
+    exit $exit
 }
-
-# 軽量モードでない場合のみSFT再生成
-if (-not $lightweightMode) {
-    Write-Host "Regenerating SFT dataset..."
-    & $py -X utf8 -u tools/export_sft_dataset.py --min_chars 16 --split 0.9
-    
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "SFT regeneration completed"
-    } else {
-        Write-Error "SFT regeneration failed"
-        exit 1
-    }
-} else {
-    Write-Host "Lightweight mode: skipping SFT regeneration"
-}
-
-Write-Host "Data collection loop completed"
-exit $LASTEXITCODE

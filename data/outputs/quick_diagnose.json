@@ -1,0 +1,20 @@
+{
+  "base": "http://127.0.0.1:8080",
+  "local_only": true,
+  "api_keys_present": [],
+  "env_has_trailing_v1": false,
+  "server_ok": true,
+  "server_info": 200,
+  "ui_import_ok": true,
+  "ui_import_err": null,
+  "kernel_double_v1_ok": true,
+  "kernel_scan_err": null,
+  "config_ok": true,
+  "config_info": "C:\\Users\\User\\GoverningCore_v5_Slice\\config\\settings.json",
+  "port_open": true,
+  "gpu": [
+    "NVIDIA GeForce RTX 3050, 6144 MiB"
+  ],
+  "start_scripts_found": true,
+  "elapsed_ms": 1119
+}

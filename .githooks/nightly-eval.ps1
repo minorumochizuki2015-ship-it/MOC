@@ -1,5 +1,9 @@
 # Nightly regression (agent mode). Fails build if score < 5.
 
+# 単一インスタンス実行
+$mtx = New-Object System.Threading.Mutex($false,"GC_$($MyInvocation.MyCommand.Name)")
+if (-not $mtx.WaitOne(0)) { exit 0 }
+
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 

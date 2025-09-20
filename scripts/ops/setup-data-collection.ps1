@@ -20,7 +20,8 @@ if ($Remove) {
     schtasks /Delete /TN $taskName /F 2>$null
     if ($LASTEXITCODE -eq 0) {
         Write-Host "✅ タスク削除完了" -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Host "ℹ️  削除対象タスクなし" -ForegroundColor Blue
     }
     exit 0
@@ -36,14 +37,15 @@ $command = "powershell -ExecutionPolicy Bypass -File `"$scriptPath`""
 $schedule = if ($Interval -lt 60) { "MINUTE" } else { "HOURLY" }
 $modifier = if ($Interval -lt 60) { $Interval } else { [math]::Floor($Interval / 60) }
 
-    schtasks /Create /TN $taskName /TR $command /SC $schedule /MO $modifier /RU SYSTEM /RP "" /F
+schtasks /Create /TN $taskName /TR $command /SC $schedule /MO $modifier /RU SYSTEM /RP "" /F
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "✅ データ収集タスク作成完了" -ForegroundColor Green
     Write-Host "Task: $taskName" -ForegroundColor Yellow
     Write-Host "Schedule: $schedule / $modifier" -ForegroundColor Yellow
     Write-Host "Script: $scriptPath" -ForegroundColor Yellow
-} else {
+}
+else {
     Write-Error "❌ タスク作成失敗"
     exit 1
 }

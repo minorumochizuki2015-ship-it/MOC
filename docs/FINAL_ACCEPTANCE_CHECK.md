@@ -7,6 +7,7 @@
 ## ✅ チェック結果
 
 ### 基本機能チェック
+
 - [x] `quick-health.ps1` → ヘルスOK & mini_eval 5/5（tools/15s）
 - [x] `.githooks` が hooksPath に設定済み（`.githooks`）
 - [x] pre-push で mini_eval 発火（10–15sでPASS）
@@ -16,6 +17,7 @@
 - [x] 直近の良好タグ：`mini-eval-ok-20250920` へ即ロールバック可
 
 ### 運用の見るポイント（確認済み）
+
 - [x] mini_eval 履歴：`data/logs/current/mini_eval_history.jsonl` の **score** と **elapsed_ms**
   - 最新3回: 5/5成功、平均53秒
 - [x] 診断：`tools/quick_diagnose.py` の **server_ok / gpu / port_open**
@@ -57,6 +59,7 @@ git checkout mini-eval-ok-20250920
 ---
 
 **次のステップ**:
+
 1. データ収集タスクを常時稼働
 2. ローカルトレーナーの実体接続
 3. 夜間失敗時の自動ロールバック有効化

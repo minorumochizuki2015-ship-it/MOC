@@ -1,6 +1,10 @@
 # 継続運用監視（見るポイント確認）
 # Usage: .\scripts\ops\monitor-status.ps1 [-Fix] [-LogRotate]
 
+# 単一インスタンス実行
+$mtx = New-Object System.Threading.Mutex($false, "GC_$($MyInvocation.MyCommand.Name)")
+if (-not $mtx.WaitOne(0)) { exit 0 }
+
 param(
     [switch]$Fix = $false,
     [switch]$LogRotate = $false
@@ -16,7 +20,8 @@ Write-Host "`n1️⃣ Git hooksPath確認..." -ForegroundColor Yellow
 $hooksPath = git config core.hooksPath
 if ($hooksPath -eq ".githooks") {
     Write-Host "✅ hooksPath: $hooksPath" -ForegroundColor Green
-} else {
+}
+else {
     Write-Warning "⚠️  hooksPath: $hooksPath (expected: .githooks)"
     if ($Fix) {
         git config core.hooksPath .githooks
@@ -38,11 +43,13 @@ if (Test-Path $loraDir) {
     $loraFiles = Get-ChildItem $loraDir -File | Select-Object Name, Length, LastWriteTime
     if ($loraFiles.Count -gt 0) {
         Write-Host "✅ LoRA成果物: $($loraFiles.Count) files" -ForegroundColor Green
-        $loraFiles | Format-Table Name, @{Name="Size(KB)";Expression={[math]::Round($_.Length/1KB,1)}}, LastWriteTime -AutoSize
-    } else {
+        $loraFiles | Format-Table Name, @{Name = "Size(KB)"; Expression = { [math]::Round($_.Length / 1KB, 1) } }, LastWriteTime -AutoSize
+    }
+    else {
         Write-Host "ℹ️  LoRA成果物なし" -ForegroundColor Blue
     }
-} else {
+}
+else {
     Write-Host "ℹ️  LoRA成果物ディレクトリなし" -ForegroundColor Blue
 }
 
@@ -62,7 +69,8 @@ if (Test-Path $logDir) {
             Write-Host "✅ 14日以上古いログを削除: $($oldLogs.Count) files" -ForegroundColor Green
         }
     }
-} else {
+}
+else {
     Write-Host "ℹ️  ログディレクトリなし" -ForegroundColor Blue
 }
 
@@ -73,9 +81,10 @@ if (Test-Path $historyFile) {
     $recent = Get-Content $historyFile -Tail 3 | ForEach-Object { $_ | ConvertFrom-Json }
     if ($recent.Count -gt 0) {
         Write-Host "最近の評価結果:" -ForegroundColor Green
-        $recent | Format-Table @{Name="Time";Expression={[DateTime]::Parse($_.timestamp).ToString("MM/dd HH:mm")}}, score, success, @{Name="Elapsed(ms)";Expression={$_.elapsed_ms}} -AutoSize
+        $recent | Format-Table @{Name = "Time"; Expression = { [DateTime]::Parse($_.timestamp).ToString("MM/dd HH:mm") } }, score, success, @{Name = "Elapsed(ms)"; Expression = { $_.elapsed_ms } } -AutoSize
     }
-} else {
+}
+else {
     Write-Host "ℹ️  評価履歴なし" -ForegroundColor Blue
 }
 

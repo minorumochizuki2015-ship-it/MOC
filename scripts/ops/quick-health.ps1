@@ -35,7 +35,8 @@ $args += @("--out", "data\outputs\mini_eval.json")
 if ($LASTEXITCODE -eq 0) {
     $result = Get-Content data\outputs\mini_eval.json | ConvertFrom-Json
     Write-Host "✅ 回帰チェック OK (Score: $($result.score))" -ForegroundColor Green
-} else {
+}
+else {
     Write-Error "❌ 回帰チェック失敗 (Exit: $LASTEXITCODE)"
     exit 1
 }

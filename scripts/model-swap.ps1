@@ -56,7 +56,8 @@ Write-Host "Running post-swap evaluation..." -ForegroundColor Yellow
 if ($LASTEXITCODE -eq 0) {
     Write-Host "✅ Model swap successful" -ForegroundColor Green
     Write-Host "Current model: $currentLink -> $hashModelPath" -ForegroundColor Cyan
-} else {
+}
+else {
     Write-Warning "⚠️ Post-swap evaluation failed, consider rollback"
     Write-Host "Rollback command: git checkout mini-eval-ok-20250920" -ForegroundColor Yellow
 }

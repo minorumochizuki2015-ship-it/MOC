@@ -9,7 +9,11 @@ import os
 import subprocess
 import sys
 import time
+import warnings
 from pathlib import Path
+
+# 無害なSyntaxWarningを抑制
+warnings.filterwarnings("ignore", category=SyntaxWarning)
 
 DEFAULT_TIMEOUT = int(os.getenv("MINI_EVAL_TIMEOUT", "15"))
 DEFAULT_MODE = os.getenv("MINI_EVAL_MODE", "tools")  # 'tools' or 'agent'

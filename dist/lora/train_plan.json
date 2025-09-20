@@ -1,10 +1,8 @@
 {
-  "backend": "llama.cpp",
-  "base": "C:\\Users\\User\\GoverningCore_v5_Slice\\models\\qwen2-7b-instruct-q4_k_m.gguf",
-  "train": "C:\\Users\\User\\GoverningCore_v5_Slice\\data\\sft\\train.jsonl",
-  "val": "C:\\Users\\User\\GoverningCore_v5_Slice\\data\\sft\\val.jsonl",
-  "out": "C:\\Users\\User\\GoverningCore_v5_Slice\\dist\\lora",
-  "epochs": 2,
-  "notes": "qlora-local-round-1",
-  "hints": "llama.cpp: examples/finetune のローカル実行で LoRA を生成し、--lora-out を args.out へ。 HF: QLoRA (bitsandbytes 4bit) をオフラインキャッシュで実行。インターネット未使用。"
+  "train": "data/sft/train.jsonl",
+  "val": "data/sft/val.jsonl",
+  "epochs": 1,
+  "lr": 0.0002,
+  "r": 8,
+  "bf16": false
 }

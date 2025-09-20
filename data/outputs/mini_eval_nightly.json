@@ -1,0 +1,25 @@
+{
+  "score": "3/3",
+  "passed": 3,
+  "total": 3,
+  "cases": [
+    {
+      "name": "edit_file",
+      "ok": true,
+      "ms": 11474
+    },
+    {
+      "name": "search_repo",
+      "ok": true,
+      "ms": 13907
+    },
+    {
+      "name": "make_diff",
+      "ok": true,
+      "ms": 10068
+    }
+  ],
+  "ts": 1758389541,
+  "baseline": 3,
+  "regression": false
+}

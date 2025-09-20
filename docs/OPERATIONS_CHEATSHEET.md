@@ -75,22 +75,26 @@
 ### 必須チェック項目
 
 1. **Git hooksPath**: `.githooks` に設定されているか
+
    ```powershell
    git config core.hooksPath
    ```
 
 2. **環境変数**: 日常=tools/15、夜間=agent/45
+
    ```powershell
    echo $env:MINI_EVAL_MODE
    echo $env:MINI_EVAL_TIMEOUT
    ```
 
 3. **学習成果**: `dist/lora/*` に配置されているか
+
    ```powershell
    Get-ChildItem dist\lora -File | Format-Table Name, Length, LastWriteTime
    ```
 
 4. **ログ肥大**: `data/logs/**` が100MB超えていないか
+
    ```powershell
    (Get-ChildItem data\logs -Recurse -File | Measure-Object -Property Length -Sum).Sum / 1MB
    ```
@@ -131,16 +135,19 @@ SCHTASKS /Create /TN "gc-log-rotate" /SC WEEKLY /D SUN /ST 02:00 `
 ## 📈 次ステップ（推奨順序）
 
 1. **データ収集タスクを常時稼働**
+
    ```powershell
    .\scripts\ops\setup-data-collection.ps1 -Interval 30
    ```
 
 2. **ローカルトレーナーの実体接続**
+
    ```powershell
    $env:LOCAL_LORA_TRAINER = "python scripts\trainer\real_trainer.py --train {train} --val {val} --out {outdir}"
    ```
 
 3. **夜間失敗時の自動ロールバック**
+
    ```powershell
    # .githooks/nightly-eval.ps1 の最後に追加
    if ($score -lt 5) { & .\scripts\ops\quick-rollback.ps1 -Verify }
@@ -149,16 +156,19 @@ SCHTASKS /Create /TN "gc-log-rotate" /SC WEEKLY /D SUN /ST 02:00 `
 ## 🎯 運用フロー
 
 ### 日常運用
+
 1. `.\scripts\ops\quick-health.ps1` でヘルスチェック
 2. 問題があれば `.\scripts\ops\monitor-status.ps1 -Fix` で修正
 3. 学習が必要なら `.\scripts\ops\train-trigger.ps1` で実行
 
 ### 夜間運用
+
 1. 自動データ収集（30分毎）
 2. 自動夜間評価（毎日2:30）
 3. 失敗時は自動ロールバック
 
 ### 週次運用
+
 1. `.\scripts\ops\monitor-status.ps1 -LogRotate` でログローテーション
 2. 学習成果の確認と置換
 3. ベースラインタグの更新

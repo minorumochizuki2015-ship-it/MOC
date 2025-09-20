@@ -1,9 +1,9 @@
 {
-  "total": 15,
-  "train": 13,
-  "val": 2,
+  "total": 30,
+  "train": 27,
+  "val": 3,
   "max_len": 2048,
-  "min_chars": 64,
-  "src": "data\\logs\\current",
-  "ts": 1758384536
+  "min_chars": 16,
+  "src": "data/logs/current",
+  "ts": 1758394272
 }
