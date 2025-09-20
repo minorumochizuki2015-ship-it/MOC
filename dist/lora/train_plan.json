@@ -5,6 +5,6 @@
   "val": "C:\\Users\\User\\GoverningCore_v5_Slice\\data\\sft\\val.jsonl",
   "out": "C:\\Users\\User\\GoverningCore_v5_Slice\\dist\\lora",
   "epochs": 2,
-  "notes": "qlora dry plan",
+  "notes": "qlora-local-round-1",
   "hints": "llama.cpp: examples/finetune のローカル実行で LoRA を生成し、--lora-out を args.out へ。 HF: QLoRA (bitsandbytes 4bit) をオフラインキャッシュで実行。インターネット未使用。"
 }

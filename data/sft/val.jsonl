@@ -1,1 +1,2 @@
-{"instruction": "プロジェクトの構造を分析する", "output": "list_dirとsearchツールを組み合わせてプロジェクトの構造を分析する"}
+{"instruction": "プロジェクトの設定ファイルを読み取る", "output": "read_fileツールを使用してconfig/settings.jsonやpyproject.tomlなどの設定ファイルを読み取り、内容を確認する"}
+{"instruction": "複数のファイルを一括で処理する", "output": "list_dirでファイル一覧を取得し、各ファイルに対してread_fileやmodify_fileを適用して一括処理する"}
