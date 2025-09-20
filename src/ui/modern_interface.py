@@ -359,25 +359,41 @@ class ModernCursorAIInterface:
         # 次回更新をスケジュール
         self.parent.after(update_interval, self.update_server_status)
     def _sync_server_buttons(self):
-        """起動・停止ボタン：1箇所で状態同期（多発configure抑止）"""
+        """起動・停止ボタン：1箇所で状態同期（更新ズレ修正版）"""
         if self._ui_freeze:
             return
         try:
-            state = "on" if getattr(self, "server_online", False) else "off"
-            if state == self._last_btn_state:
+            # 現在の状態を正確に取得
+            current_state = "on" if getattr(self, "server_online", False) else "off"
+            
+            # 状態が変わった場合のみ更新
+            if hasattr(self, "_last_btn_state") and current_state == self._last_btn_state:
                 return
-            self._last_btn_state = state
-            if state == "on":
-                if hasattr(self, "start_button"):
-                    self.start_button.configure(state="disabled")
-                if hasattr(self, "stop_button"):
-                    self.stop_button.configure(state="normal")
-            else:
-                if hasattr(self, "start_button"):
-                    self.start_button.configure(state="normal")
-                if hasattr(self, "stop_button"):
-                    self.stop_button.configure(state="disabled")
-        except Exception:
+                
+            self._last_btn_state = current_state
+            
+            # メインスレッドで安全に更新
+            def update_buttons():
+                try:
+                    if current_state == "on":
+                        if hasattr(self, "start_button") and self.start_button.winfo_exists():
+                            self.start_button.configure(state="disabled")
+                        if hasattr(self, "stop_button") and self.stop_button.winfo_exists():
+                            self.stop_button.configure(state="normal")
+                    else:
+                        if hasattr(self, "start_button") and self.start_button.winfo_exists():
+                            self.start_button.configure(state="normal")
+                        if hasattr(self, "stop_button") and self.stop_button.winfo_exists():
+                            self.stop_button.configure(state="disabled")
+                except Exception as e:
+                    print(f"DEBUG: ボタン更新エラー: {e}")
+            
+            # メインスレッドで実行
+            if hasattr(self, "parent") and self.parent.winfo_exists():
+                self.parent.after(0, update_buttons)
+                
+        except Exception as e:
+            print(f"DEBUG: _sync_server_buttons エラー: {e}")
             pass
     def _setup_file_panel(self, parent):
         """ファイルパネルをセットアップ"""
@@ -2604,14 +2620,23 @@ AIモード: {self.ai_mode.get()}
         except Exception:
             pass
     def _update_status_badge(self):
-        """ステータスバッジを更新"""
+        """ステータスバッジを更新（同期改善版）"""
         try:
-            if hasattr(self, "status_badge"):
-                if self.server_online:
-                    self.status_badge.configure(text="稼働中", fg_color="#006400")
-                else:
-                    self.status_badge.configure(text="サーバー未接続", fg_color="#444444")
-        except Exception:
+            if hasattr(self, "status_badge") and self.status_badge.winfo_exists():
+                # メインスレッドで安全に更新
+                def update_badge():
+                    try:
+                        if self.server_online:
+                            self.status_badge.configure(text="稼働中", fg_color="#006400")
+                        else:
+                            self.status_badge.configure(text="サーバー未接続", fg_color="#444444")
+                    except Exception as e:
+                        print(f"DEBUG: バッジ更新エラー: {e}")
+                
+                if hasattr(self, "parent") and self.parent.winfo_exists():
+                    self.parent.after(0, update_badge)
+        except Exception as e:
+            print(f"DEBUG: _update_status_badge エラー: {e}")
             pass
     def _on_exec_mode_changed(self, value):
         """実行モードが変更された時のコールバック"""
