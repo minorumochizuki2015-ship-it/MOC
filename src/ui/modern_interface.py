@@ -1513,7 +1513,7 @@ AIモード: {self.ai_mode.get()}
                         json.dumps(result["result"], ensure_ascii=False, indent=2),
                     )
                 else:
-                    # 文字化け対策: 結果をUTF-8でエンコード
+                    # 文字化け対策: 結果をUTF-8でエンコード（強化版）
                     result_text = str(result["result"])
                     try:
                         # 文字化けを修正
@@ -1521,9 +1521,19 @@ AIモード: {self.ai_mode.get()}
                             result_text = result_text.decode('utf-8', errors='replace')
                         elif not isinstance(result_text, str):
                             result_text = str(result_text)
+                        
+                        # 追加の文字化け修正
+                        import unicodedata
+                        result_text = unicodedata.normalize('NFC', result_text)
+                        
+                        # 不正な文字を除去
+                        result_text = ''.join(char for char in result_text if unicodedata.category(char)[0] != 'C' or char in '\n\t')
+                        
                         self.output_text.insert("end", result_text)
-                    except Exception:
-                        self.output_text.insert("end", result_text)
+                    except Exception as e:
+                        # エラー時は安全な文字列を表示
+                        safe_text = f"[文字化け修正エラー: {e}]\n{str(result['result'])[:100]}..."
+                        self.output_text.insert("end", safe_text)
             # 新機能の情報を表示
             info_lines = []
             if "thinking_time" in result:
