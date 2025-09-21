@@ -1,0 +1,12 @@
+{
+  "source": "cursor",
+  "title": "smoke-long",
+  "domain": "code",
+  "task_type": "edit",
+  "success": true,
+  "prompt": "Refactor the function to be pure and add tests for unicode/empty inputs; explain edge cases in comments.",
+  "output": "Refactored foo() to be pure, added validation, wrote tests for unicode/empty, updated docs; coverage +8%.",
+  "refs": [],
+  "privacy": "no_pii",
+  "tags": []
+}

@@ -1,0 +1,16 @@
+{
+  "source": "trae",
+  "title": "起動テスト用データ",
+  "domain": "code",
+  "task_type": "edit",
+  "success": true,
+  "prompt": "起動テスト用のプロンプト",
+  "output": "起動テスト用の出力",
+  "refs": [
+    "test/startup.py"
+  ],
+  "privacy": "no_pii",
+  "tags": [
+    "startup-test"
+  ]
+}

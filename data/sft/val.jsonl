@@ -1,3 +1,1 @@
-{"instruction": "Pythonファイル内の関数定義を検索する", "output": "searchツールを使用してPythonファイル内で'def 'キーワードを検索し、関数定義の一覧を取得する"}
-{"instruction": "テストファイルを実行して結果を確認する", "output": "run_testsツールを使用してテストスイートを実行し、成功・失敗の結果を確認する"}
-{"instruction": "docsフォルダの内容を確認し、READMEファイルの概要をまとめてdata/outputs/docs_summary.txtに保存", "output": "1. docsフォルダの内容を確認\n2. READMEファイルを読み取り\n3. 概要をまとめてファイルに保存"}
+{"instruction":"Write a Python function to add two numbers.","output":"def add_numbers(a, b):\n    return a + b"}

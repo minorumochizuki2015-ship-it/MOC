@@ -1,0 +1,12 @@
+{
+  "source": "manual",
+  "title": "drop-smoke",
+  "domain": "unknown",
+  "task_type": "edit",
+  "success": true,
+  "prompt": "p",
+  "output": "o",
+  "refs": [],
+  "privacy": "no_pii",
+  "tags": []
+}

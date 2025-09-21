@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学習インテーク・アプリ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+        }
+
+        .section h2 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+        }
+
+        .status-panel {
+            background: #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .status-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .status-value {
+            color: #007bff;
+            font-weight: 600;
+        }
+
+        .items-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: box-shadow 0.2s;
+        }
+
+        .item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .item-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-inbox {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-accepted {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .item-content {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>学習インテーク・アプリ</h1>
+            <p>ローカル統治核AI用学習データ収集・管理システム</p>
+        </div>
+
+        <div class="main-content">
+            <!-- データ投入セクション -->
+            <div class="section">
+                <h2>📝 データ投入</h2>
+                <div id="alert-container"></div>
+
+                <form id="data-form">
+                    <div class="form-group">
+                        <label for="source">データソース</label>
+                        <select id="source" name="source" required>
+                            <option value="trae">Trae</option>
+                            <option value="cursor">Cursor</option>
+                            <option value="manual">手動</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title">タイトル</label>
+                        <input type="text" id="title" name="title" required placeholder="短い要約を入力">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="domain">ドメイン</label>
+                        <select id="domain" name="domain">
+                            <option value="auto">自動推定</option>
+                            <option value="code">コード</option>
+                            <option value="write">ライティング</option>
+                            <option value="patent">特許</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="task_type">タスク種別</label>
+                        <select id="task_type" name="task_type" required>
+                            <option value="edit">編集</option>
+                            <option value="search">検索</option>
+                            <option value="fix">修正</option>
+                            <option value="draft">ドラフト</option>
+                            <option value="refactor">リファクタ</option>
+                            <option value="spec">仕様</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="success" name="success">
+                            <label for="success">成功</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prompt">プロンプト</label>
+                        <textarea id="prompt" name="prompt" required placeholder="プロンプトを入力"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="output">出力</label>
+                        <textarea id="output" name="output" required placeholder="出力を入力"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rationale_success">成功理由</label>
+                        <textarea id="rationale_success" name="rationale_success" placeholder="成功理由（任意）"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rationale_failure">失敗理由</label>
+                        <textarea id="rationale_failure" name="rationale_failure" placeholder="失敗理由（任意）"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="math_or_rules">使用した式/根拠/規約</label>
+                        <input type="text" id="math_or_rules" name="math_or_rules"
+                            placeholder="例: SRP, cyclomatic complexity">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="refs">参照パス/URL（カンマ区切り）</label>
+                        <input type="text" id="refs" name="refs" placeholder="例: src/example.py, docs/guide.md">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="privacy">プライバシーレベル</label>
+                        <select id="privacy" name="privacy">
+                            <option value="no_pii">個人情報なし</option>
+                            <option value="pii_redacted">個人情報マスク済み</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags">タグ（カンマ区切り）</label>
+                        <input type="text" id="tags" name="tags" placeholder="例: mini-eval-case-7, test">
+                    </div>
+
+                    <button type="submit" class="btn btn-success">データ投入</button>
+                </form>
+            </div>
+
+            <!-- 管理・処理セクション -->
+            <div class="section">
+                <h2>⚙️ 管理・処理</h2>
+
+                <!-- ステータスパネル -->
+                <div class="status-panel">
+                    <h3>システム状態</h3>
+                    <div id="status-container">
+                        <div class="status-item">
+                            <span class="status-label">Inbox:</span>
+                            <span class="status-value" id="inbox-count">-</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Accepted:</span>
+                            <span class="status-value" id="accepted-count">-</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Rejected:</span>
+                            <span class="status-value" id="rejected-count">-</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">Buckets:</span>
+                            <span class="status-value" id="buckets-count">-</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">SFT:</span>
+                            <span class="status-value" id="sft-count">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 処理ボタン -->
+                <div style="margin-bottom: 20px;">
+                    <button id="filter-btn" class="btn btn-warning">フィルタ実行</button>
+                    <button id="export-sft-btn" class="btn btn-info">SFT生成</button>
+                    <button id="train-btn" class="btn btn-success">学習実行</button>
+                    <button id="refresh-btn" class="btn">更新</button>
+                </div>
+
+                <!-- アイテム一覧 -->
+                <div>
+                    <h3>アイテム一覧</h3>
+                    <div id="items-container" class="items-list">
+                        <div style="text-align: center; padding: 20px; color: #6c757d;">
+                            読み込み中...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ライブ履歴 -->
+                <div class="card mt-3">
+                    <div class="card-header">ライブ履歴</div>
+                    <div class="card-body" style="max-height:220px;overflow:auto" id="liveBox">
+                        <div class="text-muted">待機中...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // グローバル変数
+        let currentItems = [];
+
+        // DOM要素取得
+        const dataForm = document.getElementById('data-form');
+        const alertContainer = document.getElementById('alert-container');
+        const statusContainer = document.getElementById('status-container');
+        const itemsContainer = document.getElementById('items-container');
+        const filterBtn = document.getElementById('filter-btn');
+        const exportSftBtn = document.getElementById('export-sft-btn');
+        const trainBtn = document.getElementById('train-btn');
+        const refreshBtn = document.getElementById('refresh-btn');
+
+        // アラート表示
+        function showAlert(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alert);
+
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // ステータス更新
+        async function updateStatus() {
+            try {
+                const response = await fetch('/ui/status');
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('inbox-count').textContent = data.status.inbox;
+                    document.getElementById('accepted-count').textContent = data.status.accepted;
+                    document.getElementById('rejected-count').textContent = data.status.rejected;
+                    document.getElementById('buckets-count').textContent = data.status.buckets;
+                    document.getElementById('sft-count').textContent = data.status.sft;
+                }
+            } catch (error) {
+                console.error('ステータス更新エラー:', error);
+            }
+        }
+
+        // アイテム一覧更新
+        async function updateItems() {
+            try {
+                const response = await fetch('/ui/items');
+                const data = await response.json();
+
+                if (data.success) {
+                    currentItems = data.items;
+                    renderItems();
+                } else {
+                    itemsContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">エラー: ' + data.message + '</div>';
+                }
+            } catch (error) {
+                itemsContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #dc3545;">読み込みエラー: ' + error.message + '</div>';
+            }
+        }
+
+        // アイテム表示
+        function renderItems() {
+            if (currentItems.length === 0) {
+                itemsContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #6c757d;">アイテムがありません</div>';
+                return;
+            }
+
+            const html = currentItems.map(item => `
+                <div class="item">
+                    <div class="item-header">
+                        <span class="item-title">${item.title}</span>
+                        <span class="item-status status-${item.status}">${item.status}</span>
+                    </div>
+                    <div class="item-content">
+                        <strong>ドメイン:</strong> ${item.domain} | 
+                        <strong>タスク:</strong> ${item.task_type} | 
+                        <strong>成功:</strong> ${item.success ? 'Yes' : 'No'}
+                    </div>
+                    <div class="item-actions">
+                        ${item.status === 'queue' ? `
+                            <button class="btn btn-success btn-sm" onclick="approveItem('${item.id}')">承認</button>
+                            <button class="btn btn-danger btn-sm" onclick="rejectItem('${item.id}')">拒否</button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            itemsContainer.innerHTML = html;
+        }
+
+        // アイテム承認
+        async function approveItem(itemId) {
+            try {
+                const response = await fetch(`/ui/approve/${itemId}`, { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    updateItems();
+                    updateStatus();
+                } else {
+                    showAlert(data.message, 'danger');
+                }
+            } catch (error) {
+                showAlert('エラー: ' + error.message, 'danger');
+            }
+        }
+
+        // アイテム拒否
+        async function rejectItem(itemId) {
+            try {
+                const response = await fetch(`/ui/reject/${itemId}`, { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    updateItems();
+                    updateStatus();
+                } else {
+                    showAlert(data.message, 'danger');
+                }
+            } catch (error) {
+                showAlert('エラー: ' + error.message, 'danger');
+            }
+        }
+
+        // フィルタ実行
+        async function runFilter() {
+            filterBtn.classList.add('loading');
+            try {
+                const response = await fetch('/ui/filter', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    updateItems();
+                    updateStatus();
+                } else {
+                    showAlert(data.message, 'danger');
+                }
+            } catch (error) {
+                showAlert('エラー: ' + error.message, 'danger');
+            } finally {
+                filterBtn.classList.remove('loading');
+            }
+        }
+
+        // SFT生成
+        async function exportSft() {
+            exportSftBtn.classList.add('loading');
+            try {
+                const response = await fetch('/ui/export-sft', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                    updateStatus();
+                } else {
+                    showAlert(data.message, 'danger');
+                }
+            } catch (error) {
+                showAlert('エラー: ' + error.message, 'danger');
+            } finally {
+                exportSftBtn.classList.remove('loading');
+            }
+        }
+
+        // 学習実行
+        async function trainModel() {
+            trainBtn.classList.add('loading');
+            try {
+                const response = await fetch('/ui/train', { method: 'POST' });
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert(data.message, 'success');
+                } else {
+                    showAlert(data.message, 'danger');
+                }
+            } catch (error) {
+                showAlert('エラー: ' + error.message, 'danger');
+            } finally {
+                trainBtn.classList.remove('loading');
+            }
+        }
+
+        // 全更新
+        async function refreshAll() {
+            refreshBtn.classList.add('loading');
+            await Promise.all([updateStatus(), updateItems()]);
+            refreshBtn.classList.remove('loading');
+        }
+
+        // イベントリスナー
+        dataForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(dataForm);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/ui/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showAlert(result.message, 'success');
+                    dataForm.reset();
+                    updateItems();
+                    updateStatus();
+                } else {
+                    showAlert(result.message, 'danger');
+                }
+            } catch (error) {
+                showAlert('エラー: ' + error.message, 'danger');
+            }
+        });
+
+        filterBtn.addEventListener('click', runFilter);
+        exportSftBtn.addEventListener('click', exportSft);
+        trainBtn.addEventListener('click', trainModel);
+        refreshBtn.addEventListener('click', refreshAll);
+
+        // ライブ履歴ポーリング
+        let last = 0;
+        async function pull() {
+            try {
+                const r = await fetch(`/ui/events?since_ms=${last}`);
+                const j = await r.json();
+                const box = document.getElementById('liveBox');
+                if (!j.success) return;
+                last = j.now_ms;
+                (j.events || []).forEach(ev => {
+                    const row = document.createElement('div');
+                    const t = new Date(ev.ts_ms).toLocaleTimeString();
+                    row.className = 'small';
+                    row.textContent = `[${t}] ${ev.type} ${ev.title ?? ev.id ?? ''} ${ev.msg ?? ''}`;
+                    box.appendChild(row);
+                    box.scrollTop = box.scrollHeight;
+                });
+            } catch (e) { }
+        }
+
+        // 初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            refreshAll();
+
+            // 5秒ごとにステータス更新
+            setInterval(updateStatus, 5000);
+
+            // 3秒ごとにライブ履歴更新
+            setInterval(pull, 3000);
+        });
+    </script>
+</body>
+
+</html>

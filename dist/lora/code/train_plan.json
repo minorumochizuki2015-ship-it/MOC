@@ -1,0 +1,10 @@
+{
+  "train": "data/sft/train.jsonl",
+  "val": "data/sft/val.jsonl",
+  "domain": "code",
+  "epochs": 1,
+  "lr": 0.0002,
+  "r": 8,
+  "bf16": false,
+  "auto_eval": true
+}

@@ -19,12 +19,17 @@ try {
     $py = Join-Path $repo '.venv\Scripts\python.exe'
     if (-not (Test-Path $py)) { throw "python not found: $py" }
 
-    # 1) quick diagnose
+    # 1) intake filter (inbox→queue/accepted/rejected)
+    & "$py" -X utf8 -u tools\intake_filter.py --data-dir data\intake *>> $log
+    $if_rc = $LASTEXITCODE; $if_ok = ($if_rc -eq 0)
+    "intake_filter_ok=$if_ok rc=$if_rc" | Out-File $log -Append
+
+    # 2) quick diagnose
     & "$py" -X utf8 -u tools\quick_diagnose.py *>> $log
     $qd_rc = $LASTEXITCODE; $qd_ok = ($qd_rc -eq 0)
     "qd_ok=$qd_ok rc=$qd_rc" | Out-File $log -Append
 
-    # 2) mini eval (tools mode, short timeout)
+    # 3) mini eval (tools mode, short timeout)
     $mode = $env:MINI_EVAL_MODE; if (-not $mode) { $mode = 'tools' }
     $to = $env:MINI_EVAL_TIMEOUT; if (-not $to) { $to = 15 }
   
@@ -40,7 +45,7 @@ try {
     # 元に戻す
     $ErrorActionPreference = $prevEAP
 
-    # 3) files appear with slight delay under scheduler → retry
+    # 4) files appear with slight delay under scheduler → retry
     $qd_path = Join-Path $repo 'data\outputs\quick_diagnose.json'
     $hist_path = Join-Path $repo 'data\logs\current\mini_eval_history.jsonl'
     $files_ok = $false
@@ -50,7 +55,8 @@ try {
     }
     "files_ok=$files_ok qd=$(Test-Path $qd_path) hist=$(Test-Path $hist_path)" | Out-File $log -Append
 
-    if ($qd_ok -and $me_ok -and $files_ok) { $exit = 0 }
+    if ($if_ok -and $qd_ok -and $me_ok -and $files_ok) { $exit = 0 }
+    elseif (-not $if_ok) { $exit = 8 }
     elseif (-not $qd_ok) { $exit = 10 }
     elseif (-not $me_ok) { $exit = 11 }
     else { $exit = 12 }

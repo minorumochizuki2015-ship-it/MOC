@@ -1,0 +1,14 @@
+{
+  "source": "manual",
+  "title": "自動化テストDROP",
+  "domain": "code",
+  "task_type": "edit",
+  "success": true,
+  "prompt": "Test prompt",
+  "output": "Test output",
+  "refs": [],
+  "privacy": "no_pii",
+  "tags": [
+    "auto-drop"
+  ]
+}

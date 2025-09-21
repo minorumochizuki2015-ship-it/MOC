@@ -1,0 +1,16 @@
+{
+  "source": "trae",
+  "title": "関数分解の成功例",
+  "domain": "code",
+  "task_type": "refactor",
+  "success": true,
+  "prompt": "関数を小さく分解して責務を分離したい",
+  "output": "def process_data(data): return [x.strip() for x in data.split(',')]",
+  "refs": [
+    "src/example.py"
+  ],
+  "privacy": "no_pii",
+  "tags": [
+    "mini-eval-case-7"
+  ]
+}

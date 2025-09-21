@@ -1,0 +1,12 @@
+{
+  "source": "manual",
+  "title": "smoke2",
+  "domain": "unknown",
+  "task_type": "edit",
+  "success": true,
+  "prompt": "関数f(x)=x^2の導関数を求める手順を説明して",
+  "output": "微分の定義に基づき極限を取り…という流れを箇条書きで記述",
+  "refs": [],
+  "privacy": "no_pii",
+  "tags": []
+}

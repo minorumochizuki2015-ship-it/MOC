@@ -1,0 +1,22 @@
+{
+  "instruction": "関数を小さく分解して責務を分離したい",
+  "meta": {
+    "success": true,
+    "title": "関数分解の成功例",
+    "domain": "code",
+    "ts": "2025-09-21T12:00:00+09:00",
+    "refs": [
+      "src/example.py"
+    ],
+    "tags": [
+      "mini-eval-case-7"
+    ],
+    "math_or_rules": "SRP, cyclomatic complexity",
+    "task_type": "refactor",
+    "privacy": "no_pii",
+    "source": "trae",
+    "rationale_success": "凝集度↑と結合度↓",
+    "id": "test-code-001"
+  },
+  "output": "def process_data(data): return [x.strip() for x in data.split(',')]"
+}

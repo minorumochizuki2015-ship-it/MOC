@@ -1,8 +1,0 @@
----
-description: Use OPENAI_COMPAT_BASE + API_KEY only; no secrets in logs.
-globs:
-  - "**/*"
-alwaysApply: true
----
-OPENAI_COMPAT_BASE と API_KEY のみ使用。秘密はログ禁止。新規ネットワークエンドポイントの追加禁止。オフライン動作を阻害しない。
-

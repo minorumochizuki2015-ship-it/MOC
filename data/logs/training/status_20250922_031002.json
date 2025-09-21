@@ -1,0 +1,6 @@
+﻿{
+    "ok":  true,
+    "plan":  "C:\\Users\\User\\GoverningCore_v5_Slice\\dist\\lora\\train_plan.json",
+    "trainer":  "C:\\Users\\User\\GoverningCore_v5_Slice\\scripts\\trainer\\local_trainer.ps1",
+    "ts":  "2025-09-22T03:10:03.7589572+09:00"
+}

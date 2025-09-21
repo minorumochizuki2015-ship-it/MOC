@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>Intake Dashboard</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        body {
+            font-family: system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            margin: 20px;
+            background: #0b1020;
+            color: #eaf1ff
+        }
+
+        .grid {
+            display: grid;
+            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))
+        }
+
+        .card {
+            background: #141b34;
+            border: 1px solid #2a355f;
+            border-radius: 14px;
+            padding: 14px
+        }
+
+        .k {
+            opacity: .7;
+            font-size: 12px
+        }
+
+        .v {
+            font-size: 20px;
+            font-weight: 700
+        }
+
+        .ok {
+            color: #67e8a6
+        }
+
+        .warn {
+            color: #fbbf24
+        }
+
+        .bad {
+            color: #fb7185
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px
+        }
+
+        th,
+        td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #223056
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: #223056
+        }
+
+        .bar {
+            height: 8px;
+            background: #223056;
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .fill {
+            height: 100%;
+            background: #67e8a6
+        }
+
+        a {
+            color: #93c5fd
+        }
+    </style>
+</head>
+
+<body>
+    <h2>学習インテーク・ダッシュボード</h2>
+    <div class="grid" id="cards">
+        <div class="card">
+            <div class="k">Server</div>
+            <div class="v" id="serverState">—</div>
+            <div class="k">GPU</div>
+            <div id="gpu">—</div>
+        </div>
+        <div class="card">
+            <div class="k">Mini Eval（最新）</div>
+            <div class="v"><span id="score">—</span></div>
+            <div class="bar">
+                <div id="scoreFill" class="fill" style="width:0%"></div>
+            </div>
+            <div class="k">Elapsed</div>
+            <div id="elapsed">—</div>
+        </div>
+        <div class="card">
+            <div class="k">Intake</div>
+            <div>Inbox <span class="pill" id="cInbox">0</span></div>
+            <div>Queue <span class="pill" id="cQueue">0</span></div>
+            <div>Accepted <span class="pill" id="cAccepted">0</span></div>
+        </div>
+        <div class="card">
+            <div class="k">SFT Stats</div>
+            <div>train <span class="pill" id="sTrain">0</span></div>
+            <div>val <span class="pill" id="sVal">0</span></div>
+            <div class="k">dup_ratio</div>
+            <div id="sDup">—</div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+        <div class="k">履歴（最新20件）</div>
+        <table id="hist">
+            <thead>
+                <tr>
+                    <th>time</th>
+                    <th>score</th>
+                    <th>elapsed(ms)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <p style="opacity:.7;margin-top:8px">
+        <a href="/ui/">← Intake UI</a> ・ <a href="/docs">API Docs</a> ・ <a href="/healthz">healthz</a>
+    </p>
+
+    <script>
+        async function load() {
+            const r = await fetch('/ui/snapshot.json?ts=' + Date.now());
+            const j = await r.json();
+
+            // server/gpu
+            const ok = j.qd && j.qd.server_ok;
+            document.getElementById('serverState').textContent = ok ? 'OK' : 'NG';
+            document.getElementById('serverState').className = ok ? 'v ok' : 'v bad';
+            document.getElementById('gpu').textContent = (j.qd?.gpu || ['—']).join(', ');
+
+            // intake counts
+            document.getElementById('cInbox').textContent = j.counts?.inbox ?? 0;
+            document.getElementById('cQueue').textContent = j.counts?.queue ?? 0;
+            document.getElementById('cAccepted').textContent = j.counts?.accepted ?? 0;
+
+            // sft stats
+            document.getElementById('sTrain').textContent = j.stats?.train_count ?? 0;
+            document.getElementById('sVal').textContent = j.stats?.val_count ?? 0;
+            document.getElementById('sDup').textContent = (j.stats?.dup_ratio ?? 0).toFixed(2);
+
+            // last mini eval
+            const last = j.last;
+            if (last) {
+                const sc = `${last.score}/${last.total}`;
+                document.getElementById('score').textContent = sc;
+                document.getElementById('elapsed').textContent = (last.elapsed_ms / 1000).toFixed(1) + 's';
+                const pct = Math.min(100, Math.round(last.score / Math.max(1, last.total) * 100));
+                document.getElementById('scoreFill').style.width = pct + '%';
+            }
+
+            // history table
+            const tb = document.querySelector('#hist tbody');
+            tb.innerHTML = '';
+            (j.history || []).slice().reverse().forEach(h => {
+                const tr = document.createElement('tr');
+                const dt = new Date((h.timestamp || j.ts) * 1000).toLocaleString();
+                tr.innerHTML = `<td>${dt}</td><td>${h.score}/${h.total}</td><td>${h.elapsed_ms ?? '-'}</td>`;
+                tb.appendChild(tr);
+            });
+        }
+        load(); setInterval(load, 5000);
+    </script>
+</body>
+
+</html>

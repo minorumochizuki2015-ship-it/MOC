@@ -1,0 +1,7 @@
+{"id": "8619b8aa-348d-4aec-9a5e-eca21a0b295e", "ts": "2025-09-22T01:11:16.073587", "status": "inbox", "domain": "code", "title": "起動テスト用データ", "source": "trae"}
+{"id": "13615f94-d3f0-4c05-8685-63f4d3e015e8", "ts": "2025-09-22T01:27:36.060450", "status": "inbox", "domain": "code", "title": "demo", "source": "manual"}
+{"id": "dc56872c-f0d5-4cf2-9786-615c0582cc0f", "ts": "2025-09-22T04:49:28.918295", "status": "inbox", "domain": "unknown", "title": "smoke", "source": "trae"}
+{"id": "fa8e7e1b-5e3c-472a-be29-14f3b1b6d88b", "ts": "2025-09-22T04:58:35.815041", "status": "inbox", "domain": "unknown", "title": "smoke2", "source": "manual"}
+{"id": "00de2024-98df-4f7e-b44b-144e13834345", "ts": "2025-09-22T05:12:06.176441", "status": "inbox", "domain": "code", "title": "smoke-long", "source": "cursor"}
+{"id": "8c09164d-7dea-4a9c-a867-129b2fe7ff8b", "ts": "2025-09-22T05:40:16.514714", "status": "inbox", "domain": "code", "title": "check", "source": "cursor"}
+{"id": "8c09164d-7dea-4a9c-a867-129b2fe7ff8b", "ts": "2025-09-22T05:40:16.514714", "status": "accepted", "domain": "code", "title": "check", "source": "cursor", "hash": "a85aa016298cf35ad1b4d1d343bd41a6486b4c7b", "reason": ""}

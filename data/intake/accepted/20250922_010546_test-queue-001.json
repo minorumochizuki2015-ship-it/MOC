@@ -1,0 +1,19 @@
+{
+  "id": "test-queue-001",
+  "ts": "2025-09-21 12:00:00+09:00",
+  "source": "manual",
+  "title": "編集されたタイトル",
+  "domain": "write",
+  "task_type": "edit",
+  "success": true,
+  "prompt": "テスト用プロンプト",
+  "output": "テスト用出力",
+  "rationale_success": "テスト成功",
+  "rationale_failure": null,
+  "math_or_rules": null,
+  "refs": [],
+  "privacy": "no_pii",
+  "tags": [
+    "test"
+  ]
+}

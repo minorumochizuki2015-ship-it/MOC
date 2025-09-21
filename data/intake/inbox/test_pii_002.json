@@ -1,0 +1,14 @@
+{
+  "source": "manual",
+  "title": "機微情報テスト",
+  "domain": "write",
+  "task_type": "draft",
+  "success": false,
+  "prompt": "ユーザーのメールアドレスを処理する",
+  "output": "user@example.com を処理しました",
+  "refs": [],
+  "privacy": "no_pii",
+  "tags": [
+    "test"
+  ]
+}

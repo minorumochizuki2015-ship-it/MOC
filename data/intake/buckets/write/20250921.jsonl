@@ -1,0 +1,19 @@
+{
+  "instruction": "技術文書の構成を改善したい",
+  "meta": {
+    "success": true,
+    "title": "技術文書構成改善",
+    "domain": "write",
+    "ts": "2025-09-21T12:01:00+09:00",
+    "refs": [],
+    "tags": [
+      "documentation"
+    ],
+    "task_type": "draft",
+    "privacy": "no_pii",
+    "source": "manual",
+    "rationale_success": "論理的な流れで読みやすくなった",
+    "id": "test-write-001"
+  },
+  "output": "1. 概要 2. 詳細 3. 結論の構成で文書を整理"
+}

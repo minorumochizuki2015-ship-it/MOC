@@ -1,27 +1,4 @@
-{"instruction": "エラーハンドリングを改善する", "output": "searchツールでエラーハンドリングパターンを検索し、modify_fileでtry-except文を追加して改善する"}
-{"instruction": "設定の変更を検証する", "output": "modify_fileで設定を変更し、run_testsでテストを実行して変更が正しく動作することを確認する"}
-{"instruction": "コードベース全体で特定のパターンを検索する", "output": "searchツールを使用してコードベース全体で特定のパターンやキーワードを検索し、結果をまとめる"}
-{"instruction": "ファイルの内容を修正する", "output": "modify_fileツールを使用してファイルの内容を検索・置換する"}
-{"instruction": "ファイルを作成して内容を書き込む", "output": "write_fileツールを使用してファイルを作成し、指定された内容を書き込む"}
-{"instruction": "ファイルの内容を特定の文字列で置換する", "output": "modify_fileツールを使用してファイル内の特定の文字列を検索し、新しい文字列に置換する"}
-{"instruction": "ディレクトリ構造を再帰的に探索する", "output": "list_dirツールを使用してディレクトリの内容を一覧表示し、必要に応じて再帰的に探索する"}
-{"instruction": "既存のファイルをバックアップする", "output": "read_fileでファイルを読み取り、write_fileでバックアップファイルを作成する"}
-{"instruction": "新しいファイルを作成してドキュメントを書く", "output": "write_fileツールを使用して新しいファイルを作成し、適切なドキュメント内容を書き込む"}
-{"instruction": "複数のファイルを一括で処理する", "output": "list_dirでファイル一覧を取得し、各ファイルに対してread_fileやmodify_fileを適用して一括処理する"}
-{"instruction": "エラーログから問題の原因を特定する", "output": "read_fileでログファイルを読み取り、searchツールでエラーメッセージを検索して原因を特定する"}
-{"instruction": "コードを検索して特定のキーワードを見つける", "output": "searchツールを使用してコードベース内で特定のキーワードを検索する"}
-{"instruction": "プロジェクトの構造を分析する", "output": "list_dirとsearchツールを組み合わせてプロジェクトの構造を分析する"}
-{"instruction": "src/coreフォルダ内のPythonファイルを検索し、関数定義の数をカウント", "output": "1. src/coreフォルダ内のPythonファイルを検索\n2. 各ファイルで関数定義をカウント\n3. 結果をファイルに保存"}
-{"instruction": "コードの品質をチェックする", "output": "run_testsでテストを実行し、searchツールでコードパターンを検索して品質問題を特定する"}
-{"instruction": "テストを実行する", "output": "run_testsツールを使用してテストスイートを実行し、結果を返す"}
-{"instruction": "プロジェクトの設定ファイルを読み取る", "output": "read_fileツールを使用してconfig/settings.jsonやpyproject.tomlなどの設定ファイルを読み取り、内容を確認する"}
-{"instruction": "プロジェクトの統計情報を収集する", "output": "list_dirでファイル一覧を取得し、searchツールでコードパターンを検索して統計情報を収集する"}
-{"instruction": "プロジェクトの構造を可視化する", "output": "list_dirでディレクトリ構造を取得し、searchツールでファイルパターンを検索して構造を分析する"}
-{"instruction": "ログファイルを分析してエラーを特定する", "output": "read_fileツールでログファイルを読み取り、searchツールでエラーパターンを検索して問題を特定する"}
-{"instruction": "ドキュメントを更新する", "output": "read_fileで既存のドキュメントを読み取り、modify_fileで内容を更新して最新の状態に保つ"}
-{"instruction": "Gitコミットを実行する", "output": "git_commitツールを使用して変更をコミットする"}
-{"instruction": "コードの変更をGitにコミットする", "output": "git_commitツールを使用して変更をステージングし、適切なメッセージでコミットする"}
-{"instruction": "ディレクトリの内容を一覧表示する", "output": "list_dirツールを使用してディレクトリの内容を一覧表示する"}
-{"instruction": "プロジェクトの依存関係を確認する", "output": "read_fileツールでrequirements.txtやpyproject.tomlを読み取り、依存関係の情報を取得する"}
-{"instruction": "設定ファイルの値を更新する", "output": "read_fileで設定ファイルを読み取り、modify_fileで値を更新し、変更を保存する"}
-{"instruction": "ファイルの内容を読み取る", "output": "read_fileツールを使用してファイルの内容を読み取り、結果を返す"}
+{"instruction":"関数f(x)=x^2の導関数を求める手順を説明して","output":"微分の定義に基づき極限を取り…という流れを箇条書きで記述"}
+{"instruction":"Refactor the function to be pure and add tests for unicode/empty inputs; explain edge cases in comments.","output":"Refactored foo() to be pure, added validation, wrote tests for unicode/empty, updated docs; coverage +8%."}
+{"instruction":"関数を小さく分解して責務を分離したい","output":"def process_data(data): return [x.strip() for x in data.split(',')]"}
+{"instruction":"ユーザーのメールアドレスを処理する","output":"user@example.com を処理しました"}

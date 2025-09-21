@@ -1,0 +1,14 @@
+{
+  "source": "manual",
+  "title": "手動テスト用データ",
+  "domain": "write",
+  "task_type": "draft",
+  "success": true,
+  "prompt": "手動テスト用のプロンプト",
+  "output": "手動テスト用の出力",
+  "refs": [],
+  "privacy": "no_pii",
+  "tags": [
+    "manual-test"
+  ]
+}

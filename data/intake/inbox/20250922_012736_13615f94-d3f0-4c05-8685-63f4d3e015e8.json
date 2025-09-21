@@ -1,0 +1,15 @@
+{
+  "source": "manual",
+  "title": "demo",
+  "domain": "code",
+  "task_type": "edit",
+  "success": true,
+  "prompt": "Write a Python function to add two numbers.",
+  "output": "def add_numbers(a, b):\n    return a + b",
+  "refs": [],
+  "privacy": "no_pii",
+  "tags": [
+    "demo",
+    "test"
+  ]
+}
