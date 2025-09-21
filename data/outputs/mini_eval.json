@@ -1,54 +1,54 @@
 {
-  "score": 0,
+  "score": 6,
   "total": 8,
   "results": [
     {
       "ok": false,
-      "ms": 15013,
+      "ms": 15033,
       "stdout": "",
       "stderr": "timeout>15s"
     },
     {
       "ok": false,
-      "ms": 15024,
+      "ms": 15031,
       "stdout": "",
       "stderr": "timeout>15s"
     },
     {
-      "ok": false,
-      "ms": 15030,
-      "stdout": "",
-      "stderr": "timeout>15s"
+      "ok": true,
+      "ms": 13438,
+      "stdout": "LOG_SUM: health ok via /v1/models\n{\"ok\": true, \"result\": {\"success\": true, \"result\": [], \"evolution\": {\"current_params\": {\"learning_rate\": 0.01, \"batch_size\": 32, \"temperature\": 0.7, \"max_tokens\": 500}, \"performance\": 1.0, \"next_params\": {\"learning_rate\": 0.09625370033764176, \"batch_size\": 85, \"temperature\": 0.878282728257476, \"max_tokens\": 372}}}}",
+      "stderr": ""
     },
     {
-      "ok": false,
-      "ms": 15036,
-      "stdout": "",
-      "stderr": "timeout>15s"
+      "ok": true,
+      "ms": 10214,
+      "stdout": "LOG_SUM: health ok via /v1/models\n{\"ok\": true, \"result\": {\"success\": true, \"result\": {\"path\": \"C:\\\\Users\\\\User\\\\GoverningCore_v5_Slice\\\\data\\\\outputs\\\\dummy_old.txt\", \"kind\": \"text\", \"content\": \"old\\r\\n\"}, \"evolution\": {\"current_params\": {\"learning_rate\": 0.01, \"batch_size\": 32, \"temperature\": 0.7, \"max_tokens\": 500}, \"performance\": 1.0, \"next_params\": {\"learning_rate\": 0.03955046408312901, \"batch_size\": 104, \"temperature\": 1.7873767717788875, \"max_tokens\": 964}}}}",
+      "stderr": ""
     },
     {
-      "ok": false,
-      "ms": 15034,
-      "stdout": "",
-      "stderr": "timeout>15s"
+      "ok": true,
+      "ms": 11570,
+      "stdout": "LOG_SUM: health ok via /v1/models\n{\"ok\": true, \"result\": {\"success\": true, \"result\": [], \"evolution\": {\"current_params\": {\"learning_rate\": 0.01, \"batch_size\": 32, \"temperature\": 0.7, \"max_tokens\": 500}, \"performance\": 1.0, \"next_params\": {\"learning_rate\": 0.09656476915809015, \"batch_size\": 95, \"temperature\": 0.7788239328576125, \"max_tokens\": 399}}}}",
+      "stderr": ""
     },
     {
-      "ok": false,
-      "ms": 15024,
-      "stdout": "",
-      "stderr": "timeout>15s"
+      "ok": true,
+      "ms": 9783,
+      "stdout": "LOG_SUM: health ok via /v1/models\n{\"ok\": true, \"result\": {\"success\": false, \"error\": \"search() got an unexpected keyword argument 'keyword'\", \"plan\": {\"tool\": \"search\", \"args\": {\"keyword\": \"class \", \"limit\": 5}}, \"evolution\": {\"current_params\": {\"learning_rate\": 0.01, \"batch_size\": 32, \"temperature\": 0.7, \"max_tokens\": 500}, \"performance\": 0.0, \"next_params\": {\"learning_rate\": 0.08981442124510775, \"batch_size\": 22, \"temperature\": 0.4911792303754139, \"max_tokens\": 425}}}}",
+      "stderr": ""
     },
     {
-      "ok": false,
-      "ms": 15007,
-      "stdout": "",
-      "stderr": "timeout>15s"
+      "ok": true,
+      "ms": 9732,
+      "stdout": "LOG_SUM: health ok via /v1/models\n{\"ok\": true, \"result\": {\"success\": true, \"result\": {\"path\": \"C:\\\\Users\\\\User\\\\GoverningCore_v5_Slice\\\\docs\\\\README.md\", \"kind\": \"text\", \"content\": \"# GoverningCore v5 - 統治核AIシステム\\n\\n> **Cursor AI同等システム** - 統治核AI v5.0 モダン版\\n\\n## 🏗️ アーキテクチャ概要\\n\\n```\\n┌─────────────────────────────────────────────────────────────┐\\n│                   統治核AI v5.0 システム                    │\\n├─────────────────────────────────────────────────────────────┤\\n│  🎯 メインエントリーポイント                                │\\n│  ├── main_modern.py          # モダン版（推奨）            │\\n│  └── main.py                 # 従来版（フォールバック）     │\\n├─────────────────────────────────────────────────────────────┤\\n│  🧠 コアシステム層                                         │\\n│  ├── cursor_ai_system.py     # Cursor AI同等システム統合   │\\n│  ├── kernel.py               # AIカーネル（API統合）       │\\n│  ├── memory.py               # ブロックチェーン型メモリ     │\\n│  ├── agent_mode.py           # エージェントモード          │\\n│  └── governance.py           # 統治監査システム            │\\n├─────────────────────────────────────────────────────────────┤\\n│  🎨 UI層                                                   │\\n│  ├── modern_interface.py     # モダンインターフェース      │\\n│  └── cursor_ai_interface.py  # Cursor AI同等UI            │\\n├─────────────────────────────────────────────────────────────┤\\n│  🔧 ユーティリティ層                                       │\\n│  ├── genetic/                # 遺伝的アルゴリズム          │\\n│  ├── utils/                  # 設定・自動マッチング        │\\n│  └── legacy/                 # レガシーサポート             │\\n└─────────────────────────────────────────────────────────────┘\\n```\\n\\n## 📁 プロジェクト構造（2025年9月20日 整理完了）\\n\\n```\\nGoverningCore_v5_Slice/\\n├── 📁 src/                          # メインソースコード\\n│   ├── 📁 core/                     # コア機能\\n│   │   ├── cursor_ai_system.py     # Cursor AI同等システム統合\\n│   │   ├── kernel.py               # AIカーネル（API統合）\\n│   │   ├── memory.py               # ブロックチェーン型メモリ\\n│   │   ├── agent_mode.py           # エージェントモード\\n│   ",
+      "stderr": ""
     },
     {
-      "ok": false,
-      "ms": 15032,
-      "stdout": "",
-      "stderr": "timeout>15s"
+      "ok": true,
+      "ms": 11293,
+      "stdout": "LOG_SUM: health ok via /v1/models\n{\"ok\": true, \"result\": {\"success\": true, \"result\": [], \"evolution\": {\"current_params\": {\"learning_rate\": 0.01, \"batch_size\": 32, \"temperature\": 0.7, \"max_tokens\": 500}, \"performance\": 1.0, \"next_params\": {\"learning_rate\": 0.049469671454796076, \"batch_size\": 84, \"temperature\": 1.3228839205463612, \"max_tokens\": 415}}}}",
+      "stderr": ""
     }
   ]
 }

@@ -1,0 +1,13 @@
+2025-09-22 08:05:30,084 - INFO - BENCHMARK_START: bench_1758495929983 - Model: auto, Task: generate
+2025-09-22 08:05:36,117 - INFO - BENCHMARK_START: bench_1758495936011 - Model: auto, Task: generate
+2025-09-22 08:05:47,251 - INFO - BENCHMARK_END: bench_1758495936011 - Duration: 11.032s, Tokens: 15, Speed: 1.36 tok/s, Status: completed
+2025-09-22 08:05:49,492 - INFO - BENCHMARK_START: bench_1758495949388 - Model: auto, Task: generate
+2025-09-22 08:05:58,815 - INFO - BENCHMARK_END: bench_1758495949388 - Duration: 9.223s, Tokens: 17, Speed: 1.84 tok/s, Status: completed
+2025-09-22 08:05:59,699 - INFO - BENCHMARK_START: bench_1758495959596 - Model: auto, Task: generate
+2025-09-22 08:06:09,076 - INFO - BENCHMARK_END: bench_1758495959596 - Duration: 9.277s, Tokens: 16, Speed: 1.72 tok/s, Status: completed
+2025-09-22 08:06:11,269 - INFO - BENCHMARK_START: bench_1758495971167 - Model: auto, Task: generate
+2025-09-22 08:06:20,171 - INFO - BENCHMARK_END: bench_1758495971167 - Duration: 8.800s, Tokens: 15, Speed: 1.70 tok/s, Status: completed
+2025-09-22 08:06:21,053 - INFO - BENCHMARK_START: bench_1758495980950 - Model: auto, Task: generate
+2025-09-22 08:06:29,900 - INFO - BENCHMARK_END: bench_1758495980950 - Duration: 8.747s, Tokens: 14, Speed: 1.60 tok/s, Status: completed
+2025-09-22 08:06:30,780 - INFO - BENCHMARK_START: bench_1758495990679 - Model: auto, Task: generate
+2025-09-22 08:06:39,854 - INFO - BENCHMARK_END: bench_1758495990679 - Duration: 8.971s, Tokens: 14, Speed: 1.56 tok/s, Status: completed
