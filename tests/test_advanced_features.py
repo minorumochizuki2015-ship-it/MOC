@@ -10,6 +10,7 @@ import os
 import sys
 import time
 from pathlib import Path
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -17,6 +18,8 @@ sys.path.insert(0, str(ROOT))
 from src.core import kernel
 
 fail = 0
+
+@pytest.mark.integration
 
 
 def check(name, cond, info=""):
@@ -103,3 +106,9 @@ if fail:
     print(f"FAILED: {fail} case(s)")
     sys.exit(1)
 print("ALL PASS")
+
+def test_advanced_features():
+    """pytest wrapper for advanced features test"""
+    # The actual test logic is executed at module level above
+    # This function serves as a pytest entry point
+    assert fail == 0, f"Advanced features test failed with {fail} case(s)"
