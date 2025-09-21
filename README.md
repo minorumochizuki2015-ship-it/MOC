@@ -354,13 +354,51 @@ Get-Content data\logs\current\trae_autostart_*.log -Tail 50 -Wait
 # 自動起動制御
 New-Item -Type File .trae\disable_autostart -Force  # 停止
 Remove-Item .trae\disable_autostart -ErrorAction SilentlyContinue  # 再開
+
+# メトリクス確認
+Get-Content data\logs\current\metrics.tsv -Tail 5
 ```
+
+## 🔄 最新の改善作業（2025-09-22）
+
+### ✅ trae_autostart.ps1 統合機能完成
+
+1. **構文エラー修正完了**
+   - 変数参照エラー修正: `"$name"` → `"${name}"`
+   - Try/Catch構文の整理と統合
+   - PowerShell構文チェック通過確認
+
+2. **統合機能実装**
+   - SFT取り込み処理の一体化
+   - 重複防止機能の統合
+   - ローテーション機能の統合
+   - メトリクス記録機能の統合
+
+3. **動作確認完了**
+   - ドライランモード: 正常動作確認
+   - `-Apply`モード: 実際の処理実行確認
+   - メトリクス記録: `data/logs/current/metrics.tsv`への継続記録確認
+
+### 📊 メトリクス機能状況
+
+- **記録ファイル**: `data/logs/current/metrics.tsv`
+- **記録項目**: タイムスタンプ、accepted、dup、errors、train_mb、lines
+- **更新頻度**: 自動起動実行時（15分間隔）
+- **最新記録**: 2025-09-22 06:16:03 - accepted=3, dup=1, errors=0, train_mb=0, lines=10
+
+### 🎯 統合システム完成
+
+- **SFT処理**: ✅ 自動取り込み・重複防止・エラーハンドリング
+- **メトリクス**: ✅ 継続的な記録・TSVファイル管理
+- **ログ管理**: ✅ 構造化ログ・ローテーション
+- **品質保証**: ✅ ドライラン・構文チェック・動作確認
 
 ## 📝 ライセンス
 
 統治核AIシステム v5.0 - Cursor AI同等システム
 
 ---
-*最終更新: 2025年1月22日*
+*最終更新: 2025年9月22日*
 *自律運転システム完成: 2025-01-22*
+*統合機能完成: 2025-09-22*
 Cursor Git check: 2025-09-19T09:09:57+09:00
