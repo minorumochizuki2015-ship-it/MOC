@@ -105,7 +105,7 @@ try {
       # Add event handlers to Windows Forms
       .add_Load({ __log "Form.Load" })
       .add_Shown({ __log "Form.Shown" })
-      .add_FormClosing({ param($s,$e) 
+      .add_FormClosing({ param($s,$e)
         $dt = ([DateTime]::UtcNow - $__t0).TotalMilliseconds
         __log ("FormClosing reason=" + $e.CloseReason + " t=" + [int]$dt + "ms")
         if### **修正版のコードと説明**

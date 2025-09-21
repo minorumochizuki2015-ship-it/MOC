@@ -17,7 +17,7 @@ def test_replace_basic():
     )
     new = T(
         """
-    def target(x): 
+    def target(x):
         return x*2
     """
     )
@@ -35,8 +35,8 @@ def test_append_when_missing():
 def test_nested_same_name_kept_top_level():
     src = T(
         """
-    def target(): 
-        def target(): 
+    def target():
+        def target():
             return 0
         return 1
     """

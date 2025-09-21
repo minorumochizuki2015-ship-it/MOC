@@ -18,7 +18,7 @@ class Kernel:
         self.api_key = API_KEY
         self.model = None  # 遅延初期化
         self._initialized = False
-        
+
         # 性能最適化のためのキャッシュとメトリクス
         self._response_cache = {}
         self._cache_lock = threading.Lock()
@@ -34,7 +34,7 @@ class Kernel:
         """HTTPリクエストを再試行付きで実行"""
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type":"application/json"}
         body = None if data is None else json.dumps(data).encode("utf-8")
-        
+
         for i in range(retries + 1):
             try:
                 req = urllib.request.Request(url, data=body, headers=headers)
@@ -53,7 +53,7 @@ class Kernel:
                 self._initialized = True
             except Exception as e:
                 raise ConnectionError(f"サーバーに接続できません: {e}")
-    
+
     def _get_model_id(self) -> str:
         lst = self._req(self.v1 + "/models")
         return lst["data"][0]["id"]
@@ -61,7 +61,7 @@ class Kernel:
     def _generate_cache_key(self, prompt: str) -> str:
         """プロンプトからキャッシュキーを生成"""
         return hashlib.md5(prompt.encode('utf-8')).hexdigest()[:16]
-    
+
     def _update_metrics(self, response_time: float, cache_hit: bool = False, error: bool = False):
         """性能メトリクスを更新"""
         with self._metrics_lock:
@@ -70,14 +70,14 @@ class Kernel:
                 self._performance_metrics["cache_hits"] += 1
             if error:
                 self._performance_metrics["error_count"] += 1
-            
+
             # 平均応答時間の更新（指数移動平均）
             alpha = 0.1
             current_avg = self._performance_metrics["avg_response_time"]
             self._performance_metrics["avg_response_time"] = (
                 alpha * response_time + (1 - alpha) * current_avg
             )
-    
+
     def get_performance_metrics(self) -> Dict[str, Any]:
         """性能メトリクスを取得"""
         with self._metrics_lock:
@@ -94,9 +94,9 @@ class Kernel:
         """高性能なAPIクエリ（キャッシュ機能付き）"""
         # サーバー接続を確認
         self._ensure_initialized()
-        
+
         start_time = time.time()
-        
+
         # キャッシュチェック
         if use_cache:
             cache_key = self._generate_cache_key(prompt)
@@ -105,7 +105,7 @@ class Kernel:
                     cached_response = self._response_cache[cache_key]
                     self._update_metrics(time.time() - start_time, cache_hit=True)
                     return cached_response
-        
+
         try:
             # システムメッセージを簡潔に
             sysmsg = "あなたは統治核AIです。簡潔で正確な回答を提供してください。"
@@ -123,9 +123,9 @@ class Kernel:
             resp = self._req(self.v1 + "/chat/completions", body)
             text = (resp.get("choices") or [{}])[0].get("message",{}).get("content","").strip()
             gov  = Governance().summarize_governance_analysis(text, None)
-            
+
             result = {"response_text": text, "governance_analysis": gov}
-            
+
             # キャッシュに保存
             if use_cache:
                 with self._cache_lock:
@@ -135,10 +135,10 @@ class Kernel:
                         # 古いエントリを削除（FIFO）
                         oldest_key = next(iter(self._response_cache))
                         del self._response_cache[oldest_key]
-            
+
             self._update_metrics(time.time() - start_time)
             return result
-            
+
         except Exception as e:
             self._update_metrics(time.time() - start_time, error=True)
             raise e
@@ -191,12 +191,12 @@ def generate_chat(history: list, prompt: str, max_tokens: int = 256, system: str
         msgs.append({"role": "system", "content": system})
     msgs += history
     msgs.append({"role": "user", "content": prompt})
-    
+
     mid = _http(f"{OPENAI_BASE}/models")["data"][0]["id"]
     body = {
-        "model": mid, 
-        "messages": msgs, 
-        "max_tokens": max_tokens, 
+        "model": mid,
+        "messages": msgs,
+        "max_tokens": max_tokens,
         "stream": False
     }
     res = _http(f"{OPENAI_BASE}/chat/completions", body, timeout=120)

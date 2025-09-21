@@ -26,37 +26,37 @@ try {
     }
 
     # ãã©ã¼ã ãã­ã¼ããããã¨ãããã®ã­ã°ã«è¨é²ããã¤ãã³ããã³ãã©
-    [System.Windows.Forms.Application]::add_Load({ 
+    [System.Windows.Forms.Application]::add_Load({
         param($sender)
         TraceUIEvent "Form.Load", "Application Load Event"
     })
 
     # ã¦ã£ã³ãã¦ãè¡¨ç¤ºãããã¨ãããã®ã­ã°ã«è¨é²ããã¤ãã³ããã³ãã©
-    [System.Windows.Forms.Application]::add_Shown({ 
+    [System.Windows.Forms.Application]::add_Shown({
         param($sender)
         TraceUIEvent "Form.Shown", "Window Show Event"
     })
 
     # ãã©ã¼ã ã®ã¯ã­ã¼ãºã¤ãã³ããæ¤ç¥ããéããåã«ã­ã°ã«è¨é²ããã¤ãã³ããã³ãã©
-    [System.Windows.Forms.Application]::add_FormClosing({ 
+    [System.Windows.Forms.Application]::add_FormClosing({
         param($sender, $e)
         $dt = ([DateTime]::UtcNow - $t0).TotalMilliseconds
         TraceUIEvent "FormClosing", ("Closing reason: {0} (took {1}ms)" -f $e.CloseReason, [int]$dt)
     })
 
     # ãã©ã¼ã ãéããã¨ãããã®ã­ã°ã«è¨é²ããã¤ãã³ããã³ãã©
-    [System.Windows.Forms.Application]::add_FormClosed({ 
+    [System.Windows.Forms.Application]::add_FormClosed({
 ```powershell
     param($sender)
     TraceUIEvent "FormClosed", "Window Closed Event"
 })
 
-[System.Windows.Forms.Application]::add_ApplicationExit({ 
+[System.Windows.Forms.Application]::add_ApplicationExit({
     param($sender)
     TraceUIEvent "ApplicationExit", "Application Exit Event"
 })
 
-[System.Windows.Forms.Application]::add_ThreadExit({ 
+[System.Windows.Forms.Application]::add_ThreadExit({
     param($sender)
     TraceUIEvent "ThreadExit", "Thread Exit Event"
 })
@@ -78,7 +78,7 @@ try {
         })
         $__ui_timer.Start()
         # UIåºãè¦å½ãã¾ãã
-        .add_FormClosing({ 
+        .add_FormClosing({
             param($sender, $e)
             if(-not $__ui_alive){ $e.Cancel = $true }
         })

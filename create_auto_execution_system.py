@@ -83,12 +83,12 @@ print('簡易テスト実行中...')
 try:
     from src.core.kernel import generate_chat, read_paths, healthcheck
     print('✓ 新機能インポート成功')
-    
+
     if healthcheck():
         print('✓ サーバー接続成功')
     else:
         print('⚠️ サーバー接続失敗')
-        
+
     print('✓ 簡易テスト完了')
 except Exception as e:
     print(f'✗ エラー: {e}')

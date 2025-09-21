@@ -17,7 +17,7 @@ try {
       $__ui_alive = $false
       $__ui_timer = New-Object System.Windows.Forms.Timer
       $__ui_timer.Interval = 250
-      
+
       # UI ã®çå­ãã§ãã¯æ©è½ã® Tick ã¤ãã³ãã®ãã³ãã©ã§ã3ç§å¾ã«ãã©ã°ãç«ã¦ãï¼UIã«ã¼ãã«ä¾å­ããªã System.Threading.Timerï¼
       $__ui_timer.add_Tick({
         if (([DateTime]::UtcNow - $__ui_start).TotalMilliseconds -ge 3000) {
@@ -25,7 +25,7 @@ try {
           $__ui_timer.Stop(); $__ui_timer.Dispose()
         }
       })
-      
+
       # UI ã®çå­ãã§ãã¯ç¨ã®ã¹ã¬ãããéå§ãã
       $__ui_timer.Start()
       .add_FormClosing({ param($s,$e) if(-not $__ui_alive){ $e.Cancel = $true } })
@@ -41,7 +41,7 @@ try {
     if(-not $__alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive)" }
   })
   .add_FormClosed({ __log "FormClosed" })
-  
+
   #ä½ã®ã¢ããªã±ã¼ã·ã§ã³çµäºãã³ãã©
   [System.Windows.Forms.Application]::add_ApplicationExit({ __log "ApplicationExit" })
   [System.Windows.Forms.Application]::add_ThreadExit({ __log以下のコードが PowerShell のスクリプトで、`System.Windows.Forms` の機能を使用するための準備と、自動的な UI の生存チェック機能を含んでいます。各部分の説明と修正点を確認してください：
@@ -71,7 +71,7 @@ try {
     $__ui_timer.Start()
     .add_FormClosing({ param($s,$e) if(-not $__ui_alive){ $e.Cancel = $true } })
   }
-  
+
   # UI Load, Shown, Closing, Closed events
   .add_Load({ __log "Form.Load" })
   .add_Shown({ __log "Form.Shown" })

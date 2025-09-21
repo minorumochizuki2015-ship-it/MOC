@@ -63,5 +63,3 @@ if %EC% NEQ 0 (
 
 echo 動作確認:  curl http://%HOST%:%PORT%/v1/models
 pause
-
-

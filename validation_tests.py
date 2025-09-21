@@ -134,10 +134,10 @@ def process_data(data):
         # 副作用: グローバル変数変更とランダム要素
         global_counter = getattr(process_data, 'counter', 0)
         process_data.counter = global_counter + 1
-        
+
         processed = item * 2 + random.randint(1, 10)
         result.append(processed)
-    
+
     print(f"処理済み: {len(result)}件")  # 副作用: 出力
     return result"""
 

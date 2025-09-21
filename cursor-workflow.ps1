@@ -32,23 +32,23 @@ function Show-Help {
 
 function Remove-PyCache {
   param([switch]$WhatIf)
-  
+
   $pattern = "__pycache__"
   $dirs = Get-ChildItem -Recurse -Directory -Name $pattern -ErrorAction SilentlyContinue
-  
+
   if ($dirs.Count -eq 0) {
     Write-Host "✓ __pycache__ディレクトリは見つかりませんでした"
     return
   }
-  
+
   Write-Host "発見された__pycache__ディレクトリ: $($dirs.Count)個"
   $dirs | ForEach-Object { Write-Host "  - $_" }
-  
+
   if ($WhatIf) {
     Write-Host "Dry-Run: 削除は実行されません"
     return
   }
-  
+
   $dirs | ForEach-Object {
     try {
       Remove-Item -Path $_ -Recurse -Force -ErrorAction Stop
@@ -61,28 +61,28 @@ function Remove-PyCache {
 
 function Remove-TempFiles {
   param([switch]$WhatIf)
-  
+
   $patterns = @("*.tmp", "*.log", "*.bak", "*.swp")
   $files = @()
-  
+
   foreach ($pattern in $patterns) {
     $found = Get-ChildItem -Recurse -File -Name $pattern -ErrorAction SilentlyContinue
     $files += $found
   }
-  
+
   if ($files.Count -eq 0) {
     Write-Host "✓ 一時ファイルは見つかりませんでした"
     return
   }
-  
+
   Write-Host "発見された一時ファイル: $($files.Count)個"
   $files | ForEach-Object { Write-Host "  - $_" }
-  
+
   if ($WhatIf) {
     Write-Host "Dry-Run: 削除は実行されません"
     return
   }
-  
+
   $files | ForEach-Object {
     try {
       Remove-Item -Path $_ -Force -ErrorAction Stop
@@ -95,7 +95,7 @@ function Remove-TempFiles {
 
 function Invoke-TestSuite {
   Write-Host "テストスイートを実行中..."
-  
+
   # スキーマ検証
   Write-Host "1. スキーマ検証..."
   try {
@@ -104,7 +104,7 @@ function Invoke-TestSuite {
     Write-Host "✗ スキーマ検証: 失敗 - $($_.Exception.Message)"
     return $false
   }
-  
+
   # Consistency-mini
   Write-Host "2. Consistency-mini..."
   try {
@@ -113,7 +113,7 @@ function Invoke-TestSuite {
     Write-Host "✗ Consistency-mini: 失敗 - $($_.Exception.Message)"
     return $false
   }
-  
+
   # pytest
   Write-Host "3. pytest実行..."
   try {
@@ -122,37 +122,37 @@ function Invoke-TestSuite {
     Write-Host "✗ pytest: 失敗 - $($_.Exception.Message)"
     return $false
   }
-  
+
   Write-Host "✓ 全テスト完了"
   return $true
 }
 
 function Backup-ImportantFiles {
   param([switch]$WhatIf)
-  
+
   $importantFiles = @(
     "src/ui/modern_interface.py",
-    "src/core/code_executor.py", 
+    "src/core/code_executor.py",
     "main_modern.py",
     "start_modern_ui.bat"
   )
-  
+
   $timestamp = (Get-Date).ToString('yyyyMMdd_HHmmss')
   $backupDir = "backups"
-  
+
   if (-not (Test-Path $backupDir)) {
     New-Item -ItemType Directory -Path $backupDir | Out-Null
   }
-  
+
   foreach ($file in $importantFiles) {
     if (-not (Test-Path $file)) {
       Write-Host "⚠ ファイルが見つかりません: $file"
       continue
     }
-    
+
     $backupName = "$(Split-Path $file -Leaf).backup_$timestamp"
     $backupPath = Join-Path $backupDir $backupName
-    
+
     if ($WhatIf) {
       Write-Host "Dry-Run: $file -> $backupPath"
     } else {
@@ -168,26 +168,26 @@ function Backup-ImportantFiles {
 
 function Restore-LatestBackup {
   param([string]$Pattern = "*.backup_*")
-  
+
   $backupDir = "backups"
   if (-not (Test-Path $backupDir)) {
     Write-Host "✗ バックアップディレクトリが見つかりません: $backupDir"
     return
   }
-  
+
   $backups = Get-ChildItem -Path $backupDir -File -Name $Pattern | Sort-Object LastWriteTime -Descending
   if ($backups.Count -eq 0) {
     Write-Host "✗ バックアップファイルが見つかりません"
     return
   }
-  
+
   $latest = $backups[0]
   $backupPath = Join-Path $backupDir $latest
   $originalName = $latest -replace '\.backup_\d{8}_\d{6}$', ''
-  
+
   Write-Host "最新バックアップ: $latest"
   Write-Host "復元先: $originalName"
-  
+
   try {
     Copy-Item -Path $backupPath -Destination $originalName -Force
     Write-Host "✓ 復元完了: $originalName"
@@ -198,7 +198,7 @@ function Restore-LatestBackup {
 
 function Test-Dependencies {
   Write-Host "依存関係を確認中..."
-  
+
   # Python
   try {
     $pythonVersion = & .\.venv\Scripts\python.exe --version
@@ -207,7 +207,7 @@ function Test-Dependencies {
     Write-Host "✗ Python: 利用不可"
     return $false
   }
-  
+
   # Node.js
   try {
     $nodeVersion = & node --version
@@ -216,7 +216,7 @@ function Test-Dependencies {
     Write-Host "✗ Node.js: 利用不可"
     return $false
   }
-  
+
   # npm
   try {
     $npmVersion = & npm --version
@@ -225,7 +225,7 @@ function Test-Dependencies {
     Write-Host "✗ npm: 利用不可"
     return $false
   }
-  
+
   Write-Host "✓ 全依存関係が利用可能"
   return $true
 }

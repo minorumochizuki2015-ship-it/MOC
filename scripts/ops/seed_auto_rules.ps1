@@ -89,5 +89,3 @@ $rows | Export-Csv -NoTypeInformation -Encoding UTF8 $CsvOut
 $added | Format-Table -AutoSize
 Write-Host "Registered -> $RulesPath"
 Write-Host "CSV Export -> $CsvOut"
-
-

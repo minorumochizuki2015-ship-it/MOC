@@ -5,23 +5,23 @@ function Safe-Edit-With-Plan {
         [string],
         [hashtable]
     )
-    
+
     # 1. バックアップ作成
      = Get-Date -Format "yyyyMMdd_HHmmss"
      = ".\backups\.backup_"
     Copy-Item   -Force
     Write-Host "✓ バックアップ作成: "
-    
+
     try {
         # 2. テスト実行
-         = run_tests 
+         = run_tests
         if (-not .passed) {
             throw "テスト失敗: "
         }
-        
+
         # 3. 最小差分でPATCH
-        Apply-Minimal-Patch  
-        
+        Apply-Minimal-Patch
+
         Write-Host "✓ 安全に編集完了: "
     }
     catch {
@@ -34,14 +34,14 @@ function Safe-Edit-With-Plan {
 
 function run_tests {
     param([string])
-    
+
     if ( -like "*.py") {
-        python -m py_compile 
+        python -m py_compile
         if ( -ne 0) {
             return @{passed=False; failed="構文エラー"; summary="構文チェック失敗"}
         }
     }
-    
+
     return @{passed=True; failed=""; summary="テスト成功"}
 }
 

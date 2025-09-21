@@ -1,4 +1,4 @@
-**åé¡ã®ç¹å®**: 
+**åé¡ã®ç¹å®**:
 
 ãã®ã³ã¼ãã¯ãPowerShellã¹ã¯ãªããã¨Windows Formsã¢ããªã±ã¼ã·ã§ã³ãçµã¿åãããè¤éãªã¹ãããã·ã§ããã§ããä¸»ãªåé¡ç¹ã¯ä»¥ä¸ã®éãï¼
 
@@ -7,11 +7,11 @@
 3. `$rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))`ã¨é¢é£ããé¨åã¯Windows Formsã¢ããªã±ã¼ã·ã§ã³ã®ç¶ã¨ã¯é¢ä¿ããã¾ããããããPowerShellã¹ã¯ãªããã®é¨åã«å«ã¾ãã¦ããå¯è½æ§ãããã¾ãã
 4. ã¹ã¯ãªããã®æå¾ã«è¦ããã`# ===== PART: 00-header.ps1 =====` ã®ãããªæ³¨éã¯ãã³ã¼ãã®çè§£ãå°é£ã«ããå¯è½æ§ãããã¾ãã
 
-**ãããã°ã³ã¼ã**: 
+**ãããã°ã³ã¼ã**:
 
 ãã®ã³ã¼ããã¨ã©ã¼ãèµ·ããåå ã¨åé¡ç¹ãç¤ºãããã«ã¯ãé¢é£ããé¨åãåãåºãããããããã©ã®ããã«åä½ãã¦ããããç¢ºèªãã¾ããç¹ã«`__script:alive = $true`ã«èª¤ã£ãã¢ã¯ã»ã¹ãå­å¨ãããã¨ãç¹å®ãã¾ããã®ã§ãé¢æ°ã¹ã³ã¼ãå¤ã®å¤æ°ã«ç´æ¥ã¢ã¯ã»ã¹ããªãããã«ä¿®æ­£ãããã¨ãã§ãã
 
-**ä¿®æ­£ç**: 
+**ä¿®æ­£ç**:
 
 ä»¥ä¸ã®ããã«ãªãã¾ãï¼
 
@@ -21,19 +21,19 @@ param([switch]$Smoke)
 
 try {
   $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
-  
-  function __log([string]$m){ 
+
+  function __log([string]$m){
     Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
   }
-  
+
   $__t0 = [DateTime]::UtcNow
   $__alive = $false
-  
+
   # 3ç§å¾ã«ãã©ã°ãç«ã¦ãï¼UIã«ã¼ãã«ä¾å­ããªã System.Threading.Timerï¼
   $__tm = [System.Threading.Timer]::new({
     $script:__alive = $true
   }, $null, 3000, [System.Threading.Timeout]::Infinite)
-  
+
   # ã¤ãã³ããã¬ã¼ã¹ã®ã³ã¼ãã¯Windows Formsã¢ããªã±ã¼ã·ã§ã³ã¨ã¯é¢é£ããã¾ãããããããPowerShellã¹ã¯ãªããã«ç§»åãã¾ãã
 }
 catch {}
@@ -46,19 +46,19 @@ param([switch]$Smoke)
 
 try {
   $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
-  
+
   function __log([string]$m){
     Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m)
   }
-  
+
   $__t0 = [DateTime]::UtcNow
   $__alive = $false
-  
+
   # 3秒後にフラグを立てる（UIループに依存しない System.Threading.Timer）
   $__tm = [System.Threading.Timer]::new({
     $script:__alive = $true
   }, $null, 3000, [System.Threading.Timeout]::Infinite)
-  
+
   # イベントトレース
   add_Load({ __log "Form.Load" })
   add_Shown({ __log "Form.Shown" })
@@ -98,14 +98,14 @@ param([switch]$Smoke)
 1. **問題の特定**：
    - 原始コードにおける`__script:alive = $true`は無効なシンタックスです。PowerShellはご質問ありがとうございます。前の回答を続けます：
 
-1. **問題の特定**: 
+1. **問題の特定**:
    - 修正版コードでは、`$script:__alive = $true`という記述が存在しますが、これは PowerShell で使用するコードではありません。 `$script:`はスクリプト内のスコープで使用されます。この表現は `__alive` をスクリプトスコープにアクセスし、`$true` に設定するという意味ではありません。したがって、この記述はエラーを引き起こします。
    - また、`add_Load`, `add_Shown`, `add_FormClosing`, `add_FormClosed`, `add_ApplicationExit`, `add_ThreadExit` など、Windows Forms コントロールのイベントハンドラの呼び出しからも問題が発生しています。これらの関数は `.AddHandler` によって Windows Forms のコントロールに割り当てられます。これらの関数は PowerShell の内部的な機能であり、直接呼び出すことは推奨されていません。 PowerShell から Windows Forms コードを直接呼び出すことは一般的には困難で、効果的なプログラムの実装には適していません。
 
-2. **デバッグコード**: 
+2. **デバッグコード**:
    - これらの問題を解決するために、Windows Forms のコードを PowerShell 内から適切に実行する方法を示すためのデバッグコードを提供します。そのためのコードは、PowerShell が Windows Forms アプリケーションのコードにアクセスするための仮想的なブリッジを提供します。しかし、この方法は一般的には推奨されず、Windows Forms アプリケーションの開発には、Windows Forms フォーム エディタや C# の Visual Studio などのツールを使用することを強くお勧めします。
 
-3. **修正版**: 
+3. **修正版**:
    - PowerShell で Windows Forms アプリケーションを直接制御するための完全な修正版を提供することは困難ですが、その一例として、PowerShell から Windows Forms アプリケーションへのアクセスを可能にするために `.NET Framework` を使用した例を以下で提供します。この例は Windows Forms アプリケーションの開発ではなく、Windows Forms アプリケーションのコードを PowerShell 内から呼び出すことを目的としています。
 
 4. **説明**：
@@ -118,7 +118,7 @@ param([switch]$Smoke)
    ```powershell
    #requires -Version 7.0
    param([switch]$Smoke)
-   
+
    try {
       # PowerShell内部でのWindows Formsコードにアクセスするための仮想的なブリッジ
       $rep

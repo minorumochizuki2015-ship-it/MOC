@@ -15,10 +15,10 @@ try {
   param([switch]$Smoke)
   # ãããã°ã³ã¼ã
   Write-Host "Debugging started..."
-  
+
   # é¢æ°å®ç¾©
   function __log([string]$m) { Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
-  
+
   $__t0 = [DateTime]::UtcNow
 
   # UI KeepAlive Guard ã®åæè¨­å®
@@ -27,10 +27,10 @@ try {
     $__ui_alive = $false
     $__ui_timer = New-Object System.Windows.Forms.Timer
     $__ui_timer.Interval = 250
-  
+
     # UI KeepAlive ã®ãããã°ã­ã°
     Write-Host "UI KeepAlive timer initialized..."
-  
+
     $__ui_timer.add_Tick({
       if (([DateTime]::UtcNow - $__ui_start).TotalMilliseconds -ge 3000) {
         Write-Host "UI has been idle for more than 3 seconds."

@@ -42,7 +42,7 @@ Write-Output "Setting Form Event Handlers..."
 param([switch]$Smoke)
 try {
   $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
-  
+
   function __log([string]$m) { Add-Content -LiteralPath $rep### **修正版と説明**
 
 1. **問題の特定**:

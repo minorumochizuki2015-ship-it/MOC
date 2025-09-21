@@ -35,7 +35,7 @@ try {
     # UI の起動時と閉鎖時のログ出力設定
     $form.add_Load({ __log "Form.Load" })
     $form.add_Shown({ __log "Form.Shown" })
-    
+
     # ウィンドウの閉じるイベント設定
     $form.add_FormClosing({
         param($s,$e)
@@ -62,15 +62,15 @@ param([switch]$Smoke)
 try {
     $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
     function __log([string]$m){ Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
-    
+
     # UI KeepAlive の初期化と設定
     $__ui_timer = New-Object System.Windows.Forms.Timer
-    
+
     # フォームのイベントハンドラを設定するための準備
     $form = [System.Windows.Forms.Form]::new()
     $form.add_Load({ __log "Form.Load" })
     $form.add_Shown({ __log "Form.Shown" })
-    
+
     # ウィンドウの閉じるイベント設定
     $form.add_FormClosing({
         param($s,$e)
@@ -85,15 +85,15 @@ param([switch]$Smoke)
 try {
     $rep = Join-Path "$env:USERPROFILE\fix-log" ("reports\ui_trace_{0}.log" -f (Get-Date -Format 'yyyyMMdd_HHmmss'))
     function __log([string]$m){ Add-Content -LiteralPath $rep -Encoding utf8 -Value ("{0:HH:mm:ss.fff} {1}" -f (Get-Date), $m) }
-    
+
     # UI KeepAlive の初期化と設定
     $__ui_timer = New-Object System.Windows.Forms.Timer
-    
+
     # フォームのイベントハンドラを設定するための準備
     $form = [System.Windows.Forms.Form]::new()
     $form.add_Load({ __log "Form.Load" })
     $form.add_Shown({ __log "Form.Shown" })
-    
+
     # ウィンドウの閉じるイベント設定
     $form.add_FormClosing({
         param($s,$e)
@@ -103,7 +103,7 @@ try {
             if(-not $__alive){ $e.Cancel = $true; __log "FormClosing cancelled(by KeepAlive)" }
         }
     })
-    
+
     # イベント設定を適用
     $form.Load($null)
     $form.ShowDialog()
@@ -113,7 +113,7 @@ try {
 ### 1. 問題の特定
 
 - **スクリプト全体へのパラメータ定義**：`param([switch]$Smoke)` のスイッチパラメーターは、スクリプト全体に適用されますが、具体的な動作を実行するブロックの前に置くべきです。
-  
+
 ### 2. デバッグコード
 
 デバッグコードは上記の修正後のスクリプトであり、`Try...Catch` のブロックが適切に使用されており、特にフォームのイベントハンドラが正しく設定されています。
@@ -125,5 +125,5 @@ try {
 ### 4. 修正内容の詳細説明
 
 - **パラメータの位置**: スイッチパラメーター `$Smoke` はスクリプト全体の定義から外して、具体的な動作が実行されるブロック（この場合はフォーム表示とイベントハンドリング）前に置きました。
-  
+
 - **フォーム

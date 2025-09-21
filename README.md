@@ -285,7 +285,7 @@ pwsh -NoProfile -File .\cursor-workflow.ps1 -Action backup-files -Apply
 
 **利用可能なアクション:**
 - `cleanup-cache`: __pycache__ディレクトリを削除
-- `cleanup-temp`: 一時ファイルを削除  
+- `cleanup-temp`: 一時ファイルを削除
 - `run-tests`: テストスイートを実行
 - `backup-files`: 重要ファイルをバックアップ
 - `restore-backup`: バックアップから復元
