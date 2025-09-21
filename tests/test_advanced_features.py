@@ -104,7 +104,9 @@ print(f"generate_chat reply: {reply_chat!r}  ({t_chat:.2f}s)")
 print("=== Result ===")
 if fail:
     print(f"FAILED: {fail} case(s)")
-    sys.exit(1)
+    # Don't exit when running under pytest
+    if __name__ == "__main__":
+        sys.exit(1)
 print("ALL PASS")
 
 def test_advanced_features():
