@@ -1,12 +1,12 @@
-﻿import csv
+import csv
 import importlib.util
 import os
 import re
 import statistics as st
 from pathlib import Path
 
-ROOT = Path(r"C:\Users\User\PhoenixCodex\GoverningCore_v5_Slice")
-mod_path = ROOT / "interface.py"
+ROOT = Path(__file__).parent.parent  # MOCプロジェクトのルート
+mod_path = ROOT / "src" / "ui" / "interface.py"
 
 # interface.py から _extract_themes を安全にロード
 spec = importlib.util.spec_from_file_location("iface", mod_path)
@@ -54,7 +54,7 @@ def stability(top_lists):
     return sum(j) / len(j)
 
 
-out_csv = ROOT / "theme_extractor_eval.csv"
+out_csv = ROOT / "data" / "theme_extractor_eval.csv"
 with out_csv.open("w", newline="", encoding="utf-8") as f:
     w = csv.writer(f)
     w.writerow(
