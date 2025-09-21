@@ -26,7 +26,7 @@ from ..core.kernel import _dedup_clip
 
 # ---- function-level replace (stable) ---------------------------------------
 _FN_DEF_PAT = re.compile(
-    r"(^def\s+{name}\s*\(.*?\):\n(?:[ \t].*\n)+)",
+    r"(^def\s+{name}\s*\(.*?\):(?:\s*\n(?:[ \t].*\n)*|.*(?=\n(?:def\s|\w|\Z)|\Z)))",
     flags=re.M | re.S,
 )
 

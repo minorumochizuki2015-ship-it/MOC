@@ -12,14 +12,21 @@ import time
 from pathlib import Path
 import pytest
 
+# このテストはローカルAI接続が必要な統合テスト。
+# 環境が未設定ならモジュール単位でスキップしてCIを赤にしない。
+pytestmark = [pytest.mark.integration]
+if not (os.getenv("LOCALAI_URL") or os.getenv("OPENAI_COMPAT_BASE")):
+    pytest.skip(
+        "LOCALAI_URL/OPENAI_COMPAT_BASE 未設定のため advanced features をスキップ（integration）",
+        allow_module_level=True,
+    )
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from src.core import kernel
 
 fail = 0
-
-@pytest.mark.integration
 
 
 def check(name, cond, info=""):
@@ -109,6 +116,7 @@ if fail:
         sys.exit(1)
 print("ALL PASS")
 
+@pytest.mark.integration
 def test_advanced_features():
     """pytest wrapper for advanced features test"""
     # The actual test logic is executed at module level above
