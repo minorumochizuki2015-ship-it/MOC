@@ -6,6 +6,7 @@ import requests
 BASE = os.getenv("OPENAI_COMPAT_BASE", "http://127.0.0.1:8080/v1")
 
 
+@pytest.mark.integration
 @pytest.mark.timeout(5)
 def test_models_endpoint():
     try:
@@ -20,6 +21,7 @@ def test_models_endpoint():
     ), "no models listed"
 
 
+@pytest.mark.integration
 @pytest.mark.timeout(10)
 def test_chat_completion_minimal():
     try:

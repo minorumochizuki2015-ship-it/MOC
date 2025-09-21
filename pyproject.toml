@@ -22,5 +22,6 @@ markers = [
     "unit: Unit tests",
     "integration: Integration tests",
     "e2e: End-to-end tests",
-    "slow: Slow running tests"
+    "slow: Slow running tests",
+    "timeout: Tests with timeout settings"
 ]
