@@ -1,0 +1,29 @@
+{
+  "plan": {
+    "id": "39fadaaf-e259-4c82-a1d2-dafaa31e92e9",
+    "title": "753.193 Party Reflex v2.0 初期実装",
+    "created_at": "2025-09-21T22:55:39Z",
+    "items": [
+      {
+        "id": "scaffold",
+        "description": "app_core/app_ui の骨格とアセットディレクトリを整備",
+        "status": "completed"
+      },
+      {
+        "id": "core-logic",
+        "description": "状態機械・タイミング・スコアリングの基礎実装",
+        "status": "completed"
+      },
+      {
+        "id": "ui-arena",
+        "description": "Kivy レイアウトと主要画面の初期実装",
+        "status": "completed"
+      },
+      {
+        "id": "tests",
+        "description": "pytest/mypy 向け下地テストとスクリプトを追加",
+        "status": "completed"
+      }
+    ]
+  }
+}

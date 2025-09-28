@@ -1,0 +1,225 @@
+# Rule 25: Fallback Strategy
+# フォールバック戦略ルール - 段階的代替手段の実行と自動切り替え
+
+name: "Fallback Strategy Rule"
+rule_id: 25
+level: "Always Apply"
+version: "1.0"
+created_date: "2025-01-XX"
+purpose: "段階的代替手段の実行と自動切り替え"
+
+# フォールバックレベル定義
+fallback_levels:
+  primary:
+    description: "主要手段（最高品質）"
+    quality_level: "high"
+    timeout: 1800  # 30分
+    retry_count: 2
+    resource_limit:
+      cpu_percent: 80
+      memory_mb: 4096
+      disk_mb: 1024
+  
+  secondary:
+    description: "代替手段（中品質）"
+    quality_level: "medium"
+    timeout: 900   # 15分
+    retry_count: 1
+    resource_limit:
+      cpu_percent: 60
+      memory_mb: 2048
+      disk_mb: 512
+  
+  tertiary:
+    description: "最終手段（最低品質）"
+    quality_level: "low"
+    timeout: 300   # 5分
+    retry_count: 0
+    resource_limit:
+      cpu_percent: 40
+      memory_mb: 1024
+      disk_mb: 256
+
+# 具体的なフォールバック戦略
+strategies:
+  apk_analysis:
+    description: "APK解析のフォールバック戦略"
+    primary:
+      method: "complete_apk_analysis"
+      tools: ["aapt2", "apktool", "jadx"]
+      expected_quality: "high"
+      success_criteria:
+        - "manifest_parsed: true"
+        - "resources_extracted: true"
+        - "dex_decompiled: true"
+    
+    secondary:
+      method: "basic_apk_analysis"
+      tools: ["aapt", "unzip"]
+      expected_quality: "medium"
+      success_criteria:
+        - "manifest_parsed: true"
+        - "basic_info_extracted: true"
+    
+    tertiary:
+      method: "minimal_apk_analysis"
+      tools: ["zipinfo", "file"]
+      expected_quality: "low"
+      success_criteria:
+        - "file_structure_analyzed: true"
+
+  il2cpp_analysis:
+    description: "IL2CPP解析のフォールバック戦略"
+    primary:
+      method: "il2cpp_dumper_analysis"
+      tools: ["Il2CppDumper", "metadata_parser"]
+      expected_quality: "high"
+      success_criteria:
+        - "metadata_parsed: true"
+        - "symbols_extracted: true"
+        - "classes_reconstructed: true"
+    
+    secondary:
+      method: "basic_il2cpp_analysis"
+      tools: ["strings", "objdump"]
+      expected_quality: "medium"
+      success_criteria:
+        - "unity_strings_extracted: true"
+        - "basic_symbols_found: true"
+    
+    tertiary:
+      method: "unity_pattern_matching"
+      tools: ["grep", "regex"]
+      expected_quality: "low"
+      success_criteria:
+        - "unity_patterns_detected: true"
+
+  dynamic_analysis:
+    description: "動的解析のフォールバック戦略"
+    primary:
+      method: "frida_comprehensive_analysis"
+      tools: ["frida", "frida-server"]
+      expected_quality: "high"
+      success_criteria:
+        - "runtime_hooks_active: true"
+        - "api_calls_traced: true"
+        - "memory_analyzed: true"
+    
+    secondary:
+      method: "frida_basic_analysis"
+      tools: ["frida"]
+      expected_quality: "medium"
+      success_criteria:
+        - "basic_hooks_active: true"
+        - "function_calls_traced: true"
+    
+    tertiary:
+      method: "static_behavior_estimation"
+      tools: ["static_analyzer"]
+      expected_quality: "low"
+      success_criteria:
+        - "behavior_patterns_estimated: true"
+
+# フォールバック実行設定
+execution:
+  auto_fallback: true
+  quality_tracking: true
+  result_merging: true
+  
+  trigger_conditions:
+    timeout: true
+    error_threshold: 3
+    resource_exhaustion: true
+    tool_unavailable: true
+    quality_insufficient: true
+  
+  fallback_decision:
+    algorithm: "quality_aware"
+    factors:
+      - "previous_success_rate"
+      - "available_resources"
+      - "time_constraints"
+      - "quality_requirements"
+
+# 結果統合設定
+result_integration:
+  merge_strategy: "quality_weighted"
+  
+  quality_weights:
+    high: 1.0
+    medium: 0.7
+    low: 0.4
+  
+  merge_rules:
+    - "Higher quality results take precedence"
+    - "Combine complementary data from different levels"
+    - "Flag quality level of each data component"
+    - "Maintain traceability of data sources"
+
+# 成功判定基準
+success_criteria:
+  minimum_quality: "low"
+  required_completeness: 50  # 50%以上の完了率
+  
+  phase_specific:
+    static_analysis:
+      minimum_data_points: 5
+      required_sections: ["apk_info", "manifest"]
+    
+    il2cpp_analysis:
+      minimum_data_points: 3
+      required_sections: ["unity_detection"]
+    
+    dynamic_analysis:
+      minimum_data_points: 2
+      required_sections: ["runtime_info"]
+
+# 監視・ログ設定
+monitoring:
+  track_fallback_usage: true
+  measure_quality_impact: true
+  log_decision_factors: true
+  
+  metrics:
+    - "fallback_trigger_rate"
+    - "fallback_success_rate"
+    - "quality_degradation_rate"
+    - "time_savings"
+    - "resource_efficiency"
+
+# アラート設定
+alerts:
+  high_fallback_rate:
+    condition: "fallback_rate > 50%"
+    action: "investigate_primary_failures"
+    priority: "high"
+  
+  quality_degradation:
+    condition: "average_quality < medium"
+    action: "review_fallback_strategies"
+    priority: "medium"
+  
+  tertiary_usage:
+    condition: "tertiary_usage > 20%"
+    action: "improve_primary_reliability"
+    priority: "medium"
+
+# 統合設定
+integration:
+  error_recovery: true
+  quality_monitoring: true
+  phase_quality_gate: true
+  
+  hooks:
+    pre_fallback: "log_fallback_trigger"
+    post_fallback: "update_quality_metrics"
+    on_success: "record_success_pattern"
+    on_failure: "analyze_failure_pattern"
+
+# ログ設定
+logging:
+  level: "INFO"
+  location: "data/logs/current/fallback_strategy.log"
+  include_decision_tree: true
+  include_quality_impact: true
+  include_performance_metrics: true

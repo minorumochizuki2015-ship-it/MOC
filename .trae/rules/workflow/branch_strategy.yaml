@@ -1,0 +1,70 @@
+# Rule 34: Branch Strategy & Workflow
+rule_id: 34
+name: "Branch Strategy & Workflow"
+description: "Trunk-based development with minimal diff operations"
+category: "workflow"
+priority: "always_apply"
+version: "1.0.0"
+
+# ブランチ戦略
+branch_strategy:
+  default_branch: "main"
+  protection_rules:
+    main:
+      - direct_push: false
+      - force_push: false
+      - require_pr: true
+      - require_reviews: 1
+      - require_status_checks: true
+      - linear_history: true
+  
+  branch_naming:
+    feature: "feat/<scope>-<short>"
+    bugfix: "fix/<issue>-<short>"
+    documentation: "doc/<short>"
+    release: "release/v<X.Y.Z>"
+    hotfix: "hotfix/v<X.Y.Z+1>"
+
+# コミット規約
+commit_convention:
+  format: "Conventional Commits"
+  types:
+    - "feat: 新機能追加"
+    - "fix: バグ修正"
+    - "docs: ドキュメント更新"
+    - "style: コードスタイル修正"
+    - "refactor: リファクタリング"
+    - "test: テスト追加・修正"
+    - "chore: その他の変更"
+  
+  requirements:
+    - signed_commits: true
+    - minimal_diff: true
+    - no_full_replacement: true
+
+# マージ規約
+merge_policy:
+  strategy: "squash_merge"
+  requirements:
+    - ci_passing: true
+    - review_approved: true
+    - checkpoint_created: true
+    - minimal_diff_only: true
+
+# バージョニング
+versioning:
+  scheme: "SemVer"
+  format: "v<X.Y.Z>"
+  starting_version: "v0.1.0"
+  tag_format: "annotated"
+
+# 統合設定
+integration:
+  checkpoint_gate: true
+  quality_gate: true
+  backup_before_merge: true
+  
+logging:
+  level: "INFO"
+  location: "data/logs/current/branch_workflow.log"
+  include_metrics: true

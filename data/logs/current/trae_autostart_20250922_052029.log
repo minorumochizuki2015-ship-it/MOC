@@ -1,0 +1,5 @@
+RUN: autopatch cycle
+SFT: processing accepted data
+SFT: skipping duplicate file test_duplicate_copy.json (hash: dc799bd5b0a7553c8e5cf810d591b04e0558c35c411f95eaee54413b5d12fdd2)
+TIMEOUT: 196.6s > 40
+OK

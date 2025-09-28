@@ -1,0 +1,292 @@
+# Rule 26: Phase Quality Gate
+# フェーズ品質ゲートルール - フェーズ間品質継承と検証
+
+name: "Phase Quality Gate Rule"
+rule_id: 26
+level: "Always Apply"
+version: "1.0"
+created_date: "2025-01-XX"
+purpose: "フェーズ間品質継承と検証"
+
+# フェーズ定義
+phases:
+  static_analysis:
+    description: "静的解析フェーズ"
+    order: 1
+    dependencies: []
+    
+  il2cpp_analysis:
+    description: "IL2CPP解析フェーズ"
+    order: 2
+    dependencies: ["static_analysis"]
+    
+  frida_generation:
+    description: "Fridaスクリプト生成フェーズ"
+    order: 3
+    dependencies: ["static_analysis", "il2cpp_analysis"]
+    
+  dynamic_analysis:
+    description: "動的解析フェーズ"
+    order: 4
+    dependencies: ["frida_generation"]
+    
+  ml_analysis:
+    description: "機械学習解析フェーズ"
+    order: 5
+    dependencies: ["static_analysis", "dynamic_analysis"]
+    
+  data_integration:
+    description: "データ統合フェーズ"
+    order: 6
+    dependencies: ["static_analysis", "il2cpp_analysis", "dynamic_analysis", "ml_analysis"]
+    
+  code_generation:
+    description: "コード生成フェーズ"
+    order: 7
+    dependencies: ["data_integration"]
+    
+  project_construction:
+    description: "プロジェクト構築フェーズ"
+    order: 8
+    dependencies: ["code_generation"]
+
+# フェーズ別品質ゲート設定
+phase_gates:
+  static_analysis:
+    minimum_quality: "medium"
+    
+    required_data:
+      - "apk_basic_info"
+      - "file_structure"
+      - "manifest_analysis"
+      - "resources_analysis"
+      - "assets_analysis"
+    
+    quality_checks:
+      data_completeness:
+        threshold: 80
+        unit: "percent"
+        description: "データ完全性80%以上"
+      
+      analysis_success_rate:
+        threshold: 90
+        unit: "percent"
+        description: "解析成功率90%以上"
+      
+      critical_info_present:
+        required: true
+        description: "重要情報の存在確認"
+    
+    success_criteria:
+      - "All required data sections present"
+      - "Data completeness >= 80%"
+      - "No critical analysis failures"
+    
+    failure_actions:
+      - "Trigger fallback strategy"
+      - "Log quality degradation"
+      - "Attempt data recovery"
+
+  il2cpp_analysis:
+    minimum_quality: "low"
+    
+    required_data:
+      - "unity_detection_result"
+      - "il2cpp_presence_check"
+      - "unity_version_info"
+    
+    quality_checks:
+      unity_detection_accuracy:
+        threshold: 70
+        unit: "percent"
+        description: "Unity検出精度70%以上"
+      
+      il2cpp_analysis_depth:
+        threshold: 50
+        unit: "percent"
+        description: "IL2CPP解析深度50%以上"
+    
+    success_criteria:
+      - "Unity detection completed"
+      - "IL2CPP analysis attempted"
+      - "Basic Unity info extracted"
+    
+    failure_actions:
+      - "Use Unity pattern matching fallback"
+      - "Estimate Unity version"
+      - "Continue with reduced IL2CPP data"
+
+  dynamic_analysis:
+    minimum_quality: "low"
+    
+    required_data:
+      - "runtime_behavior_data"
+      - "api_call_patterns"
+      - "performance_metrics"
+    
+    quality_checks:
+      behavior_data_coverage:
+        threshold: 50
+        unit: "percent"
+        description: "動作データカバレッジ50%以上"
+      
+      api_call_diversity:
+        threshold: 10
+        unit: "count"
+        description: "API呼び出し種類10以上"
+    
+    success_criteria:
+      - "Runtime behavior captured"
+      - "API patterns identified"
+      - "Performance baseline established"
+    
+    failure_actions:
+      - "Use static behavior estimation"
+      - "Apply common Unity patterns"
+      - "Generate minimal runtime data"
+
+# 品質継承ルール
+quality_inheritance:
+  propagation_rules:
+    - "Quality level cannot improve without additional analysis"
+    - "Quality degradation must be explicitly justified"
+    - "Minimum quality must be maintained across phases"
+  
+  inheritance_matrix:
+    high_to_high:
+      condition: "Additional high-quality analysis performed"
+      probability: 0.9
+    
+    high_to_medium:
+      condition: "Some analysis failures or data loss"
+      probability: 0.7
+    
+    medium_to_medium:
+      condition: "Consistent analysis quality maintained"
+      probability: 0.8
+    
+    medium_to_low:
+      condition: "Significant analysis failures"
+      probability: 0.5
+    
+    low_to_low:
+      condition: "Minimal analysis performed"
+      probability: 0.6
+
+# ゲート実行設定
+gate_execution:
+  blocking: true
+  timeout: 300  # 5分
+  retry_count: 2
+  
+  validation_steps:
+    1: "Check phase completion status"
+    2: "Validate required data presence"
+    3: "Assess data quality metrics"
+    4: "Determine quality level"
+    5: "Check minimum quality threshold"
+    6: "Make pass/fail decision"
+    7: "Update quality inheritance"
+    8: "Log gate results"
+
+# ゲート判定アクション
+gate_actions:
+  pass:
+    actions:
+      - "Proceed to next phase"
+      - "Inherit current quality level"
+      - "Update phase progress"
+      - "Log successful gate passage"
+    
+    quality_updates:
+      - "Maintain or improve quality level"
+      - "Update quality metrics"
+      - "Record quality evidence"
+  
+  conditional_pass:
+    conditions:
+      - "Quality slightly below threshold but acceptable"
+      - "Critical data present despite some gaps"
+      - "Fallback strategies available"
+    
+    actions:
+      - "Proceed with quality warning"
+      - "Enhance monitoring for next phase"
+      - "Prepare compensation strategies"
+      - "Log conditional passage reasons"
+  
+  fail:
+    actions:
+      - "Trigger fallback strategy"
+      - "Attempt quality recovery"
+      - "Log quality degradation details"
+      - "Evaluate continuation feasibility"
+    
+    recovery_options:
+      - "Retry current phase with different approach"
+      - "Use alternative analysis methods"
+      - "Accept lower quality and continue"
+      - "Abort with partial results"
+
+# 品質メトリクス追跡
+quality_tracking:
+  metrics:
+    - "phase_completion_rate"
+    - "quality_level_distribution"
+    - "quality_degradation_frequency"
+    - "gate_passage_rate"
+    - "fallback_trigger_rate"
+  
+  aggregation:
+    - "Per-phase statistics"
+    - "Cross-phase quality trends"
+    - "Overall quality trajectory"
+    - "Quality improvement opportunities"
+
+# 監視・アラート設定
+monitoring:
+  real_time_tracking: true
+  quality_trend_analysis: true
+  
+  alert_conditions:
+    quality_degradation:
+      condition: "Quality drops by 2 levels"
+      action: "Immediate investigation"
+      priority: "high"
+    
+    gate_failure_rate:
+      condition: "Gate failure rate > 30%"
+      action: "Review gate thresholds"
+      priority: "medium"
+    
+    phase_timeout:
+      condition: "Phase exceeds timeout"
+      action: "Trigger emergency fallback"
+      priority: "high"
+
+# レポート設定
+reporting:
+  gate_reports: true
+  quality_trends: true
+  phase_analysis: true
+  
+  report_content:
+    - "Gate passage statistics"
+    - "Quality level transitions"
+    - "Failure pattern analysis"
+    - "Improvement recommendations"
+
+# 統合設定
+integration:
+  quality_standards: true
+  fallback_strategy: true
+  error_recovery: true
+  quality_monitoring: true
+
+# ログ設定
+logging:
+  level: "INFO"
+  location: "data/logs/current/phase_quality_gate.log"
+  include_quality_decisions: true
+  include_inheritance_tracking: true
+  include_gate_timing: true

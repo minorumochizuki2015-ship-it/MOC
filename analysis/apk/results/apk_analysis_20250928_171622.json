@@ -1,0 +1,88 @@
+{
+  "apk_info": {
+    "file_name": "heydoon_test.apk",
+    "file_size": 1659,
+    "file_size_mb": 0.0,
+    "modified_time": "2025-09-28T16:43:55.327287",
+    "analysis_time": "2025-09-28T17:16:22.630089"
+  },
+  "manifest": {
+    "found": true,
+    "size": 897,
+    "note": "バイナリXML形式のため、詳細解析にはaapt2が必要"
+  },
+  "resources": {
+    "total_resources": 0,
+    "resource_types": {},
+    "images": [],
+    "layouts": [],
+    "values": []
+  },
+  "assets": {
+    "total_assets": 4,
+    "asset_files": [
+      "assets/bin/Data/Managed/Assembly-CSharp.dll",
+      "assets/bin/Data/Managed/HeyDooonCore.dll",
+      "assets/bin/Data/Managed/NetworkManager.dll",
+      "assets/heydoon_config.json"
+    ],
+    "data_files": [
+      "assets/heydoon_config.json"
+    ],
+    "config_files": [
+      "assets/heydoon_config.json"
+    ]
+  },
+  "strings": {
+    "extracted_strings": [],
+    "note": "完全な文字列抽出にはaapt2が必要",
+    "error": "文字列抽出エラー: \"There is no item named 'classes.dex' in the archive\""
+  },
+  "file_structure": {
+    "total_files": 7,
+    "directories": [
+      "assets",
+      "assets/bin/Data/Managed",
+      "lib/arm64-v8a"
+    ],
+    "file_types": {
+      "xml": 1,
+      "dll": 3,
+      "json": 1,
+      "so": 2
+    },
+    "notable_files": [
+      "assets/bin/Data/Managed/Assembly-CSharp.dll",
+      "assets/bin/Data/Managed/HeyDooonCore.dll",
+      "assets/bin/Data/Managed/NetworkManager.dll",
+      "assets/heydoon_config.json"
+    ]
+  },
+  "unity_analysis": {
+    "unity_info": {},
+    "il2cpp_metadata": {},
+    "assembly_info": {},
+    "symbols": [],
+    "strings": [],
+    "methods": [],
+    "classes": [],
+    "disassembly": {},
+    "implementation_hints": [],
+    "unity_detected": true,
+    "il2cpp_detected": false
+  },
+  "implementation_hints": [
+    "Unity/ネイティブコンポーネントが検出されました:",
+    "  • ネイティブライブラリ (.dll): 3個",
+    "  • ネイティブライブラリ (.so): 2個",
+    "設定/セーブデータファイル:",
+    "  • heydoon_config.json",
+    "アセットファイル 4個 - ゲームデータの抽出が可能",
+    "\n推奨される解析アプローチ:",
+    "  1. Il2CppDumper/Il2CppInspectorでメタデータ解析",
+    "  2. Ghidra/IDA Proでネイティブコード逆アセンブル",
+    "  3. Frida/Xposedでランタイムフック",
+    "  4. メモリダンプ/パッチによる動的解析",
+    "  5. ネットワーク通信の傍受・改変"
+  ]
+}

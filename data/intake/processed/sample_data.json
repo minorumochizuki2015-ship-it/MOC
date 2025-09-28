@@ -1,0 +1,12 @@
+[
+  {
+    "instruction": "Pythonでリストを作成する方法を教えて",
+    "input": "",
+    "output": "Pythonでリストを作成するには、角括弧[]を使用します。例: my_list = [1, 2, 3, 'hello']"
+  },
+  {
+    "instruction": "関数の定義方法は？",
+    "input": "",
+    "output": "Pythonで関数を定義するには、defキーワードを使用します。例: def my_function(): pass"
+  }
+]

@@ -1,0 +1,19 @@
+Unity DLL解析結果サマリー
+==================================================
+
+検出されたUnityファイル:
+  lib/arm64-v8a/libil2cpp.so: native_library
+  lib/arm64-v8a/libunity.so: native_library
+
+抽出されたシンボル数: 50
+抽出された文字列数: 400
+
+実装ヒント:
+  • IL2CPPメタデータが検出されました - Unity IL2CPPビルドです
+  • Il2CppDumperやIl2CppInspectorを使用してより詳細な解析が可能です
+  • 2個のネイティブライブラリが見つかりました
+  • Ghidra、IDA Pro、またはradare2を使用した逆アセンブルが推奨されます
+  • 50個のIL2CPP関連シンボルが見つかりました
+  • これらのシンボルを使用してAPIフックやメモリパッチが可能です
+  • 122個のUnity関連文字列が見つかりました
+  • 対象アーキテクチャ: AArch64

@@ -1,0 +1,5 @@
+RUN: autopatch cycle
+SFT: processing accepted data
+SFT: rejected test_invalid_schema.json - no valid items
+TIMEOUT: 196.7s > 40
+OK

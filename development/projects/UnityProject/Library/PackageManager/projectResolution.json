@@ -1,0 +1,125 @@
+{
+  "context": {
+    "projectPath": "C:/Users/User/Trae/MOC/data/clone_generation/UnityProject/Packages",
+    "unityVersion": "6000.2.6f1"
+  },
+  "inputs": [
+    "C:\\Users\\User\\Trae\\MOC\\data\\clone_generation\\UnityProject\\Packages\\manifest.json",
+    "C:\\Users\\User\\Trae\\MOC\\data\\clone_generation\\UnityProject\\Packages\\packages-lock.json",
+    "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.6f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\BuiltInPackagesCombined.sha1"
+  ],
+  "outputs": {
+    "com.unity.2d.sprite@1.0.0": {
+      "name": "com.unity.2d.sprite",
+      "displayName": "2D Sprite",
+      "resolvedPath": "C:\\Users\\User\\Trae\\MOC\\data\\clone_generation\\UnityProject\\Library\\PackageCache\\com.unity.2d.sprite@331abd9a1e2f",
+      "fingerprint": "331abd9a1e2ff424a1ef2626e16936071ab7ce3d",
+      "editorCompatibility": "2019.2.0a1",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.2d.tilemap@1.0.0": {
+      "name": "com.unity.2d.tilemap",
+      "displayName": "2D Tilemap Editor",
+      "resolvedPath": "C:\\Users\\User\\Trae\\MOC\\data\\clone_generation\\UnityProject\\Library\\PackageCache\\com.unity.2d.tilemap@aa5f5491174d",
+      "fingerprint": "aa5f5491174d692ae7c6327102931ff1f46f7d2a",
+      "editorCompatibility": "2019.2.0a1",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.multiplayer.center@1.0.0": {
+      "name": "com.unity.multiplayer.center",
+      "displayName": "Multiplayer Center",
+      "resolvedPath": "C:\\Users\\User\\Trae\\MOC\\data\\clone_generation\\UnityProject\\Library\\PackageCache\\com.unity.multiplayer.center@f3fb577b3546",
+      "fingerprint": "f3fb577b3546594b97b8cc34307cd621f60f1c73",
+      "editorCompatibility": "6000.0.0a1",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.ugui@2.0.0": {
+      "name": "com.unity.ugui",
+      "displayName": "Unity UI",
+      "resolvedPath": "C:\\Users\\User\\Trae\\MOC\\data\\clone_generation\\UnityProject\\Library\\PackageCache\\com.unity.ugui@e375ff18e90f",
+      "fingerprint": "e375ff18e90f823f9c3d4ffbc1532d6cde85ed48",
+      "editorCompatibility": "2019.2.0a1",
+      "version": "2.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.accessibility@1.0.0": {
+      "name": "com.unity.modules.accessibility",
+      "displayName": "Accessibility",
+      "resolvedPath": "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.6f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\com.unity.modules.accessibility",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.ui@1.0.0": {
+      "name": "com.unity.modules.ui",
+      "displayName": "UI",
+      "resolvedPath": "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.6f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\com.unity.modules.ui",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.imgui@1.0.0": {
+      "name": "com.unity.modules.imgui",
+      "displayName": "IMGUI",
+      "resolvedPath": "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.6f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\com.unity.modules.imgui",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.uielements@1.0.0": {
+      "name": "com.unity.modules.uielements",
+      "displayName": "UIElements",
+      "resolvedPath": "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.6f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\com.unity.modules.uielements",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.tilemap@1.0.0": {
+      "name": "com.unity.modules.tilemap",
+      "displayName": "Tilemap",
+      "resolvedPath": "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.6f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\com.unity.modules.tilemap",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.jsonserialize@1.0.0": {
+      "name": "com.unity.modules.jsonserialize",
+      "displayName": "JSONSerialize",
+      "resolvedPath": "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.6f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\com.unity.modules.jsonserialize",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.hierarchycore@1.0.0": {
+      "name": "com.unity.modules.hierarchycore",
+      "displayName": "Hierarchy Core",
+      "resolvedPath": "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.6f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\com.unity.modules.hierarchycore",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.physics@1.0.0": {
+      "name": "com.unity.modules.physics",
+      "displayName": "Physics",
+      "resolvedPath": "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.6f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\com.unity.modules.physics",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.physics2d@1.0.0": {
+      "name": "com.unity.modules.physics2d",
+      "displayName": "Physics 2D",
+      "resolvedPath": "C:\\Program Files\\Unity\\Hub\\Editor\\6000.2.6f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\com.unity.modules.physics2d",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    }
+  }
+}

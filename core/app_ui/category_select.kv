@@ -1,0 +1,54 @@
+#:kivy 2.3.0
+#:import dp kivy.metrics.dp
+
+# カテゴリ選択画面の簡易レイアウト。
+<CategorySelectScreen>:
+    name: "category_select"
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(12)
+        spacing: dp(8)
+        Label:
+            text: "カテゴリを選択"
+            font_name: app.default_font or "Roboto"
+            font_size: "28sp"
+            size_hint_y: None
+            height: dp(48)
+            bold: True
+        Label:
+            text: root.summary_text
+            font_name: app.default_font or "Roboto"
+            font_size: "18sp"
+            size_hint_y: None
+            height: dp(32)
+        ScrollView:
+            do_scroll_x: False
+            GridLayout:
+                id: category_grid
+                cols: 3
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: dp(64)
+                row_force_default: True
+                spacing: dp(8)
+                padding: dp(4)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(52)
+            spacing: dp(12)
+            Button:
+                text: "全選択"
+                font_name: app.default_font or "Roboto"
+                on_release: root.select_all()
+            Button:
+                text: "全解除"
+                font_name: app.default_font or "Roboto"
+                on_release: root.clear_all()
+            Button:
+                text: "お気に入り"
+                font_name: app.default_font or "Roboto"
+                on_release: root.select_favorites()
+            Button:
+                text: "次の設定へ"
+                font_name: app.default_font or "Roboto"
+                on_release: root.proceed()

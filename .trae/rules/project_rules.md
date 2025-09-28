@@ -17,8 +17,8 @@
 | 11 | Patch Diff Rule | パッチ差分 | ✅ Always Apply | 変更内容の明示・検証 |
 | 12 | Checkpoint Rule | チェックポイント | ✅ Always Apply | 段階的な進捗保存 |
 | 13 | PLAN Gate | 計画ゲート | ✅ Always Apply | 実装前の設計検証 |
-| 14 | TEST Gate | テストゲート | ✅ Always Apply | 品質基準の確認 |
-| 15 | PATCH Gate | パッチゲート | ✅ Always Apply | 変更内容の最終検証 |
+| 14 | TEST Gate | テストゲート | ✅ Always Apply | **具体的品質基準**: カバレッジ80%+、静的解析B+、性能2秒以内、脆弱性0件 |
+| 15 | PATCH Gate | パッチゲート | ✅ Always Apply | 変更内容の最終検証 + **品質継承確認** + 品質劣化防止 |
 | 16 | Test Layout | テスト整理 | ✅ Always Apply | 階層・命名・決定化ルール |
 | 17 | Test Artifacts | テスト成果物 | ✅ Always Apply | coverage/junit出力管理 |
 | 18 | External Assets | 外部資産除外 | ✅ Always Apply | `llama.cpp/`等の除外 |
@@ -28,6 +28,20 @@
 | 21 | SBOM | ソフトウェア部品表 | ✅ Always Apply | `observability/sbom/`で管理 |
 | 22 | Release Train | リリース列車 | ✅ Always Apply | 段階的リリース管理 |
 | 23 | Feature Flag | 機能フラグ | ✅ Always Apply | 段階的機能展開 |
+| **24** | **Quality Standards** | **品質基準** | ✅ Always Apply | **定量的品質基準・段階的品質レベル（High/Medium/Low）** |
+| **25** | **Fallback Strategy** | **フォールバック戦略** | ✅ Always Apply | **段階的代替手段・自動切り替え・品質追跡** |
+| **26** | **Phase Quality Gate** | **フェーズ品質ゲート** | ✅ Always Apply | **フェーズ間品質継承・検証・品質劣化防止** |
+| **27** | **Error Recovery** | **エラー回復** | ✅ Always Apply | **自動再試行・回復処理・段階的復旧** |
+| **28** | **Quality Monitoring** | **品質監視** | ✅ Always Apply | **リアルタイム品質メトリクス・トレンド分析** |
+| **29** | **Dependency Resilience** | **依存堅牢化** | ✅ Always Apply | **外部依存の堅牢化・代替手段・可用性チェック** |
+| **30** | **Partial Success** | **部分成功活用** | ✅ Always Apply | **不完全結果の最大活用・品質重み付け統合** |
+| **31** | **Quality Dashboard** | **品質ダッシュボード** | ⚠️ Best Effort | **品質状況の可視化・トレンド表示** |
+| **32** | **Adaptive Quality** | **適応品質** | ⚠️ Best Effort | **動的品質基準調整・状況適応** |
+| **33** | **Quality Alert** | **品質アラート** | ⚠️ Best Effort | **品質問題の自動通知・早期警告** |
+| **34** | **Branch Strategy & Workflow** | **ブランチ戦略・ワークフロー** | ✅ Always Apply | **Trunk-based開発・最小差分運用・Conventional Commits** |
+| **35** | **Checkpoint System & Backup** | **チェックポイント・バックアップ** | ✅ Always Apply | **自動バックアップ・Dry-Run既定・復旧戦略** |
+| **36** | **Directory Structure & Layout** | **ディレクトリ構造・レイアウト** | ✅ Always Apply | **単一リポジトリ・標準化構造・アクセス制御** |
+| **37** | **Code Formatting & Quality** | **コードフォーマット・品質** | ✅ Always Apply | **Black+isort統合・Unity YAML安定化・品質基準** |
 
 ## 🔄 開発プロセス概要
 
@@ -46,6 +60,12 @@ graph TD
 - **Always Apply**: 必須適用（例外なし）
 - **Best Effort**: 最善努力（エラーでも継続）
 - **Dry-Run既定**: 実行前に計画表示、`-Apply`で実行
+
+### 新統合ルール（Rule 34-37）
+- **Branch Strategy**: Trunk-based開発、最小差分、Conventional Commits
+- **Checkpoint System**: 自動バックアップ、Dry-Run既定、PowerShell統合
+- **Directory Structure**: 単一リポジトリ、標準化構造、権限管理
+- **Code Formatting**: Black+isort、Unity YAML安定化、品質基準統合
 
 ### AutoPatch Mode
 - 自己変更禁止の例外として、品質向上のための自動パッチ適用を許可

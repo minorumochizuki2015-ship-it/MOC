@@ -1,0 +1,58 @@
+{
+  "data/test_inputs/heydoon_test.apk": {
+    "completion_percentage": 0.0,
+    "success": false,
+    "output_dir": "data/complete_clone_analysis/heydoon_test",
+    "details": {
+      "success": false,
+      "error": "静的解析に失敗しました",
+      "completion_percentage": 0.0,
+      "generation_state": {
+        "current_phase": "static_analysis",
+        "progress": 12.5,
+        "total_phases": 8,
+        "completed_phases": [],
+        "errors": [
+          "静的解析に失敗しました"
+        ]
+      },
+      "partial_results": {
+        "static_analysis": {},
+        "dynamic_analysis": {},
+        "il2cpp_analysis": {},
+        "ml_analysis": {},
+        "game_logic": {},
+        "assets": {},
+        "implementation_hints": []
+      }
+    }
+  },
+  "data/test_inputs/sample_unity_app.apk": {
+    "completion_percentage": 0.0,
+    "success": false,
+    "output_dir": "data/complete_clone_analysis/sample_unity_app",
+    "details": {
+      "success": false,
+      "error": "静的解析に失敗しました",
+      "completion_percentage": 0.0,
+      "generation_state": {
+        "current_phase": "static_analysis",
+        "progress": 12.5,
+        "total_phases": 8,
+        "completed_phases": [],
+        "errors": [
+          "静的解析に失敗しました"
+        ]
+      },
+      "partial_results": {
+        "static_analysis": {},
+        "dynamic_analysis": {},
+        "il2cpp_analysis": {},
+        "ml_analysis": {},
+        "game_logic": {},
+        "assets": {},
+        "implementation_hints": []
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+[
+  {
+    "prompt": "短い",
+    "output": "これは短すぎるpromptのテストです"
+  },
+  {
+    "instruction": "古い形式のキー",
+    "output": "これはinstructionキーを使った古い形式です"
+  }
+]

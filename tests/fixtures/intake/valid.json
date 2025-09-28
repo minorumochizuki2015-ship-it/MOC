@@ -1,0 +1,10 @@
+[
+  {
+    "prompt": "What is the capital of Japan? Please provide a detailed answer.",
+    "output": "The capital of Japan is Tokyo. Tokyo is the largest metropolitan area in the world and serves as the political, economic, and cultural center of Japan."
+  },
+  {
+    "prompt": "Explain the concept of machine learning in simple terms for beginners.",
+    "output": "Machine learning is a type of artificial intelligence where computers learn to make predictions or decisions by finding patterns in data, rather than being explicitly programmed for every task."
+  }
+]

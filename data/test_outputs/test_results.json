@@ -1,0 +1,36 @@
+{
+  "timestamp": "2025-09-28 16:46:14",
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "errors": 0,
+    "total_time": 4.826050519943237
+  },
+  "details": [
+    {
+      "test_name": "APK選択・解析",
+      "result": "PASS",
+      "elapsed_time": 0.5242996215820312
+    },
+    {
+      "test_name": "Unity抽出",
+      "result": "FAIL",
+      "elapsed_time": 0.004050493240356445
+    },
+    {
+      "test_name": "IL2CPP解析",
+      "result": "PASS",
+      "elapsed_time": 0.042662858963012695
+    },
+    {
+      "test_name": "ネイティブ逆アセンブル",
+      "result": "PASS",
+      "elapsed_time": 0.04560685157775879
+    },
+    {
+      "test_name": "結果管理",
+      "result": "FAIL",
+      "elapsed_time": 4.209430694580078
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+#:kivy 2.3.0
+#:import dp kivy.metrics.dp
+
+# 結果表示画面の簡易レイアウト。
+<ResultScreen>:
+    name: "result"
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(12)
+        spacing: dp(12)
+        Label:
+            id: winner_label
+            text: app.strings.get("status_result", "結果")
+            font_name: app.default_font or "Roboto"
+            font_size: "48sp"
+            size_hint_y: None
+            height: dp(72)
+            bold: True
+        GridLayout:
+            id: result_table
+            cols: 3
+            size_hint_y: None
+            height: self.minimum_height
+            row_default_height: dp(44)
+            row_force_default: True
+            spacing: dp(8)
+        BoxLayout:
+            size_hint_y: None
+            height: dp(52)
+            spacing: dp(12)
+            Button:
+                text: app.strings.get("action_rematch", "もう一度")
+                font_name: app.default_font or "Roboto"
+                on_release: app.request_rematch()
+            Button:
+                text: app.strings.get("action_new_players", "別の人と")
+                font_name: app.default_font or "Roboto"
+                on_release: app.request_new_players()
+            Button:
+                text: app.strings.get("action_home", "ホームへ")
+                font_name: app.default_font or "Roboto"
+                on_release: app.request_home()

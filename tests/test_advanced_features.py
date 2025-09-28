@@ -10,6 +10,7 @@ import os
 import sys
 import time
 from pathlib import Path
+
 import pytest
 
 # このテストはローカルAI接続が必要な統合テスト。
@@ -115,6 +116,7 @@ if fail:
     if __name__ == "__main__":
         sys.exit(1)
 print("ALL PASS")
+
 
 @pytest.mark.integration
 def test_advanced_features():

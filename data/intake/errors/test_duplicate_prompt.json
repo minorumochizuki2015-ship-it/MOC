@@ -1,0 +1,6 @@
+[
+  {
+    "prompt": "PowerShellでファイルを作成する方法を教えてください",
+    "output": "PowerShellでファイルを作成するには、New-Itemコマンドレットを使用します。例：New-Item -Path 'test.txt' -ItemType File"
+  }
+]

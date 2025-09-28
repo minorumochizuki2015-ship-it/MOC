@@ -1,0 +1,193 @@
+# Rule 24: Quality Standards
+# 品質基準ルール - 定量的品質基準の設定と段階的品質レベルの管理
+
+name: "Quality Standards Rule"
+rule_id: 24
+level: "Always Apply"
+version: "1.0"
+created_date: "2025-01-XX"
+purpose: "定量的品質基準の設定と段階的品質レベルの管理"
+
+# 品質レベル定義
+quality_levels:
+  high:
+    description: "高品質 - 本番環境対応レベル"
+    criteria:
+      code_coverage: 
+        threshold: 90
+        unit: "percent"
+        description: "コードカバレッジ90%以上"
+      
+      static_analysis:
+        threshold: "A"
+        scale: ["A", "B", "C", "D", "F"]
+        description: "静的解析スコアA評価"
+      
+      performance_test:
+        threshold: 1.0
+        unit: "seconds"
+        description: "応答時間1秒以内"
+      
+      security_scan:
+        threshold: 0
+        unit: "count"
+        description: "高リスク脆弱性0件"
+      
+      documentation:
+        threshold: 80
+        unit: "percent"
+        description: "ドキュメントカバレッジ80%以上"
+
+  medium:
+    description: "中品質 - 開発環境対応レベル"
+    criteria:
+      code_coverage:
+        threshold: 80
+        unit: "percent"
+        description: "コードカバレッジ80%以上"
+      
+      static_analysis:
+        threshold: "B"
+        scale: ["A", "B", "C", "D", "F"]
+        description: "静的解析スコアB評価"
+      
+      performance_test:
+        threshold: 2.0
+        unit: "seconds"
+        description: "応答時間2秒以内"
+      
+      security_scan:
+        threshold: 0
+        unit: "count"
+        description: "クリティカル脆弱性0件"
+      
+      documentation:
+        threshold: 60
+        unit: "percent"
+        description: "ドキュメントカバレッジ60%以上"
+
+  low:
+    description: "低品質 - 最小動作レベル"
+    criteria:
+      code_coverage:
+        threshold: 60
+        unit: "percent"
+        description: "コードカバレッジ60%以上"
+      
+      static_analysis:
+        threshold: "C"
+        scale: ["A", "B", "C", "D", "F"]
+        description: "静的解析スコアC評価"
+      
+      performance_test:
+        threshold: 5.0
+        unit: "seconds"
+        description: "応答時間5秒以内"
+      
+      security_scan:
+        threshold: 3
+        unit: "count"
+        description: "高リスク脆弱性3件未満"
+      
+      documentation:
+        threshold: 40
+        unit: "percent"
+        description: "ドキュメントカバレッジ40%以上"
+
+# 最小品質基準（これを下回ると失敗とみなす）
+minimum_standards:
+  code_coverage:
+    threshold: 60
+    unit: "percent"
+    blocking: true
+    description: "コードカバレッジ60%以上必須"
+  
+  static_analysis:
+    threshold: "C"
+    scale: ["A", "B", "C", "D", "F"]
+    blocking: true
+    description: "静的解析スコアC評価以上必須"
+  
+  security_scan:
+    threshold: 0
+    unit: "count"
+    blocking: true
+    description: "クリティカル脆弱性0件必須"
+  
+  basic_functionality:
+    threshold: true
+    blocking: true
+    description: "基本機能の動作確認必須"
+
+# 品質検証設定
+validation:
+  automatic_check: true
+  manual_review: false
+  blocking: true
+  timeout: 300  # 5分
+  retry_count: 2
+
+# 品質メトリクス設定
+metrics:
+  collection_interval: 60  # 60秒間隔
+  storage_location: "observability/quality/metrics/"
+  retention_days: 30
+  
+  tracked_metrics:
+    - "code_coverage_percentage"
+    - "static_analysis_score"
+    - "performance_response_time"
+    - "security_vulnerability_count"
+    - "documentation_coverage_percentage"
+    - "test_pass_rate"
+    - "build_success_rate"
+
+# 品質レポート設定
+reporting:
+  format: ["json", "html", "csv"]
+  output_location: "observability/quality/reports/"
+  include_trends: true
+  include_recommendations: true
+  
+  report_sections:
+    - "quality_summary"
+    - "detailed_metrics"
+    - "trend_analysis"
+    - "improvement_recommendations"
+    - "compliance_status"
+
+# 品質改善推奨事項
+improvement_recommendations:
+  low_coverage:
+    condition: "code_coverage < 70"
+    recommendation: "テストケースの追加を推奨"
+    priority: "high"
+  
+  poor_static_analysis:
+    condition: "static_analysis_score < B"
+    recommendation: "コード品質の改善を推奨"
+    priority: "medium"
+  
+  slow_performance:
+    condition: "performance_response_time > 3.0"
+    recommendation: "パフォーマンス最適化を推奨"
+    priority: "medium"
+  
+  security_issues:
+    condition: "security_vulnerability_count > 0"
+    recommendation: "セキュリティ問題の即座な修正を推奨"
+    priority: "critical"
+
+# 統合設定
+integration:
+  test_gate: true
+  patch_gate: true
+  autostart_mode: true
+  quality_monitoring: true
+
+# ログ設定
+logging:
+  level: "INFO"
+  location: "data/logs/current/quality_standards.log"
+  include_metrics: true
+  include_recommendations: true

@@ -1,0 +1,181 @@
+{
+  "apk_info": {
+    "file_name": "realistic_unity_app.apk",
+    "file_size": 3572,
+    "file_size_mb": 0.0,
+    "modified_time": "2025-09-28T16:52:19.855808",
+    "analysis_time": "2025-09-28T16:53:16.367110"
+  },
+  "manifest": {
+    "found": true,
+    "size": 217,
+    "note": "バイナリXML形式のため、詳細解析にはaapt2が必要"
+  },
+  "resources": {
+    "total_resources": 0,
+    "resource_types": {},
+    "images": [],
+    "layouts": [],
+    "values": []
+  },
+  "assets": {
+    "total_assets": 9,
+    "asset_files": [
+      "assets/bin/Data/Managed/Assembly-CSharp.dll",
+      "assets/bin/Data/Managed/UnityEngine.dll",
+      "assets/bin/Data/Managed/System.Core.dll",
+      "assets/bin/Data/il2cpp_data/Metadata/global-metadata.dat",
+      "assets/bin/Data/sharedassets0.assets",
+      "assets/bin/Data/level0",
+      "assets/bin/Data/unity_builtin_extra",
+      "assets/bin/Data/RuntimeInitializeOnLoads.json",
+      "assets/StreamingAssets/config.json"
+    ],
+    "data_files": [
+      "assets/bin/Data/RuntimeInitializeOnLoads.json",
+      "assets/StreamingAssets/config.json"
+    ],
+    "config_files": [
+      "assets/StreamingAssets/config.json"
+    ]
+  },
+  "strings": {
+    "extracted_strings": [],
+    "note": "完全な文字列抽出にはaapt2が必要"
+  },
+  "file_structure": {
+    "total_files": 18,
+    "directories": [
+      "META-INF",
+      "assets/StreamingAssets",
+      "assets/bin/Data",
+      "assets/bin/Data/Managed",
+      "assets/bin/Data/il2cpp_data/Metadata",
+      "lib/arm64-v8a",
+      "lib/armeabi-v7a"
+    ],
+    "file_types": {
+      "xml": 1,
+      "dll": 3,
+      "so": 3,
+      "dat": 1,
+      "assets": 1,
+      "arsc": 1,
+      "dex": 1,
+      "mf": 1,
+      "sf": 1,
+      "rsa": 1,
+      "json": 2
+    },
+    "notable_files": [
+      "assets/bin/Data/Managed/Assembly-CSharp.dll",
+      "assets/bin/Data/Managed/UnityEngine.dll",
+      "assets/bin/Data/Managed/System.Core.dll",
+      "assets/bin/Data/il2cpp_data/Metadata/global-metadata.dat",
+      "assets/bin/Data/sharedassets0.assets",
+      "assets/bin/Data/level0",
+      "assets/bin/Data/unity_builtin_extra",
+      "assets/bin/Data/RuntimeInitializeOnLoads.json",
+      "assets/StreamingAssets/config.json"
+    ]
+  },
+  "unity_analysis": {
+    "unity_info": {},
+    "il2cpp_metadata": {
+      "assets/bin/Data/il2cpp_data/Metadata/global-metadata.dat": {
+        "magic_number": "0x43324c49",
+        "file_size": 206,
+        "is_valid_metadata": false
+      }
+    },
+    "assembly_info": {
+      "assets/bin/Data/Managed/Assembly-CSharp.dll": {
+        "machine_type": "0x14c",
+        "number_of_sections": 3,
+        "timestamp": 305419896,
+        "entry_point": "0x0",
+        "image_base": "0x0",
+        "exports": 0,
+        "imports": 0
+      },
+      "assets/bin/Data/Managed/UnityEngine.dll": {
+        "machine_type": "0x14c",
+        "number_of_sections": 3,
+        "timestamp": 305419896,
+        "entry_point": "0x0",
+        "image_base": "0x0",
+        "exports": 0,
+        "imports": 0
+      },
+      "lib/arm64-v8a/libil2cpp.so": {
+        "type": "native_library",
+        "architecture": {
+          "architecture": "x64",
+          "class": 64,
+          "endianness": true,
+          "entry_point": "0x1000"
+        },
+        "total_symbols": 0,
+        "il2cpp_symbols": 0,
+        "unity_strings": 0,
+        "file_size": 1024
+      },
+      "lib/arm64-v8a/libunity.so": {
+        "type": "native_library",
+        "architecture": {
+          "architecture": "x64",
+          "class": 64,
+          "endianness": true,
+          "entry_point": "0x1000"
+        },
+        "total_symbols": 0,
+        "il2cpp_symbols": 0,
+        "unity_strings": 0,
+        "file_size": 1024
+      },
+      "lib/armeabi-v7a/libil2cpp.so": {
+        "type": "native_library",
+        "architecture": {
+          "architecture": "x64",
+          "class": 64,
+          "endianness": true,
+          "entry_point": "0x1000"
+        },
+        "total_symbols": 0,
+        "il2cpp_symbols": 0,
+        "unity_strings": 0,
+        "file_size": 1024
+      }
+    },
+    "symbols": [],
+    "strings": [],
+    "methods": [],
+    "classes": [],
+    "disassembly": {},
+    "implementation_hints": [
+      "IL2CPPメタデータが検出されました - Unity IL2CPPビルドです",
+      "Il2CppDumperやIl2CppInspectorを使用してより詳細な解析が可能です",
+      "3個のネイティブライブラリが見つかりました",
+      "Ghidra、IDA Pro、またはradare2を使用した逆アセンブルが推奨されます",
+      "対象アーキテクチャ: x64"
+    ]
+  },
+  "implementation_hints": [
+    "Unity/ネイティブコンポーネントが検出されました:",
+    "  • ネイティブライブラリ (.dll): 3個",
+    "  • ネイティブライブラリ (.so): 3個",
+    "IL2CPP Unity ゲームです - 高度な逆アセンブル技術が必要",
+    "ネイティブアセンブリが検出されました - メモリダンプ/パッチが可能",
+    "ゲーム要素ファイルが検出されました:",
+    "  • level0",
+    "設定/セーブデータファイル:",
+    "  • config.json",
+    "アセットファイル 9個 - ゲームデータの抽出が可能",
+    "\n推奨される解析アプローチ:",
+    "  1. Il2CppDumper/Il2CppInspectorでメタデータ解析",
+    "  2. Ghidra/IDA Proでネイティブコード逆アセンブル",
+    "  3. Frida/Xposedでランタイムフック",
+    "  4. メモリダンプ/パッチによる動的解析",
+    "  5. ネットワーク通信の傍受・改変"
+  ]
+}

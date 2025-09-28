@@ -1,0 +1,107 @@
+# Rule 36: Directory Structure & Project Layout
+rule_id: 36
+name: "Directory Structure & Project Layout"
+description: "Standardized project structure with single repository approach"
+category: "development"
+priority: "always_apply"
+version: "1.0.0"
+
+# プロジェクト構造
+project_structure:
+  root_type: "single_repository"
+  base_directories:
+    unity: "Unity project (Assets/Packages/ProjectSettings)"
+    python_poc: "Kivy/PoC (.venv, src/**, tests/**)"
+    docs: "Documentation (md files, diagrams)"
+    assets: "Media assets (source/ and dist/ separation)"
+    scripts: "PowerShell/CI helper scripts"
+    backups: "Manual/automatic snapshots (zip)"
+    data: "Runtime data and logs"
+    observability: "Monitoring and quality metrics"
+
+# 詳細ディレクトリ構成
+directory_layout:
+  assets:
+    source: "Original source files"
+    dist: "Processed/optimized files"
+  
+  data:
+    logs:
+      current: "Active log files"
+      legacy: "Archived log files"
+    locks: "Process lock files"
+    
+  observability:
+    coverage: "Code coverage reports"
+    junit: "Test result reports"
+    sbom: "Software Bill of Materials"
+    quality: "Quality metrics and reports"
+
+# ファイル管理規則
+file_management:
+  encoding: "UTF-8"
+  line_endings:
+    default: "LF"
+    exceptions:
+      - "*.bat: CRLF"
+  
+  ignore_patterns:
+    unity:
+      - "Library/"
+      - "Temp/"
+      - "Logs/"
+      - "Obj/"
+      - "Build/"
+      - "UserSettings/"
+      - "Packages/com.unity.*.samples/"
+    
+    python:
+      - ".venv/"
+      - ".mypy_cache/"
+      - ".pytest_cache/"
+      - "dist/"
+      - "__pycache__/"
+    
+    assets:
+      - "assets/dist/"
+    
+    logs:
+      - "data/logs/current/"
+    
+    backups:
+      - "backups/*.zip"
+
+# 設定ファイル要件
+configuration_files:
+  required:
+    - ".editorconfig"
+    - ".gitattributes"
+    - ".gitignore"
+    - ".pre-commit-config.yaml"
+  
+  optional:
+    - "unity_spec.md"
+    - "proposal.md"
+    - "README.md"
+
+# 権限とアクセス制御
+access_control:
+  protected_directories:
+    - ".trae/rules/"
+    - "observability/"
+    - "backups/"
+  
+  restricted_operations:
+    - full_directory_replacement: false
+    - bulk_deletion: "require_confirmation"
+
+# 統合設定
+integration:
+  backup_system: true
+  quality_monitoring: true
+  ci_cd_pipeline: true
+
+logging:
+  level: "INFO"
+  location: "data/logs/current/directory_structure.log"
+  include_metrics: false

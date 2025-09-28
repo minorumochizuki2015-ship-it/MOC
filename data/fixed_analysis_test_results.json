@@ -1,0 +1,266 @@
+{
+  "data/test_inputs/realistic_unity_app.apk": {
+    "success": true,
+    "completion_percentage": 50.0,
+    "generation_state": {
+      "current_phase": "completed",
+      "progress": 100.0,
+      "total_phases": 8,
+      "completed_phases": [
+        "static_analysis",
+        "ml_analysis",
+        "data_integration",
+        "code_generation",
+        "project_construction"
+      ],
+      "errors": [
+        "Fridaスクリプト生成エラー: FridaScriptGenerator.generate_api_trace_script() missing 1 required positional argument: 'unity_strings'"
+      ]
+    },
+    "project_path": "data\\fixed_analysis_test\\UnityProject",
+    "analysis_summary": {
+      "static_analysis_completed": true,
+      "il2cpp_analysis_completed": false,
+      "dynamic_analysis_completed": false,
+      "ml_analysis_completed": true,
+      "code_generation_completed": true,
+      "project_construction_completed": true
+    },
+    "implementation_hints": [
+      {
+        "phase": "1. Project Setup",
+        "duration": "2-3 hours",
+        "tasks": [
+          "Create Unity project",
+          "Import required packages",
+          "Setup project structure"
+        ]
+      },
+      {
+        "phase": "2. Core Systems",
+        "duration": "8-10 hours",
+        "tasks": [
+          "Implement game manager",
+          "Create player controller",
+          "Setup physics system"
+        ]
+      },
+      {
+        "phase": "3. Game Logic",
+        "duration": "6-8 hours",
+        "tasks": [
+          "Implement scoring system",
+          "Create level progression",
+          "Add game state management"
+        ]
+      },
+      {
+        "phase": "4. UI Implementation",
+        "duration": "4-6 hours",
+        "tasks": [
+          "Create main menu",
+          "Implement HUD",
+          "Add settings screen"
+        ]
+      },
+      {
+        "phase": "5. Polish & Testing",
+        "duration": "2-3 hours",
+        "tasks": [
+          "Bug fixes",
+          "Performance optimization",
+          "Final testing"
+        ]
+      }
+    ],
+    "estimated_development_time": "20-30 hours",
+    "quality_assessment": {
+      "quality_score": 62.5,
+      "quality_level": "Good",
+      "completed_phases": 5,
+      "total_phases": 8,
+      "error_count": 1,
+      "recommendations": [
+        "IL2CPP解析を実行して、より詳細なゲームロジックを抽出することを推奨します",
+        "動的解析を実行して、実際の動作パターンを把握することを推奨します",
+        "エラーを解決して、生成品質を向上させることを推奨します"
+      ]
+    }
+  },
+  "data/test_inputs/heydoon_test.apk": {
+    "success": true,
+    "completion_percentage": 58.0,
+    "generation_state": {
+      "current_phase": "completed",
+      "progress": 100.0,
+      "total_phases": 8,
+      "completed_phases": [
+        "static_analysis",
+        "ml_analysis",
+        "data_integration",
+        "code_generation",
+        "project_construction"
+      ],
+      "errors": [
+        "Fridaスクリプト生成エラー: FridaScriptGenerator.generate_api_trace_script() missing 1 required positional argument: 'unity_strings'"
+      ]
+    },
+    "project_path": "data\\fixed_analysis_test\\UnityProject",
+    "analysis_summary": {
+      "static_analysis_completed": true,
+      "il2cpp_analysis_completed": false,
+      "dynamic_analysis_completed": false,
+      "ml_analysis_completed": true,
+      "code_generation_completed": true,
+      "project_construction_completed": true
+    },
+    "implementation_hints": [
+      {
+        "phase": "1. Project Setup",
+        "duration": "2-3 hours",
+        "tasks": [
+          "Create Unity project",
+          "Import required packages",
+          "Setup project structure"
+        ]
+      },
+      {
+        "phase": "2. Core Systems",
+        "duration": "8-10 hours",
+        "tasks": [
+          "Implement game manager",
+          "Create player controller",
+          "Setup physics system"
+        ]
+      },
+      {
+        "phase": "3. Game Logic",
+        "duration": "6-8 hours",
+        "tasks": [
+          "Implement scoring system",
+          "Create level progression",
+          "Add game state management"
+        ]
+      },
+      {
+        "phase": "4. UI Implementation",
+        "duration": "4-6 hours",
+        "tasks": [
+          "Create main menu",
+          "Implement HUD",
+          "Add settings screen"
+        ]
+      },
+      {
+        "phase": "5. Polish & Testing",
+        "duration": "2-3 hours",
+        "tasks": [
+          "Bug fixes",
+          "Performance optimization",
+          "Final testing"
+        ]
+      }
+    ],
+    "estimated_development_time": "20-30 hours",
+    "quality_assessment": {
+      "quality_score": 62.5,
+      "quality_level": "Good",
+      "completed_phases": 5,
+      "total_phases": 8,
+      "error_count": 1,
+      "recommendations": [
+        "IL2CPP解析を実行して、より詳細なゲームロジックを抽出することを推奨します",
+        "動的解析を実行して、実際の動作パターンを把握することを推奨します",
+        "エラーを解決して、生成品質を向上させることを推奨します"
+      ]
+    }
+  },
+  "data/test_inputs/sample_unity_app.apk": {
+    "success": true,
+    "completion_percentage": 58.0,
+    "generation_state": {
+      "current_phase": "completed",
+      "progress": 100.0,
+      "total_phases": 8,
+      "completed_phases": [
+        "static_analysis",
+        "ml_analysis",
+        "data_integration",
+        "code_generation",
+        "project_construction"
+      ],
+      "errors": [
+        "Fridaスクリプト生成エラー: FridaScriptGenerator.generate_api_trace_script() missing 1 required positional argument: 'unity_strings'"
+      ]
+    },
+    "project_path": "data\\fixed_analysis_test\\UnityProject",
+    "analysis_summary": {
+      "static_analysis_completed": true,
+      "il2cpp_analysis_completed": false,
+      "dynamic_analysis_completed": false,
+      "ml_analysis_completed": true,
+      "code_generation_completed": true,
+      "project_construction_completed": true
+    },
+    "implementation_hints": [
+      {
+        "phase": "1. Project Setup",
+        "duration": "2-3 hours",
+        "tasks": [
+          "Create Unity project",
+          "Import required packages",
+          "Setup project structure"
+        ]
+      },
+      {
+        "phase": "2. Core Systems",
+        "duration": "8-10 hours",
+        "tasks": [
+          "Implement game manager",
+          "Create player controller",
+          "Setup physics system"
+        ]
+      },
+      {
+        "phase": "3. Game Logic",
+        "duration": "6-8 hours",
+        "tasks": [
+          "Implement scoring system",
+          "Create level progression",
+          "Add game state management"
+        ]
+      },
+      {
+        "phase": "4. UI Implementation",
+        "duration": "4-6 hours",
+        "tasks": [
+          "Create main menu",
+          "Implement HUD",
+          "Add settings screen"
+        ]
+      },
+      {
+        "phase": "5. Polish & Testing",
+        "duration": "2-3 hours",
+        "tasks": [
+          "Bug fixes",
+          "Performance optimization",
+          "Final testing"
+        ]
+      }
+    ],
+    "estimated_development_time": "20-30 hours",
+    "quality_assessment": {
+      "quality_score": 62.5,
+      "quality_level": "Good",
+      "completed_phases": 5,
+      "total_phases": 8,
+      "error_count": 1,
+      "recommendations": [
+        "IL2CPP解析を実行して、より詳細なゲームロジックを抽出することを推奨します",
+        "動的解析を実行して、実際の動作パターンを把握することを推奨します",
+        "エラーを解決して、生成品質を向上させることを推奨します"
+      ]
+    }
+  }
+}

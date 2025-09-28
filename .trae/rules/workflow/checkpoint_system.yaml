@@ -1,0 +1,81 @@
+# Rule 35: Checkpoint System & Backup Strategy
+rule_id: 35
+name: "Checkpoint System & Backup Strategy"
+description: "Automated backup and checkpoint system with dry-run default"
+category: "workflow"
+priority: "always_apply"
+version: "1.0.0"
+
+# チェックポイント戦略
+checkpoint_strategy:
+  triggers:
+    - before_major_changes: true
+    - before_merge: true
+    - scheduled: "daily"
+    - manual: true
+  
+  naming_convention: "checkpoint_<YYYYMMDD-HHmmss>"
+  storage_location: "backups/"
+  retention_policy:
+    local: "30_days"
+    remote: "90_days"
+
+# バックアップ設定
+backup_configuration:
+  format: "zip"
+  compression: true
+  include_git_history: true
+  exclude_patterns:
+    - "node_modules/"
+    - ".venv/"
+    - "__pycache__/"
+    - "*.tmp"
+    - "data/logs/current/"
+  
+  verification:
+    integrity_check: true
+    restore_test: false  # 本番では無効
+
+# PowerShell統合
+powershell_integration:
+  dry_run_default: true
+  apply_flag: "-Apply"
+  script_location: "scripts/New-Checkpoint.ps1"
+  
+  preflight_checks:
+    - uncommitted_changes: "error"
+    - disk_space: "warn_if_low"
+    - git_status: "clean_required"
+
+# 自動化設定
+automation:
+  pre_merge_checkpoint: true
+  post_merge_cleanup: true
+  failure_rollback: true
+  
+  notifications:
+    success: "log_only"
+    failure: "alert"
+    
+# 復旧戦略
+recovery_strategy:
+  rollback_methods:
+    - git_reset: "git reset --hard <tag>"
+    - zip_restore: "extract_and_rebuild"
+    - incremental_restore: "partial_recovery"
+  
+  validation:
+    post_restore_tests: true
+    integrity_verification: true
+
+# 統合設定
+integration:
+  branch_workflow: true
+  quality_gates: true
+  ci_cd_pipeline: true
+
+logging:
+  level: "INFO"
+  location: "data/logs/current/checkpoint_system.log"
+  include_metrics: true
+  include_timing: true

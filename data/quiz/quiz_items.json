@@ -1,0 +1,382 @@
+[
+  {
+    "id": "greeting_hello",
+    "category": "greeting",
+    "type": "text",
+    "payload": {
+      "text": "おはようございます",
+      "noise": "ｵﾊﾖｳｺﾞｻﾞｲﾏｽ",
+      "prompt": "「おはようございます」が出たら指を離す"
+    }
+  },
+  {
+    "id": "greeting_welcome",
+    "category": "greeting",
+    "type": "text",
+    "payload": {
+      "text": "いらっしゃいませ",
+      "noise": "ｲﾗｯｼｬｲﾏｾ",
+      "prompt": "「いらっしゃいませ」が出たら指を離す"
+    }
+  },
+  {
+    "id": "greeting_thanks",
+    "category": "greeting",
+    "type": "text",
+    "payload": {
+      "text": "ありがとうございます",
+      "noise": "ｱﾘｶﾞﾄｳｺﾞｻﾞｲﾏｽ",
+      "prompt": "「ありがとうございます」が出たら指を離す"
+    }
+  },
+  {
+    "id": "greeting_cheers",
+    "category": "greeting",
+    "type": "text",
+    "payload": {
+      "text": "乾杯！",
+      "noise": "ｶﾝﾊﾟ-ｲ!",
+      "prompt": "「乾杯！」が出たら指を離す"
+    }
+  },
+  {
+    "id": "greeting_goodjob",
+    "category": "greeting",
+    "type": "text",
+    "payload": {
+      "text": "おつかれさま",
+      "noise": "ｵﾂｶﾚｻﾏ",
+      "prompt": "「おつかれさま」が出たら指を離す"
+    }
+  },
+  {
+    "id": "command_now",
+    "category": "command",
+    "type": "text",
+    "payload": {
+      "text": "今！",
+      "noise": "ｲﾏ!",
+      "prompt": "「今！」が出たら指を離す"
+    }
+  },
+  {
+    "id": "command_jump",
+    "category": "command",
+    "type": "text",
+    "payload": {
+      "text": "ジャンプ",
+      "noise": "ｼﾞｬﾝﾌﾟ",
+      "prompt": "「ジャンプ」が出たら指を離す"
+    }
+  },
+  {
+    "id": "command_stop",
+    "category": "command",
+    "type": "text",
+    "payload": {
+      "text": "止まれ",
+      "noise": "ﾄﾏﾚ",
+      "prompt": "「止まれ」が出たら指を離す"
+    }
+  },
+  {
+    "id": "command_touch",
+    "category": "command",
+    "type": "text",
+    "payload": {
+      "text": "タッチ",
+      "noise": "ﾀｯﾁ",
+      "prompt": "「タッチ」が出たら指を離す"
+    }
+  },
+  {
+    "id": "command_flash",
+    "category": "command",
+    "type": "text",
+    "payload": {
+      "text": "閃け",
+      "noise": "ﾋﾗﾒｹ",
+      "prompt": "「閃け」が出たら指を離す"
+    }
+  },
+  {
+    "id": "command_ready",
+    "category": "command",
+    "type": "text",
+    "payload": {
+      "text": "構え",
+      "noise": "ｶﾏｴ",
+      "prompt": "「構え」が出たら指を離す"
+    }
+  },
+  {
+    "id": "command_dash",
+    "category": "command",
+    "type": "text",
+    "payload": {
+      "text": "ダッシュ",
+      "noise": "ﾀﾞｯｼｭ",
+      "prompt": "「ダッシュ」が出たら指を離す"
+    }
+  },
+  {
+    "id": "countdown_three",
+    "category": "countdown",
+    "type": "text",
+    "payload": {
+      "text": "３",
+      "noise": "SAN",
+      "prompt": "「３」が出たら指を離す"
+    }
+  },
+  {
+    "id": "countdown_two",
+    "category": "countdown",
+    "type": "text",
+    "payload": {
+      "text": "２",
+      "noise": "NI",
+      "prompt": "「２」が出たら指を離す"
+    }
+  },
+  {
+    "id": "countdown_one",
+    "category": "countdown",
+    "type": "text",
+    "payload": {
+      "text": "１",
+      "noise": "ICHI",
+      "prompt": "「１」が出たら指を離す"
+    }
+  },
+  {
+    "id": "countdown_go",
+    "category": "countdown",
+    "type": "text",
+    "payload": {
+      "text": "ＧＯ！",
+      "noise": "GO!",
+      "prompt": "「ＧＯ！」が出たら指を離す"
+    }
+  },
+  {
+    "id": "countdown_ready",
+    "category": "countdown",
+    "type": "text",
+    "payload": {
+      "text": "レディ",
+      "noise": "READY",
+      "prompt": "「レディ」が出たら指を離す"
+    }
+  },
+  {
+    "id": "countdown_set",
+    "category": "countdown",
+    "type": "text",
+    "payload": {
+      "text": "セット",
+      "noise": "SET",
+      "prompt": "「セット」が出たら指を離す"
+    }
+  },
+  {
+    "id": "countdown_wait",
+    "category": "countdown",
+    "type": "text",
+    "payload": {
+      "text": "待て",
+      "noise": "MATE",
+      "prompt": "「待て」が出たら指を離す"
+    }
+  },
+  {
+    "id": "countdown_spurt",
+    "category": "countdown",
+    "type": "text",
+    "payload": {
+      "text": "ラスト",
+      "noise": "LAST",
+      "prompt": "「ラスト」が出たら指を離す"
+    }
+  },
+  {
+    "id": "fish_shark",
+    "category": "fish",
+    "type": "image",
+    "payload": {
+      "file": "images/fish/shark.png",
+      "prompt": "魚の画像が出たら指を離す"
+    }
+  },
+  {
+    "id": "fish_salmon",
+    "category": "fish",
+    "type": "image",
+    "payload": {
+      "file": "images/fish/salmon.png",
+      "prompt": "魚の画像が出たら指を離す"
+    }
+  },
+  {
+    "id": "fish_tuna",
+    "category": "fish",
+    "type": "image",
+    "payload": {
+      "file": "images/fish/tuna.png",
+      "prompt": "魚の画像が出たら指を離す"
+    }
+  },
+  {
+    "id": "fish_eel",
+    "category": "fish",
+    "type": "image",
+    "payload": {
+      "file": "images/fish/eel.png",
+      "prompt": "魚の画像が出たら指を離す"
+    }
+  },
+  {
+    "id": "fish_mackerel",
+    "category": "fish",
+    "type": "image",
+    "payload": {
+      "file": "images/fish/mackerel.png",
+      "prompt": "魚の画像が出たら指を離す"
+    }
+  },
+  {
+    "id": "fruit_apple",
+    "category": "fruit",
+    "type": "image",
+    "payload": {
+      "file": "images/fruit/apple.png",
+      "prompt": "果物の画像が出たら指を離す"
+    }
+  },
+  {
+    "id": "fruit_banana",
+    "category": "fruit",
+    "type": "image",
+    "payload": {
+      "file": "images/fruit/banana.png",
+      "prompt": "果物の画像が出たら指を離す"
+    }
+  },
+  {
+    "id": "fruit_grape",
+    "category": "fruit",
+    "type": "image",
+    "payload": {
+      "file": "images/fruit/grape.png",
+      "prompt": "果物の画像が出たら指を離す"
+    }
+  },
+  {
+    "id": "fruit_orange",
+    "category": "fruit",
+    "type": "image",
+    "payload": {
+      "file": "images/fruit/orange.png",
+      "prompt": "果物の画像が出たら指を離す"
+    }
+  },
+  {
+    "id": "fruit_melon",
+    "category": "fruit",
+    "type": "image",
+    "payload": {
+      "file": "images/fruit/melon.png",
+      "prompt": "果物の画像が出たら指を離す"
+    }
+  },
+  {
+    "id": "shape_star",
+    "category": "shape",
+    "type": "image",
+    "payload": {
+      "file": "images/shape/star.png",
+      "prompt": "指定の形が出たら指を離す"
+    }
+  },
+  {
+    "id": "shape_circle",
+    "category": "shape",
+    "type": "image",
+    "payload": {
+      "file": "images/shape/circle.png",
+      "prompt": "指定の形が出たら指を離す"
+    }
+  },
+  {
+    "id": "shape_triangle",
+    "category": "shape",
+    "type": "image",
+    "payload": {
+      "file": "images/shape/triangle.png",
+      "prompt": "指定の形が出たら指を離す"
+    }
+  },
+  {
+    "id": "shape_square",
+    "category": "shape",
+    "type": "image",
+    "payload": {
+      "file": "images/shape/square.png",
+      "prompt": "指定の形が出たら指を離す"
+    }
+  },
+  {
+    "id": "shape_heart",
+    "category": "shape",
+    "type": "image",
+    "payload": {
+      "file": "images/shape/heart.png",
+      "prompt": "指定の形が出たら指を離す"
+    }
+  },
+  {
+    "id": "pref_tokyo",
+    "category": "pref",
+    "type": "image",
+    "payload": {
+      "file": "images/pref/tokyo.png",
+      "prompt": "都道府県カードが出たら指を離す"
+    }
+  },
+  {
+    "id": "pref_kyoto",
+    "category": "pref",
+    "type": "image",
+    "payload": {
+      "file": "images/pref/kyoto.png",
+      "prompt": "都道府県カードが出たら指を離す"
+    }
+  },
+  {
+    "id": "pref_osaka",
+    "category": "pref",
+    "type": "image",
+    "payload": {
+      "file": "images/pref/osaka.png",
+      "prompt": "都道府県カードが出たら指を離す"
+    }
+  },
+  {
+    "id": "pref_hokkaido",
+    "category": "pref",
+    "type": "image",
+    "payload": {
+      "file": "images/pref/hokkaido.png",
+      "prompt": "都道府県カードが出たら指を離す"
+    }
+  },
+  {
+    "id": "pref_okinawa",
+    "category": "pref",
+    "type": "image",
+    "payload": {
+      "file": "images/pref/okinawa.png",
+      "prompt": "都道府県カードが出たら指を離す"
+    }
+  }
+]

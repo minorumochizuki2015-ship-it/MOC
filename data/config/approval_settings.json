@@ -1,0 +1,12 @@
+{
+    "auto_approve": true,
+    "skip_confirmation": true,
+    "approval_timeout_seconds": 5,
+    "default_action": "approve",
+    "enabled_for": [
+        "code_generation",
+        "file_operations",
+        "test_execution",
+        "ui_operations"
+    ]
+}

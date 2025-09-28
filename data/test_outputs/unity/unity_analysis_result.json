@@ -1,0 +1,20 @@
+{
+  "unity_info": {},
+  "il2cpp_metadata": {
+    "assets/bin/Data/il2cpp_data/Metadata/global-metadata.dat": {
+      "magic_number": "0x4d4d5544",
+      "file_size": 21,
+      "is_valid_metadata": false
+    }
+  },
+  "assembly_info": {},
+  "symbols": [],
+  "strings": [],
+  "methods": [],
+  "classes": [],
+  "disassembly": {},
+  "implementation_hints": [
+    "IL2CPPメタデータが検出されました - Unity IL2CPPビルドです",
+    "Il2CppDumperやIl2CppInspectorを使用してより詳細な解析が可能です"
+  ]
+}

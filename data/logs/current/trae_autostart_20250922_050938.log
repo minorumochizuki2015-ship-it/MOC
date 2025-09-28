@@ -1,0 +1,6 @@
+RUN: autopatch cycle
+SFT: processing accepted data
+SFT: processed additional_data.json
+SFT: processed sample_data.json
+TIMEOUT: 196.7s > 40
+OK

@@ -1,0 +1,34 @@
+{
+  "game_config": {
+    "name": "HeyDooon Clone",
+    "version": "1.0.0",
+    "description": "APK解析結果を基に作成したリアクションゲーム",
+    "original_analysis": {
+      "apk_name": "HeyDooon_1.20_APKPure.apk",
+      "apk_size_mb": 100.71,
+      "unity_version": "IL2CPP v29",
+      "analysis_date": "2025-09-28T14:51:23"
+    }
+  },
+  "gameplay": {
+    "challenge_types": [
+      "color_recognition",
+      "shape_recognition", 
+      "reaction_speed",
+      "multi_tap"
+    ],
+    "difficulty_levels": ["Easy", "Normal", "Hard", "Expert"],
+    "scoring": {
+      "base_points": 100,
+      "time_bonus_multiplier": 1.0,
+      "accuracy_bonus": 50
+    }
+  },
+  "technical_specs": {
+    "engine": "Pygame",
+    "resolution": "800x600",
+    "fps": 60,
+    "audio_support": true,
+    "save_system": true
+  }
+}

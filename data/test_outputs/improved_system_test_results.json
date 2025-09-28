@@ -1,0 +1,62 @@
+{
+  "test_summary": {
+    "total_tests": 3,
+    "successful_tests": 3,
+    "max_completion_rate": 100.0,
+    "avg_completion_rate": 100.0,
+    "target_achieved": true
+  },
+  "detailed_results": [
+    {
+      "apk_path": "data/test_inputs/sample_unity_app.apk",
+      "success": true,
+      "completion_rate": 100.0,
+      "phases_completed": [
+        "static_analysis",
+        "il2cpp_analysis",
+        "dynamic_analysis",
+        "ml_analysis",
+        "data_integration",
+        "code_generation",
+        "project_construction"
+      ],
+      "errors": [
+        "Fridaスクリプト生成エラー: FridaScriptGenerator.generate_api_trace_script() missing 1 required positional argument: 'unity_strings'"
+      ]
+    },
+    {
+      "apk_path": "data/test_inputs/realistic_unity_app.apk",
+      "success": true,
+      "completion_rate": 100.0,
+      "phases_completed": [
+        "static_analysis",
+        "il2cpp_analysis",
+        "dynamic_analysis",
+        "ml_analysis",
+        "data_integration",
+        "code_generation",
+        "project_construction"
+      ],
+      "errors": [
+        "Fridaスクリプト生成エラー: FridaScriptGenerator.generate_api_trace_script() missing 1 required positional argument: 'unity_strings'"
+      ]
+    },
+    {
+      "apk_path": "data/test_inputs/heydoon_test.apk",
+      "success": true,
+      "completion_rate": 100.0,
+      "phases_completed": [
+        "static_analysis",
+        "il2cpp_analysis",
+        "dynamic_analysis",
+        "ml_analysis",
+        "data_integration",
+        "code_generation",
+        "project_construction"
+      ],
+      "errors": [
+        "Fridaスクリプト生成エラー: FridaScriptGenerator.generate_api_trace_script() missing 1 required positional argument: 'unity_strings'"
+      ]
+    }
+  ]
+}

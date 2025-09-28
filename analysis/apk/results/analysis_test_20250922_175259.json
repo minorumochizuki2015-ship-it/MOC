@@ -1,0 +1,77 @@
+{
+  "apk_info": {
+    "file_name": "test.apk",
+    "file_size": 15520,
+    "file_size_mb": 0.01,
+    "modified_time": "2025-09-22T17:52:59.054173",
+    "analysis_time": "2025-09-22T17:52:59.054907"
+  },
+  "manifest": {
+    "found": true,
+    "size": 1800,
+    "note": "バイナリXML形式のため、詳細解析にはaapt2が必要"
+  },
+  "resources": {
+    "total_resources": 3,
+    "resource_types": {
+      "drawable": 1,
+      "layout": 1,
+      "values": 1
+    },
+    "images": [
+      "res/drawable/icon.png"
+    ],
+    "layouts": [
+      "res/layout/main.xml"
+    ],
+    "values": [
+      "res/values/strings.xml"
+    ]
+  },
+  "assets": {
+    "total_assets": 2,
+    "asset_files": [
+      "assets/config.json",
+      "assets/data/levels.json"
+    ],
+    "data_files": [
+      "assets/config.json",
+      "assets/data/levels.json"
+    ],
+    "config_files": [
+      "assets/config.json"
+    ]
+  },
+  "strings": {
+    "extracted_strings": [],
+    "note": "完全な文字列抽出にはaapt2が必要"
+  },
+  "file_structure": {
+    "total_files": 7,
+    "directories": [
+      "assets",
+      "assets/data",
+      "res/drawable",
+      "res/layout",
+      "res/values"
+    ],
+    "file_types": {
+      "xml": 3,
+      "png": 1,
+      "json": 2,
+      "dex": 1
+    },
+    "notable_files": [
+      "assets/config.json",
+      "assets/data/levels.json"
+    ]
+  },
+  "implementation_hints": [
+    "assetsフォルダが存在 - ゲームデータやリソースファイルが含まれている可能性",
+    "JSONファイルが存在 - 設定やゲームデータの構造化データ",
+    "XMLファイルが存在 - レイアウトや設定ファイル",
+    "画像リソース 1個 - UI要素やゲームグラフィック",
+    "レイアウトファイル 1個 - UI構造の参考",
+    "データファイルが存在 - ゲームロジックや設定の参考"
+  ]
+}

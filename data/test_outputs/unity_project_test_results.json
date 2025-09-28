@@ -1,0 +1,96 @@
+{
+  "project_structure": {
+    "Assets": {
+      "exists": true,
+      "path": "data\\clone_generation\\UnityProject\\Assets"
+    },
+    "Assets/Scripts": {
+      "exists": true,
+      "path": "data\\clone_generation\\UnityProject\\Assets\\Scripts"
+    },
+    "Assets/Scenes": {
+      "exists": true,
+      "path": "data\\clone_generation\\UnityProject\\Assets\\Scenes"
+    },
+    "Assets/Prefabs": {
+      "exists": true,
+      "path": "data\\clone_generation\\UnityProject\\Assets\\Prefabs"
+    },
+    "ProjectSettings": {
+      "exists": true,
+      "path": "data\\clone_generation\\UnityProject\\ProjectSettings"
+    },
+    "score": 1.0
+  },
+  "script_validation": {
+    "total_scripts": 3,
+    "valid_scripts": 3,
+    "score": 1.0,
+    "details": {
+      "GameManager.cs": {
+        "path": "data\\clone_generation\\UnityProject\\Assets\\Scripts\\Core\\GameManager.cs",
+        "size": 2252,
+        "lines": 105,
+        "issues": [],
+        "valid": true
+      },
+      "PlayerController.cs": {
+        "path": "data\\clone_generation\\UnityProject\\Assets\\Scripts\\Player\\PlayerController.cs",
+        "size": 2352,
+        "lines": 101,
+        "issues": [],
+        "valid": true
+      },
+      "UIManager.cs": {
+        "path": "data\\clone_generation\\UnityProject\\Assets\\Scripts\\UI\\UIManager.cs",
+        "size": 2983,
+        "lines": 129,
+        "issues": [],
+        "valid": true
+      }
+    }
+  },
+  "asset_validation": {
+    "score": 1.0,
+    "details": {
+      "Materials": {
+        "exists": true,
+        "file_count": 0
+      },
+      "Textures": {
+        "exists": true,
+        "file_count": 0
+      },
+      "Audio": {
+        "exists": true,
+        "file_count": 0
+      },
+      "Animations": {
+        "exists": true,
+        "file_count": 0
+      },
+      "Prefabs": {
+        "exists": true,
+        "file_count": 1
+      }
+    }
+  },
+  "overall_score": 0.9999999999999999,
+  "recommendations": [
+    "✅ プロジェクトは良好な状態です - Unityエディタでの実行テストを推奨"
+  ],
+  "unity_settings": {
+    "score": 1.0,
+    "details": {
+      "ProjectSettings/ProjectSettings.asset": {
+        "exists": true
+      },
+      "ProjectSettings/ProjectVersion.txt": {
+        "exists": true
+      },
+      "Packages/manifest.json": {
+        "exists": true
+      }
+    }
+  }
+}

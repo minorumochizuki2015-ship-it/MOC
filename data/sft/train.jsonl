@@ -1,0 +1,10 @@
+# SFT Training Data
+# This file contains training data in JSONL format
+# Each line should be a valid JSON object{"instruction":"Pythonでリストを作成する方法を教えて","input":"","output":"Pythonでリストを作成するには、角括弧[]を使用します。例: my_list = [1, 2, 3, 'hello']"}
+{"instruction":"関数の定義方法は？","input":"","output":"Pythonで関数を定義するには、defキーワードを使用します。例: def my_function(): pass"}
+{"instruction":"PowerShellでファイルを作成する方法は？","input":"","output":"PowerShellでファイルを作成するには、New-Itemコマンドレットを使用します。例: New-Item -ItemType File -Path 'test.txt'"}
+{"instruction":"Pythonでリストを作成する方法を教えて","input":"","output":"Pythonでリストを作成するには、角括弧[]を使用します。例: my_list = [1, 2, 3, 'hello']"}
+{"instruction":"関数の定義方法は？","input":"","output":"Pythonで関数を定義するには、defキーワードを使用します。例: def my_function(): pass"}
+{"instruction":"重複テスト用のデータです","output":"このファイルは重複防止機能のテストに使用されます"}
+{"instruction":"PowerShellでファイルを作成する方法を教えてください","output":"PowerShellでファイルを作成するには、New-Itemコマンドレットを使用します。例：New-Item -Path 'test.txt' -ItemType File"}
+{"instruction":"Pythonでリストを作成する方法は？","output":"Pythonでリストを作成するには角括弧を使用します。例：my_list = [1, 2, 3, 'hello']"}

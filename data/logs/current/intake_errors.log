@@ -1,0 +1,2 @@
+SFT-SCHEMA-ERROR test_invalid_schema.json: missing required keys (prompt/output)
+SFT-SCHEMA-ERROR test_invalid_schema.json: missing required keys (prompt/output)

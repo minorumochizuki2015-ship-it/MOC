@@ -1,0 +1,10 @@
+[
+  {
+    "prompt": "Hi",
+    "output": "Hello! How can I help you today?"
+  },
+  {
+    "prompt": "What is AI?",
+    "output": "AI stands for Artificial Intelligence, which refers to computer systems that can perform tasks that typically require human intelligence."
+  }
+]

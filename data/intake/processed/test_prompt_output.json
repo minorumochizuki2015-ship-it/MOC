@@ -1,0 +1,10 @@
+[
+  {
+    "prompt": "PowerShellでファイルを作成する方法を教えてください",
+    "output": "PowerShellでファイルを作成するには、New-Itemコマンドレットを使用します。例：New-Item -Path 'test.txt' -ItemType File"
+  },
+  {
+    "prompt": "Pythonでリストを作成する方法は？",
+    "output": "Pythonでリストを作成するには角括弧を使用します。例：my_list = [1, 2, 3, 'hello']"
+  }
+]

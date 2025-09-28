@@ -1,0 +1,82 @@
+[
+  {
+    "id": "greeting",
+    "name": "挨拶",
+    "effects": [
+      "mosaic"
+    ],
+    "weight": 1.0,
+    "difficulty": "low",
+    "modes": [
+      "g1"
+    ]
+  },
+  {
+    "id": "command",
+    "name": "合図ことば",
+    "effects": [
+      "flip"
+    ],
+    "weight": 1.0,
+    "difficulty": "med",
+    "modes": [
+      "g1"
+    ]
+  },
+  {
+    "id": "countdown",
+    "name": "カウントダウン",
+    "effects": [],
+    "weight": 0.9,
+    "difficulty": "med",
+    "modes": [
+      "g1"
+    ]
+  },
+  {
+    "id": "fish",
+    "name": "生物/魚類",
+    "effects": [
+      "mosaic"
+    ],
+    "weight": 1.0,
+    "difficulty": "med",
+    "modes": [
+      "g2"
+    ]
+  },
+  {
+    "id": "fruit",
+    "name": "フルーツ",
+    "effects": [],
+    "weight": 1.0,
+    "difficulty": "low",
+    "modes": [
+      "g2"
+    ]
+  },
+  {
+    "id": "shape",
+    "name": "かたち",
+    "effects": [
+      "flip"
+    ],
+    "weight": 0.8,
+    "difficulty": "med",
+    "modes": [
+      "g2"
+    ]
+  },
+  {
+    "id": "pref",
+    "name": "都道府県",
+    "effects": [
+      "mosaic"
+    ],
+    "weight": 1.0,
+    "difficulty": "med",
+    "modes": [
+      "g2"
+    ]
+  }
+]

@@ -1,0 +1,137 @@
+# Rule 37: Code Formatting & Quality Standards
+rule_id: 37
+name: "Code Formatting & Quality Standards"
+description: "Unified code formatting with Black+isort and quality enforcement"
+category: "development"
+priority: "always_apply"
+version: "1.0.0"
+
+# フォーマット設定
+formatting_standards:
+  python:
+    formatter: "black"
+    import_sorter: "isort"
+    type_checker: "mypy"
+    target_directories:
+      - "src/"
+      - "python_poc/src/"
+    
+    black_config:
+      line_length: 88
+      target_version: ["py39"]
+      include: '\.pyi?$'
+      extend_exclude: '''
+      /(
+        \.git
+        | \.venv
+        | build
+        | dist
+      )/
+      '''
+    
+    isort_config:
+      profile: "black"
+      multi_line_output: 3
+      line_length: 88
+      known_first_party: ["src", "core"]
+    
+    mypy_config:
+      strict: true
+      target: "src/"
+      ignore_missing_imports: true
+
+  unity:
+    formatter: "unity_yaml_stabilization"
+    target_files:
+      - "*.unity"
+      - "*.prefab"
+      - "*.asset"
+    
+    settings:
+      force_text_serialization: true
+      yaml_merge_tool: "unityyaml"
+
+  markdown:
+    linter: "markdownlint"
+    config_file: ".markdownlint.json"
+    
+  powershell:
+    style: "dry_run_default"
+    requirements:
+      - no_here_strings: true
+      - no_three_arg_replace: true
+      - no_invisible_unicode: true
+      - error_action_stop: true
+
+# Pre-commit設定
+pre_commit_hooks:
+  repos:
+    - repo: "https://github.com/psf/black"
+      rev: "24.8.0"
+      hooks:
+        - id: "black"
+          files: "^(src/|python_poc/)"
+    
+    - repo: "https://github.com/pycqa/isort"
+      rev: "5.13.2"
+      hooks:
+        - id: "isort"
+          files: "^(src/|python_poc/)"
+    
+    - repo: "https://github.com/pre-commit/mirrors-mypy"
+      rev: "v1.11.1"
+      hooks:
+        - id: "mypy"
+          files: "^(src/|python_poc/src/)"
+          additional_dependencies: []
+    
+    - repo: "https://github.com/igorshubovych/markdownlint-cli"
+      rev: "v0.42.0"
+      hooks:
+        - id: "markdownlint"
+
+# 品質基準
+quality_standards:
+  code_coverage:
+    minimum: 80
+    target: 90
+    fail_under: 80
+  
+  static_analysis:
+    mypy_score: "B+"
+    complexity_limit: 10
+    
+  performance:
+    response_time_limit: "2s"
+    memory_usage_limit: "512MB"
+  
+  security:
+    vulnerability_count: 0
+    security_scan_required: true
+
+# エディタ設定
+editor_config:
+  root: true
+  universal:
+    charset: "utf-8"
+    end_of_line: "lf"
+    insert_final_newline: true
+    indent_style: "space"
+    indent_size: 2
+  
+  language_specific:
+    cs_shader:
+      indent_size: 4
+    bat:
+      end_of_line: "crlf"
+
+# 統合設定
+integration:
+  pre_commit_hooks: true
+  ci_cd_pipeline: true
+  quality_gates: true
+
+logging:
+  level: "INFO"
+  location: "data/logs/current/code_formatting.log"
+  include_metrics: true

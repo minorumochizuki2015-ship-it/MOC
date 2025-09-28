@@ -1,0 +1,18 @@
+[2025-09-29 02:52:04] [INFO] === New-Checkpoint.ps1 Started ===
+[2025-09-29 02:52:04] [INFO] Parameters: Apply=False, Label=20250929-025204
+[2025-09-29 02:52:05] [INFO] Disk space check passed: 664.01GB available
+[2025-09-29 02:52:05] [INFO] Current branch: feature/enable-autopatch-autostart
+[2025-09-29 02:52:05] [ERROR] === New-Checkpoint.ps1 Failed ===
+[2025-09-29 02:52:05] [ERROR] Error: The property 'Count' cannot be found on this object. Verify that the property exists.
+[2025-09-29 02:52:05] [INFO] === New-Checkpoint.ps1 Started ===
+[2025-09-29 02:52:05] [INFO] Parameters: Apply=True, Label=20250929-025205
+[2025-09-29 02:52:05] [INFO] Disk space check passed: 664.01GB available
+[2025-09-29 02:52:05] [INFO] Current branch: feature/enable-autopatch-autostart
+[2025-09-29 02:52:05] [ERROR] === New-Checkpoint.ps1 Failed ===
+[2025-09-29 02:52:05] [ERROR] Error: The property 'Count' cannot be found on this object. Verify that the property exists.
+[2025-09-29 02:52:52] [INFO] === New-Checkpoint.ps1 Started ===
+[2025-09-29 02:52:52] [INFO] Parameters: Apply=False, Label=20250929-025252
+[2025-09-29 02:52:52] [INFO] Disk space check passed: 664.01GB available
+[2025-09-29 02:52:52] [INFO] Current branch: feature/enable-autopatch-autostart
+[2025-09-29 02:52:53] [ERROR] PREFLIGHT FAILED:
+[2025-09-29 02:52:53] [ERROR]   - Uncommitted changes exist. Please commit or stash changes first.

@@ -1,0 +1,5 @@
+RUN: autopatch cycle
+SFT: processing accepted data
+SFT: processed test_duplicate.json - 1 valid items
+TIMEOUT: 196.8s > 40
+OK
