@@ -1,0 +1,42 @@
+name: "System Monitoring Check"
+description: "Automated system health monitoring workflow"
+version: "2.1.0"
+author: "ORCH-Next Monitoring Team"
+tags: ["monitoring", "health", "automated"]
+created_at: "2025-01-10T12:00:00Z"
+
+workflow:
+  steps:
+    - name: "check_system_health"
+      type: "health_check"
+      config:
+        endpoints:
+          - "/api/health"
+          - "/api/status"
+        timeout_seconds: 30
+    
+    - name: "collect_metrics"
+      type: "metrics"
+      config:
+        sources: ["prometheus", "application_logs"]
+        retention_hours: 24
+    
+    - name: "analyze_trends"
+      type: "analysis"
+      config:
+        algorithms: ["anomaly_detection", "trend_analysis"]
+        threshold_deviation: 2.0
+    
+    - name: "generate_report"
+      type: "reporting"
+      config:
+        format: "json"
+        include_charts: true
+        auto_publish: true
+
+metadata:
+  complexity: "medium"
+  estimated_duration_minutes: 15
+  requires_approval: false
+  risk_level: "low"
+  schedule: "*/30 * * * *"  # Every 30 minutes

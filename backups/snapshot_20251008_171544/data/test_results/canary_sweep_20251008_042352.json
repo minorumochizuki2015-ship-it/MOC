@@ -1,0 +1,48 @@
+{
+  "base_url": "http://127.0.0.1:5000",
+  "endpoints": [
+    "/api/tasks",
+    "/api/milestones",
+    "/api/alerts",
+    "/api/predictions",
+    "/api/quality/metrics",
+    "/api/quality/health",
+    "/status",
+    "/events"
+  ],
+  "duration_sec_per_interval": 600,
+  "candidates": [
+    3,
+    5,
+    10,
+    15
+  ],
+  "results": {
+    "3": {
+      "samples": 1600,
+      "error_rate": 0.25,
+      "avg_latency_ms": 409,
+      "sse_ok_rate": 1.0
+    },
+    "5": {
+      "samples": 960,
+      "error_rate": 0.25,
+      "avg_latency_ms": 408,
+      "sse_ok_rate": 1.0
+    },
+    "10": {
+      "samples": 480,
+      "error_rate": 0.25,
+      "avg_latency_ms": 408,
+      "sse_ok_rate": 1.0
+    },
+    "15": {
+      "samples": 320,
+      "error_rate": 0.25,
+      "avg_latency_ms": 409,
+      "sse_ok_rate": 1.0
+    }
+  },
+  "recommended_interval": 5,
+  "timestamp": "2025-10-08T03:20:49.697863"
+}

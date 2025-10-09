@@ -1,0 +1,19 @@
+{
+  "copied_paths": [
+    "config",
+    "data",
+    "src",
+    "templates",
+    "docs",
+    "ORCH\\\\STATE",
+    "ORCH\\\\REPORTS",
+    "ORCH\\\\LOGS",
+    "orch_dashboard.py",
+    ".github\\\\workflows",
+    "requirements.txt",
+    "pyproject.toml",
+    "README.md"
+  ],
+  "timestamp": "20251008_171544",
+  "source": "C:\\Users\\User\\Trae\\ORCH-Next"
+}

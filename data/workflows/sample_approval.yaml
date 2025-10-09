@@ -1,0 +1,40 @@
+name: "Sample Approval Workflow"
+description: "A sample workflow demonstrating approval process"
+version: "1.0.0"
+author: "ORCH-Next System"
+tags: ["approval", "sample", "demo"]
+created_at: "2025-01-10T12:00:00Z"
+
+workflow:
+  steps:
+    - name: "validate_request"
+      type: "validation"
+      config:
+        rules:
+          - "required_fields_present"
+          - "format_valid"
+    
+    - name: "request_approval"
+      type: "approval"
+      config:
+        approver_role: "AUDIT"
+        timeout_minutes: 60
+        auto_approve: false
+    
+    - name: "execute_action"
+      type: "action"
+      config:
+        command: "echo 'Action executed'"
+        safe_mode: true
+    
+    - name: "notify_completion"
+      type: "notification"
+      config:
+        channels: ["log", "dashboard"]
+        message: "Workflow completed successfully"
+
+metadata:
+  complexity: "low"
+  estimated_duration_minutes: 5
+  requires_approval: true
+  risk_level: "low"

@@ -1,0 +1,13 @@
+{
+  "timestamp": "20251008_153927",
+  "git_head": "cf843bdf4d9f1db40468f4c6dabebdf1743e02e5",
+  "note": "Design snapshot prior to major UI changes.",
+  "paths": [
+    "C:\\Users\\User\\Trae\\ORCH-Next\\backups\\design_backup_20251008_153927\\templates",
+    "C:\\Users\\User\\Trae\\ORCH-Next\\backups\\design_backup_20251008_153927\\src",
+    "C:\\Users\\User\\Trae\\ORCH-Next\\backups\\design_backup_20251008_153927\\config",
+    "C:\\Users\\User\\Trae\\ORCH-Next\\backups\\design_backup_20251008_153927\\orch_dashboard.py",
+    "C:\\Users\\User\\Trae\\ORCH-Next\\backups\\design_backup_20251008_153927\\pyproject.toml",
+    "C:\\Users\\User\\Trae\\ORCH-Next\\backups\\design_backup_20251008_153927\\requirements.txt"
+  ]
+}

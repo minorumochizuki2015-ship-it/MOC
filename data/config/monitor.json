@@ -1,0 +1,43 @@
+{
+  "heartbeat_interval": 30,
+  "metrics_retention_days": 7,
+  "alert_cooldown_minutes": 15,
+  "recovery_max_attempts": 3,
+  "thresholds": {
+    "cpu_usage": {
+      "warning": 80.0,
+      "critical": 95.0
+    },
+    "memory_usage": {
+      "warning": 85.0,
+      "critical": 95.0
+    },
+    "disk_usage": {
+      "warning": 90.0,
+      "critical": 98.0
+    },
+    "response_time": {
+      "warning": 2.0,
+      "critical": 5.0
+    },
+    "error_rate": {
+      "warning": 0.05,
+      "critical": 0.1
+    },
+    "task_queue_size": {
+      "warning": 100,
+      "critical": 500
+    }
+  },
+  "notifications": {
+    "slack_webhook": null,
+    "webhook_url": null,
+    "email_enabled": false
+  },
+  "self_healing": {
+    "enabled": true,
+    "auto_restart": true,
+    "auto_scale": false,
+    "rollback_enabled": true
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "generated_at": "2025-10-08T17:15:46.191196",
+  "totals": {
+    "count": 8,
+    "ok": 8,
+    "errors": 0
+  },
+  "by_url": [
+    {
+      "url": "http://127.0.0.1:5000/api/agents/list",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "error": null,
+      "body": "[{\"heartbeat_at\":\"2025-10-08T17:13:45.097701\",\"id\":\"AG-AUDIT\",\"name\":\"AG-AUDIT\",\"reports\":[{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:49:35.004168\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:49:48.259340\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:51:35.798414\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:53:36.587364\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:55:37.477566\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:56:18.190719\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:57:38.363396\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:59:39.195210\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:01:40.033366\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:03:40.877855\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:05:41.691438\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:07:42.513842\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:09:43.360503\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:11:44.215560\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:13:45.135946\"}],\"status\":\"active\",\"tags\":[],\"updated_at\":\"2025-10-08T17:13:45.135946\"}]\n"
+    },
+    {
+      "url": "http://127.0.0.1:5000/api/agents/register",
+      "method": "POST",
+      "ok": true,
+      "status": 200,
+      "error": null,
+      "body": "{\"id\":\"AG-AUDIT\",\"success\":true}\n"
+    },
+    {
+      "url": "http://127.0.0.1:5000/api/agents/heartbeat",
+      "method": "POST",
+      "ok": true,
+      "status": 200,
+      "error": null,
+      "body": "{\"id\":\"AG-AUDIT\",\"success\":true}\n"
+    },
+    {
+      "url": "http://127.0.0.1:5000/api/agents/report",
+      "method": "POST",
+      "ok": true,
+      "status": 200,
+      "error": null,
+      "body": "{\"id\":\"AG-AUDIT\",\"success\":true}\n"
+    },
+    {
+      "url": "http://127.0.0.1:5000/api/agents/list",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "error": null,
+      "body": "[{\"heartbeat_at\":\"2025-10-08T17:15:45.903552\",\"id\":\"AG-AUDIT\",\"name\":\"AG-AUDIT\",\"reports\":[{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:49:35.004168\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:49:48.259340\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:51:35.798414\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:53:36.587364\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:55:37.477566\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:56:18.190719\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:57:38.363396\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T16:59:39.195210\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:01:40.033366\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:03:40.877855\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:05:41.691438\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:07:42.513842\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:09:43.360503\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:11:44.215560\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:13:45.135946\"},{\"data\":{\"details\":{\"phase\":\"init\"},\"id\":\"AG-AUDIT\",\"summary\":\"audit registration & heartbeat ok\"},\"timestamp\":\"2025-10-08T17:15:45.924981\"}],\"status\":\"active\",\"tags\":[],\"updated_at\":\"2025-10-08T17:15:45.924981\"}]\n"
+    },
+    {
+      "url": "http://127.0.0.1:5000/status",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "error": null,
+      "body": "{\"metrics\":{\"cpu\":28.0,\"mem\":24.1},\"phase\":\"init\",\"status\":\"active\",\"time\":\"2025-10-08T17:15:45.950555\"}\n"
+    },
+    {
+      "url": "http://127.0.0.1:5000/api/system-health",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "error": null,
+      "body": "{\"cpu_pct\":23.1,\"mem_pct\":24.1,\"status\":\"ok\",\"uptime\":\"2025-10-08T17:15:46.080565\"}\n"
+    },
+    {
+      "url": "http://127.0.0.1:5000/api/work/progress",
+      "method": "GET",
+      "ok": true,
+      "status": 200,
+      "error": null,
+      "body": "{\"md_tail\":[\"# NonStop Audit\",\"\",\"\\u521d\\u671f\\u5316: \\u76e3\\u67fb\\u30ed\\u30b0\\u306f\\u3053\\u3053\\u306b\\u8ffd\\u8a18\\u3055\\u308c\\u307e\\u3059\\u3002\"],\"success\":true,\"test_summary\":null,\"updated_at\":\"2025-10-08T17:15:46.189223\"}\n"
+    }
+  ]
+}

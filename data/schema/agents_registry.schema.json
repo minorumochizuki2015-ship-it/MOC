@@ -1,0 +1,52 @@
+{
+  "$id": "orch.agents_registry",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agents Registry",
+  "description": "Schema for agents registry used by ORCH-Next dashboard and orchestrator.",
+  "oneOf": [
+    {
+      "type": "array",
+      "items": { "$ref": "#/$defs/agent" }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "agents": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/agent" }
+        }
+      },
+      "required": ["agents"],
+      "additionalProperties": true
+    }
+  ],
+  "$defs": {
+    "agent": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string" },
+        "status": { "type": "string", "enum": ["online", "offline", "unknown"] },
+        "last_seen": { "type": "string", "format": "date-time" },
+        "metadata": { "type": "object" },
+        "reports": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/report" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "report": {
+      "type": "object",
+      "required": ["timestamp", "status"],
+      "properties": {
+        "timestamp": { "type": "string", "format": "date-time" },
+        "status": { "type": "string" },
+        "message": { "type": "string" },
+        "artifacts": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    }
+  }
+}

@@ -1,0 +1,63 @@
+name: Path Policy Check (Windows Absolute)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  path-check:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate path policy in key docs
+        shell: pwsh
+        run: |
+          Write-Host "Running Windows absolute path policy checks..."
+          $files = @(
+            "docs/AUDIT_PROMPT_v2.8.md",
+            "docs/CMD_PROMPT_v2.8.md",
+            "docs/WORK_PROMPT_v2.8.md",
+            ".trae/rules/project_rules.md",
+            "ORCH/STATE/APPROVALS.md",
+            "artifacts/phase4_dashboard/README.md",
+            "artifacts/task-registration/README.md",
+            "artifacts/WORK2-ROADMAP/README.md"
+          )
+
+          $errors = @()
+
+          foreach ($f in $files) {
+            if (-not (Test-Path $f)) { continue }
+            $content = Get-Content -Raw -Encoding UTF8 $f
+
+            # Rule 1: Disallow forward slashes in path-like tokens (artifacts/, ORCH/, MOC/, docs/)
+            $forwardSlashPattern = '(artifacts|ORCH|MOC|docs)/'
+            if ([regex]::IsMatch($content, $forwardSlashPattern)) {
+              $errors += "[Rule1] '$f' contains forward-slash paths (use backslashes)."
+            }
+
+            # Rule 2: Evidence/Artifacts/Inputs/Outputs references must be Windows absolute (drive letter or UNC)
+            $mustBeAbsoluteLines = Select-String -Path $f -Pattern '^(.*(Evidence|Artifacts|Inputs|Outputs).*)$' -Encoding UTF8
+            foreach ($line in $mustBeAbsoluteLines) {
+              $text = $line.Line
+              # Find any backslash path segments
+              $hasPath = [regex]::IsMatch($text, '(artifacts|ORCH|MOC|docs|README|metrics|log|json|md|txt)\\')
+              if ($hasPath) {
+                $isAbs = [regex]::IsMatch($text, '([A-Za-z]:\\\\|\\\\\\\\)')
+                if (-not $isAbs) {
+                  $errors += "[Rule2] '$f' line requires Windows absolute path: $text"
+                }
+              }
+            }
+          }
+
+          if ($errors.Count -gt 0) {
+            Write-Host "Policy violations detected:" -ForegroundColor Red
+            $errors | ForEach-Object { Write-Host $_ }
+            Write-Host "Failing CI due to path policy violations." -ForegroundColor Red
+            exit 1
+          } else {
+            Write-Host "No path policy violations found." -ForegroundColor Green
+          }

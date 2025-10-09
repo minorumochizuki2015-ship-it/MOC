@@ -1,0 +1,17 @@
+{
+  "doc_exists": true,
+  "markers_present": {
+    "段階的合格判定": true,
+    "推奨しきい値": true,
+    "HTTP API": true,
+    "SSE": true,
+    "自動判定": true
+  },
+  "forced_thresholds_present": {
+    "成功[率]?(?:\\s*[:：]?\\s*)?(?:≥|>=)?\\s*95%": true,
+    "P95(?:\\s*レイテンシ)?(?:\\s*[:：]?\\s*)?(?:≤|<=)?\\s*1500\\s*ms": true,
+    "(再接続|reconnect).{0,30}(?:≤|<=)?\\s*5\\s*(秒|s)": true,
+    "(ドロップ率|drop\\s*rate).{0,30}(?:≤|<=)?\\s*5\\s*%": true
+  },
+  "errors": []
+}

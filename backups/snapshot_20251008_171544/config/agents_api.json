@@ -1,0 +1,22 @@
+{
+  "auth": {
+    "type": "jwt", 
+    "required": false,
+    "jwt_issuer": "orch-next",
+    "jwt_audience": "orch-dashboard"
+  },
+  "security": {
+    "rate_limit_per_minute": 120,
+    "cors_origins": ["http://127.0.0.1:5000"],
+    "csrf_protection": true
+  },
+  "registry": {
+    "path": "data/agents_registry.json",
+    "schema": "data/schema/agents_registry.schema.json"
+  },
+  "logging": {
+    "level": "INFO",
+    "audit_trail": true,
+    "correlation_id_header": "X-Request-ID"
+  }
+}

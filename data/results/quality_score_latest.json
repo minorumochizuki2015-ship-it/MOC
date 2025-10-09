@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-10-07T20:48:09.785323Z",
+  "sources": [
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/canary_monitor_20251008_021912.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/canary_monitor_20251008_022627.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/canary_monitor_20251008_032049.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/canary_monitor_20251008_034149.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/canary_monitor_20251008_035824.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/canary_monitor_20251008_041141.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/canary_sweep_20251008_042352.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/http_load_20251008_050843.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/http_load_20251008_051318.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/http_load_20251008_054208.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/http_metrics_latest.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/phase3_integration_test_20251007_154520.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/sse_load_20251008_045908.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/sse_load_20251008_054727.json",
+    "C:/Users/User/Trae/ORCH-Next/data/test_results/sse_metrics_latest.json"
+  ],
+  "scores": {
+    "common": 5.0,
+    "special": 5.0,
+    "novelty": 4.0,
+    "total": 96.0
+  },
+  "gate": {
+    "staging": true,
+    "preprod": true,
+    "autodecide": true
+  }
+}

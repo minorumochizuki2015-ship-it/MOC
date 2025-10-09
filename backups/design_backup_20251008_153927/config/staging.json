@@ -1,0 +1,6 @@
+{
+  "healthcheck_url": "https://staging.local/api/health",
+  "retry_sec": 5,
+  "max_wait_sec": 30,
+  "success_required": 5
+}

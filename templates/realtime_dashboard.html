@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORCH-Next Phase 4 リアルタイム監視ダッシュボード</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-online { background: #27ae60; }
+        .status-warning { background: #f39c12; }
+        .status-error { background: #e74c3c; }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+        
+        .metric-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .alert-item {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .alert-critical {
+            background: #fdf2f2;
+            border-color: #e74c3c;
+            color: #c0392b;
+        }
+        
+        .alert-warning {
+            background: #fef9e7;
+            border-color: #f39c12;
+            color: #d68910;
+        }
+        
+        .alert-info {
+            background: #ebf3fd;
+            border-color: #3498db;
+            color: #2980b9;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+        
+        .timestamp {
+            color: #95a5a6;
+            font-size: 0.8rem;
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+        
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1000;
+        }
+        
+        .connected {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .disconnected {
+            background: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ORCH-Next Phase 4 リアルタイム監視ダッシュボード
+            <span id="systemStatus" class="status-indicator status-online"></span>
+        </h1>
+    </div>
+    
+    <div id="connectionStatus" class="connection-status connected">接続中</div>
+    
+    <div class="dashboard-grid">
+        <!-- システム概要 -->
+        <div class="card">
+            <h3>システム概要</h3>
+            <div class="metric-value" id="systemHealth">100%</div>
+            <div class="metric-label">システム健全性</div>
+            <div class="metric-value" id="activeProcesses">0</div>
+            <div class="metric-label">アクティブプロセス</div>
+            <div class="timestamp" id="lastUpdate">最終更新: --</div>
+        </div>
+        
+        <!-- AI予測精度 -->
+        <div class="card">
+            <h3>AI予測精度</h3>
+            <div class="metric-value" id="aiAccuracy">--</div>
+            <div class="metric-label">現在の精度</div>
+            <div class="metric-value" id="predictionCount">0</div>
+            <div class="metric-label">予測実行回数</div>
+        </div>
+        
+        <!-- リソース使用率 -->
+        <div class="card">
+            <h3>リソース使用率</h3>
+            <div class="chart-container">
+                <canvas id="resourceChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- アラート -->
+        <div class="card">
+            <h3>リアルタイムアラート</h3>
+            <div id="alertContainer">
+                <div class="alert-item alert-info">システム正常稼働中</div>
+            </div>
+        </div>
+        
+        <!-- 品質トレンド -->
+        <div class="card">
+            <h3>品質トレンド</h3>
+            <div class="chart-container">
+                <canvas id="qualityChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- 自動化ステータス -->
+        <div class="card">
+            <h3>自動化ステータス</h3>
+            <div class="metric-value" id="automationStatus">稼働中</div>
+            <div class="metric-label">現在のステータス</div>
+            <div class="metric-value" id="automationTasks">0</div>
+            <div class="metric-label">実行中タスク</div>
+        </div>
+    </div>
+
+    <script>
+        // Socket.IO接続（Phase 4 リアルタイムサーバーへ明示的に接続）
+        const socket = io('http://127.0.0.1:5001');
+        
+        // チャート初期化
+        const resourceChart = new Chart(document.getElementById('resourceChart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'CPU使用率',
+                    data: [],
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'メモリ使用率',
+                    data: [],
+                    borderColor: '#e74c3c',
+                    backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+        
+        const qualityChart = new Chart(document.getElementById('qualityChart'), {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: '品質スコア',
+                    data: [],
+                    borderColor: '#27ae60',
+                    backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+        
+        // Socket.IOイベントハンドラ
+        socket.on('connect', function() {
+            document.getElementById('connectionStatus').textContent = '接続中';
+            document.getElementById('connectionStatus').className = 'connection-status connected';
+        });
+        
+        socket.on('disconnect', function() {
+            document.getElementById('connectionStatus').textContent = '切断';
+            document.getElementById('connectionStatus').className = 'connection-status disconnected';
+        });
+
+        // 初期データ（最新メトリクス/アラート）受信
+        socket.on('initial_data', function(data) {
+            if (data && data.metrics && data.metrics.length > 0) {
+                updateMetrics(data.metrics[data.metrics.length - 1]);
+            }
+            if (data && data.alerts) {
+                data.alerts.forEach(addAlert);
+            }
+        });
+        
+        socket.on('metrics_update', function(data) {
+            updateMetrics(data);
+        });
+        
+        socket.on('new_alert', function(alert) {
+            addAlert(alert);
+        });
+        
+        socket.on('ai_prediction', function(prediction) {
+            updateAIPrediction(prediction);
+        });
+        
+        socket.on('automation_status', function(status) {
+            updateAutomationStatus(status);
+        });
+        
+        // メトリクス更新
+        function updateMetrics(metrics) {
+            document.getElementById('systemHealth').textContent = metrics.system_health + '%';
+            document.getElementById('activeProcesses').textContent = metrics.active_processes;
+            document.getElementById('lastUpdate').textContent = '最終更新: ' + new Date().toLocaleTimeString();
+            
+            // リソースチャート更新
+            const now = new Date().toLocaleTimeString();
+            resourceChart.data.labels.push(now);
+            resourceChart.data.datasets[0].data.push(metrics.cpu_usage);
+            resourceChart.data.datasets[1].data.push(metrics.memory_usage);
+            
+            // データ数制限
+            if (resourceChart.data.labels.length > 20) {
+                resourceChart.data.labels.shift();
+                resourceChart.data.datasets[0].data.shift();
+                resourceChart.data.datasets[1].data.shift();
+            }
+            
+            resourceChart.update('none');
+            
+            // システムステータス更新
+            const statusIndicator = document.getElementById('systemStatus');
+            if (metrics.system_health >= 90) {
+                statusIndicator.className = 'status-indicator status-online';
+            } else if (metrics.system_health >= 70) {
+                statusIndicator.className = 'status-indicator status-warning';
+            } else {
+                statusIndicator.className = 'status-indicator status-error';
+            }
+        }
+        
+        // AI予測更新
+        function updateAIPrediction(prediction) {
+            document.getElementById('aiAccuracy').textContent = prediction.accuracy + '%';
+            document.getElementById('predictionCount').textContent = prediction.count;
+            
+            // 品質チャート更新
+            const now = new Date().toLocaleTimeString();
+            qualityChart.data.labels.push(now);
+            qualityChart.data.datasets[0].data.push(prediction.quality_score);
+            
+            if (qualityChart.data.labels.length > 20) {
+                qualityChart.data.labels.shift();
+                qualityChart.data.datasets[0].data.shift();
+            }
+            
+            qualityChart.update('none');
+        }
+        
+        // 自動化ステータス更新
+        function updateAutomationStatus(status) {
+            document.getElementById('automationStatus').textContent = status.status;
+            document.getElementById('automationTasks').textContent = status.active_tasks;
+        }
+        
+        // アラート追加
+        function addAlert(alert) {
+            const container = document.getElementById('alertContainer');
+            const alertElement = document.createElement('div');
+            
+            let alertClass = 'alert-info';
+            if (alert.level === 'critical') alertClass = 'alert-critical';
+            else if (alert.level === 'warning') alertClass = 'alert-warning';
+            
+            alertElement.className = `alert-item ${alertClass}`;
+            alertElement.innerHTML = `
+                <strong>${alert.timestamp}</strong><br>
+                ${alert.message}
+            `;
+            
+            container.insertBefore(alertElement, container.firstChild);
+            
+            // アラート数制限
+            while (container.children.length > 10) {
+                container.removeChild(container.lastChild);
+            }
+        }
+        
+        // 初期データ要求は接続時サーバ側から送信されるため不要
+    </script>
+</body>
+</html>

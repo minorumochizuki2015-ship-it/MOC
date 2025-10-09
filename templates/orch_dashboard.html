@@ -1,0 +1,3996 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Gantt Chart Library -->
+    <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.css">
+    <!-- Socket.IO -->
+    <!-- Socket.IO disabled for Flask-only mode -->
+    <!-- 作業進捗・報告 / 指示センター (MVP) -->
+    <div class="container my-4" id="work-progress-report">
+        <div class="row g-4">
+            <div class="col-md-7">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <span><i class="fas fa-clipboard-list me-2"></i>作業進捗・報告</span>
+                        <button class="btn btn-sm btn-outline-primary" id="btn-progress-reload"><i class="fas fa-sync"></i> 更新</button>
+                    </div>
+                    <div class="card-body">
+                        <small class="text-muted d-block">NonStop_Audit.md（末尾50行）</small>
+                        <pre class="bg-dark text-white p-3 rounded" id="audit-tail" style="max-height: 280px; overflow: auto;">読み込み中...</pre>
+                        <div class="mt-3">
+                            <small class="text-muted d-block">テスト概要</small>
+                            <div class="border rounded p-2 bg-light" id="test-summary">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card shadow-sm">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <span><i class="fas fa-inbox me-2"></i>指示センター</span>
+                        <button class="btn btn-sm btn-outline-primary" id="btn-ins-reload"><i class="fas fa-sync"></i> 更新</button>
+                    </div>
+                    <div class="card-body">
+                        <form id="ins-form" class="mb-3">
+                            <div class="mb-2">
+                                <label class="form-label">タイトル</label>
+                                <input class="form-control" id="ins-title" placeholder="例: UI改善提案の取り込み">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">詳細</label>
+                                <textarea class="form-control" id="ins-detail" rows="3" placeholder="具体的な指示内容"></textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">担当</label>
+                                <input class="form-control" id="ins-owner" placeholder="CMD" value="CMD">
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-1"></i>送信</button>
+                                <button type="button" class="btn btn-outline-secondary" id="ins-clear">クリア</button>
+                            </div>
+                        </form>
+                        <small class="text-muted d-block">登録済み指示</small>
+                        <ul class="list-group" id="ins-list"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadWorkProgress() {
+            try {
+                const res = await fetch('/api/work/progress');
+                if (!res.ok) throw new Error(`/api/work/progress ${res.status}`);
+                const data = await res.json();
+                const tail = Array.isArray(data.md_tail) ? data.md_tail.join('\n') : '';
+                document.getElementById('audit-tail').textContent = tail || '（表示可能な監査ログがありません）';
+                const ts = data.updated_at ? new Date(data.updated_at).toLocaleString() : '';
+                const summaryEl = document.getElementById('test-summary');
+                if (data.test_summary) {
+                    summaryEl.textContent = JSON.stringify(data.test_summary, null, 2);
+                } else {
+                    summaryEl.textContent = 'テスト概要は未取得です';
+                }
+            } catch (e) {
+                document.getElementById('audit-tail').textContent = `読み込みエラー: ${e.message}`;
+            }
+        }
+
+        async function loadInstructions() {
+            try {
+                const res = await fetch('/api/work/instructions');
+                if (!res.ok) throw new Error(`/api/work/instructions ${res.status}`);
+                const data = await res.json();
+                const list = Array.isArray(data.items) ? data.items : [];
+                const ul = document.getElementById('ins-list');
+                ul.innerHTML = '';
+                if (list.length === 0) {
+                    ul.innerHTML = '<li class="list-group-item text-muted">指示はありません</li>';
+                    return;
+                }
+                list.slice().reverse().forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    const ts = item.created_at ? new Date(item.created_at).toLocaleString() : '';
+                    li.innerHTML = `<div class="fw-bold">${item.title || '(無題)'} <small class="text-muted">#${item.id}</small></div>
+                                    <div class="small text-muted">${item.owner || '-'} / ${ts}</div>
+                                    <div class="mt-1">${(item.detail || '').replace(/</g,'&lt;')}</div>`;
+                    ul.appendChild(li);
+                });
+            } catch (e) {
+                const ul = document.getElementById('ins-list');
+                ul.innerHTML = `<li class="list-group-item text-danger">読み込みエラー: ${e.message}</li>`;
+            }
+        }
+
+        async function sendInstruction(e) {
+            e.preventDefault();
+            try {
+                const title = document.getElementById('ins-title').value.trim();
+                const detail = document.getElementById('ins-detail').value.trim();
+                const owner = document.getElementById('ins-owner').value.trim() || 'CMD';
+                const res = await fetch('/api/work/instructions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, detail, owner })
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) throw new Error(data.error || `http ${res.status}`);
+                // reset
+                document.getElementById('ins-title').value = '';
+                document.getElementById('ins-detail').value = '';
+                // reload
+                loadInstructions();
+            } catch (e) {
+                alert(`送信失敗: ${e.message}`);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初期ロード
+            loadWorkProgress();
+            loadInstructions();
+            // 手動更新
+            const btnPR = document.getElementById('btn-progress-reload');
+            const btnIR = document.getElementById('btn-ins-reload');
+            if (btnPR) btnPR.addEventListener('click', loadWorkProgress);
+            if (btnIR) btnIR.addEventListener('click', loadInstructions);
+            // フォーム送信
+            const form = document.getElementById('ins-form');
+            const clr = document.getElementById('ins-clear');
+            if (form) form.addEventListener('submit', sendInstruction);
+            if (clr) clr.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('ins-title').value = '';
+                document.getElementById('ins-detail').value = '';
+            });
+            // 自動更新（15秒）
+            setInterval(loadWorkProgress, 15000);
+        });
+    </script>
+
+    <script>
+        // 左サイドバーの生成：h2/h3を自動抽出
+        document.addEventListener('DOMContentLoaded', () => {
+            // サイドバー作成
+            const sidebar = document.createElement('div');
+            sidebar.className = 'left-sidebar d-none d-md-block';
+            const title = document.createElement('div');
+            title.className = 'sidebar-title';
+            title.textContent = 'タブ一覧';
+            const list = document.createElement('div');
+            list.id = 'sidebar-list';
+            list.className = 'list-group';
+            sidebar.appendChild(title);
+            sidebar.appendChild(list);
+            document.body.appendChild(sidebar);
+            document.body.classList.add('has-sidebar');
+
+            const headings = Array.from(document.querySelectorAll('h2, h3'));
+            if (headings.length) {
+                headings.forEach((h, idx) => {
+                    const id = h.id || `section-${idx}`;
+                    h.id = id;
+                    const a = document.createElement('a');
+                    a.href = `#${id}`;
+                    a.className = 'sidebar-link';
+                    a.textContent = h.textContent.trim();
+                    a.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+                    list.appendChild(a);
+                });
+            }
+
+            // プルタブ機能：高さが一定以上の .card-body を折りたたみ可能化
+            const bodies = Array.from(document.querySelectorAll('.card-body'));
+            bodies.forEach((el) => {
+                const rect = el.getBoundingClientRect();
+                if (rect.height > 280) {
+                    el.classList.add('pull-panel', 'collapsed');
+                    const tab = document.createElement('div');
+                    tab.className = 'pull-tab';
+                    tab.textContent = '展開/折りたたみ';
+                    tab.addEventListener('click', () => {
+                        el.classList.toggle('collapsed');
+                    });
+                    el.parentElement?.style.setProperty('position','relative');
+                    el.parentElement?.appendChild(tab);
+                }
+            });
+
+            // SSE: /events からライブヘルスを取得してナビに表示
+            // ナビ右側ウィジェットを生成
+            const nav = document.querySelector('nav.navbar');
+            if (nav) {
+                const widget = document.createElement('div');
+                widget.className = 'ms-auto d-flex align-items-center text-light';
+                widget.id = 'live-health-widget';
+                widget.style.gap = '1rem';
+                widget.innerHTML = `
+                    <span id="sse-status" class="badge bg-secondary">SSE: 接続中...</span>
+                    <span><i class="fa-solid fa-microchip"></i> CPU <span id="live-cpu">-</span>%</span>
+                    <span><i class="fa-solid fa-memory"></i> MEM <span id="live-mem">-</span>MB</span>
+                `;
+                nav.appendChild(widget);
+            }
+
+            const sseStatus = document.getElementById('sse-status');
+            const liveCpu = document.getElementById('live-cpu');
+            const liveMem = document.getElementById('live-mem');
+            try {
+                const es = new EventSource('/events');
+                es.onopen = () => {
+                    if (sseStatus) sseStatus.className = 'badge bg-success', sseStatus.textContent = 'SSE: 接続';
+                };
+                es.onerror = () => {
+                    if (sseStatus) sseStatus.className = 'badge bg-danger', sseStatus.textContent = 'SSE: 切断';
+                };
+                es.onmessage = (ev) => {
+                    try {
+                        const data = JSON.parse(ev.data);
+                        if (typeof data.cpu_percent !== 'undefined') {
+                            liveCpu && (liveCpu.textContent = String(data.cpu_percent));
+                        }
+                        if (typeof data.mem_used_mb !== 'undefined') {
+                            liveMem && (liveMem.textContent = String(data.mem_used_mb));
+                        }
+                    } catch (e) {
+                        console.warn('SSE parse error', e);
+                    }
+                };
+            } catch (e) {
+                console.warn('EventSource init failed', e);
+                if (sseStatus) sseStatus.className = 'badge bg-warning', sseStatus.textContent = 'SSE: 未接続';
+            }
+        });
+    </script>
+    
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .status-card {
+            border-left: 4px solid #007bff;
+            transition: transform 0.2s;
+            margin-bottom: 1rem;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .status-ready { border-left-color: #17a2b8; background-color: #e3f2fd; color: #1976d2; }
+        .status-doing { border-left-color: #ffc107; background-color: #fff3e0; color: #f57c00; }
+        .status-review { background-color: #f3e5f5; color: #7b1fa2; }
+        .status-done { border-left-color: #28a745; background-color: #e8f5e8; color: #388e3c; }
+        .status-hold { border-left-color: #6c757d; background-color: #fce4ec; color: #c2185b; }
+        .status-drop { background-color: #ffebee; color: #d32f2f; }
+        .status-plan { background-color: #f1f8e9; color: #689f38; }
+        .status-fix { border-left-color: #dc3545; background-color: #fff8e1; color: #ffa000; }
+        
+        .approval-pending { background-color: #fff3e0; color: #f57c00; }
+        .approval-approved { background-color: #e8f5e8; color: #388e3c; }
+        .approval-rejected { background-color: #ffebee; color: #d32f2f; }
+        .approval-expired { background-color: #f5f5f5; color: #757575; }
+        
+        .gantt-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1rem;
+            }
+            
+            .metric-value {
+                font-size: 1.5rem;
+            }
+            
+            .btn-group .btn {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.5rem;
+            }
+            
+            .table-responsive {
+                font-size: 0.9rem;
+            }
+            
+            .gantt-container {
+                padding: 10px;
+                overflow-x: auto;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+            
+            .card-header h5 {
+                font-size: 1rem;
+            }
+            
+            .metric-value {
+                font-size: 1.2rem;
+            }
+            
+            .btn {
+                font-size: 0.8rem;
+            }
+            
+            .chart-container {
+                height: 200px;
+            }
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        /* AI各核の動的状態表示 */
+        .ai-core-card {
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-core-card[data-core="CMD"] {
+            border-color: #ffc107;
+        }
+
+        .ai-core-card[data-core="WORK"] {
+            border-color: #007bff;
+        }
+
+        .ai-core-card[data-core="AUDIT"] {
+            border-color: #28a745;
+        }
+
+        .ai-core-card.active {
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .core-status-indicator {
+            position: relative;
+        }
+
+        .gear-animation {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .gear-animation.spinning {
+            animation: spinGear 2s linear infinite;
+        }
+
+        .gear-icon {
+            color: currentColor;
+        }
+
+        @keyframes spinGear {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .core-metrics {
+            margin-bottom: 1rem;
+        }
+
+        /* フォントサイズとスケール改善（1.3倍に拡大） */
+        body {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        
+        .card-title {
+            font-size: 1.8rem !important;
+            font-weight: 600;
+        }
+        
+        .card-text {
+            font-size: 1.3rem !important;
+        }
+        
+        .btn {
+            font-size: 1.2rem !important;
+            padding: 0.9rem 1.8rem !important;
+        }
+        
+        .table {
+            font-size: 1.2rem !important;
+        }
+        
+        .table th {
+            font-size: 1.3rem !important;
+            font-weight: 600;
+        }
+        
+        .badge {
+            font-size: 1.1rem !important;
+            padding: 0.6rem 0.9rem !important;
+        }
+        
+        /* AI核カードのスケール改善 */
+        .ai-core-card {
+            min-height: 320px;
+            font-size: 1.2rem;
+        }
+        
+        .ai-core-card .card-title {
+            font-size: 1.7rem !important;
+            margin-bottom: 1rem;
+        }
+        
+        .core-status {
+            font-size: 1.3rem !important;
+            font-weight: 600;
+        }
+        
+        .core-metrics {
+            font-size: 1.2rem !important;
+        }
+        
+        .core-metrics .metric-value {
+            font-size: 1.8rem !important;
+            font-weight: bold;
+        }
+        
+        /* ワークフロー可視化のスケール改善 */
+        .workflow-canvas {
+            min-height: 550px;
+        }
+        
+        .workflow-canvas text {
+            font-size: 16px !important;
+            font-weight: 600;
+        }
+        
+        /* モーダルのスケール改善 */
+        .modal-title {
+            font-size: 1.8rem !important;
+        }
+        
+        .modal-body {
+            font-size: 1.3rem !important;
+        }
+        
+        .form-label {
+            font-size: 1.3rem !important;
+            font-weight: 600;
+        }
+        
+        /* 統計表示のスタイル */
+        .stat-item {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        
+        /* N8N風ワークフローのスタイル */
+        .workflow-canvas {
+            min-height: 400px;
+            background: linear-gradient(90deg, #f8f9fa 1px, transparent 1px),
+                        linear-gradient(#f8f9fa 1px, transparent 1px);
+            background-size: 20px 20px;
+            position: relative;
+            overflow: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+        
+        .workflow-node {
+            position: absolute;
+            background: white;
+            border: 2px solid #007bff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            min-width: 120px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        
+        .workflow-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .workflow-node.status-done {
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+        
+        .workflow-node.status-doing {
+            border-color: #007bff;
+            background: #f8fbff;
+            animation: pulse 2s infinite;
+        }
+        
+        .workflow-node.status-ready {
+            border-color: #17a2b8;
+            background: #f8fdff;
+        }
+        
+        .workflow-node.status-plan {
+            border-color: #6c757d;
+            background: #f8f9fa;
+        }
+        
+        .workflow-node.status-hold {
+            border-color: #ffc107;
+            background: #fffdf8;
+        }
+        
+        .workflow-node.status-review {
+            border-color: #6f42c1;
+            background: #faf9ff;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 2px 8px rgba(0,123,255,0.1); }
+            50% { box-shadow: 0 4px 16px rgba(0,123,255,0.3); }
+            100% { box-shadow: 0 2px 8px rgba(0,123,255,0.1); }
+        }
+        
+        .workflow-connection {
+            position: absolute;
+            pointer-events: none;
+        }
+        
+        .workflow-connection svg {
+            overflow: visible;
+        }
+        
+        .workflow-connection path {
+            fill: none;
+            stroke: #6c757d;
+            stroke-width: 2;
+            marker-end: url(#arrowhead);
+        }
+        
+        .workflow-connection path.active {
+            stroke: #007bff;
+            stroke-width: 3;
+        }
+        
+        .node-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #495057;
+        }
+        
+        .node-status {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            color: white;
+            display: inline-block;
+            margin-bottom: 4px;
+        }
+        
+        .node-owner {
+            font-size: 10px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+        
+        .node-progress {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+        
+        .node-progress-bar {
+            height: 100%;
+            background: #007bff;
+            transition: width 0.3s ease;
+        }
+
+        .core-activity-log {
+            max-height: 120px;
+            overflow-y: auto;
+            background-color: #f8f9fa;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+        }
+
+        .activity-item {
+            font-size: 0.95rem;
+            color: #495057;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-item.new {
+            animation: fadeInUp 0.5s ease;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ワークフロー可視化 */
+        .workflow-container {
+            position: relative;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .core-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .core-node:hover {
+            transform: scale(1.1);
+        }
+
+        .node-circle {
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .pulse-ring {
+            animation: pulseRing 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseRing {
+            0% {
+                r: 50;
+                opacity: 0.3;
+            }
+            50% {
+                r: 60;
+                opacity: 0.1;
+            }
+            100% {
+                r: 50;
+                opacity: 0.3;
+            }
+        }
+
+        .pipe-connector {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .pipe-connector.active {
+            stroke: #007bff;
+            stroke-width: 6;
+            opacity: 1;
+        }
+
+        .pipe-connector.feedback {
+            stroke-dasharray: 5, 5;
+        }
+
+        .data-flow {
+            filter: drop-shadow(0 0 4px currentColor);
+        }
+
+        .data-flow.active {
+            opacity: 1 !important;
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                filter: drop-shadow(0 0 4px currentColor);
+            }
+            to {
+                filter: drop-shadow(0 0 8px currentColor);
+            }
+        }
+
+        /* タスクノード */
+        .task-node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .task-node:hover {
+            transform: scale(1.05);
+        }
+
+        .task-node-circle {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .task-node-text {
+            font-size: 10px;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .metric-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .realtime-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .task-table {
+            font-size: 0.9rem;
+        }
+        
+        .task-status-badge {
+            font-size: 0.75rem;
+        }
+        
+        .action-buttons {
+            margin-bottom: 1rem;
+        }
+        
+        .component-section {
+            margin-bottom: 2rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+        }
+        
+        .component-title {
+            color: #495057;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .loading-spinner {
+            display: none;
+        }
+        /* 左サイドバー（タブ一覧） */
+        .left-sidebar {
+            position: fixed;
+            left: 0;
+            top: 56px; /* ナビバー高さに合わせる */
+            width: 240px;
+            height: calc(100vh - 56px);
+            overflow-y: auto;
+            background-color: #f8f9fa;
+            border-right: 1px solid #dee2e6;
+            padding: 0.75rem;
+            z-index: 1000;
+        }
+        body.has-sidebar {
+            margin-left: 240px;
+        }
+        .sidebar-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .sidebar-link {
+            display: block;
+            padding: 0.4rem 0.5rem;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .sidebar-link:hover {
+            background-color: #e9ecef;
+            text-decoration: none;
+        }
+
+        /* プルタブ（大きい情報ブロック用の折りたたみ） */
+        .pull-tab {
+            position: absolute;
+            right: 12px;
+            top: 8px;
+            background: #343a40;
+            color: #fff;
+            border-radius: 16px;
+            padding: 4px 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .pull-panel {
+            position: relative;
+            max-height: none;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .pull-panel.collapsed {
+            max-height: 160px;
+            overflow-y: auto;
+        }
+        .pull-panel.collapsed::after {
+            content: "";
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 40px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+        }
+
+        /* ナビゲーションリンクの表示を明示（以前の非表示設定を撤回） */
+        nav.navbar a.nav-link { display: inline-block !important; }
+    </style>
+</head>
+<body>
+    <!-- アクセシビリティ向上のためのスキップリンク -->
+    <a href="#main-content" class="visually-hidden-focusable">メインコンテンツにスキップ</a>
+    
+    <!-- ナビゲーションバー -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation" aria-label="メインナビゲーション">
+        <div class="container">
+            <a class="navbar-brand" href="/" aria-label="ORCH統合管理システム ホーム">
+                <i class="fas fa-cogs me-2" aria-hidden="true"></i>
+                ORCH統合管理システム
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link active" href="/" aria-current="page">ダッシュボード</a>
+                <a class="nav-link" href="/tasks">タスク管理</a>
+                <a class="nav-link" href="/approvals">承認管理</a>
+                <a class="nav-link" href="/agents">エージェント</a>
+                <a class="nav-link" href="#" onclick="showMLSection()">ML/DB統合</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- リアルタイム接続インジケーター -->
+    <div class="realtime-indicator">
+        <span id="connection-status" class="badge bg-secondary" role="status" aria-live="polite">
+            <i class="fas fa-circle" aria-hidden="true"></i> <span class="visually-hidden">接続状態: </span>接続中...
+        </span>
+    </div>
+
+    <!-- ヘッダー -->
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="fas fa-cogs" aria-hidden="true"></i> {{ title }}</h1>
+                    <p class="mb-0">オーケストレーションシステムの統合監視ダッシュボード</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button id="refresh-btn" class="btn btn-light" aria-label="データを手動で更新">
+                        <i class="fas fa-sync-alt" aria-hidden="true"></i> 手動更新
+                    </button>
+                    <div class="loading-spinner" aria-hidden="true">
+                        <div class="spinner-border spinner-border-sm text-light" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-fluid" id="main-content" role="main">
+        <!-- AI各核の動的状態表示 -->
+        <section class="row mt-4" aria-labelledby="ai-cores-heading">
+            <div class="col-12">
+                <h2 id="ai-cores-heading" class="h3 mb-3">
+                    <i class="fas fa-microchip me-2" aria-hidden="true"></i>
+                    AI各核動作状況
+                </h2>
+            </div>
+            
+            <!-- CMD核 -->
+            <div class="col-md-4 mb-3">
+                <div class="card ai-core-card" data-core="CMD">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="h6 mb-0">
+                            <i class="fas fa-crown me-2 text-warning" aria-hidden="true"></i>
+                            司令核（CMD）
+                        </h3>
+                        <div class="core-status-indicator" id="cmd-status">
+                            <div class="gear-animation">
+                                <svg width="24" height="24" viewBox="0 0 24 24" class="gear-icon">
+                                    <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="core-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">現在の状態:</span>
+                                <span class="metric-value" id="cmd-current-state">待機中</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">処理中タスク:</span>
+                                <span class="metric-value" id="cmd-active-tasks">0</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">完了タスク:</span>
+                                <span class="metric-value" id="cmd-completed-tasks">0</span>
+                            </div>
+                        </div>
+                        <div class="core-activity-log" id="cmd-activity">
+                            <div class="activity-item">システム起動完了</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WORK核 -->
+            <div class="col-md-4 mb-3">
+                <div class="card ai-core-card" data-core="WORK">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="h6 mb-0">
+                            <i class="fas fa-cogs me-2 text-primary" aria-hidden="true"></i>
+                            作業核（WORK）
+                        </h3>
+                        <div class="core-status-indicator" id="work-status">
+                            <div class="gear-animation">
+                                <svg width="24" height="24" viewBox="0 0 24 24" class="gear-icon">
+                                    <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="core-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">現在の状態:</span>
+                                <span class="metric-value" id="work-current-state">待機中</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">処理中タスク:</span>
+                                <span class="metric-value" id="work-active-tasks">0</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">完了タスク:</span>
+                                <span class="metric-value" id="work-completed-tasks">0</span>
+                            </div>
+                        </div>
+                        <div class="core-activity-log" id="work-activity">
+                            <div class="activity-item">システム起動完了</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AUDIT核 -->
+            <div class="col-md-4 mb-3">
+                <div class="card ai-core-card" data-core="AUDIT">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="h6 mb-0">
+                            <i class="fas fa-shield-alt me-2 text-success" aria-hidden="true"></i>
+                            監査核（AUDIT）
+                        </h3>
+                        <div class="core-status-indicator" id="audit-status">
+                            <div class="gear-animation">
+                                <svg width="24" height="24" viewBox="0 0 24 24" class="gear-icon">
+                                    <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="core-metrics">
+                            <div class="metric-item">
+                                <span class="metric-label">現在の状態:</span>
+                                <span class="metric-value" id="audit-current-state">待機中</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">処理中承認:</span>
+                                <span class="metric-value" id="audit-active-approvals">0</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">完了承認:</span>
+                                <span class="metric-value" id="audit-completed-approvals">0</span>
+                            </div>
+                        </div>
+                        <div class="core-activity-log" id="audit-activity">
+                            <div class="activity-item">システム起動完了</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- タスクフロー可視化（8N8風） -->
+        <section class="row mt-4" aria-labelledby="workflow-heading">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 id="workflow-heading" class="h5 mb-0">
+                            <i class="fas fa-project-diagram me-2" aria-hidden="true"></i>
+                            タスクフロー可視化
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <!-- ワークフロー統計 -->
+                        <div id="workflow-stats" class="mb-4">
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <div class="stat-item">
+                                        <div class="stat-value">0</div>
+                                        <div class="stat-label">総タスク数</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-item">
+                                        <div class="stat-value text-primary">0</div>
+                                        <div class="stat-label">実行中</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-item">
+                                        <div class="stat-value text-success">0</div>
+                                        <div class="stat-label">完了</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="stat-item">
+                                        <div class="stat-value text-warning">0</div>
+                                        <div class="stat-label">承認待ち</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="workflow-canvas" class="workflow-container">
+                            <!-- 動的に生成されるワークフロー図 -->
+                            <svg id="workflow-svg" width="100%" height="400" viewBox="0 0 1000 400">
+                                <!-- 背景グリッド -->
+                                <defs>
+                                    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e0e0e0" stroke-width="1" opacity="0.3"/>
+                                    </pattern>
+                                </defs>
+                                <rect width="100%" height="100%" fill="url(#grid)" />
+                                
+                                <!-- AI核ノード -->
+                                <g id="cmd-node" class="core-node" transform="translate(100, 200)">
+                                    <circle r="40" fill="#ffc107" stroke="#f57c00" stroke-width="3" class="node-circle"/>
+                                    <text x="0" y="5" text-anchor="middle" fill="white" font-weight="bold" font-size="12">CMD</text>
+                                    <circle r="50" fill="none" stroke="#ffc107" stroke-width="2" opacity="0.3" class="pulse-ring"/>
+                                </g>
+                                
+                                <g id="work-node" class="core-node" transform="translate(500, 200)">
+                                    <circle r="40" fill="#007bff" stroke="#0056b3" stroke-width="3" class="node-circle"/>
+                                    <text x="0" y="5" text-anchor="middle" fill="white" font-weight="bold" font-size="12">WORK</text>
+                                    <circle r="50" fill="none" stroke="#007bff" stroke-width="2" opacity="0.3" class="pulse-ring"/>
+                                </g>
+                                
+                                <g id="audit-node" class="core-node" transform="translate(900, 200)">
+                                    <circle r="40" fill="#28a745" stroke="#1e7e34" stroke-width="3" class="node-circle"/>
+                                    <text x="0" y="5" text-anchor="middle" fill="white" font-weight="bold" font-size="12">AUDIT</text>
+                                    <circle r="50" fill="none" stroke="#28a745" stroke-width="2" opacity="0.3" class="pulse-ring"/>
+                                </g>
+                                
+                                <!-- パイプコネクター -->
+                                <g id="pipe-connectors">
+                                    <!-- CMD → WORK -->
+                                    <path id="pipe-cmd-work" d="M 140 200 Q 320 150 460 200" 
+                                          fill="none" stroke="#6c757d" stroke-width="4" opacity="0.7" class="pipe-connector"/>
+                                    <circle r="3" fill="#007bff" class="data-flow" opacity="0">
+                                        <animateMotion dur="3s" repeatCount="indefinite" begin="0s">
+                                            <mpath href="#pipe-cmd-work"/>
+                                        </animateMotion>
+                                    </circle>
+                                    
+                                    <!-- WORK → AUDIT -->
+                                    <path id="pipe-work-audit" d="M 540 200 Q 720 150 860 200" 
+                                          fill="none" stroke="#6c757d" stroke-width="4" opacity="0.7" class="pipe-connector"/>
+                                    <circle r="3" fill="#28a745" class="data-flow" opacity="0">
+                                        <animateMotion dur="3s" repeatCount="indefinite" begin="1s">
+                                            <mpath href="#pipe-work-audit"/>
+                                        </animateMotion>
+                                    </circle>
+                                    
+                                    <!-- AUDIT → CMD (フィードバック) -->
+                                    <path id="pipe-audit-cmd" d="M 860 240 Q 480 320 140 240" 
+                                          fill="none" stroke="#6c757d" stroke-width="2" opacity="0.5" class="pipe-connector feedback"/>
+                                    <circle r="2" fill="#ffc107" class="data-flow" opacity="0">
+                                        <animateMotion dur="4s" repeatCount="indefinite" begin="2s">
+                                            <mpath href="#pipe-audit-cmd"/>
+                                        </animateMotion>
+                                    </circle>
+                                </g>
+                                
+                                <!-- タスクノード（動的生成） -->
+                                <g id="task-nodes">
+                                    <!-- JavaScriptで動的に生成 -->
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 品質メトリクス -->
+        <section class="row mb-4" aria-labelledby="quality-metrics-heading">
+            <div class="col-12">
+                <h2 id="quality-metrics-heading" class="component-title">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i> 品質メトリクス
+                </h2>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card status-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value text-success" id="task-completion-rate">-</div>
+                        <div class="metric-label">タスク完了率</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card status-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value text-info" id="approval-rate">-</div>
+                        <div class="metric-label">承認率</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card status-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value text-warning" id="system-health-score">-</div>
+                        <div class="metric-label">システム健全性</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card status-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value text-danger" id="active-alerts">-</div>
+                        <div class="metric-label">アクティブアラート</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- システムヘルス -->
+        <section class="row mb-4" aria-labelledby="system-health-heading">
+            <div class="col-12">
+                <h2 id="system-health-heading" class="component-title">
+                    <i class="fas fa-heartbeat" aria-hidden="true"></i> システムヘルス
+                </h2>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">CPU使用率</h5>
+                        <div class="progress mb-2">
+                            <div id="cpu-progress" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                        <small class="text-muted" id="cpu-details">-</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">メモリ使用率</h5>
+                        <div class="progress mb-2">
+                            <div id="memory-progress" class="progress-bar bg-info" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                        <small class="text-muted" id="memory-details">-</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">ディスク使用率</h5>
+                        <div class="progress mb-2">
+                            <div id="disk-progress" class="progress-bar bg-warning" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                        <small class="text-muted" id="disk-details">-</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- アラート -->
+        <section class="row mb-4" aria-labelledby="alerts-heading" id="alerts-section" style="display: none;">
+            <div class="col-12">
+                <h2 id="alerts-heading" class="component-title">
+                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i> アラート
+                </h2>
+            </div>
+            
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="alerts-container">
+                            <!-- アラートが動的に表示される -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- マイルストーン進捗 -->
+        <section class="row mb-4" aria-labelledby="milestone-heading">
+            <div class="col-12">
+                <h2 id="milestone-heading" class="component-title">
+                    <i class="fas fa-flag-checkered" aria-hidden="true"></i> マイルストーン進捗
+                </h2>
+            </div>
+            
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="milestone-container">
+                            <!-- マイルストーン進捗が動的に表示される -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- システム概要 -->
+        <section class="row mb-4" aria-labelledby="overview-heading">
+            <div class="col-12">
+                <h2 id="overview-heading" class="component-title">
+                    <i class="fas fa-tachometer-alt" aria-hidden="true"></i> システム概要
+                </h2>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card status-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value" id="total-tasks">-</div>
+                        <div class="metric-label">総タスク数</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card status-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value" id="active-tasks">-</div>
+                        <div class="metric-label">アクティブタスク</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card status-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value" id="pending-approvals">-</div>
+                        <div class="metric-label">承認待ち</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card status-card">
+                    <div class="card-body text-center">
+                        <div class="metric-value" id="completed-today">-</div>
+                        <div class="metric-label">本日完了</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- タスク状況 -->
+        <div class="component-section">
+            <h3 class="component-title">
+                <i class="fas fa-tasks"></i> タスク状況
+            </h3>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" onclick="createNewTask()">
+                    <i class="fas fa-plus"></i> 新規タスク作成
+                </button>
+                <button class="btn btn-secondary" onclick="refreshTasks()">
+                    <i class="fas fa-sync-alt"></i> 更新
+                </button>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-striped task-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>タイトル</th>
+                            <th>ステータス</th>
+                            <th>担当者</th>
+                            <th>期限</th>
+                            <th>ロック状況</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tasks-table-body">
+                        <tr>
+                            <td colspan="7" class="text-center">読み込み中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+            <!-- タスクタイムライン -->
+            <section class="row mt-4" aria-labelledby="timeline-heading">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h2 id="timeline-heading" class="h5 mb-0">
+                                <i class="fas fa-chart-gantt me-2" aria-hidden="true"></i>
+                                タスクタイムライン
+                            </h2>
+                            <div class="btn-group" role="group" aria-label="タイムライン表示切替">
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="switchGanttView('day')" aria-pressed="false">日</button>
+                                <button type="button" class="btn btn-outline-primary btn-sm active" onclick="switchGanttView('week')" aria-pressed="true">週</button>
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="switchGanttView('month')" aria-pressed="false">月</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="gantt-chart" class="gantt-container" role="img" aria-label="タスクのガントチャート表示"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 統計チャート -->
+            <section class="row mt-4" aria-labelledby="charts-heading">
+                <div class="col-12">
+                    <h2 id="charts-heading" class="h3 mb-3">統計情報</h2>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-chart-pie me-2" aria-hidden="true"></i>
+                                タスクステータス分布
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="taskStatusChart" role="img" aria-label="タスクステータス別の分布を示す円グラフ"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-chart-bar me-2" aria-hidden="true"></i>
+                                承認状況
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="approvalStatusChart" role="img" aria-label="承認状況を示す棒グラフ"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- N8N風タスクフロー -->
+            <section class="row mb-4" aria-labelledby="workflow-heading">
+                <div class="col-12">
+                    <h2 id="workflow-heading" class="component-title">
+                        <i class="fas fa-project-diagram" aria-hidden="true"></i> タスクフロー
+                    </h2>
+                </div>
+                
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="workflow-container" class="workflow-canvas">
+                                <!-- N8N風タスクフローが動的に表示される -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- タスク一覧 -->
+            <section class="row mt-4" aria-labelledby="tasks-heading">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h2 id="tasks-heading" class="h5 mb-0">
+                                <i class="fas fa-tasks me-2" aria-hidden="true"></i>
+                                タスク一覧
+                            </h2>
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createTaskModal" aria-label="新しいタスクを作成">
+                                <i class="fas fa-plus me-1" aria-hidden="true"></i>
+                                新規作成
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <!-- タスクタブ -->
+                            <ul class="nav nav-tabs mb-3" id="taskTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="in-progress-tab" data-bs-toggle="tab" data-bs-target="#in-progress" type="button" role="tab" aria-controls="in-progress" aria-selected="true">
+                                        <i class="fas fa-play-circle me-1"></i>作業中 <span class="badge bg-primary ms-1" id="in-progress-count">0</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="planned-tab" data-bs-toggle="tab" data-bs-target="#planned" type="button" role="tab" aria-controls="planned" aria-selected="false">
+                                        <i class="fas fa-calendar-alt me-1"></i>予定 <span class="badge bg-info ms-1" id="planned-count">0</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab" aria-controls="completed" aria-selected="false">
+                                        <i class="fas fa-check-circle me-1"></i>完了済み <span class="badge bg-success ms-1" id="completed-count">0</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="not-started-tab" data-bs-toggle="tab" data-bs-target="#not-started" type="button" role="tab" aria-controls="not-started" aria-selected="false">
+                                        <i class="fas fa-pause-circle me-1"></i>未実行 <span class="badge bg-secondary ms-1" id="not-started-count">0</span>
+                                    </button>
+                                </li>
+                            </ul>
+                            
+                            <!-- タブコンテンツ -->
+                            <div class="tab-content" id="taskTabContent">
+                                <!-- 作業中タブ -->
+                                <div class="tab-pane fade show active" id="in-progress" role="tabpanel" aria-labelledby="in-progress-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" role="table" aria-label="作業中タスク一覧表">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">タイトル</th>
+                                                    <th scope="col">担当者</th>
+                                                    <th scope="col">期限</th>
+                                                    <th scope="col">進捗</th>
+                                                    <th scope="col">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="in-progress-table-body">
+                                                <!-- 作業中タスクデータがここに挿入されます -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- 予定タブ -->
+                                <div class="tab-pane fade" id="planned" role="tabpanel" aria-labelledby="planned-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" role="table" aria-label="予定タスク一覧表">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">タイトル</th>
+                                                    <th scope="col">担当者</th>
+                                                    <th scope="col">期限</th>
+                                                    <th scope="col">優先度</th>
+                                                    <th scope="col">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="planned-table-body">
+                                                <!-- 予定タスクデータがここに挿入されます -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- 完了済みタブ -->
+                                <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" role="table" aria-label="完了済みタスク一覧表">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">タイトル</th>
+                                                    <th scope="col">担当者</th>
+                                                    <th scope="col">完了日</th>
+                                                    <th scope="col">成果物</th>
+                                                    <th scope="col">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="completed-table-body">
+                                                <!-- 完了済みタスクデータがここに挿入されます -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- 未実行タブ -->
+                                <div class="tab-pane fade" id="not-started" role="tabpanel" aria-labelledby="not-started-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" role="table" aria-label="未実行タスク一覧表">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">タイトル</th>
+                                                    <th scope="col">担当者</th>
+                                                    <th scope="col">期限</th>
+                                                    <th scope="col">ステータス</th>
+                                                    <th scope="col">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="not-started-table-body">
+                                                <!-- 未実行タスクデータがここに挿入されます -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 承認一覧 -->
+            <section class="row mt-4" aria-labelledby="approvals-heading">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 id="approvals-heading" class="h5 mb-0">
+                                <i class="fas fa-check-circle me-2" aria-hidden="true"></i>
+                                承認一覧
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" role="table" aria-label="承認一覧表">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">承認ID</th>
+                                            <th scope="col">タスクID</th>
+                                            <th scope="col">操作</th>
+                                            <th scope="col">ステータス</th>
+                                            <th scope="col">申請者</th>
+                                            <th scope="col">承認者</th>
+                                            <th scope="col">申請日時</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="approvals-table-body">
+                                        <!-- 承認データがここに挿入されます -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ML/DB統合セクション -->
+            <section class="row mt-4" id="ml-db-section" style="display: none;" aria-labelledby="ml-db-heading">
+                <div class="col-12">
+                    <h2 id="ml-db-heading" class="h3 mb-3">
+                        <i class="fas fa-brain me-2" aria-hidden="true"></i>
+                        機械学習・データベース統合
+                    </h2>
+                </div>
+                
+                <!-- ML状態表示 -->
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-robot me-2" aria-hidden="true"></i>
+                                機械学習エンジン状態
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="ml-status-content">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>学習済みモデル数:</span>
+                                    <span id="ml-model-count" class="badge bg-primary">-</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>総学習データ数:</span>
+                                    <span id="ml-data-count" class="badge bg-info">-</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>最終学習日時:</span>
+                                    <span id="ml-last-training" class="badge bg-secondary">-</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <span>平均精度:</span>
+                                    <span id="ml-accuracy" class="badge bg-success">-</span>
+                                </div>
+                                <button class="btn btn-primary btn-sm me-2" onclick="trainMLModel()">
+                                    <i class="fas fa-play"></i> モデル訓練開始
+                                </button>
+                                <button class="btn btn-secondary btn-sm" onclick="refreshMLStatus()">
+                                    <i class="fas fa-sync-alt"></i> 状態更新
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- パラメーター最適化 -->
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-cogs me-2" aria-hidden="true"></i>
+                                PS1パラメーター最適化
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="script-selector" class="form-label">スクリプト選択:</label>
+                                <select class="form-select" id="script-selector">
+                                    <option value="">スクリプトを選択...</option>
+                                    <option value="task_processor">task_processor.ps1</option>
+                                    <option value="file_operations">file_operations.ps1</option>
+                                    <option value="system_monitor">system_monitor.ps1</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-success btn-sm me-2" onclick="optimizeParameters()">
+                                <i class="fas fa-magic"></i> パラメーター最適化
+                            </button>
+                            <div id="optimization-result" class="mt-3" style="display: none;">
+                                <h6>最適化結果:</h6>
+                                <div id="optimized-params"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 作業結果データベース -->
+                <div class="col-12 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-database me-2" aria-hidden="true"></i>
+                                作業結果データベース
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="task-id-input" class="form-label">タスクID:</label>
+                                    <input type="text" class="form-control" id="task-id-input" placeholder="タスクIDを入力">
+                                </div>
+                                <div class="col-md-6 d-flex align-items-end">
+                                    <button class="btn btn-primary me-2" onclick="loadWorkOutcomes()">
+                                        <i class="fas fa-search"></i> 作業結果を検索
+                                    </button>
+                                    <button class="btn btn-success" onclick="showSaveOutcomeModal()">
+                                        <i class="fas fa-plus"></i> 結果を保存
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="work-outcomes-table" class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>タスクID</th>
+                                            <th>操作種別</th>
+                                            <th>成功/失敗</th>
+                                            <th>実行時間(ms)</th>
+                                            <th>エラーメッセージ</th>
+                                            <th>変更ファイル数</th>
+                                            <th>実行日時</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="work-outcomes-body">
+                                        <tr>
+                                            <td colspan="7" class="text-center">データがありません</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 新規タスク作成モーダル -->
+        <div class="modal fade" id="createTaskModal" tabindex="-1" aria-labelledby="createTaskModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title h5" id="createTaskModalLabel">新規タスク作成</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="モーダルを閉じる"></button>
+                    </div>
+                    <form id="createTaskForm" novalidate>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="taskTitle" class="form-label">タイトル <span class="text-danger" aria-label="必須">*</span></label>
+                                <input type="text" class="form-control" id="taskTitle" name="title" required aria-describedby="taskTitleHelp">
+                                <div id="taskTitleHelp" class="form-text">タスクの簡潔な説明を入力してください</div>
+                                <div class="invalid-feedback">タイトルは必須です</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="taskOwner" class="form-label">担当者</label>
+                                <select class="form-select" id="taskOwner" name="owner" aria-describedby="taskOwnerHelp">
+                                    <option value="CMD">CMD</option>
+                                    <option value="WORK" selected>WORK</option>
+                                    <option value="AUDIT">AUDIT</option>
+                                </select>
+                                <div id="taskOwnerHelp" class="form-text">タスクの担当者を選択してください</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="taskDue" class="form-label">期限</label>
+                                <input type="date" class="form-control" id="taskDue" name="due" aria-describedby="taskDueHelp">
+                                <div id="taskDueHelp" class="form-text">タスクの完了期限を設定してください（任意）</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="taskNotes" class="form-label">備考</label>
+                                <textarea class="form-control" id="taskNotes" name="notes" rows="3" aria-describedby="taskNotesHelp"></textarea>
+                                <div id="taskNotesHelp" class="form-text">追加の詳細や受入基準を記入してください</div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus me-1" aria-hidden="true"></i>
+                                作成
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 通知エリア -->
+        <div id="notification-area" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;" aria-live="polite" aria-atomic="true">
+            <!-- 通知がここに動的に追加されます -->
+        </div>
+
+        <!-- ローディングオーバーレイ -->
+        <div id="loading-overlay" class="loading-overlay d-none" role="status" aria-label="読み込み中">
+            <div class="loading-spinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">読み込み中...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Socket.IO接続
+const socket = (typeof io === "function") ? io({autoConnect: true}) : { on: ()=>{}, emit: ()=>{} }; if (!("on" in socket)) { console.warn("SocketIO disabled; running without realtime."); }let ganttChart = null;
+        let taskStatusChart = null;
+        let approvalStatusChart = null;
+        let currentGanttView = 'Week';
+
+        // ガントチャート初期化
+        function initGanttChart(tasks) {
+            // ガントチャートは一時的に無効化し、代替表示を使用
+            document.getElementById('gantt-chart').innerHTML = 
+                '<div class="alert alert-info"><i class="fas fa-info-circle me-2"></i>ガントチャート機能は現在準備中です。タスク一覧をご利用ください。</div>';
+            return;
+        }
+
+        // ステータスから進捗率を計算
+        function getProgressByStatus(status) {
+            const progressMap = {
+                'PLAN': 0,
+                'READY': 10,
+                'DOING': 50,
+                'REVIEW': 80,
+                'DONE': 100,
+                'HOLD': 25,
+                'DROP': 0,
+                'FIX': 40
+            };
+            return progressMap[status] || 0;
+        }
+
+        // ガントチャート表示切替
+        function switchGanttView(viewMode) {
+            currentGanttView = viewMode.charAt(0).toUpperCase() + viewMode.slice(1);
+            document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (ganttChart) {
+                ganttChart.change_view_mode(currentGanttView);
+            }
+        }
+
+        // タスクステータスチャート初期化
+        function initTaskStatusChart(tasks) {
+            const statusCounts = {};
+            tasks.forEach(task => {
+                statusCounts[task.status] = (statusCounts[task.status] || 0) + 1;
+            });
+
+            const ctx = document.getElementById('taskStatusChart').getContext('2d');
+            
+            if (taskStatusChart) {
+                taskStatusChart.destroy();
+            }
+
+            taskStatusChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(statusCounts),
+                    datasets: [{
+                        data: Object.values(statusCounts),
+                        backgroundColor: [
+                            '#1976d2', '#f57c00', '#7b1fa2', '#388e3c',
+                            '#c2185b', '#d32f2f', '#689f38', '#ffa000'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // ステータスアイコン取得
+        function getStatusIcon(status) {
+            const iconMap = {
+                'PLAN': 'fa-lightbulb',
+                'READY': 'fa-play-circle',
+                'DOING': 'fa-spinner',
+                'REVIEW': 'fa-search',
+                'DONE': 'fa-check-circle',
+                'HOLD': 'fa-pause-circle',
+                'DROP': 'fa-times-circle',
+                'FIX': 'fa-wrench'
+            };
+            return iconMap[status] || 'fa-question-circle';
+        }
+
+        // 承認アイコン取得
+        function getApprovalIcon(status) {
+            const iconMap = {
+                'pending': 'fa-clock',
+                'approved': 'fa-check',
+                'rejected': 'fa-times',
+                'expired': 'fa-hourglass-end'
+            };
+            return iconMap[status] || 'fa-question';
+        }
+
+        // AI各核の動的状態管理
+        let coreStates = {
+            CMD: { status: 'idle', activeTasks: 0, completedTasks: 0, activity: [] },
+            WORK: { status: 'idle', activeTasks: 0, completedTasks: 0, activity: [] },
+            AUDIT: { status: 'idle', activeApprovals: 0, completedApprovals: 0, activity: [] }
+        };
+
+        // 核の状態更新
+        function updateCoreStatus(core, status, metrics = {}) {
+            const coreState = coreStates[core];
+            if (!coreState) return;
+
+            coreState.status = status;
+            Object.assign(coreState, metrics);
+
+            // UI更新
+            updateCoreUI(core);
+            
+            // アクティビティログ追加
+            addCoreActivity(core, `状態変更: ${status}`);
+        }
+
+        // 核のUI更新
+        function updateCoreUI(core) {
+            const state = coreStates[core];
+            const card = document.querySelector(`.ai-core-card[data-core="${core}"]`);
+            const gearAnimation = document.querySelector(`#${core.toLowerCase()}-status .gear-animation`);
+            
+            if (!card || !gearAnimation) return;
+
+            // カードの状態表示
+            card.classList.toggle('active', state.status !== 'idle');
+            
+            // 歯車アニメーション
+            gearAnimation.classList.toggle('spinning', state.status === 'working');
+
+            // メトリクス更新
+            const currentStateEl = document.getElementById(`${core.toLowerCase()}-current-state`);
+            if (currentStateEl) {
+                currentStateEl.textContent = getStatusText(state.status);
+            }
+
+            if (core === 'AUDIT') {
+                const activeEl = document.getElementById(`${core.toLowerCase()}-active-approvals`);
+                const completedEl = document.getElementById(`${core.toLowerCase()}-completed-approvals`);
+                if (activeEl) activeEl.textContent = state.activeApprovals;
+                if (completedEl) completedEl.textContent = state.completedApprovals;
+            } else {
+                const activeEl = document.getElementById(`${core.toLowerCase()}-active-tasks`);
+                const completedEl = document.getElementById(`${core.toLowerCase()}-completed-tasks`);
+                if (activeEl) activeEl.textContent = state.activeTasks;
+                if (completedEl) completedEl.textContent = state.completedTasks;
+            }
+        }
+
+        // 状態テキスト取得
+        function getStatusText(status) {
+            const statusMap = {
+                'idle': '待機中',
+                'working': '作業中',
+                'reviewing': '審査中',
+                'planning': '計画中',
+                'error': 'エラー'
+            };
+            return statusMap[status] || status;
+        }
+
+        // アクティビティログ追加
+        function addCoreActivity(core, message) {
+            const state = coreStates[core];
+            const timestamp = new Date().toLocaleTimeString('ja-JP');
+            const activity = `[${timestamp}] ${message}`;
+            
+            state.activity.unshift(activity);
+            if (state.activity.length > 10) {
+                state.activity.pop();
+            }
+
+            // UI更新
+            const logContainer = document.getElementById(`${core.toLowerCase()}-activity`);
+            if (logContainer) {
+                const activityItem = document.createElement('div');
+                activityItem.className = 'activity-item new';
+                activityItem.textContent = activity;
+                
+                logContainer.insertBefore(activityItem, logContainer.firstChild);
+                
+                // 古いアイテムを削除
+                while (logContainer.children.length > 10) {
+                    logContainer.removeChild(logContainer.lastChild);
+                }
+                
+                // アニメーション後にnewクラスを削除
+                setTimeout(() => {
+                    activityItem.classList.remove('new');
+                }, 500);
+            }
+        }
+
+        // ワークフロー可視化の更新（実データ連動強化）
+        function updateWorkflowVisualization(tasks = [], approvals = []) {
+            const taskNodesGroup = document.getElementById('task-nodes');
+            if (!taskNodesGroup) return;
+
+            // 既存のタスクノードをクリア
+            taskNodesGroup.innerHTML = '';
+
+            // 実際のタスクデータを状態別に分類
+            const tasksByStatus = {
+                'PLAN': tasks.filter(t => t.status === 'PLAN'),
+                'READY': tasks.filter(t => t.status === 'READY'),
+                'DOING': tasks.filter(t => t.status === 'DOING'),
+                'REVIEW': tasks.filter(t => t.status === 'REVIEW'),
+                'DONE': tasks.filter(t => t.status === 'DONE')
+            };
+
+            // アクティブなタスクを優先表示（最大8個）
+            const activeStatuses = ['DOING', 'REVIEW', 'READY', 'PLAN'];
+            let displayTasks = [];
+            
+            for (const status of activeStatuses) {
+                displayTasks = displayTasks.concat(tasksByStatus[status].slice(0, 2));
+                if (displayTasks.length >= 8) break;
+            }
+            
+            displayTasks = displayTasks.slice(0, 8);
+
+            // タスクノードを配置（円形レイアウト）
+            const centerX = 400;
+            const centerY = 250;
+            const radius = 180;
+            
+            displayTasks.forEach((task, index) => {
+                const angle = (index * 2 * Math.PI) / Math.max(displayTasks.length, 4);
+                const x = centerX + radius * Math.cos(angle - Math.PI / 2);
+                const y = centerY + radius * Math.sin(angle - Math.PI / 2);
+
+                // タスクノード作成
+                const taskNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                taskNode.setAttribute('class', 'task-node');
+                taskNode.setAttribute('data-task-id', task.id);
+                taskNode.style.cursor = 'pointer';
+
+                // ノード円
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', x);
+                circle.setAttribute('cy', y);
+                circle.setAttribute('r', 25);
+                circle.setAttribute('fill', getTaskColor(task.status));
+                circle.setAttribute('stroke', '#333');
+                circle.setAttribute('stroke-width', '2');
+                circle.setAttribute('class', 'task-circle');
+
+                // タスクID表示
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x);
+                text.setAttribute('y', y + 5);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('fill', '#fff');
+                text.setAttribute('font-size', '12');
+                text.setAttribute('font-weight', 'bold');
+                text.textContent = task.id;
+
+                // ステータス表示
+                const statusText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                statusText.setAttribute('x', x);
+                statusText.setAttribute('y', y + 45);
+                statusText.setAttribute('text-anchor', 'middle');
+                statusText.setAttribute('fill', '#333');
+                statusText.setAttribute('font-size', '10');
+                statusText.textContent = task.status;
+
+                taskNode.appendChild(circle);
+                taskNode.appendChild(text);
+                taskNode.appendChild(statusText);
+
+                // クリックイベント
+                taskNode.addEventListener('click', () => showTaskDetails(task));
+
+                // 状態に応じたアニメーション
+                if (task.status === 'DOING') {
+                    circle.setAttribute('class', 'task-circle pulse');
+                }
+
+                taskNodesGroup.appendChild(taskNode);
+
+                // 核との接続線を描画
+                const corePositions = {
+                    'CMD': { x: 150, y: 150 },
+                    'WORK': { x: 400, y: 100 },
+                    'AUDIT': { x: 650, y: 150 }
+                };
+
+                let targetCore = 'CMD';
+                if (['DOING', 'REVIEW'].includes(task.status)) targetCore = 'WORK';
+                if (task.status === 'REVIEW') targetCore = 'AUDIT';
+
+                const corePos = corePositions[targetCore];
+                const connectionLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                connectionLine.setAttribute('x1', corePos.x);
+                connectionLine.setAttribute('y1', corePos.y);
+                connectionLine.setAttribute('x2', x);
+                connectionLine.setAttribute('y2', y);
+                connectionLine.setAttribute('stroke', getTaskColor(task.status));
+                connectionLine.setAttribute('stroke-width', '2');
+                connectionLine.setAttribute('stroke-dasharray', '5,5');
+                connectionLine.setAttribute('opacity', '0.6');
+                connectionLine.setAttribute('class', 'connection-line');
+
+                taskNodesGroup.appendChild(connectionLine);
+            });
+
+            // データフロー更新
+            updateDataFlowAnimation(displayTasks.length > 0);
+            
+            // 統計情報更新
+            updateWorkflowStats(tasksByStatus, approvals);
+        }
+                // ワークフロー統計情報更新
+        function updateWorkflowStats(tasksByStatus, approvals) {
+            // タスク統計
+            const totalTasks = Object.values(tasksByStatus).reduce((sum, tasks) => sum + tasks.length, 0);
+            const activeTasks = tasksByStatus['DOING'].length + tasksByStatus['REVIEW'].length;
+            const completedTasks = tasksByStatus['DONE'].length;
+            
+            // 承認統計
+            const pendingApprovals = approvals.filter(a => a.status === 'pending').length;
+            const completedApprovals = approvals.filter(a => ['approved', 'rejected'].includes(a.status)).length;
+            
+            // 統計表示更新
+            const statsContainer = document.getElementById('workflow-stats');
+            if (statsContainer) {
+                statsContainer.innerHTML = `
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-value">${totalTasks}</div>
+                                <div class="stat-label">総タスク数</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-value text-primary">${activeTasks}</div>
+                                <div class="stat-label">実行中</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-value text-success">${completedTasks}</div>
+                                <div class="stat-label">完了</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-item">
+                                <div class="stat-value text-warning">${pendingApprovals}</div>
+                                <div class="stat-label">承認待ち</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // タスクの色取得
+        function getTaskColor(status) {
+            const colorMap = {
+                'READY': '#17a2b8',
+                'DOING': '#007bff',
+                'REVIEW': '#ffc107'
+            };
+            return colorMap[status] || '#6c757d';
+        }
+
+        // データフローアニメーション制御
+        function updateDataFlowAnimation(isActive) {
+            const dataFlows = document.querySelectorAll('.data-flow');
+            const pipeConnectors = document.querySelectorAll('.pipe-connector');
+            
+            dataFlows.forEach(flow => {
+                flow.classList.toggle('active', isActive);
+            });
+            
+            pipeConnectors.forEach(pipe => {
+                pipe.classList.toggle('active', isActive);
+            });
+        }
+
+        // タスク詳細表示
+        function showTaskDetails(task) {
+            const modal = new bootstrap.Modal(document.getElementById('taskModal'));
+            
+            // モーダル内容更新
+            document.getElementById('taskModalLabel').textContent = `タスク詳細: ${task.title}`;
+            document.getElementById('taskId').value = task.id;
+            document.getElementById('taskTitle').value = task.title;
+            document.getElementById('taskStatus').value = task.status;
+            document.getElementById('taskOwner').value = task.owner;
+            document.getElementById('taskDue').value = task.due;
+            document.getElementById('taskNotes').value = task.notes;
+            
+            modal.show();
+        }
+
+        // リアルタイム更新の統合
+        function initDynamicUI() {
+            // 初期状態設定
+            updateCoreStatus('CMD', 'idle');
+            updateCoreStatus('WORK', 'idle');
+            updateCoreStatus('AUDIT', 'idle');
+            
+            // 定期的な状態更新シミュレーション
+            setInterval(() => {
+                simulateCoreActivity();
+            }, 5000);
+        }
+
+        // 核の活動シミュレーション
+        function simulateCoreActivity() {
+            const cores = ['CMD', 'WORK', 'AUDIT'];
+            const randomCore = cores[Math.floor(Math.random() * cores.length)];
+            
+            // ランダムな活動をシミュレート
+            const activities = [
+                'タスク処理完了',
+                '新規タスク受信',
+                '承認要求処理',
+                'システム監視実行',
+                'データ同期完了'
+            ];
+            
+            const randomActivity = activities[Math.floor(Math.random() * activities.length)];
+            addCoreActivity(randomCore, randomActivity);
+        }
+
+        // 通知表示（改良版）
+        function showNotification(message, type = 'info') {
+            const alertClass = type === 'error' ? 'alert-danger' : 
+                              type === 'success' ? 'alert-success' : 'alert-info';
+            
+            const notification = document.createElement('div');
+            notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed fade-in`;
+            notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+            notification.innerHTML = `
+                <i class="fas ${type === 'error' ? 'fa-exclamation-triangle' : 
+                               type === 'success' ? 'fa-check-circle' : 'fa-info-circle'} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.classList.add('fade');
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            notification.parentNode.removeChild(notification);
+                        }
+                    }, 300);
+                }
+            }, 5000);
+        }
+
+        // ローディング表示
+        function showLoading(element) {
+            const spinner = document.createElement('div');
+            spinner.className = 'loading-spinner';
+            spinner.style.cssText = 'position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);';
+            
+            element.style.position = 'relative';
+            element.appendChild(spinner);
+            return spinner;
+        }
+
+        function hideLoading(spinner) {
+            if (spinner && spinner.parentNode) {
+                spinner.parentNode.removeChild(spinner);
+            }
+        }
+
+        // アニメーション効果付きでカードを更新
+        function updateCardWithAnimation(cardElement, newContent) {
+            cardElement.style.opacity = '0.5';
+            setTimeout(() => {
+                cardElement.innerHTML = newContent;
+                cardElement.style.opacity = '1';
+                cardElement.classList.add('fade-in');
+            }, 200);
+        }
+
+        // 承認ステータスチャート初期化
+        function initApprovalStatusChart(approvals) {
+            const statusCounts = {};
+            approvals.forEach(approval => {
+                statusCounts[approval.status] = (statusCounts[approval.status] || 0) + 1;
+            });
+
+            const ctx = document.getElementById('approvalStatusChart').getContext('2d');
+            
+            if (approvalStatusChart) {
+                approvalStatusChart.destroy();
+            }
+
+            approvalStatusChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(statusCounts),
+                    datasets: [{
+                        label: '承認件数',
+                        data: Object.values(statusCounts),
+                        backgroundColor: ['#f57c00', '#388e3c', '#d32f2f', '#757575'],
+                        borderColor: ['#e65100', '#2e7d32', '#c62828', '#616161'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 接続状態管理
+        socket.on('connect', function() {
+            document.getElementById('connection-status').innerHTML = 
+                '<i class="fas fa-circle text-success"></i> 接続済み';
+            document.getElementById('connection-status').className = 'badge bg-success';
+        });
+        
+        socket.on('disconnect', function() {
+            document.getElementById('connection-status').innerHTML = 
+                '<i class="fas fa-circle text-danger"></i> 切断';
+            document.getElementById('connection-status').className = 'badge bg-danger';
+        });
+        
+        // データ読み込み
+        async function loadDashboardData() {
+            showLoading(true);
+            
+            try {
+                // 概要データ
+                const overviewResponse = await fetch('/api/overview');
+                const overviewData = await overviewResponse.json();
+                updateOverviewData(overviewData);
+                
+                // タスクデータ
+                const tasksResponse = await fetch('/api/tasks');
+                const tasksData = await tasksResponse.json();
+                updateTasksTable(tasksData);
+                
+                // タブ別タスク表示
+                displayTasksByTabs(tasksData.tasks || []);
+
+                // マイルストーン（API）読み込みと進捗表示
+                try {
+                    const milestonesResponse = await fetch('/api/milestones');
+                    const milestonesData = await milestonesResponse.json();
+                    const milestones = milestonesData.milestones || [];
+                    displayMilestoneProgressFromMilestones(milestones, tasksData.tasks || []);
+                } catch (e) {
+                    console.warn('Milestones API読み込み失敗、タスクから生成にフォールバックします:', e);
+                    displayMilestoneProgress(tasksData.tasks || []);
+                }
+                
+                // N8N風ワークフロー表示
+                displayWorkflowVisualization(tasksData.tasks || []);
+                
+                // 承認データ
+                const approvalsResponse = await fetch('/api/approvals');
+                const approvalsData = await approvalsResponse.json();
+                updateApprovalsTable(approvalsData);
+                
+                // チャート初期化
+                initGanttChart(tasksData.tasks || []);
+                initTaskStatusChart(tasksData.tasks || []);
+                initApprovalStatusChart(approvalsData.approvals || []);
+                
+                // 動的UI更新
+                updateWorkflowVisualization(tasksData.tasks || [], approvalsData.approvals || []);
+                updateCoreStatesFromData(tasksData.tasks || [], approvalsData.approvals || []);
+                
+            } catch (error) {
+                console.error('データ読み込みエラー:', error);
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // 概要データ更新
+        function updateOverviewData(data) {
+            const systemStatus = data.system_status || {};
+            
+            document.getElementById('total-tasks').textContent = 
+                systemStatus.total_tasks || 0;
+            
+            const statusCounts = systemStatus.task_status_counts || {};
+            const activeTasks = (statusCounts.READY || 0) + (statusCounts.DOING || 0);
+            document.getElementById('active-tasks').textContent = activeTasks;
+            
+            const approvalCounts = systemStatus.approval_status_counts || {};
+            document.getElementById('pending-approvals').textContent = 
+                approvalCounts.pending || 0;
+            
+            // 本日完了タスク数（簡易実装）
+            document.getElementById('completed-today').textContent = 
+                statusCounts.DONE || 0;
+        }
+        
+        // タスクテーブル更新
+        function updateTasksTable(data) {
+            const tbody = document.getElementById('tasks-table-body');
+            const tasks = data.tasks || [];
+            
+            if (tasks.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">タスクがありません</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = tasks.map(task => `
+                <tr>
+                    <td>${task.id}</td>
+                    <td>${task.title}</td>
+                    <td><span class="badge task-status-badge status-${task.status.toLowerCase()}">
+                            <i class="fas ${getStatusIcon(task.status)} me-1"></i>
+                            ${task.status}
+                        </span></td>
+                    <td>${task.owner}</td>
+                    <td>${task.due || '-'}</td>
+                    <td>${task.lock !== '-' ? '<i class="fas fa-lock text-warning"></i>' : '<i class="fas fa-unlock text-success"></i>'}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="editTask('${task.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // 承認テーブル更新
+        function updateApprovalsTable(data) {
+            const tbody = document.getElementById('approvals-table-body');
+            const approvals = data.approvals || [];
+            
+            if (approvals.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">承認がありません</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = approvals.map(approval => `
+                <tr>
+                    <td>${approval.appr_id}</td>
+                    <td>${approval.task_id}</td>
+                    <td>${approval.op}</td>
+                    <td><span class="badge approval-${approval.status} me-2">
+                            <i class="fas ${getApprovalIcon(approval.status)} me-1"></i>
+                            ${approval.status}
+                        </span></td>
+                    <td>${approval.requested_by}</td>
+                    <td>${approval.approver || '-'}</td>
+                    <td>${approval.ts_req}</td>
+                    <td>
+                        ${approval.status === 'pending' ? 
+                            `<button class="btn btn-sm btn-success me-1" onclick="approveRequest('${approval.appr_id}')">承認</button>
+                             <button class="btn btn-sm btn-danger" onclick="rejectRequest('${approval.appr_id}')">却下</button>` : 
+                            '-'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // ローディング表示制御
+        function showLoading(show) {
+            const spinner = document.querySelector('.loading-spinner');
+            spinner.style.display = show ? 'inline-block' : 'none';
+        }
+        
+        // 新規タスク作成
+        function createNewTask() {
+            const modal = new bootstrap.Modal(document.getElementById('createTaskModal'));
+            modal.show();
+        }
+        
+        // 新規タスク送信
+        async function submitNewTask() {
+            const form = document.getElementById('createTaskForm');
+            const formData = new FormData(form);
+            
+            const taskData = {
+                title: document.getElementById('taskTitle').value,
+                owner: document.getElementById('taskOwner').value,
+                due: document.getElementById('taskDue').value,
+                notes: document.getElementById('taskNotes').value
+            };
+            
+            try {
+                const response = await fetch('/api/task/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(taskData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('createTaskModal'));
+                    modal.hide();
+                    form.reset();
+                    loadDashboardData(); // データ再読み込み
+                } else {
+                    alert('タスク作成に失敗しました: ' + result.message);
+                }
+            } catch (error) {
+                console.error('タスク作成エラー:', error);
+                alert('タスク作成中にエラーが発生しました');
+            }
+        }
+
+        // ML/DB統合機能
+        function showMLSection() {
+            // 他のセクションを非表示
+            document.querySelectorAll('section').forEach(section => {
+                if (section.id !== 'ml-db-section') {
+                    section.style.display = 'none';
+                }
+            });
+            
+            // ML/DBセクションを表示
+            document.getElementById('ml-db-section').style.display = 'block';
+            
+            // ナビゲーションの状態を更新
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // ML状態を読み込み
+            refreshMLStatus();
+        }
+
+        // ML状態更新
+        async function refreshMLStatus() {
+            try {
+                const response = await fetch('/api/ml/status');
+                const data = await response.json();
+                
+                if (data.error) {
+                    document.getElementById('ml-model-count').textContent = 'N/A';
+                    document.getElementById('ml-data-count').textContent = 'N/A';
+                    document.getElementById('ml-last-training').textContent = 'N/A';
+                    document.getElementById('ml-accuracy').textContent = 'N/A';
+                } else {
+                    document.getElementById('ml-model-count').textContent = data.model_count || 0;
+                    document.getElementById('ml-data-count').textContent = data.training_data_count || 0;
+                    document.getElementById('ml-last-training').textContent = data.last_training_time || 'なし';
+                    document.getElementById('ml-accuracy').textContent = (data.average_accuracy || 0).toFixed(2) + '%';
+                }
+            } catch (error) {
+                console.error('ML状態取得エラー:', error);
+            }
+        }
+
+        // MLモデル訓練
+        async function trainMLModel() {
+            const epochs = prompt('エポック数を入力してください (デフォルト: 50):', '50');
+            if (!epochs) return;
+            
+            try {
+                const response = await fetch('/api/ml/train', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ epochs: parseInt(epochs) })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('モデル訓練を開始しました: ' + result.message);
+                    // 状態を更新
+                    setTimeout(refreshMLStatus, 2000);
+                } else {
+                    alert('訓練開始に失敗しました: ' + result.error);
+                }
+            } catch (error) {
+                console.error('モデル訓練エラー:', error);
+                alert('訓練開始中にエラーが発生しました');
+            }
+        }
+
+        // パラメーター最適化
+        async function optimizeParameters() {
+            const scriptName = document.getElementById('script-selector').value;
+            if (!scriptName) {
+                alert('スクリプトを選択してください');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/ml/optimize/${scriptName}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const params = result.optimized_parameters;
+                    const resultDiv = document.getElementById('optimization-result');
+                    const paramsDiv = document.getElementById('optimized-params');
+                    
+                    paramsDiv.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted">タイムアウト:</small><br>
+                                <strong>${params.timeout_ms}ms</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted">リトライ回数:</small><br>
+                                <strong>${params.retry_count}</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted">バッチサイズ:</small><br>
+                                <strong>${params.batch_size}</strong>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted">メモリ制限:</small><br>
+                                <strong>${params.memory_limit_mb}MB</strong>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <small class="text-muted">成功率:</small> <span class="badge bg-success">${(params.success_rate * 100).toFixed(1)}%</span>
+                                <small class="text-muted ms-3">平均実行時間:</small> <span class="badge bg-info">${params.avg_execution_time_ms}ms</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    resultDiv.style.display = 'block';
+                } else {
+                    alert('最適化に失敗しました: ' + result.message);
+                }
+            } catch (error) {
+                console.error('パラメーター最適化エラー:', error);
+                alert('最適化中にエラーが発生しました');
+            }
+        }
+
+        // 作業結果読み込み
+        async function loadWorkOutcomes() {
+            const taskId = document.getElementById('task-id-input').value;
+            if (!taskId) {
+                alert('タスクIDを入力してください');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/knowledge/work_outcomes/${taskId}`);
+                const data = await response.json();
+                
+                const tbody = document.getElementById('work-outcomes-body');
+                
+                if (data.error) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">エラー: ' + data.error + '</td></tr>';
+                    return;
+                }
+                
+                const outcomes = data.work_outcomes || [];
+                
+                if (outcomes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center">該当するデータがありません</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = outcomes.map(outcome => `
+                    <tr>
+                        <td>${outcome.task_id}</td>
+                        <td>${outcome.operation_type}</td>
+                        <td><span class="badge ${outcome.success ? 'bg-success' : 'bg-danger'}">
+                                ${outcome.success ? '成功' : '失敗'}
+                            </span></td>
+                        <td>${outcome.execution_time_ms}</td>
+                        <td>${outcome.error_message || '-'}</td>
+                        <td>${outcome.files_modified ? outcome.files_modified.length : 0}</td>
+                        <td>${new Date(outcome.timestamp).toLocaleString()}</td>
+                    </tr>
+                `).join('');
+                
+            } catch (error) {
+                console.error('作業結果読み込みエラー:', error);
+                document.getElementById('work-outcomes-body').innerHTML = 
+                    '<tr><td colspan="7" class="text-center text-danger">読み込み中にエラーが発生しました</td></tr>';
+            }
+        }
+
+        // 作業結果保存モーダル表示
+        function showSaveOutcomeModal() {
+            alert('作業結果保存機能は開発中です。APIエンドポイント /api/knowledge/save_outcome を使用してください。');
+        }
+        
+        // タスク編集
+        function editTask(taskId) {
+            // 実装予定
+            alert('タスク編集機能は実装予定です');
+        }
+        
+        // 承認処理
+        async function approveRequest(approvalId) {
+            if (!confirm('この申請を承認しますか？')) return;
+            
+            try {
+                const response = await fetch(`/api/approval/${approvalId}/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        status: 'approved',
+                        approver: 'CMD', // 実際は現在のユーザー
+                        approver_role: 'CMD'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    loadDashboardData(); // データ再読み込み
+                } else {
+                    alert('承認処理に失敗しました: ' + result.message);
+                }
+            } catch (error) {
+                console.error('承認処理エラー:', error);
+                alert('承認処理中にエラーが発生しました');
+            }
+        }
+        
+        // 却下処理
+        async function rejectRequest(approvalId) {
+            if (!confirm('この申請を却下しますか？')) return;
+            
+            try {
+                const response = await fetch(`/api/approval/${approvalId}/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        status: 'rejected',
+                        approver: 'CMD', // 実際は現在のユーザー
+                        approver_role: 'CMD'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    loadDashboardData(); // データ再読み込み
+                } else {
+                    alert('却下処理に失敗しました: ' + result.message);
+                }
+            } catch (error) {
+                console.error('却下処理エラー:', error);
+                alert('却下処理中にエラーが発生しました');
+            }
+        }
+        
+        // 更新ボタン
+        function refreshTasks() {
+            loadDashboardData();
+        }
+        
+        // タブ別タスク表示
+        function displayTasksByTabs(tasks) {
+            // タスクを状態別に分類
+            const inProgressTasks = tasks.filter(t => t.status === 'DOING');
+            const plannedTasks = tasks.filter(t => ['PLAN', 'READY'].includes(t.status));
+            const completedTasks = tasks.filter(t => t.status === 'DONE');
+            const notStartedTasks = tasks.filter(t => ['HOLD', 'REVIEW'].includes(t.status));
+            
+            // カウント更新
+            document.getElementById('in-progress-count').textContent = inProgressTasks.length;
+            document.getElementById('planned-count').textContent = plannedTasks.length;
+            document.getElementById('completed-count').textContent = completedTasks.length;
+            document.getElementById('not-started-count').textContent = notStartedTasks.length;
+            
+            // 各タブのテーブル更新
+            updateTaskTable('in-progress-table-body', inProgressTasks, 'in-progress');
+            updateTaskTable('planned-table-body', plannedTasks, 'planned');
+            updateTaskTable('completed-table-body', completedTasks, 'completed');
+            updateTaskTable('not-started-table-body', notStartedTasks, 'not-started');
+        }
+        
+        // タスクテーブル更新
+        function updateTaskTable(tableBodyId, tasks, type) {
+            const tbody = document.getElementById(tableBodyId);
+            
+            if (tasks.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">該当するタスクがありません</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = tasks.map(task => {
+                let columns = '';
+                
+                switch (type) {
+                    case 'in-progress':
+                        const progress = getTaskProgress(task);
+                        columns = `
+                            <td>${task.id}</td>
+                            <td>${task.title}</td>
+                            <td><span class="badge bg-info">${task.owner}</span></td>
+                            <td>${task.due || '-'}</td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar ${progress.class}" role="progressbar" 
+                                         style="width: ${progress.percent}%" 
+                                         aria-valuenow="${progress.percent}" aria-valuemin="0" aria-valuemax="100">
+                                        ${progress.percent}%
+                                    </div>
+                                </div>
+                            </td>
+                        `;
+                        break;
+                        
+                    case 'planned':
+                        const priority = getTaskPriority(task);
+                        columns = `
+                            <td>${task.id}</td>
+                            <td>${task.title}</td>
+                            <td><span class="badge bg-secondary">${task.owner}</span></td>
+                            <td>${task.due || '-'}</td>
+                            <td><span class="badge ${priority.class}">${priority.text}</span></td>
+                        `;
+                        break;
+                        
+                    case 'completed':
+                        columns = `
+                            <td>${task.id}</td>
+                            <td>${task.title}</td>
+                            <td><span class="badge bg-success">${task.owner}</span></td>
+                            <td>${task.due || '-'}</td>
+                            <td>${task.artifact ? '<i class="fas fa-file-alt text-success"></i>' : '-'}</td>
+                        `;
+                        break;
+                        
+                    case 'not-started':
+                        columns = `
+                            <td>${task.id}</td>
+                            <td>${task.title}</td>
+                            <td><span class="badge bg-warning">${task.owner}</span></td>
+                            <td>${task.due || '-'}</td>
+                            <td><span class="badge bg-secondary">${task.status}</span></td>
+                        `;
+                        break;
+                }
+                
+                return `
+                    <tr>
+                        ${columns}
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="editTask('${task.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // タスク進捗計算
+        function getTaskProgress(task) {
+            const now = new Date();
+            const due = task.due ? new Date(task.due) : null;
+            
+            if (!due) {
+                return { percent: 50, class: 'bg-info' };
+            }
+            
+            const lockExpires = task.lock_expires_at ? new Date(task.lock_expires_at) : null;
+            if (lockExpires && lockExpires < now) {
+                return { percent: 25, class: 'bg-warning' };
+            }
+            
+            const timeRemaining = due - now;
+            const dayRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24));
+            
+            if (dayRemaining <= 0) {
+                return { percent: 90, class: 'bg-danger' };
+            } else if (dayRemaining <= 1) {
+                return { percent: 75, class: 'bg-warning' };
+            } else {
+                return { percent: 60, class: 'bg-primary' };
+            }
+        }
+        
+        // マイルストーン進捗表示
+        function displayMilestoneProgress(tasks) {
+            const milestones = generateMilestones(tasks);
+            const container = document.getElementById('milestone-container');
+            
+            if (milestones.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">マイルストーンデータがありません</p>';
+                return;
+            }
+            
+            container.innerHTML = milestones.map(milestone => `
+                <div class="milestone-item mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="milestone-title">
+                            <i class="fas ${milestone.icon} me-2"></i>
+                            ${milestone.name}
+                        </h5>
+                        <span class="badge ${milestone.statusClass} fs-6">${milestone.status}</span>
+                    </div>
+                    
+                    <div class="progress mb-3" style="height: 25px;">
+                        <div class="progress-bar ${milestone.progressClass}" 
+                             role="progressbar" 
+                             style="width: ${milestone.progress}%" 
+                             aria-valuenow="${milestone.progress}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            ${milestone.progress}%
+                        </div>
+                    </div>
+                    
+                    <div class="milestone-details">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <small class="text-muted">完了タスク</small>
+                                <div class="fw-bold">${milestone.completedTasks}/${milestone.totalTasks}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">期限</small>
+                                <div class="fw-bold">${milestone.dueDate || '未設定'}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">担当者</small>
+                                <div class="fw-bold">${milestone.assignees.join(', ')}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">リスク</small>
+                                <div class="fw-bold">
+                                    <span class="badge ${milestone.riskClass}">${milestone.riskLevel}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        ${milestone.description ? `
+                            <div class="mt-2">
+                                <small class="text-muted">説明</small>
+                                <div class="milestone-description">${milestone.description}</div>
+                            </div>
+                        ` : ''}
+                        
+                        ${milestone.tasks.length > 0 ? `
+                            <div class="mt-3">
+                                <small class="text-muted">関連タスク</small>
+                                <div class="milestone-tasks">
+                                    ${milestone.tasks.map(task => `
+                                        <span class="badge ${getTaskStatusBadgeClass(task.status)} me-1 mb-1">
+                                            ${task.id}: ${task.title}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // マイルストーン生成
+        function generateMilestones(tasks) {
+            const milestones = [
+                {
+                    id: 'phase1',
+                    name: 'Phase 1: 基盤構築',
+                    icon: 'fa-foundation',
+                    description: 'システム基盤とコア機能の実装',
+                    tasks: tasks.filter(t => t.id <= 10),
+                    dueDate: '2025-01-15'
+                },
+                {
+                    id: 'phase2', 
+                    name: 'Phase 2: 機能拡張',
+                    icon: 'fa-cogs',
+                    description: '高度な機能とUI/UXの改善',
+                    tasks: tasks.filter(t => t.id > 10 && t.id <= 20),
+                    dueDate: '2025-02-01'
+                },
+                {
+                    id: 'phase3',
+                    name: 'Phase 3: 最適化・運用',
+                    icon: 'fa-rocket',
+                    description: 'パフォーマンス最適化と運用体制構築',
+                    tasks: tasks.filter(t => t.id > 20),
+                    dueDate: '2025-02-15'
+                }
+            ];
+            
+            return milestones.map(milestone => {
+                const totalTasks = milestone.tasks.length;
+                const completedTasks = milestone.tasks.filter(t => t.status === 'DONE').length;
+                const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+                
+                // ステータス判定
+                let status, statusClass, progressClass;
+                if (progress === 100) {
+                    status = '完了';
+                    statusClass = 'bg-success';
+                    progressClass = 'bg-success';
+                } else if (progress >= 70) {
+                    status = '進行中（順調）';
+                    statusClass = 'bg-primary';
+                    progressClass = 'bg-primary';
+                } else if (progress >= 30) {
+                    status = '進行中';
+                    statusClass = 'bg-info';
+                    progressClass = 'bg-info';
+                } else {
+                    status = '開始前/遅延';
+                    statusClass = 'bg-warning';
+                    progressClass = 'bg-warning';
+                }
+                
+                // リスク評価
+                const now = new Date();
+                const due = milestone.dueDate ? new Date(milestone.dueDate) : null;
+                let riskLevel, riskClass;
+                
+                if (due) {
+                    const daysRemaining = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
+                    const expectedProgress = Math.max(0, 100 - (daysRemaining * 2)); // 簡易計算
+                    
+                    if (progress < expectedProgress - 20) {
+                        riskLevel = '高';
+                        riskClass = 'bg-danger';
+                    } else if (progress < expectedProgress - 10) {
+                        riskLevel = '中';
+                        riskClass = 'bg-warning';
+                    } else {
+                        riskLevel = '低';
+                        riskClass = 'bg-success';
+                    }
+                } else {
+                    riskLevel = '不明';
+                    riskClass = 'bg-secondary';
+                }
+                
+                // 担当者一覧
+                const assignees = [...new Set(milestone.tasks.map(t => t.owner).filter(Boolean))];
+                
+                return {
+                    ...milestone,
+                    totalTasks,
+                    completedTasks,
+                    progress,
+                    status,
+                    statusClass,
+                    progressClass,
+                    riskLevel,
+                    riskClass,
+                    assignees: assignees.length > 0 ? assignees : ['未割当']
+                };
+            });
+        }
+
+        // マイルストーン進捗表示（MILESTONES.md由来データ）
+        function displayMilestoneProgressFromMilestones(milestones, tasks) {
+            const container = document.getElementById('milestone-container');
+            if (!Array.isArray(milestones) || milestones.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">マイルストーンデータがありません（タスクから推定表示に切替）</p>';
+                displayMilestoneProgress(tasks || []);
+                return;
+            }
+
+            // ID→タスクのマップ作成
+            const taskMap = {};
+            (tasks || []).forEach(t => { taskMap[String(t.id)] = t; });
+
+            const uiMilestones = milestones.map(ms => {
+                const msTasks = (ms.task_ids || []).map(id => taskMap[String(id)]).filter(Boolean);
+                const totalTasks = msTasks.length;
+                const completedTasks = msTasks.filter(t => t.status === 'DONE').length;
+                const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+                // ステータス判定
+                let status = ms.status || '未設定';
+                let statusClass = 'bg-secondary';
+                let progressClass = 'bg-info';
+                if (progress === 100) {
+                    status = '完了';
+                    statusClass = 'bg-success';
+                    progressClass = 'bg-success';
+                } else if (progress >= 70) {
+                    status = '進行中（順調）';
+                    statusClass = 'bg-primary';
+                    progressClass = 'bg-primary';
+                } else if (progress >= 30) {
+                    status = '進行中';
+                    statusClass = 'bg-info';
+                    progressClass = 'bg-info';
+                } else {
+                    status = '開始前/遅延';
+                    statusClass = 'bg-warning';
+                    progressClass = 'bg-warning';
+                }
+
+                // リスク評価
+                const now = new Date();
+                const due = ms.due ? new Date(ms.due) : null;
+                let riskLevel = '不明';
+                let riskClass = 'bg-secondary';
+                if (due) {
+                    const daysRemaining = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
+                    const expectedProgress = Math.max(0, 100 - (daysRemaining * 2));
+                    if (progress < expectedProgress - 20) {
+                        riskLevel = '高';
+                        riskClass = 'bg-danger';
+                    } else if (progress < expectedProgress - 10) {
+                        riskLevel = '中';
+                        riskClass = 'bg-warning';
+                    } else {
+                        riskLevel = '低';
+                        riskClass = 'bg-success';
+                    }
+                }
+
+                const assignees = [...new Set(msTasks.map(t => t.owner).filter(Boolean))];
+
+                return {
+                    id: ms.ms_id,
+                    name: ms.name,
+                    icon: 'fa-flag-checkered',
+                    description: ms.description,
+                    tasks: msTasks,
+                    dueDate: ms.due || '',
+                    totalTasks,
+                    completedTasks,
+                    progress,
+                    status,
+                    statusClass,
+                    progressClass,
+                    riskLevel,
+                    riskClass,
+                    assignees: assignees.length > 0 ? assignees : ['未割当'],
+                    kpi: ms.kpi || '',
+                };
+            });
+
+            // 既存コンテナ参照を再利用
+            if (uiMilestones.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">マイルストーンデータがありません</p>';
+                return;
+            }
+
+            container.innerHTML = uiMilestones.map(milestone => `
+                <div class="milestone-item mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="milestone-title">
+                            <i class="fas ${milestone.icon} me-2"></i>
+                            ${milestone.name}
+                        </h5>
+                        <span class="badge ${milestone.statusClass} fs-6">${milestone.status}</span>
+                    </div>
+
+                    <div class="progress mb-3" style="height: 25px;">
+                        <div class="progress-bar ${milestone.progressClass}" 
+                             role="progressbar" 
+                             style="width: ${milestone.progress}%" 
+                             aria-valuenow="${milestone.progress}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            ${milestone.progress}%
+                        </div>
+                    </div>
+
+                    <div class="milestone-details">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <small class="text-muted">完了タスク</small>
+                                <div class="fw-bold">${milestone.completedTasks}/${milestone.totalTasks}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">期限</small>
+                                <div class="fw-bold">${milestone.dueDate || '未設定'}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">担当者</small>
+                                <div class="fw-bold">${milestone.assignees.join(', ')}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">リスク</small>
+                                <div class="fw-bold">
+                                    <span class="badge ${milestone.riskClass}">${milestone.riskLevel}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${milestone.description ? `
+                            <div class="mt-2">
+                                <small class="text-muted">説明</small>
+                                <div class="milestone-description">${milestone.description}</div>
+                            </div>
+                        ` : ''}
+
+                        ${milestone.kpi ? `
+                            <div class="mt-2">
+                                <small class="text-muted">KPI</small>
+                                <div class="milestone-description">${milestone.kpi}</div>
+                            </div>
+                        ` : ''}
+
+                        ${milestone.tasks.length > 0 ? `
+                            <div class="mt-3">
+                                <small class="text-muted">関連タスク</small>
+                                <div class="milestone-tasks">
+                                    ${milestone.tasks.map(task => `
+                                        <span class="badge ${getTaskStatusBadgeClass(task.status)} me-1 mb-1">
+                                            ${task.id}: ${task.title}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // マイルストーン自動更新（MD変更の即時反映）
+        async function refreshMilestones() {
+            try {
+                const tasksResponse = await fetch('/api/tasks');
+                const tasksData = await tasksResponse.json();
+                const milestonesResponse = await fetch('/api/milestones');
+                const milestonesData = await milestonesResponse.json();
+                displayMilestoneProgressFromMilestones(milestonesData.milestones || [], tasksData.tasks || []);
+            } catch (e) {
+                console.warn('Milestones refresh failed:', e);
+            }
+        }
+
+        // 3秒間隔でマイルストーンを再読込しUIへ反映
+        setInterval(refreshMilestones, 3000);
+        
+        // タスク優先度取得
+        function getTaskPriority(task) {
+            const now = new Date();
+            const due = task.due ? new Date(task.due) : null;
+            
+            if (!due) {
+                return { text: '通常', class: 'bg-secondary' };
+            }
+            
+            const timeRemaining = due - now;
+            const dayRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24));
+            
+            if (dayRemaining <= 0) {
+                return { text: '緊急', class: 'bg-danger' };
+            } else if (dayRemaining <= 1) {
+                return { text: '高', class: 'bg-warning' };
+            } else if (dayRemaining <= 3) {
+                return { text: '中', class: 'bg-info' };
+            } else {
+                return { text: '低', class: 'bg-success' };
+            }
+        }
+        
+        // タスクステータスバッジクラス取得
+        function getTaskStatusBadgeClass(status) {
+            switch (status) {
+                case 'DONE': return 'bg-success';
+                case 'DOING': return 'bg-primary';
+                case 'READY': return 'bg-info';
+                case 'PLAN': return 'bg-secondary';
+                case 'HOLD': return 'bg-warning';
+                case 'REVIEW': return 'bg-dark';
+                default: return 'bg-light text-dark';
+            }
+        }
+        
+        // N8N風ワークフロー表示（tasks配列を受け取る）
+        function displayWorkflowVisualization(tasksInput) {
+            const container = document.getElementById('workflow-container');
+            if (!container || !tasksInput) {
+                return;
+            }
+            
+            // SVGマーカー定義を追加
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.style.position = 'absolute';
+            svg.style.top = '0';
+            svg.style.left = '0';
+            svg.style.width = '100%';
+            svg.style.height = '100%';
+            svg.style.pointerEvents = 'none';
+            
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+            marker.setAttribute('id', 'arrowhead');
+            marker.setAttribute('markerWidth', '10');
+            marker.setAttribute('markerHeight', '7');
+            marker.setAttribute('refX', '9');
+            marker.setAttribute('refY', '3.5');
+            marker.setAttribute('orient', 'auto');
+            
+            const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
+            polygon.setAttribute('fill', '#6c757d');
+            
+            marker.appendChild(polygon);
+            defs.appendChild(marker);
+            svg.appendChild(defs);
+            
+            // コンテナをクリア
+            container.innerHTML = '';
+            container.appendChild(svg);
+            
+            // タスクデータを取得（オブジェクト/配列の両対応、ヘッダー行も除外）
+            const rows = Array.isArray(tasksInput) ? tasksInput : (tasksInput.tasks || []);
+            if (!Array.isArray(rows) || rows.length === 0) return;
+
+            let tasks = [];
+            if (rows.length && typeof rows[0] === 'object' && !Array.isArray(rows[0])) {
+                // 既にオブジェクト形式
+                tasks = rows.map(obj => ({
+                    id: obj.id,
+                    title: obj.title,
+                    status: obj.status,
+                    owner: obj.owner,
+                    lock: obj.lock,
+                    lock_owner: obj.lock_owner,
+                    lock_expires_at: obj.lock_expires_at,
+                    due: obj.due,
+                    artifact: obj.artifact,
+                    notes: obj.notes
+                }));
+            } else {
+                // 行配列＋ヘッダー対応
+                const hasHeader = rows.length > 0 && typeof rows[0][0] === 'string';
+                tasks = rows.slice(hasHeader ? 1 : 0).map(row => {
+                    const [id, title, status, owner, lock, lock_owner, lock_expires_at, due, artifact, notes] = row;
+                    return { id, title, status, owner, lock, lock_owner, lock_expires_at, due, artifact, notes };
+                });
+            }
+            
+            // ステータス別にタスクをグループ化
+            const statusGroups = {
+                'PLAN': tasks.filter(t => t.status === 'PLAN'),
+                'READY': tasks.filter(t => t.status === 'READY'),
+                'DOING': tasks.filter(t => t.status === 'DOING'),
+                'REVIEW': tasks.filter(t => t.status === 'REVIEW'),
+                'DONE': tasks.filter(t => t.status === 'DONE'),
+                'HOLD': tasks.filter(t => t.status === 'HOLD')
+            };
+            
+            // ノード配置計算
+            const nodeWidth = 140;
+            const nodeHeight = 80;
+            const columnSpacing = 200;
+            const rowSpacing = 100;
+            const startX = 50;
+            const startY = 50;
+            
+            let columnIndex = 0;
+            const nodePositions = {};
+            
+            // ステータス順序
+            const statusOrder = ['PLAN', 'READY', 'DOING', 'REVIEW', 'DONE', 'HOLD'];
+            
+            statusOrder.forEach(status => {
+                const groupTasks = statusGroups[status];
+                if (groupTasks.length > 0) {
+                    groupTasks.forEach((task, index) => {
+                        const x = startX + columnIndex * columnSpacing;
+                        const y = startY + index * rowSpacing;
+                        nodePositions[task.id] = { x, y, task };
+                        
+                        // ノード作成
+                        createWorkflowNode(container, task, x, y);
+                    });
+                    columnIndex++;
+                }
+            });
+            
+            // 接続線を描画
+            drawWorkflowConnections(svg, nodePositions, statusOrder);
+        }
+        
+        // ワークフローノード作成
+        function createWorkflowNode(container, task, x, y) {
+            const node = document.createElement('div');
+            node.className = `workflow-node status-${task.status.toLowerCase()}`;
+            node.style.left = x + 'px';
+            node.style.top = y + 'px';
+            
+            // ステータスバッジ
+            const statusBadge = document.createElement('div');
+            statusBadge.className = `node-status ${getTaskStatusBadgeClass(task.status)}`;
+            statusBadge.textContent = task.status;
+            
+            // タイトル
+            const title = document.createElement('div');
+            title.className = 'node-title';
+            title.textContent = task.title.length > 15 ? task.title.substring(0, 15) + '...' : task.title;
+            title.title = task.title; // フルタイトルをツールチップに
+            
+            // 担当者
+            const owner = document.createElement('div');
+            owner.className = 'node-owner';
+            owner.textContent = task.owner || '未割当';
+            
+            // 進捗バー（期限ベース）
+            const progress = document.createElement('div');
+            progress.className = 'node-progress';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'node-progress-bar';
+            
+            // 期限に基づく進捗計算
+            if (task.due) {
+                const now = new Date();
+                const due = new Date(task.due);
+                const timeRemaining = due - now;
+                const dayRemaining = Math.ceil(timeRemaining / (1000 * 60 * 60 * 24));
+                
+                let progressPercent = 0;
+                if (task.status === 'DONE') {
+                    progressPercent = 100;
+                } else if (dayRemaining <= 0) {
+                    progressPercent = 100;
+                    progressBar.style.background = '#dc3545'; // 期限切れは赤
+                } else if (dayRemaining <= 1) {
+                    progressPercent = 80;
+                    progressBar.style.background = '#ffc107'; // 緊急は黄色
+                } else if (dayRemaining <= 3) {
+                    progressPercent = 60;
+                } else {
+                    progressPercent = 30;
+                }
+                
+                progressBar.style.width = progressPercent + '%';
+            }
+            
+            progress.appendChild(progressBar);
+            
+            node.appendChild(statusBadge);
+            node.appendChild(title);
+            node.appendChild(owner);
+            node.appendChild(progress);
+            
+            // クリックイベント
+            node.addEventListener('click', () => {
+                showTaskDetails(task);
+            });
+            
+            container.appendChild(node);
+        }
+        
+        // ワークフロー接続線描画
+        function drawWorkflowConnections(svg, nodePositions, statusOrder) {
+            const nodeWidth = 140;
+            const nodeHeight = 80;
+            
+            // ステータス間の接続を描画
+            for (let i = 0; i < statusOrder.length - 1; i++) {
+                const currentStatus = statusOrder[i];
+                const nextStatus = statusOrder[i + 1];
+                
+                // 各ステータスの代表ノードを取得
+                const currentNodes = Object.values(nodePositions).filter(n => n.task.status === currentStatus);
+                const nextNodes = Object.values(nodePositions).filter(n => n.task.status === nextStatus);
+                
+                if (currentNodes.length > 0 && nextNodes.length > 0) {
+                    // 代表ノード同士を接続
+                    const fromNode = currentNodes[0];
+                    const toNode = nextNodes[0];
+                    
+                    const fromX = fromNode.x + nodeWidth;
+                    const fromY = fromNode.y + nodeHeight / 2;
+                    const toX = toNode.x;
+                    const toY = toNode.y + nodeHeight / 2;
+                    
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const d = `M ${fromX} ${fromY} Q ${fromX + 50} ${fromY} ${toX - 20} ${toY}`;
+                    path.setAttribute('d', d);
+                    path.setAttribute('stroke', '#6c757d');
+                    path.setAttribute('stroke-width', '2');
+                    path.setAttribute('fill', 'none');
+                    path.setAttribute('marker-end', 'url(#arrowhead)');
+                    
+                    svg.appendChild(path);
+                }
+            }
+        }
+        
+        // タスク詳細表示（モーダル）
+        function showTaskDetails(task) {
+            const modalEl = document.getElementById('taskDetailsModal');
+            if (!modalEl) return;
+
+            // 値のセット
+            const titleEl = modalEl.querySelector('#taskDetailTitle');
+            const statusEl = modalEl.querySelector('#taskDetailStatus');
+            const ownerEl = modalEl.querySelector('#taskDetailOwner');
+            const dueEl = modalEl.querySelector('#taskDetailDue');
+            const notesEl = modalEl.querySelector('#taskDetailNotes');
+            const modelEl = modalEl.querySelector('#taskDetailModel');
+
+            if (titleEl) titleEl.textContent = `${task.id}: ${task.title || '未設定'}`;
+            if (statusEl) {
+                statusEl.className = `badge ${getTaskStatusBadgeClass(task.status)}`;
+                statusEl.textContent = task.status || 'UNKNOWN';
+            }
+            if (ownerEl) ownerEl.textContent = task.owner || '未割当';
+            if (dueEl) dueEl.textContent = task.due || '未設定';
+            if (notesEl) notesEl.textContent = task.notes || '（指示内容なし）';
+
+            // 簡易的な思考モデル抽出（notesに "model:" が含まれる場合）
+            let modelText = '未設定';
+            if (task.notes && typeof task.notes === 'string') {
+                const match = task.notes.match(/model\s*:\s*([\w\-]+)/i);
+                if (match && match[1]) modelText = match[1];
+            }
+            if (modelEl) modelEl.textContent = modelText;
+
+            // モーダル表示
+            const bsModal = new bootstrap.Modal(modalEl);
+            bsModal.show();
+        }
+        
+        // 手動更新ボタン
+        document.getElementById('refresh-btn').addEventListener('click', function() {
+            loadDashboardData();
+        });
+        
+        // 核の状態をデータから更新
+        function updateCoreStatesFromData(tasks, approvals) {
+            // CMD核の状態
+            const planTasks = tasks.filter(t => t.status === 'PLAN').length;
+            const readyTasks = tasks.filter(t => t.status === 'READY').length;
+            const doneTasks = tasks.filter(t => t.status === 'DONE').length;
+            
+            updateCoreStatus('CMD', planTasks > 0 ? 'planning' : 'idle', {
+                activeTasks: planTasks + readyTasks,
+                completedTasks: doneTasks
+            });
+            
+            // WORK核の状態
+            const doingTasks = tasks.filter(t => t.status === 'DOING').length;
+            const workCompletedTasks = tasks.filter(t => ['REVIEW', 'DONE'].includes(t.status)).length;
+            
+            updateCoreStatus('WORK', doingTasks > 0 ? 'working' : 'idle', {
+                activeTasks: doingTasks,
+                completedTasks: workCompletedTasks
+            });
+            
+            // AUDIT核の状態
+            const pendingApprovals = approvals.filter(a => a.status === 'pending').length;
+            const completedApprovals = approvals.filter(a => ['approved', 'rejected'].includes(a.status)).length;
+            
+            updateCoreStatus('AUDIT', pendingApprovals > 0 ? 'reviewing' : 'idle', {
+                activeApprovals: pendingApprovals,
+                completedApprovals: completedApprovals
+            });
+        }
+
+        // 品質メトリクス更新
+        async function updateQualityMetrics() {
+            try {
+                const [metricsResponse, healthResponse, alertsResponse] = await Promise.all([
+                    fetch('/api/quality/metrics'),
+                    fetch('/api/quality/health'),
+                    fetch('/api/quality/alerts')
+                ]);
+                
+                const metrics = await metricsResponse.json();
+                const health = await healthResponse.json();
+                const alerts = await alertsResponse.json();
+                
+                // APIの値はすでに百分率(%)の場合があるため、乗算せずに表示する
+                const tcr = Number(metrics.task_completion_rate);
+                const ar = Number(metrics.approval_rate);
+                const sh = Number(metrics.system_health_score ?? metrics.system_health);
+
+                document.getElementById('task-completion-rate').textContent = 
+                    Number.isFinite(tcr) ? tcr.toFixed(1) + '%' : '-';
+                document.getElementById('approval-rate').textContent = 
+                    Number.isFinite(ar) ? ar.toFixed(1) + '%' : '-';
+                document.getElementById('system-health-score').textContent = 
+                    Number.isFinite(sh) ? sh.toFixed(1) + '%' : '-';
+                document.getElementById('active-alerts').textContent = Array.isArray(alerts) ? alerts.length : 0;
+                
+                // システムヘルス表示
+                updateSystemHealth(health);
+                
+                // アラート表示
+                updateAlerts(alerts);
+                
+            } catch (error) {
+                console.error('品質メトリクス取得エラー:', error);
+            }
+        }
+        
+        // システムヘルス表示更新
+        function updateSystemHealth(health) {
+            if (!health || typeof health !== 'object') {
+                return;
+            }
+            // CPU使用率
+            const cpuPercent = Number(health.cpu_percent ?? health.cpu_usage ?? 0);
+            const cpuCount = Number(health.cpu_count ?? health.cpu_cores ?? 0);
+            const cpuBarEl = document.getElementById('cpu-progress');
+            if (cpuBarEl) {
+                cpuBarEl.style.width = cpuPercent + '%';
+                cpuBarEl.textContent = cpuPercent.toFixed(1) + '%';
+                cpuBarEl.setAttribute('aria-valuenow', cpuPercent);
+                cpuBarEl.className = 'progress-bar';
+                if (cpuPercent > 80) cpuBarEl.classList.add('bg-danger');
+                else if (cpuPercent > 60) cpuBarEl.classList.add('bg-warning');
+                else cpuBarEl.classList.add('bg-success');
+            }
+            const cpuDetailsEl = document.getElementById('cpu-details');
+            if (cpuDetailsEl) cpuDetailsEl.textContent = `${cpuCount}コア`;
+            
+            // CPU使用率に応じて色を変更
+            const cpuBar = document.getElementById('cpu-progress');
+            cpuBar.className = 'progress-bar';
+            if (cpuPercent > 80) cpuBar.classList.add('bg-danger');
+            else if (cpuPercent > 60) cpuBar.classList.add('bg-warning');
+            else cpuBar.classList.add('bg-success');
+            
+            // メモリ使用率
+            const memoryPercent = Number(health.memory_percent ?? health.memory_usage_percent ?? 0);
+            const memoryUsed = Number(health.memory_used ?? 0);
+            const memoryTotal = Number(health.memory_total ?? 0);
+            const memBarEl = document.getElementById('memory-progress');
+            if (memBarEl) {
+                memBarEl.style.width = memoryPercent + '%';
+                memBarEl.textContent = memoryPercent.toFixed(1) + '%';
+                memBarEl.setAttribute('aria-valuenow', memoryPercent);
+            }
+            const memDetailsEl = document.getElementById('memory-details');
+            if (memDetailsEl) {
+                memDetailsEl.textContent = `${(memoryUsed / 1024 / 1024 / 1024).toFixed(1)}GB / ${(memoryTotal / 1024 / 1024 / 1024).toFixed(1)}GB`;
+            }
+            
+            // ディスク使用率
+            const diskPercent = Number(health.disk_percent ?? health.disk_usage_percent ?? 0);
+            const diskUsed = Number(health.disk_used ?? 0);
+            const diskTotal = Number(health.disk_total ?? 0);
+            const diskBarEl = document.getElementById('disk-progress');
+            if (diskBarEl) {
+                diskBarEl.style.width = diskPercent + '%';
+                diskBarEl.textContent = diskPercent.toFixed(1) + '%';
+                diskBarEl.setAttribute('aria-valuenow', diskPercent);
+            }
+            const diskDetailsEl = document.getElementById('disk-details');
+            if (diskDetailsEl) {
+                diskDetailsEl.textContent = `${(diskUsed / 1024 / 1024 / 1024).toFixed(1)}GB / ${(diskTotal / 1024 / 1024 / 1024).toFixed(1)}GB`;
+            }
+        }
+        
+        // アラート表示更新（配列以外が返ってきた場合にも安全に処理）
+        function updateAlerts(alerts) {
+            const alertsSection = document.getElementById('alerts-section');
+            const alertsContainer = document.getElementById('alerts-container');
+
+            if (!alertsSection || !alertsContainer) return;
+
+            // alerts が配列でない場合のフォールバック処理
+            let list = [];
+            if (Array.isArray(alerts)) {
+                list = alerts;
+            } else if (alerts && typeof alerts === 'object') {
+                // よくある形: {items: [...]}, {data: [...]}, あるいは {id1: {...}, id2: {...}}
+                if (Array.isArray(alerts.items)) {
+                    list = alerts.items;
+                } else if (Array.isArray(alerts.data)) {
+                    list = alerts.data;
+                } else {
+                    // オブジェクトの値からアラート形を抽出
+                    list = Object.values(alerts).filter(v => v && typeof v === 'object' && (('title' in v) || ('message' in v)));
+                }
+            }
+
+            if (!Array.isArray(list) || list.length === 0) {
+                alertsSection.style.display = 'none';
+                alertsContainer.innerHTML = '';
+                return;
+            }
+
+            alertsSection.style.display = 'block';
+            alertsContainer.innerHTML = '';
+
+            list.forEach(alert => {
+                const severity = alert?.severity ?? 'info';
+                const title = alert?.title ?? '通知';
+                const message = alert?.message ?? '';
+                const ts = alert?.timestamp ? new Date(alert.timestamp).toLocaleString() : '';
+
+                const alertElement = document.createElement('div');
+                alertElement.className = `alert alert-${getAlertClass(severity)} alert-dismissible fade show`;
+                alertElement.innerHTML = `
+                    <i class="fas fa-${getAlertIcon(severity)} me-2"></i>
+                    <strong>${title}</strong> ${message}
+                    <small class="d-block mt-1 text-muted">${ts}</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+                alertsContainer.appendChild(alertElement);
+            });
+        }
+        
+        // アラートの重要度に応じたクラス取得
+        function getAlertClass(severity) {
+            switch (severity) {
+                case 'critical': return 'danger';
+                case 'warning': return 'warning';
+                case 'info': return 'info';
+                default: return 'secondary';
+            }
+        }
+        
+        // アラートの重要度に応じたアイコン取得
+        function getAlertIcon(severity) {
+            switch (severity) {
+                case 'critical': return 'exclamation-triangle';
+                case 'warning': return 'exclamation-circle';
+                case 'info': return 'info-circle';
+                default: return 'bell';
+            }
+        }
+
+        // 初期データ読み込み
+        document.addEventListener('DOMContentLoaded', function() {
+            // 動的UI初期化
+            initDynamicUI();
+            
+            loadDashboardData();
+            updateQualityMetrics();
+            
+            // 30秒ごとに自動更新
+            setInterval(() => {
+                loadDashboardData();
+                updateQualityMetrics();
+            }, 30000);
+        });
+    </script>
+
+    <!-- タスク詳細モーダル -->
+    <div class="modal fade" id="taskDetailsModal" tabindex="-1" aria-labelledby="taskDetailsLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="taskDetailsLabel">タスク詳細 <span id="taskDetailStatus" class="badge bg-secondary ms-2">-</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <div id="taskDetailTitle" class="fw-bold fs-5"></div>
+                        <small class="text-muted">担当: <span id="taskDetailOwner">-</span> / 期限: <span id="taskDetailDue">-</span></small>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted d-block">指示内容</small>
+                        <div id="taskDetailNotes" class="border rounded p-2 bg-light"></div>
+                    </div>
+                    <div class="mt-3">
+                        <small class="text-muted d-block">思考モデル</small>
+                        <div id="taskDetailModel" class="badge bg-info">未設定</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- オーケストレーション制御パネル (MVP) -->
+    <div class="container my-4" id="orch-control-panel">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <span><i class="fas fa-project-diagram me-2"></i>オーケストレーション制御パネル</span>
+                <span class="badge bg-secondary" id="orch-dispatcher-state">Dispatcher: 未確認</span>
+            </div>
+            <div class="card-body">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label for="orch-core-id" class="form-label">coreId</label>
+                        <input class="form-control" id="orch-core-id" list="orch-core-suggestions" placeholder="WORK_AI_01" value="WORK_AI_01">
+                        <datalist id="orch-core-suggestions">
+                            <option value="WORK_AI_01"></option>
+                            <option value="AUDIT_AI_01"></option>
+                            <option value="CMD_AI_01"></option>
+                        </datalist>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="orch-interval-sec" class="form-label">間隔 (秒)</label>
+                        <input type="number" min="1" class="form-control" id="orch-interval-sec" value="15">
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="orch-stay-flag" checked>
+                            <label class="form-check-label" for="orch-stay-flag">Stayモード</label>
+                        </div>
+                        <div class="form-check mt-2">
+                            <input class="form-check-input" type="checkbox" id="orch-enable-orch-flag" checked>
+                            <label class="form-check-label" for="orch-enable-orch-flag">ORCH連携</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex gap-2">
+                        <button class="btn btn-primary" id="btn-dispatch-start"><i class="fas fa-play me-1"></i>Dispatch開始</button>
+                        <button class="btn btn-outline-danger" id="btn-dispatch-stop"><i class="fas fa-stop me-1"></i>停止</button>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <small class="text-muted d-block">ログ表示（MVP・今後WebSocket/SSEに置換）</small>
+                    <pre class="bg-dark text-white p-3 rounded" id="orch-log-panel" style="max-height: 240px; overflow: auto;">準備完了。操作ログがここに表示されます。</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function refreshOrchStatus() {
+            try {
+                let data;
+                let res = await fetch('/status');
+                if (!res.ok) {
+                    // フォールバック: 軽量ヘルスチェック
+                    res = await fetch('/api/system-health');
+                    if (!res.ok) throw new Error(`/status ${res.status} & /api/system-health ${res.status}`);
+                }
+                data = await res.json().catch(() => ({}));
+                const badge = document.getElementById('orch-dispatcher-state');
+                const running = !!data?.dispatcher?.running;
+                badge.textContent = `Dispatcher: ${running ? '稼働中' : '停止'}`;
+                badge.className = `badge ${running ? 'bg-success' : 'bg-secondary'}`;
+
+                // 追加情報（プロセス件数など）をログに反映
+                const log = document.getElementById('orch-log-panel');
+                const count = (data?.dispatcher?.processes || []).length;
+                const summary = `Status: running=${running} processes=${count}`;
+                if (log) {
+                    logAppend(`[status] ${summary}`);
+                }
+            } catch (e) {
+                logAppend(`[status] エラー: ${e.message}`);
+            }
+        }
+
+        async function dispatchStart() {
+            const coreId = document.getElementById('orch-core-id').value.trim();
+            const intervalSec = Number(document.getElementById('orch-interval-sec').value || 15);
+            const stay = document.getElementById('orch-stay-flag').checked;
+            const enableOrchIntegration = document.getElementById('orch-enable-orch-flag').checked;
+            if (!coreId) {
+                alert('coreId を入力してください');
+                return;
+            }
+            try {
+                const payload = { coreId, intervalSec, stay, enableOrchIntegration, action: 'Dispatch' };
+                logAppend(`[dispatch] POST /dispatch body=${JSON.stringify(payload)}`);
+                const res = await fetch('/dispatch', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || !data?.success) throw new Error(data?.message || `http ${res.status}`);
+                logAppend(`[dispatch] 起動成功: core=${coreId} pid=${data.pid ?? '-'} cmd=${data.command ?? '-'}\n`);
+                refreshOrchStatus();
+            } catch (e) {
+                logAppend(`[dispatch] 起動失敗: ${e.message}`);
+                alert(`Dispatch起動失敗: ${e.message}`);
+            }
+        }
+
+        async function dispatchStop() {
+            const coreId = document.getElementById('orch-core-id').value.trim();
+            try {
+                const payload = coreId ? { coreId } : {};
+                logAppend(`[dispatch] POST /dispatch/stop body=${JSON.stringify(payload)}`);
+                const res = await fetch('/dispatch/stop', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || !data?.success) throw new Error(data?.message || `http ${res.status}`);
+                logAppend(`[dispatch] 停止成功: stopped_pids=${JSON.stringify(data.stopped_pids ?? [])}`);
+                refreshOrchStatus();
+            } catch (e) {
+                logAppend(`[dispatch] 停止失敗: ${e.message}`);
+                alert(`停止失敗: ${e.message}`);
+            }
+        }
+
+        function logAppend(text) {
+            const el = document.getElementById('orch-log-panel');
+            if (!el) return;
+            const ts = new Date().toLocaleString();
+            el.textContent += `\n[${ts}] ${text}`;
+            el.scrollTop = el.scrollHeight;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnStart = document.getElementById('btn-dispatch-start');
+            const btnStop = document.getElementById('btn-dispatch-stop');
+            if (btnStart) btnStart.addEventListener('click', dispatchStart);
+            if (btnStop) btnStop.addEventListener('click', dispatchStop);
+            refreshOrchStatus();
+            setInterval(refreshOrchStatus, 10000);
+        });
+    </script>
+
+</body>
+</html>
+

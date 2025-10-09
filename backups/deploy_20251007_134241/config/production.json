@@ -1,0 +1,166 @@
+{
+  "environment": "production",
+  "version": "1.0.0",
+  "deployment_date": "2025-10-07T04:30:00Z",
+  
+  "database": {
+    "type": "sqlite",
+    "path": "data/orch_production.db",
+    "backup_interval_hours": 6,
+    "max_connections": 10,
+    "timeout_seconds": 30
+  },
+  
+  "ai_prediction": {
+    "model_path": "data/models/prediction_model.pkl",
+    "training_data_path": "data/training_data.csv",
+    "min_accuracy_threshold": 0.80,
+    "retrain_interval_hours": 24,
+    "feature_importance_threshold": 0.05,
+    "prediction_cache_ttl_minutes": 15
+  },
+  
+  "monitoring": {
+    "enabled": true,
+    "interval_seconds": 30,
+    "emergency_mode_threshold": {
+      "cpu_percent": 85,
+      "memory_percent": 80,
+      "disk_percent": 90,
+      "error_rate_percent": 10
+    },
+    "alert_channels": ["log", "dashboard"],
+    "metrics_retention_days": 30,
+    "health_check_timeout_seconds": 10
+  },
+  
+  "dashboard": {
+    "host": "localhost",
+    "port": 5000,
+    "debug": false,
+    "auto_refresh_seconds": 30,
+    "max_data_points": 1000,
+    "chart_update_interval_ms": 5000,
+    "session_timeout_minutes": 60
+  },
+  
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file_path": "data/logs/orch_production.log",
+    "max_file_size_mb": 100,
+    "backup_count": 5,
+    "console_output": true,
+    "sensitive_data_filter": true
+  },
+  
+  "security": {
+    "api_key_required": true,
+    "rate_limiting": {
+      "enabled": true,
+      "requests_per_minute": 100,
+      "burst_limit": 20
+    },
+    "cors": {
+      "enabled": true,
+      "allowed_origins": ["http://localhost:5000"],
+      "allowed_methods": ["GET", "POST"],
+      "allowed_headers": ["Content-Type", "Authorization"]
+    },
+    "input_validation": {
+      "max_request_size_mb": 10,
+      "sanitize_inputs": true,
+      "sql_injection_protection": true
+    }
+  },
+  
+  "performance": {
+    "max_concurrent_requests": 50,
+    "request_timeout_seconds": 30,
+    "cache_enabled": true,
+    "cache_ttl_minutes": 10,
+    "compression_enabled": true,
+    "static_file_cache_hours": 24
+  },
+  
+  "backup": {
+    "enabled": true,
+    "schedule": "0 2 * * *",
+    "retention_days": 30,
+    "backup_path": "backups/auto",
+    "compress": true,
+    "verify_integrity": true
+  },
+  
+  "alerts": {
+    "email": {
+      "enabled": false,
+      "smtp_server": "",
+      "smtp_port": 587,
+      "username": "",
+      "password": "",
+      "recipients": []
+    },
+    "webhook": {
+      "enabled": false,
+      "url": "",
+      "timeout_seconds": 10,
+      "retry_count": 3
+    },
+    "thresholds": {
+      "critical": {
+        "cpu_percent": 95,
+        "memory_percent": 90,
+        "disk_percent": 95,
+        "error_rate_percent": 25
+      },
+      "warning": {
+        "cpu_percent": 80,
+        "memory_percent": 75,
+        "disk_percent": 85,
+        "error_rate_percent": 5
+      }
+    }
+  },
+  
+  "features": {
+    "ai_prediction": true,
+    "real_time_monitoring": true,
+    "automated_approval": true,
+    "quality_dashboard": true,
+    "anomaly_detection": true,
+    "predictive_scaling": false,
+    "advanced_analytics": false
+  },
+  
+  "maintenance": {
+    "scheduled_downtime": {
+      "enabled": false,
+      "start_time": "02:00",
+      "duration_minutes": 30,
+      "notification_minutes": 15
+    },
+    "auto_cleanup": {
+      "enabled": true,
+      "old_logs_days": 30,
+      "temp_files_hours": 24,
+      "cache_cleanup_hours": 6
+    }
+  },
+  
+  "integration": {
+    "external_apis": {
+      "timeout_seconds": 15,
+      "retry_count": 3,
+      "circuit_breaker": {
+        "failure_threshold": 5,
+        "recovery_timeout_seconds": 60
+      }
+    },
+    "webhooks": {
+      "max_payload_size_mb": 5,
+      "timeout_seconds": 10,
+      "signature_verification": true
+    }
+  }
+}

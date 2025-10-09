@@ -1,0 +1,3189 @@
+{
+  "started_at": "2025-10-08T03:58:24.210334",
+  "base_url": "http://127.0.0.1:5000",
+  "interval_sec": 10,
+  "run_minutes": 10,
+  "checks": [
+    {
+      "timestamp": "2025-10-08T03:58:24.210334",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 18
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1021
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1027
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1120
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 56
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T03:58:37.526695",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 28
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1018
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1010
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1148
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 43
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T03:58:50.832024",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 31
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1018
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1027
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1109
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 45
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T03:59:04.150678",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 21
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 8
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1019
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1007
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1108
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 49
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T03:59:17.408062",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 21
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1024
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1012
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1131
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 58
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T03:59:30.704553",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 23
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1019
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1029
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1118
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 47
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T03:59:43.988786",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 8
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 18
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 18
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1016
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1018
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1122
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 35
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T03:59:57.248296",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1018
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1007
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1111
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 56
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:00:10.530681",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 18
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1021
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1028
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1113
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 45
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:00:23.824559",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 18
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 31
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1023
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1009
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1120
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 48
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:00:37.102167",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 26
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1034
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1020
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1118
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 36
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:00:50.390752",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 21
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 31
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 18
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 17
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1012
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1008
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1108
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 55
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:01:03.668896",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 8
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1012
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1009
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1132
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 65
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:01:16.924578",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 8
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 21
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1006
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1026
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1116
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 50
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:01:30.187091",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1024
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1013
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1117
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 52
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:01:43.458749",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 17
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 23
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1020
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1028
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1128
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 45
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:01:56.765416",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1020
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1021
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1101
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 49
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:02:10.023344",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1033
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1021
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1112
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 59
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:02:23.359245",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 17
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 8
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1028
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1027
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1101
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 38
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:02:36.625170",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1023
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1013
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1145
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 46
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:02:49.933001",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 18
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1008
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1020
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1102
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 56
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:03:03.169288",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 24
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 31
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1018
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1008
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1118
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 59
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:03:16.474616",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 31
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1019
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1019
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1117
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 35
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:03:29.778102",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 21
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 17
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 28
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 14
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1034
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1029
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1090
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 58
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:03:43.081448",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1016
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1031
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1110
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 35
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:03:56.366825",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 28
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1010
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1028
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1118
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 51
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:04:09.692009",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 18
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 23
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1026
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1013
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1120
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 54
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:04:23.006730",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 4
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1009
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1023
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1102
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 35
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:04:36.211478",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 32
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 8
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 26
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1016
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1030
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1105
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 73
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:04:49.531356",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 12
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 18
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1025
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1026
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1124
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 57
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:05:02.853706",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1032
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1031
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1095
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 50
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:05:16.167328",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 23
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1020
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1009
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1104
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 39
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:05:29.428031",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 21
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1033
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1033
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1110
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 59
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:05:42.737556",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 14
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1038
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1009
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1107
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 55
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:05:56.037175",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 4
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1034
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1009
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1117
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 33
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:06:09.268088",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 25
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1012
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1010
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1111
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 35
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:06:22.509949",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 25
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1013
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1031
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1097
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 33
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:06:35.763383",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 4
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 8
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1011
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1034
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1108
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 55
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:06:49.060057",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 9
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 23
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 14
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1025
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1008
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1093
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 34
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:07:02.287235",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 9
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 14
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1021
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1010
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1103
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 54
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:07:15.535993",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 14
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1031
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1028
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1115
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 51
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:07:28.823293",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1027
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1026
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1093
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 54
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:07:42.117623",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 26
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 8
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1012
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1008
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1116
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 46
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:07:55.375732",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1028
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1029
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1122
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 58
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:08:08.722012",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 26
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 3
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1018
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1018
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1127
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 47
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:08:22.037685",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1010
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1009
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1092
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 57
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:08:35.244858",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 27
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 9
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 21
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 14
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1021
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1008
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1116
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 47
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:08:48.527458",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 14
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1010
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1029
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1093
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 50
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:09:01.767015",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1011
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1027
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1110
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 38
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:09:14.992247",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 9
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 31
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1034
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1032
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1120
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 67
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:09:28.327584",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1012
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1027
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1103
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 58
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:09:41.607497",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 23
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 32
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 28
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 17
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1022
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1028
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1104
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 57
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:09:54.939036",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 14
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 16
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1008
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1010
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1116
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 50
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:10:08.208899",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 6
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 17
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1021
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1008
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1091
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 66
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:10:21.467306",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 22
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1010
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1028
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1108
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 51
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:10:34.756361",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 5
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1012
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1019
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1113
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 51
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:10:47.989646",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 18
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 14
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1018
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1008
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1118
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 64
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:11:01.313723",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 13
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 19
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 7
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1033
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1029
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1099
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 69
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:11:14.625857",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 20
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 30
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 26
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1032
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1019
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1127
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 57
+        }
+      ]
+    },
+    {
+      "timestamp": "2025-10-08T04:11:27.984750",
+      "results": [
+        {
+          "path": "/api/tasks",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 25
+        },
+        {
+          "path": "/api/milestones",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 15
+        },
+        {
+          "path": "/api/alerts",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 29
+        },
+        {
+          "path": "/api/predictions",
+          "status_code": 404,
+          "ok": false,
+          "latency_ms": 4
+        },
+        {
+          "path": "/api/quality/metrics",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1029
+        },
+        {
+          "path": "/api/quality/health",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1017
+        },
+        {
+          "path": "/status",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 1131
+        },
+        {
+          "path": "/events",
+          "status_code": 200,
+          "ok": true,
+          "latency_ms": 62
+        }
+      ]
+    }
+  ],
+  "finished_at": "2025-10-08T04:11:41.319166"
+}

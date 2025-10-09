@@ -1,0 +1,2 @@
+AUTO_DECIDE=on
+FREEZE=off

@@ -1,0 +1,25 @@
+{
+  "summary": {
+    "total_requests": 6776,
+    "success_rate": 1.0,
+    "latency_mean_ms": 221.61555489964582,
+    "latency_p95_ms": 287.0,
+    "latency_max_ms": 417,
+    "per_endpoint": {
+      "/": {
+        "requests": 6776,
+        "success_rate": 1.0,
+        "latency_mean_ms": 221.61555489964582,
+        "latency_p95_ms": 287.0,
+        "latency_max_ms": 417
+      }
+    }
+  },
+  "raw_count": 6776,
+  "base_url": "http://127.0.0.1:5000",
+  "endpoints": [
+    "/",
+    "/api/metrics",
+    "/api/trends"
+  ]
+}

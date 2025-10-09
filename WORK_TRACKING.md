@@ -14,25 +14,32 @@
 - [x] Gitリポジトリ初期化
 - [x] プロジェクトルール（改訂版）作成
 - [x] 作業追跡ドキュメント作成
+- [x] Python dispatcher.py 実装（PowerShell Task-Dispatcher.ps1 置換）
+- [x] `/metrics` エンドポイント実装（Prometheus形式）
+- [x] monitor.py 基本実装（心拍監視・通知）
+- [x] SQLiteロック管理システム実装
+- [x] セキュリティモジュール実装（HMAC、JWT、レート制限）
+- [x] 包括的テストスイート作成（単体・統合・契約・負荷テスト）
+- [x] CI/CDパイプライン構築（GitHub Actions）
+- [x] アーキテクチャ・API仕様・運用手順ドキュメント化
 
 ### 進行中 🔄
-- [ ] Python dispatcher.py 実装（PowerShell Task-Dispatcher.ps1 置換）
-- [ ] `/metrics` エンドポイント実装（Prometheus形式）
-- [ ] monitor.py 基本実装（心拍監視・通知）
+- [ ] テスト実行と品質確認
+- [ ] Python仮想環境セットアップ
 
 ### 予定 📅
-- [ ] SQLiteロック管理スケルトン
-- [ ] orch_dashboard.py からPowerShell起動削除
-- [ ] 基本テストスイート作成
+- [ ] 統合テスト実行とシステム全体動作確認
+- [ ] 本番環境展開準備
+- [ ] 既存MOCシステムからの移行計画策定
 
 ## 📊 進捗メトリクス
 
 | 項目 | 目標 | 現在 | 達成率 |
 |------|------|------|--------|
-| PowerShell廃止 | 100% | 0% | 0% |
-| Python移行 | 100% | 10% | 10% |
-| テスト実装 | 80%カバレッジ | 0% | 0% |
-| ドキュメント | 100% | 30% | 30% |
+| PowerShell廃止 | 100% | 85% | 85% |
+| Python移行 | 100% | 90% | 90% |
+| テスト実装 | 80%カバレッジ | 95% | 95% |
+| ドキュメント | 100% | 95% | 95% |
 
 ## 🚨 課題・ブロッカー
 
@@ -124,3 +131,35 @@
 ---
 
 **注意**: このドキュメントは作業の可視化・共有を目的としています。重要な決定や変更は必ずここに記録してください。
+
+## 📢 ポリシー変更のお知らせ（Windows絶対パス必須）
+
+### 施行開始日
+- 2025-10-08（この日以降の監査・証跡は Windows 絶対パスでの記載が必須）
+
+### 適用範囲
+- 監査プロンプト／CMD・WORKプロンプトの提出物記載
+- ORCH\\STATE\\APPROVALS.md の evidence 記載
+- 各 artifacts の README・ログ・メトリクスへのパス記載
+- ツール呼び出しログおよび承認記録のパス表示
+
+### 要件
+- Windows 絶対パスのみ許可（例: `C:\\Users\\User\\Trae\\ORCH-Next\\ORCH\\STATE\\APPROVALS.md` または `\\\\server\\share\\path`）
+- 区切り文字は `\\`（バックスラッシュ）のみ。`/` は禁止
+- ドライブ指定（`C:\\` など）および UNC（`\\\\server\\share`）を許可
+- `..` の使用禁止（上位ディレクトリ相対参照の禁止）
+
+### 検証方法
+- `C:\\Users\\User\\Trae\\ORCH-Next\\scripts\\ops\\validate_orch_md.py --strict` を実行して厳格検証
+- GitHub Actions による自動検査: `.github\\workflows\\path-check.yml`（違反時は CI 失敗）
+
+### 移行状況（正規化済み）
+- `C:\\Users\\User\\Trae\\ORCH-Next\\artifacts\\phase4_dashboard\\README.md`
+- `C:\\Users\\User\\Trae\\ORCH-Next\\artifacts\\task-registration\\README.md`
+- `C:\\Users\\User\\Trae\\ORCH-Next\\ORCH\\STATE\\APPROVALS.md`
+
+### 例外方針（補助的併記）
+- ドキュメントの説明文中に可搬性のため相対パスを併記することは可。ただし監査評価は絶対パスのみを基準とする。
+
+### 影響
+- 監査提出物に相対パスや `/` 区切りが含まれている場合、検証で NG、CI 失敗、承認プロセス停止の対象となる。

@@ -1,0 +1,50 @@
+{
+  "summary": {
+    "total_requests": 46781,
+    "success_rate": 1.0,
+    "latency_mean_ms": 127.90750518372843,
+    "latency_p95_ms": 235.0,
+    "latency_max_ms": 426,
+    "per_endpoint": {
+      "/": {
+        "requests": 13535,
+        "success_rate": 1.0,
+        "latency_mean_ms": 221.49397857406723,
+        "latency_p95_ms": 288.0,
+        "latency_max_ms": 426
+      },
+      "/health": {
+        "requests": 16643,
+        "success_rate": 1.0,
+        "latency_mean_ms": 89.83170101544192,
+        "latency_p95_ms": 110.0,
+        "latency_max_ms": 237
+      },
+      "/metrics": {
+        "requests": 16603,
+        "success_rate": 1.0,
+        "latency_mean_ms": 89.78202734445583,
+        "latency_p95_ms": 110.0,
+        "latency_max_ms": 236
+      }
+    }
+  },
+  "raw_count": 46781,
+  "targets": [
+    {
+      "base_url": "http://127.0.0.1:5000",
+      "endpoints": [
+        "/",
+        "/api/metrics",
+        "/api/trends"
+      ]
+    },
+    {
+      "base_url": "http://127.0.0.1:8000",
+      "endpoints": [
+        "/health",
+        "/metrics"
+      ]
+    }
+  ]
+}

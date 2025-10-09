@@ -1,0 +1,78 @@
+{
+  "monitoring_interval": 5,
+  "alert_thresholds": {
+    "test_coverage_min": 0.8,
+    "code_complexity_max": 3.0,
+    "error_rate_max": 0.05,
+    "performance_score_min": 0.8,
+    "prediction_confidence_min": 0.7
+  },
+  "alert_channels": {
+    "file": true,
+    "console": true,
+    "dashboard": true
+  },
+  "spam_filter": {
+    "duplicate_threshold_hours": 24,
+    "max_notifications_per_hour": 5,
+    "silent_autopilot_mode": true,
+    "todo_write_enabled": false,
+    "critical_only_mode": true
+  },
+  "data_retention_days": 30,
+  "emergency_mode": {
+    "enabled": true,
+    "monitoring_interval": 10,
+    "alert_thresholds": {
+      "test_coverage_min": 0.75,
+      "code_complexity_max": 3.5,
+      "error_rate_max": 0.08,
+      "performance_score_min": 0.75,
+      "prediction_confidence_min": 0.6
+    }
+  },
+  "dashboard_config": {
+    "host": "127.0.0.1",
+    "port": 5000,
+    "auto_refresh_interval": 30,
+    "chart_data_points": 50
+  },
+  "http_targets": [
+    {
+      "base_url": "http://127.0.0.1:5000",
+      "endpoints": [
+        "/",
+        "/api/metrics",
+        "/api/trends"
+      ]
+    },
+    {
+      "base_url": "http://127.0.0.1:8000",
+      "endpoints": [
+        "/health",
+        "/metrics"
+      ]
+    }
+  ],
+  "sse_targets": [
+    {
+      "base_url": "http://127.0.0.1:5000",
+      "event_endpoint": "/events"
+    }
+  ],
+  "canary_endpoints": [
+    "/api/tasks",
+    "/api/milestones",
+    "/api/alerts",
+    "/api/predictions",
+    "/api/quality/metrics",
+    "/api/quality/health",
+    "/status",
+    "/events"
+  ],
+  "ai_prediction": {
+    "retrain_interval_hours": 6,
+    "min_training_samples": 100,
+    "feature_importance_threshold": 0.1
+  }
+}

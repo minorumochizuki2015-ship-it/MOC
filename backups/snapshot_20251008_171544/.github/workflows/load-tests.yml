@@ -1,0 +1,55 @@
+name: Load Tests (Optional)
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_load_tests:
+        description: 'Run HTTP/SSE load tests and aggregate quality score'
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  load-tests:
+    if: ${{ github.event.inputs.run_load_tests == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run HTTP load test (config-driven)
+        env:
+          HTTP_BASE_URL: ''
+          HTTP_ENDPOINTS: ''
+        run: |
+          python tests/load/test_http_load.py
+
+      - name: Run SSE load test (config-driven)
+        env:
+          SSE_BASE_URL: ''
+          SSE_EVENT_ENDPOINT: ''
+        run: |
+          python tests/load/test_sse_load.py
+
+      - name: Aggregate Quality Score
+        run: |
+          python scripts/ops/aggregate_quality_score.py
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-results
+          path: |
+            data/test_results/*.json
+            data/results/*.json
+          if-no-files-found: warn

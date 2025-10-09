@@ -1,0 +1,12 @@
+{
+  "agents": [
+    {
+      "id": "sample-agent-1",
+      "name": "Sample Agent",
+      "status": "unknown",
+      "last_seen": null,
+      "metadata": { "role": "Executor", "capabilities": ["tests", "audit"] },
+      "reports": []
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "campaign_id": "trae_credit_bench_20251009",
+  "sources": [
+    {
+      "name": "search_sample_site",
+      "type": "web",
+      "url": "https://www.elastic.co/guide/en/elasticsearch/reference/current/search-your-data.html",
+      "dest_dir": "data/validation/sources/search_corpus",
+      "filename": "sample_site_1.txt",
+      "license": "tbd",
+      "notes": "検索評価用の短文テキスト。URLは後で指定。"
+    },
+    {
+      "name": "search_wikipedia_ir",
+      "type": "web",
+      "url": "https://en.wikipedia.org/wiki/Information_retrieval",
+      "dest_dir": "data/validation/sources/search_corpus",
+      "filename": "wikipedia_ir.txt",
+      "license": "CC BY-SA 4.0（要出典・SA）",
+      "notes": "情報検索の基礎記事。出典URLをメタに保存し、再配布には注意。"
+    },
+    {
+      "name": "math_sample_repo",
+      "type": "git",
+      "url": "https://github.com/chaoqinyu/MathQA",
+      "dest_dir": "data/validation/sources/math_corpus/math_repo",
+      "license": "tbd",
+      "notes": "数学問題のオープンリポジトリ（URLは後で指定）。"
+    }
+    ,
+    {
+      "name": "math_gsm8k",
+      "type": "web",
+      "url": "https://raw.githubusercontent.com/openai/grade-school-math/master/grade_school_math/data/test.jsonl",
+      "dest_dir": "data/validation/sources/math_corpus",
+      "filename": "gsm8k_subset.txt",
+      "license": "MIT（要確認）",
+      "notes": "多段推論の算数問題。再配布条件を遵守。"
+    },
+    {
+      "name": "code_fix_algorithms_python",
+      "type": "git",
+      "url": "https://github.com/TheAlgorithms/Python",
+      "dest_dir": "data/validation/sources/search_corpus/algorithms_python",
+      "license": "MIT",
+      "notes": "小規模なアルゴリズム実装。コード修正用の素材として使用。"
+    }
+  ]
+}

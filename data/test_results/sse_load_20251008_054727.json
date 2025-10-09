@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "source": "test_sse_load.py",
+    "timestamp": "20251008_054727",
+    "targets": [
+      {
+        "base_url": "http://127.0.0.1:5000",
+        "event_endpoint": "/events"
+      }
+    ]
+  },
+  "analysis": {
+    "total_connections": 100,
+    "successful_connections": 100,
+    "success_rate": 1.0,
+    "connection_times": {
+      "mean": 3.7341958355903624,
+      "median": 3.740938186645508,
+      "p95": 3.7927437901496885,
+      "max": 3.7988247871398926
+    },
+    "first_message_times": {
+      "mean": 3.7420069336891175,
+      "median": 3.7415462732315063,
+      "p95": 3.7936950802803038,
+      "max": 3.7994465827941895
+    },
+    "message_metrics": {
+      "total_messages": 1145,
+      "avg_messages_per_connection": 11.45,
+      "min_messages": 10,
+      "max_messages": 13
+    },
+    "latency_metrics": {
+      "mean": 0,
+      "median": 0,
+      "p95": 0,
+      "p99": 0,
+      "max": 0
+    },
+    "error_metrics": {
+      "total_errors": 0,
+      "connections_with_errors": 0,
+      "error_rate": 0.0
+    },
+    "error_rate": 0.0
+  }
+}

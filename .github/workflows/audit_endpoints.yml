@@ -1,0 +1,53 @@
+name: Agents API Audit
+
+on:
+  push:
+    paths:
+      - 'orch_dashboard.py'
+      - 'scripts/ops/audit_endpoints.py'
+      - 'templates/**'
+      - '.github/workflows/audit_endpoints.yml'
+      - 'requirements.txt'
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Start dashboard server
+        run: |
+          nohup python orch_dashboard.py >/dev/null 2>&1 &
+          echo $! > server.pid
+          sleep 3
+
+      - name: Run endpoint audit
+        run: |
+          python scripts/ops/audit_endpoints.py http://127.0.0.1:5000
+
+      - name: Upload audit artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: agents-api-audit
+          path: |
+            ORCH/REPORTS/AGENTS_API_AUDIT.md
+            ORCH/REPORTS/agents_api_audit_summary.json
+            ORCH/REPORTS/NonStop_Audit.md
+
+      - name: Stop server
+        if: always()
+        run: |
+          kill $(cat server.pid) || true

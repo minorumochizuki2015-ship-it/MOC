@@ -1,0 +1,22 @@
+{
+  "language_whitelist": ["ja", "en"],
+  "mime_whitelist": ["text/plain", "text/html", "application/json"],
+  "doc_text_char_min": 200,
+  "doc_text_char_max": 20000,
+  "pii_scrub": true,
+  "dedup": true,
+  "search": {
+    "topic_whitelist": ["information retrieval", "vector search", "ranking", "evaluation"],
+    "strip_tables": true
+  },
+  "math": {
+    "require_steps": true,
+    "allow_latex": true,
+    "exclude_images_only": true
+  },
+  "code_fix": {
+    "repo_size_max_mb": 50,
+    "file_types": [".py", ".md", ".json"],
+    "prefer_repos_with_tests": true
+  }
+}

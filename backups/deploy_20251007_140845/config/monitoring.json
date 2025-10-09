@@ -1,0 +1,38 @@
+{
+  "monitoring_interval": 30,
+  "alert_thresholds": {
+    "test_coverage_min": 0.8,
+    "code_complexity_max": 3.0,
+    "error_rate_max": 0.05,
+    "performance_score_min": 0.8,
+    "prediction_confidence_min": 0.7
+  },
+  "alert_channels": {
+    "file": true,
+    "console": true,
+    "dashboard": true
+  },
+  "data_retention_days": 30,
+  "emergency_mode": {
+    "enabled": true,
+    "monitoring_interval": 10,
+    "alert_thresholds": {
+      "test_coverage_min": 0.75,
+      "code_complexity_max": 3.5,
+      "error_rate_max": 0.08,
+      "performance_score_min": 0.75,
+      "prediction_confidence_min": 0.6
+    }
+  },
+  "dashboard_config": {
+    "host": "0.0.0.0",
+    "port": 5000,
+    "auto_refresh_interval": 30,
+    "chart_data_points": 50
+  },
+  "ai_prediction": {
+    "retrain_interval_hours": 6,
+    "min_training_samples": 100,
+    "feature_importance_threshold": 0.1
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "start_time": "2025-10-07T15:44:37.506894",
+  "ai_prediction": {
+    "quality_training": {
+      "accuracy": 0.8689655172413793,
+      "best_params": {
+        "max_depth": 10,
+        "min_samples_split": 3,
+        "n_estimators": 250
+      },
+      "train_samples": 1740,
+      "test_samples": 435,
+      "cv_score": 0.8465517241379311
+    },
+    "quality_prediction": {
+      "prediction": 1,
+      "probability_normal": 0.11820706314012396,
+      "probability_issue": 0.8817929368598761,
+      "confidence": 0.8817929368598761,
+      "recommendation": "テストカバレッジを80%以上に向上させてください; コードの複雑度を下げるリファクタリングを検討してください"
+    },
+    "resource_training": {
+      "mse": 0.002939178469943039,
+      "rmse": 0.05421419066944594,
+      "r2_score": 0.6007918927080624,
+      "train_samples": 880,
+      "test_samples": 220
+    },
+    "resource_prediction": {
+      "predicted_load": 0.5077819943012171,
+      "load_level": "Medium",
+      "recommendation": "リソース状態は良好です",
+      "confidence": 0.8577819943012172
+    }
+  },
+  "monitoring": {
+    "current_metrics": {
+      "timestamp": "2025-10-07T15:45:18.631389",
+      "test_coverage": 0.8421369260347968,
+      "code_complexity": 3.3045372304731346,
+      "error_rate": 0.07729745944241276,
+      "performance_score": 0.8783408838693375,
+      "source": "real_time_collection"
+    },
+    "anomalies": []
+  },
+  "automation": {
+    "approval_analysis": {
+      "decision": "escalate",
+      "risk_level": "medium",
+      "confidence": 0.5,
+      "matched_rules": []
+    },
+    "approval_stats": {
+      "decision_stats": {
+        "approved": 1,
+        "escalate": 3
+      },
+      "risk_stats": {
+        "low": 1,
+        "medium": 3
+      },
+      "recent_24h": 4,
+      "total_processed": 4
+    }
+  },
+  "integration": {
+    "quality_assessment": {
+      "prediction": 1,
+      "probability_normal": 0.13393130556436636,
+      "probability_issue": 0.8660686944356337,
+      "confidence": 0.8660686944356337,
+      "recommendation": "コードの複雑度を下げるリファクタリングを検討してください"
+    },
+    "anomalies": [],
+    "auto_quality_fix": {
+      "decision": "escalate",
+      "risk_level": "medium",
+      "confidence": 0.5,
+      "matched_rules": []
+    }
+  },
+  "success_metrics": {
+    "ai_prediction_accuracy": true,
+    "ai_resource_prediction": true,
+    "monitoring_metrics_collected": true,
+    "monitoring_anomaly_detection": true,
+    "automation_functional": true,
+    "integration_working": true,
+    "no_critical_errors": true
+  },
+  "end_time": "2025-10-07T15:45:20.094288",
+  "overall_success": true,
+  "duration_seconds": 42.587394
+}

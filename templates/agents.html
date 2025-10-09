@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agents Management</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 20px; }
+      header { display: flex; justify-content: space-between; align-items: center; }
+      nav a { margin-right: 12px; }
+      table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+      th, td { border: 1px solid #ddd; padding: 8px; }
+      th { background: #f4f4f4; }
+      .row { display: flex; gap: 16px; margin-top: 16px; }
+      .card { border: 1px solid #ddd; padding: 12px; border-radius: 8px; flex: 1; }
+      .ok { color: #0a0; }
+      .err { color: #a00; }
+      button { padding: 6px 10px; }
+      input, select { padding: 6px 8px; }
+      footer { margin-top: 24px; color: #777; }
+      code { background: #f6f8fa; padding: 2px 4px; border-radius: 4px; }
+      /* Agents UI enhancements */
+      .filter-bar { display: flex; gap: 10px; align-items: center; margin: 10px 0 16px; }
+      .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; line-height: 18px; }
+      .badge.healthy { background-color: #d1fae5; color: #065f46; }
+      .badge.degraded { background-color: #fef3c7; color: #92400e; }
+      .badge.offline { background-color: #fee2e2; color: #991b1b; }
+      #agentsTable thead th.sortable { cursor: pointer; }
+      #agentsTable thead th.sortable.asc::after { content: " ▲"; font-size: 12px; }
+      #agentsTable thead th.sortable.desc::after { content: " ▼"; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h2>Agent Management</h2>
+        <nav>
+          <a href="/">Dashboard</a>
+          <a href="/tasks">Tasks</a>
+          <a href="/approvals">Approvals</a>
+          <strong><a href="/agents">Agents</a></strong>
+        </nav>
+      </div>
+      <div>
+        <span id="sysHealth"></span>
+      </div>
+    </header>
+
+    <div class="row">
+      <div class="card">
+        <h3>Agents</h3>
+        <button onclick="loadAgents()">Reload</button>
+        <div class="filter-bar">
+          <input type="text" id="agentSearch" placeholder="検索: ID/名前" />
+          <select id="statusFilter">
+            <option value="">すべてのステータス</option>
+            <option value="healthy">Healthy</option>
+            <option value="active">active</option>
+            <option value="registered">registered</option>
+            <option value="paused">paused</option>
+            <option value="degraded">Degraded</option>
+            <option value="offline">Offline</option>
+          </select>
+        </div>
+        <table id="agentsTable">
+          <thead>
+            <tr>
+              <th class="sortable" data-key="id">ID</th>
+              <th class="sortable" data-key="name">Name</th>
+              <th class="sortable" data-key="status">Status</th>
+              <th class="sortable" data-key="updated_at">Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Register Agent</h3>
+        <div>
+          <label>ID <input id="regId" placeholder="agent-001" /></label>
+        </div>
+        <div>
+          <label>Name <input id="regName" placeholder="Sample Agent" /></label>
+        </div>
+        <div>
+          <label>Status
+            <select id="regStatus">
+              <option value="registered">registered</option>
+              <option value="active">active</option>
+              <option value="paused">paused</option>
+            </select>
+          </label>
+        </div>
+        <div style="margin-top:8px;">
+          <button onclick="registerAgent()">Register</button>
+          <span id="regMsg"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card">
+        <h3>Metrics</h3>
+        <div>
+          <button onclick="refreshMetrics()">Reload Metrics</button>
+        </div>
+        <ul id="metricsList" style="margin-top:8px;">
+          <li>Total agents: <strong id="m_total">-</strong></li>
+          <li>Status breakdown:
+            <ul>
+              <li>healthy: <strong id="m_healthy">-</strong></li>
+              <li>degraded: <strong id="m_degraded">-</strong></li>
+              <li>offline: <strong id="m_offline">-</strong></li>
+            </ul>
+          </li>
+          <li>Max heartbeat age (sec): <strong id="m_hb_max">-</strong></li>
+          <li>Agents API audit: total <strong id="m_audit_total">-</strong>, failures <strong id="m_audit_fail">-</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      <small>API: <code>/api/agents/*</code> ・ Health: <code>/status</code>, <code>/api/system-health</code></small>
+    </footer>
+
+    <script>
+      const base = location.origin;
+      let agentsData = [];
+
+      async function fetchJSON(url, opts) {
+        const res = await fetch(url, opts);
+        const text = await res.text();
+        try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+        catch { return { ok: res.ok, status: res.status, data: text }; }
+      }
+
+      async function loadHealth() {
+        const h = await fetchJSON(`${base}/api/system-health`);
+        const s = await fetchJSON(`${base}/status`);
+        const el = document.getElementById('sysHealth');
+        if (h.ok && s.ok) {
+          el.innerHTML = `<span class=ok>OK</span> CPU ${h.data.cpu_pct}% MEM ${h.data.mem_pct}% | ${s.data.phase}`;
+        } else {
+          el.innerHTML = `<span class=err>ERR</span>`;
+        }
+      }
+
+      function normalizeStatus(s) {
+        return (s || '').toLowerCase();
+      }
+
+      async function loadAgents() {
+        const res = await fetchJSON(`${base}/api/agents/list`);
+        agentsData = Array.isArray(res.data) ? res.data : [];
+        renderAgents();
+      }
+
+      function renderAgents() {
+        const tbody = document.querySelector('#agentsTable tbody');
+        if (!tbody) return;
+        const q = (document.getElementById('agentSearch')?.value || '').trim().toLowerCase();
+        const statusFilter = (document.getElementById('statusFilter')?.value || '');
+
+        let rows = agentsData.slice();
+        rows = rows.filter(a => {
+          const t = `${a.id || ''} ${a.name || ''}`.toLowerCase();
+          const status = normalizeStatus(a.status);
+          const qok = q === '' || t.includes(q);
+          const sok = statusFilter === '' || status === statusFilter;
+          return qok && sok;
+        });
+
+        if (window.sortState) {
+          const k = window.sortState.key;
+          const dir = window.sortState.dir === 'asc' ? 1 : -1;
+          rows.sort((a, b) => {
+            let va = a[k] ?? a.updated_at ?? a.heartbeat_at ?? '';
+            let vb = b[k] ?? b.updated_at ?? b.heartbeat_at ?? '';
+            if (typeof va === 'string' && typeof vb === 'string') return va.localeCompare(vb) * dir;
+            return (va > vb ? 1 : va < vb ? -1 : 0) * dir;
+          });
+        }
+
+        tbody.innerHTML = '';
+        for (const a of rows) {
+          const status = normalizeStatus(a.status || 'unknown');
+          const badgeClass = status === 'healthy' ? 'healthy'
+                            : status === 'degraded' ? 'degraded'
+                            : ['active','registered','paused'].includes(status) ? 'healthy'
+                            : 'offline';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${a.id || ''}</td>
+            <td>${a.name || ''}</td>
+            <td><span class="badge ${badgeClass}">${status}</span></td>
+            <td>${a.updated_at || a.heartbeat_at || ''}</td>
+            <td>
+              <button onclick="heartbeat('${a.id}')">Heartbeat</button>
+              <button onclick="report('${a.id}')">Report</button>
+              <button onclick="viewAgentDetails('${a.id}')">Details</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        }
+        updateSortIndicators();
+      }
+
+      window.sortState = { key: 'updated_at', dir: 'desc' };
+      function updateSortIndicators() {
+        const headers = document.querySelectorAll('#agentsTable thead th.sortable');
+        headers.forEach(h => {
+          h.classList.remove('asc','desc');
+          const key = h.getAttribute('data-key');
+          if (key === window.sortState.key) h.classList.add(window.sortState.dir);
+        });
+      }
+
+      function attachSortHandlers() {
+        const headers = document.querySelectorAll('#agentsTable thead th.sortable');
+        headers.forEach(h => {
+          h.addEventListener('click', () => {
+            const key = h.getAttribute('data-key');
+            if (window.sortState.key === key) {
+              window.sortState.dir = window.sortState.dir === 'asc' ? 'desc' : 'asc';
+            } else {
+              window.sortState.key = key;
+              window.sortState.dir = 'asc';
+            }
+            renderAgents();
+          });
+        });
+      }
+
+      function viewAgentDetails(id) {
+        const a = agentsData.find(x => x.id === id);
+        alert(a ? JSON.stringify(a, null, 2) : ('Agent not found: ' + id));
+      }
+
+      // Metrics: parse Prometheus exposition from /metrics
+      async function loadAgentMetrics() {
+        try {
+          const res = await fetch(`${base}/metrics`);
+          const text = await res.text();
+          // Simple parse: scan lines for desired metrics
+          const lines = text.split(/\r?\n/);
+          let total = null, hbMax = null, auditTotal = null, auditFail = null;
+          const statusCounts = { healthy: 0, degraded: 0, offline: 0 };
+          for (const ln of lines) {
+            if (ln.startsWith('orch_agents_total')) {
+              const m = ln.match(/orch_agents_total\s+(\d+(?:\.\d+)?)/);
+              if (m) total = Number(m[1]);
+            } else if (ln.startsWith('orch_agents_status')) {
+              const m = ln.match(/status="(\w+)"\}\s+(\d+(?:\.\d+)?)/);
+              if (m) {
+                const k = m[1].toLowerCase();
+                const v = Number(m[2]);
+                if (statusCounts[k] !== undefined) statusCounts[k] = v;
+              }
+            } else if (ln.startsWith('orch_agents_heartbeat_age_max_seconds')) {
+              const m = ln.match(/orch_agents_heartbeat_age_max_seconds\s+(\d+(?:\.\d+)?)/);
+              if (m) hbMax = Number(m[1]);
+            } else if (ln.startsWith('orch_agents_api_audit_total')) {
+              const m = ln.match(/orch_agents_api_audit_total\s+(\d+(?:\.\d+)?)/);
+              if (m) auditTotal = Number(m[1]);
+            } else if (ln.startsWith('orch_agents_api_audit_failures')) {
+              const m = ln.match(/orch_agents_api_audit_failures\s+(\d+(?:\.\d+)?)/);
+              if (m) auditFail = Number(m[1]);
+            }
+          }
+          // Fallback compute from agentsData if some metrics missing
+          if (total == null) total = agentsData.length;
+          if (!statusCounts.healthy && !statusCounts.degraded && !statusCounts.offline && agentsData.length) {
+            const agg = { healthy: 0, degraded: 0, offline: 0 };
+            for (const a of agentsData) {
+              const s = normalizeStatus(a.status);
+              if (agg[s] !== undefined) agg[s]++;
+            }
+            Object.assign(statusCounts, agg);
+          }
+          // Update DOM
+          const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v != null ? String(v) : '-'; };
+          setText('m_total', total);
+          setText('m_healthy', statusCounts.healthy);
+          setText('m_degraded', statusCounts.degraded);
+          setText('m_offline', statusCounts.offline);
+          setText('m_hb_max', hbMax);
+          setText('m_audit_total', auditTotal);
+          setText('m_audit_fail', auditFail);
+        } catch (e) {
+          console.error('Failed to load /metrics', e);
+        }
+      }
+
+      function refreshMetrics() {
+        // Ensure latest agent list used for fallback
+        loadAgents().then(() => loadAgentMetrics());
+      }
+
+      async function registerAgent() {
+        const id = document.getElementById('regId').value.trim();
+        const name = document.getElementById('regName').value.trim();
+        const status = document.getElementById('regStatus').value;
+        const res = await fetchJSON(`${base}/api/agents/register`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, name, status })
+        });
+        document.getElementById('regMsg').textContent = res.ok ? `Registered: ${id}` : `Error (${res.status})`;
+        loadAgents();
+      }
+
+      async function heartbeat(id) {
+        const res = await fetchJSON(`${base}/api/agents/heartbeat`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        loadAgents();
+      }
+
+      async function report(id) {
+        const res = await fetchJSON(`${base}/api/agents/report`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, details: 'UI submitted report' })
+        });
+        loadAgents();
+      }
+
+      loadHealth();
+      attachSortHandlers();
+      const search = document.getElementById('agentSearch');
+      const filter = document.getElementById('statusFilter');
+      if (search) search.addEventListener('input', () => renderAgents());
+      if (filter) filter.addEventListener('change', () => renderAgents());
+      loadAgents().then(() => loadAgentMetrics());
+    </script>
+  </body>
+</html>

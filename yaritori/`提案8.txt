@@ -1,0 +1,51 @@
+総評
+
+- 提案7は正しい方向性で、即時のPowerShell全廃・Python/Go基盤化・AI駆動のセルフヒーリングを明確に打ち出しており賛成します。提案5の保守的アプローチでは拡張性・クラウド適合性・品質担保が不足します。
+- 現場視点でも、PowerShell依存は引数束縛・文字コード・プロセス管理・ロック競合で継続的に運用負荷を生み、デバッグやCI/CD統合の阻害要因でした。ASGIベースのPythonへ統一し、性能ボトルネックはGoで補完するのが最も革新的・実用的・汎用的です。
+即時停止・置換対象（影響範囲の明示）
+
+- MOC\ORCH\scripts\ops\Task-Dispatcher.ps1 （ダッシュボードから起動）
+- MOC\ORCH\scripts\ops\AI-Core-Interface.ps1 （Stayモード・コンソール連携）
+- MOC\ORCH\scripts\ops\Start-OrchIntegration.ps1 （Python統合モジュールの起動フック）
+- MOC\ORCH\src\monitor_integration\Monitor-ORCH-Integration.ps1 （監視統合）
+- 付随的自動化: MOC\scripts\ops\Auto-Task-Dispatcher.ps1 、文書上の Poll-Dispatch.ps1 / Watch-Queue.ps1
+革新的・実用・汎用の具体策（提案7の強化版）
+
+- コア: Python ASGI（FastAPI）に統一、 uvicorn で常駐。Goは高スループット境界（SSEゲートウェイ/並列処理）に限定。
+- メトリクス: prometheus_client で /metrics を標準化。カウンタ/ゲージ/ヒストグラムをAPI/SSE/Webhook/DB操作に割り当て。GrafanaダッシュボードJSONを同梱。
+- 心拍・リアルタイム: SSE/WebSocketで心拍・ログを公開。クライアントごとの session_id ・再接続回数・最終心拍を保持。
+- セキュリティ: WebhookにHMAC署名検証＋時刻ずれ検証。APIはJWT（サービスアカウント）＋ロール。SecretsはVault/環境変数で抽象化。
+- ロック: ファイルロック＋SQLite行ロックのハイブリッド。 resource , owner , ttl , priority で優先度制御、バックオフ＋公平性を担保。
+- セルフヒーリング: 監視ループが異常指標（例: sse_connections_active の急減、 task_duration の外れ値）を検出→段階的復旧（再起動・キュー退避・ロールバック）。初期はEWMA/逸脱度で実装、将来はGoで軽量異常検知かPythonで軽量モデル。
+- 観測性: JSON構造化ログ、相関ID・ coreId 付与。OpenTelemetryは将来拡張。失敗時はイベントストアへ記録。
+- テスト/CI: pytest ＋契約テスト（Webhook HMAC），負荷テスト（Locust/k6）。GitHub ActionsでPRごとにAPI契約検証・ /metrics スモーク・100 SSE同時接続の耐性チェック。
+短期移行計画（2–3週間）
+
+- Week 1
+  - Python版ディスパッチャ dispatcher.py 作成（コア登録/タスク割当/Stayループ）。 orch_dashboard.py からPS起動を削除しPython呼び出しへ切替。
+  - /metrics 実装と基本カウンタ導入（HTTP/SSE/Webhook/DB操作）。
+  - 監視 monitor.py 作成（心拍・閾値監視・Slack/Webhook通知）。
+- Week 2
+  - ロックマネージャ lock_manager.py をSQLite化（TTL/優先度/公平キュー）。
+  - Console BridgeをASGIルートへ統合（キュー→アウトボックスをAPIで処理）。
+  - セキュリティ層導入（HMAC/JWT）。
+- Week 3
+  - Grafanaダッシュボード、CI負荷テスト、カナリアリリース。必要に応じてSSEゲートウェイをGoで導入。
+受け入れ基準（現実的・攻めの品質）
+
+- /metrics が200でPrometheus形式、主要メトリクスにラベル付与（ coreId , endpoint ）。
+- 100 SSE同時接続で心拍遅延<1s平均、切断時の自動復旧成功率>95%。
+- Webhook HMAC検証成功率>99%、タイムスキュー検出・拒否が機能。
+- ロック競合時の公平性（Starvationなし）・TTL満了処理が正しく動作。
+- 失敗イベントがJSONで永続化され、セルフヒーリングが段階的復旧を実行。
+- CIで単体/統合/負荷/セキュリティ最小セットがグリーン。
+主要リスクと回避策
+
+- Windows固有依存の残存: subprocess ・パス区切り・コードページ差。→ 全I/OをUTF-8固定、 pathlib で抽象化、PS起動パスを完全削除。
+- 競合状態の残存: ファイルロックとDBロックの二重化。→ 片方のフォールバックのみ許可、同時運用は禁止。移行後はSQLiteへ収斂。
+- 性能: SSE多重接続でCPUスパイク。→ Goゲートウェイ導入基準（>500接続/サーバ）を設定し、閾値超過時のみ採用。
+- セキュリティ誤設定: HMAC鍵やJWTロールの漏洩。→ SecretsはVault/ENVのみ、コード内直書き禁止、失敗時アラート。
+現場からの結論
+
+- 「全面Python化＋必要箇所のみGo」は、運用の単純化・拡張性・品質の全てで優位です。とくにPS依存のStay/Monitor/ディスパッチャは、障害起点が多く、AI駆動の監視・復旧ロジックとも相性が悪い。提案7の路線に即時で乗り換えましょう。
+- 直近48時間の具体アクション: orch_dashboard.py のPS起動コード削除→Pythonディスパッチャ置換、 /metrics と monitor.py の最小実装、 lock_manager.py のSQLiteスケルトン作成。これでPS停止してもダッシュボード・監視が成立し、次週の負荷テストへ進めます。

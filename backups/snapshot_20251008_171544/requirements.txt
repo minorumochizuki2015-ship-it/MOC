@@ -1,0 +1,64 @@
+# Core Framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+
+# Database
+sqlalchemy>=2.0.0
+# sqlite3 is built-in to Python, no need to install
+
+# HTTP Client
+httpx>=0.25.0
+requests>=2.31.0
+
+# Authentication & Security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.6
+
+# Monitoring & Metrics
+prometheus-client>=0.19.0
+structlog>=23.2.0
+
+# WebSocket & SSE
+websockets>=12.0
+sse-starlette>=1.8.0
+
+# Task Queue & Background Jobs
+celery>=5.3.0  # Optional, for complex async tasks
+redis>=5.0.0   # Optional, for Celery backend
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+httpx>=0.25.0  # For async test client
+locust>=2.17.0  # Load testing
+
+# Development Tools
+black>=23.11.0
+isort>=5.12.0
+flake8>=6.1.0
+mypy>=1.7.0
+pre-commit>=3.5.0
+
+# Configuration
+python-dotenv>=1.0.0
+pyyaml>=6.0.1
+
+# Utilities
+click>=8.1.0  # CLI tools
+rich>=13.7.0  # Pretty printing
+pathlib2>=2.3.7  # Enhanced pathlib (if needed)
+
+# Optional: AI/ML Integration (for future Hive-Mind features)
+# openai>=1.3.0
+# anthropic>=0.7.0
+
+# Optional: Advanced Monitoring
+# opentelemetry-api>=1.21.0
+# opentelemetry-sdk>=1.21.0
+
+# Optional: Message Queue
+# pika>=1.3.0  # RabbitMQ
+# kafka-python>=2.0.2  # Apache Kafka

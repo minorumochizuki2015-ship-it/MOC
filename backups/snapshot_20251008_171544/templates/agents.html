@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agents Management</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 20px; }
+      header { display: flex; justify-content: space-between; align-items: center; }
+      nav a { margin-right: 12px; }
+      table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+      th, td { border: 1px solid #ddd; padding: 8px; }
+      th { background: #f4f4f4; }
+      .row { display: flex; gap: 16px; margin-top: 16px; }
+      .card { border: 1px solid #ddd; padding: 12px; border-radius: 8px; flex: 1; }
+      .ok { color: #0a0; }
+      .err { color: #a00; }
+      button { padding: 6px 10px; }
+      input, select { padding: 6px 8px; }
+      footer { margin-top: 24px; color: #777; }
+      code { background: #f6f8fa; padding: 2px 4px; border-radius: 4px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h2>Agent Management</h2>
+        <nav>
+          <a href="/">Dashboard</a>
+          <a href="/tasks">Tasks</a>
+          <a href="/approvals">Approvals</a>
+          <strong><a href="/agents">Agents</a></strong>
+        </nav>
+      </div>
+      <div>
+        <span id="sysHealth"></span>
+      </div>
+    </header>
+
+    <div class="row">
+      <div class="card">
+        <h3>Agents</h3>
+        <button onclick="loadAgents()">Reload</button>
+        <table id="agentsTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Updated</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Register Agent</h3>
+        <div>
+          <label>ID <input id="regId" placeholder="agent-001" /></label>
+        </div>
+        <div>
+          <label>Name <input id="regName" placeholder="Sample Agent" /></label>
+        </div>
+        <div>
+          <label>Status
+            <select id="regStatus">
+              <option value="registered">registered</option>
+              <option value="active">active</option>
+              <option value="paused">paused</option>
+            </select>
+          </label>
+        </div>
+        <div style="margin-top:8px;">
+          <button onclick="registerAgent()">Register</button>
+          <span id="regMsg"></span>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <small>API: <code>/api/agents/*</code> ・ Health: <code>/status</code>, <code>/api/system-health</code></small>
+    </footer>
+
+    <script>
+      const base = location.origin;
+
+      async function fetchJSON(url, opts) {
+        const res = await fetch(url, opts);
+        const text = await res.text();
+        try { return { ok: res.ok, status: res.status, data: JSON.parse(text) }; }
+        catch { return { ok: res.ok, status: res.status, data: text }; }
+      }
+
+      async function loadHealth() {
+        const h = await fetchJSON(`${base}/api/system-health`);
+        const s = await fetchJSON(`${base}/status`);
+        const el = document.getElementById('sysHealth');
+        if (h.ok && s.ok) {
+          el.innerHTML = `<span class=ok>OK</span> CPU ${h.data.cpu_pct}% MEM ${h.data.mem_pct}% | ${s.data.phase}`;
+        } else {
+          el.innerHTML = `<span class=err>ERR</span>`;
+        }
+      }
+
+      async function loadAgents() {
+        const res = await fetchJSON(`${base}/api/agents/list`);
+        const tbody = document.querySelector('#agentsTable tbody');
+        tbody.innerHTML = '';
+        const list = Array.isArray(res.data) ? res.data : [];
+        for (const a of list) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${a.id || ''}</td>
+            <td>${a.name || ''}</td>
+            <td>${a.status || ''}</td>
+            <td>${a.updated_at || a.heartbeat_at || ''}</td>
+            <td>
+              <button onclick="heartbeat('${a.id}')">Heartbeat</button>
+              <button onclick="report('${a.id}')">Report</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        }
+      }
+
+      async function registerAgent() {
+        const id = document.getElementById('regId').value.trim();
+        const name = document.getElementById('regName').value.trim();
+        const status = document.getElementById('regStatus').value;
+        const res = await fetchJSON(`${base}/api/agents/register`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, name, status })
+        });
+        document.getElementById('regMsg').textContent = res.ok ? `Registered: ${id}` : `Error (${res.status})`;
+        loadAgents();
+      }
+
+      async function heartbeat(id) {
+        const res = await fetchJSON(`${base}/api/agents/heartbeat`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        loadAgents();
+      }
+
+      async function report(id) {
+        const res = await fetchJSON(`${base}/api/agents/report`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, details: 'UI submitted report' })
+        });
+        loadAgents();
+      }
+
+      loadHealth();
+      loadAgents();
+    </script>
+  </body>
+</html>
