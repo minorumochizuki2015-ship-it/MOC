@@ -16,6 +16,24 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.css">
     <!-- Socket.IO -->
     <!-- Socket.IO disabled for Flask-only mode -->
+    <!-- オートパイロットモード ライブ表示 -->
+    <div class="container my-4" id="autopilot-live">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <span><i class="fa-solid fa-robot me-2"></i>オートパイロットモード ライブ表示</span>
+                <span class="badge bg-secondary" id="autopilot-status-badge">停止中</span>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-3 mb-2">
+                    <span>監視ガード: <span id="guard-status" class="badge bg-secondary">-</span></span>
+                    <span>監査: <span id="audit-status" class="badge bg-secondary">-</span></span>
+                    <span class="small text-muted">最終更新: <span id="autopilot-last-update">--</span></span>
+                </div>
+                <small class="text-muted d-block">locks_eol_guard.log（末尾50行）</small>
+                <pre class="bg-dark text-white p-3 rounded" id="autopilot-log" style="max-height: 240px; overflow: auto;">読み込み中...</pre>
+            </div>
+        </div>
+    </div>
     <!-- 作業進捗・報告 / 指示センター (MVP) -->
     <div class="container my-4" id="work-progress-report">
         <div class="row g-4">
@@ -158,6 +176,80 @@
             });
             // 自動更新（15秒）
             setInterval(loadWorkProgress, 15000);
+        });
+    </script>
+
+    <script>
+        async function loadAutopilotStatus() {
+            try {
+                const res = await fetch('/api/autopilot/status');
+                const json = await res.json();
+                if (!json.success) throw new Error(json.error || 'status error');
+                const data = json.data || {};
+                const guard = data.guard || {};
+                const audit = data.audit || {};
+
+                const guardBadge = document.getElementById('guard-status');
+                const auditBadge = document.getElementById('audit-status');
+                const overallBadge = document.getElementById('autopilot-status-badge');
+                const lastUpdateEl = document.getElementById('autopilot-last-update');
+
+                const guardRunning = !!guard.running;
+                const auditRunning = !!audit.active_recently;
+
+                // ガード表示
+                if (guardBadge) {
+                    guardBadge.className = 'badge ' + (guardRunning ? 'bg-success' : 'bg-danger');
+                    guardBadge.textContent = guardRunning ? '監視中' : '停止中';
+                }
+                // 監査表示
+                if (auditBadge) {
+                    auditBadge.className = 'badge ' + (auditRunning ? 'bg-info' : 'bg-secondary');
+                    auditBadge.textContent = auditRunning ? '監査中' : '待機';
+                }
+                // 全体表示（優先度: 監視中 > 監査中 > 停止中）
+                if (overallBadge) {
+                    if (guardRunning) {
+                        overallBadge.className = 'badge bg-success';
+                        overallBadge.textContent = '監視中';
+                    } else if (auditRunning) {
+                        overallBadge.className = 'badge bg-info';
+                        overallBadge.textContent = '監査中';
+                    } else {
+                        overallBadge.className = 'badge bg-secondary';
+                        overallBadge.textContent = '停止中';
+                    }
+                }
+                // 更新時刻
+                if (lastUpdateEl) {
+                    const ts = guard.last_update_iso || data.timestamp;
+                    lastUpdateEl.textContent = ts ? new Date(ts).toLocaleString() : '--';
+                }
+            } catch (e) {
+                const overallBadge = document.getElementById('autopilot-status-badge');
+                if (overallBadge) overallBadge.className = 'badge bg-danger', overallBadge.textContent = 'エラー';
+            }
+        }
+
+        async function loadAutopilotLog() {
+            try {
+                const res = await fetch('/api/autopilot/logs?lines=50');
+                const json = await res.json();
+                if (!json.success) throw new Error(json.error || 'logs error');
+                const lines = Array.isArray(json.lines) ? json.lines : [];
+                const pre = document.getElementById('autopilot-log');
+                if (pre) pre.textContent = lines.join('');
+            } catch (e) {
+                const pre = document.getElementById('autopilot-log');
+                if (pre) pre.textContent = `読み込みエラー: ${e.message}`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAutopilotStatus();
+            loadAutopilotLog();
+            // 2秒間隔でライブ更新
+            setInterval(() => { loadAutopilotStatus(); loadAutopilotLog(); }, 2000);
         });
     </script>
 

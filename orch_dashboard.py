@@ -481,6 +481,83 @@ class OrchDashboard:
             except Exception as e:
                 return jsonify({"success": False, "error": str(e)}), 500
 
+        # オートパイロットモードの監視ガード／監査ステータス取得
+        @self.app.route("/api/autopilot/status")
+        def api_autopilot_status():
+            try:
+                base_dir = Path(__file__).parent
+                guard_log = base_dir / "data" / "logs" / "current" / "locks_eol_guard.log"
+                heartbeat_file = base_dir / "data" / "logs" / "current" / "locks_eol_guard.heartbeat"
+                audit_md = base_dir / "ORCH" / "REPORTS" / "NonStop_Audit.md"
+
+                now = time.time()
+                hb_exists = heartbeat_file.exists()
+                hb_mtime = heartbeat_file.stat().st_mtime if hb_exists else None
+                # ハートビートが直近15秒以内なら「監視中」
+                guard_running = bool(hb_exists and (now - (hb_mtime or 0) < 15))
+
+                # 末尾イベント抽出（最大200行）
+                last_event = None
+                last_update_iso = None
+                try:
+                    if guard_log.exists():
+                        with open(guard_log, "r", encoding="utf-8") as f:
+                            lines = f.readlines()[-200:]
+                        # 最後の INFO 行を抽出
+                        for line in reversed(lines):
+                            s = line.strip()
+                            if s:
+                                last_event = s
+                                break
+                        if hb_mtime:
+                            last_update_iso = datetime.fromtimestamp(hb_mtime).isoformat()
+                except Exception:
+                    pass
+
+                audit_exists = audit_md.exists()
+                audit_mtime = audit_md.stat().st_mtime if audit_exists else None
+                audit_recent = bool(audit_exists and (now - (audit_mtime or 0) < 120))
+
+                data = {
+                    "guard": {
+                        "running": guard_running,
+                        "log_exists": guard_log.exists(),
+                        "heartbeat_exists": hb_exists,
+                        "last_update_iso": last_update_iso,
+                        "last_event": last_event,
+                        "path": str(guard_log),
+                        "heartbeat_path": str(heartbeat_file),
+                    },
+                    "audit": {
+                        "active_recently": audit_recent,
+                        "path": str(audit_md),
+                        "last_update_iso": datetime.fromtimestamp(audit_mtime).isoformat() if audit_mtime else None,
+                    },
+                    "timestamp": datetime.now().isoformat(),
+                }
+                return jsonify({"success": True, "data": data}), 200
+            except Exception as e:
+                return jsonify({"success": False, "error": str(e)}), 500
+
+        # オートパイロット監視ガードのログ末尾取得
+        @self.app.route("/api/autopilot/logs")
+        def api_autopilot_logs():
+            try:
+                base_dir = Path(__file__).parent
+                guard_log = base_dir / "data" / "logs" / "current" / "locks_eol_guard.log"
+                lines_param = request.args.get("lines", default="100")
+                try:
+                    max_lines = max(1, min(1000, int(lines_param)))
+                except ValueError:
+                    max_lines = 100
+                if not guard_log.exists():
+                    return jsonify({"success": True, "lines": [], "note": "log not found"}), 200
+                with open(guard_log, "r", encoding="utf-8") as f:
+                    tail = f.readlines()[-max_lines:]
+                return jsonify({"success": True, "lines": tail, "path": str(guard_log)}), 200
+            except Exception as e:
+                return jsonify({"success": False, "error": str(e)}), 500
+
         @self.app.route("/health")
         def health():
             """ダッシュボードの健全性チェック"""
