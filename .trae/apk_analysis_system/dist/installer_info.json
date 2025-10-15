@@ -1,0 +1,19 @@
+{
+  "name": "APK Analysis System",
+  "version": "1.0.0",
+  "description": "Unity Hub風 APK分析システム",
+  "author": "MOC Development Team",
+  "build_date": "2025-09-30T15:20:59.500146",
+  "python_version": "3.12.6",
+  "platform": "win32",
+  "installation": {
+    "pip_install": "pip install apk-analysis-system-1.0.0-py3-none-any.whl",
+    "portable_run": "python apk_analyzer_app.py",
+    "gui_command": "apk-analyzer-gui"
+  },
+  "requirements": [
+    "Python 3.8+",
+    "tkinter (通常Pythonに含まれる)",
+    "その他の依存関係は自動インストール"
+  ]
+}

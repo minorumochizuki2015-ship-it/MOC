@@ -1,0 +1,68 @@
+Signature-Version: 1.0
+Created-By: Android Gradle 7.4.2
+SHA-256-Digest-Manifest: lrHGpdUs0y/spPnI8F0XsVWc0OmoT9tOiy9b0lYFse4=
+X-Android-APK-Signed: 2
+
+Name: AndroidManifest.xml
+SHA-256-Digest: Rhw1jnTKCoTR4Ep3kO7jXVKIjGWbdRxzQxj3KTaUeN0=
+
+Name: META-INF/com.android.games.engine.build_fingerprint
+SHA-256-Digest: OXc0IAjYkekJEsg9DhM+W6X8YQrK/eTCLGOMTZj3Ntw=
+
+Name: META-INF/com/android/build/gradle/app-metadata.properties
+SHA-256-Digest: 0FOL+fr/8aZBEav/2wjEK6vVyEHG7SyqXRekTvG5poU=
+
+Name: assets/bin/Data/Managed/Metadata/global-metadata.dat
+SHA-256-Digest: CWqgT8QyLxG9WqrFmzRpBmfSaDtsivCprznEX+TBdQw=
+
+Name: assets/bin/Data/Managed/Resources/mscorlib.dll-resources.dat
+SHA-256-Digest: YDrQxP+U0yOIvIJbkgQiTKYFz7XPWoekRyh24ezbP20=
+
+Name: assets/bin/Data/RuntimeInitializeOnLoads.json
+SHA-256-Digest: wtPzCZUPdj1eG1weuOohaSDrHEgdkvi6V+cikQAhPLw=
+
+Name: assets/bin/Data/ScriptingAssemblies.json
+SHA-256-Digest: et2H5ZkO28JWU7UH0TwcuWWlKuChyo3NIkknKVEOjj8=
+
+Name: assets/bin/Data/boot.config
+SHA-256-Digest: rafWNyESOTx77nkFG4Zi26KJ2CZN0UdFvHtg6rrYoPw=
+
+Name: assets/bin/Data/data.unity3d
+SHA-256-Digest: UrGhWejRUAbwlmvEsQK2ELe55GM754F2qoJUWW35ehU=
+
+Name: assets/bin/Data/unity default resources
+SHA-256-Digest: aFZzjen6WDqzXvCnZF+2fr6d28WmCmuiQ9ZfLzgbpnc=
+
+Name: assets/bin/Data/unity_app_guid
+SHA-256-Digest: HWO7HE56fKT9/elEd3UDHeB311yXTLhPoOdzEj4N1rY=
+
+Name: classes.dex
+SHA-256-Digest: 2rjE6mD99HrZSrP/6+hYw7ITA1BbWC8LNrNUbSit6As=
+
+Name: lib/armeabi-v7a/libil2cpp.so
+SHA-256-Digest: C/jMJnP4vOoKj0Cyf8WTU411zOtEjv4J+kvy/pKicds=
+
+Name: lib/armeabi-v7a/libmain.so
+SHA-256-Digest: 3WS/l/5WNWhlg7ChdNfjH1PqjTp/u7TzYBm9YRR+IoI=
+
+Name: lib/armeabi-v7a/libunity.so
+SHA-256-Digest: RCBeDbM1NmCTQ0/c+kjoWpFEtaUiouvmkKp6z6h5aX4=
+
+Name: res/3z.png
+SHA-256-Digest: +3oeNjtDE2VBeBdpp7GV5yJ7mqV1hxmuYPH0xGPy8GQ=
+
+Name: res/QZ.png
+SHA-256-Digest: XWluKXNKPNnbzYZ2h5sJeyHf0CWnt9jlBdD0F9mIopQ=
+
+Name: res/Qu.xml
+SHA-256-Digest: o8nc60s/sp5uVTrkjsbJ3KLrQVe6203S3bCz9u30XzY=
+
+Name: res/W5.png
+SHA-256-Digest: 4mK7SCWkBBrcN/eRdPU2mtGvTfS+h4DZDcG4f2xak1M=
+
+Name: res/hH.xml
+SHA-256-Digest: KomAGKM6ueB7LyocvxoL91OWDzctpL/xKrTKtSKVm9c=
+
+Name: resources.arsc
+SHA-256-Digest: /82lxcVlHO1EIJQnNplJu7JlmxFjVOHgRLRlnKpAjR4=
+

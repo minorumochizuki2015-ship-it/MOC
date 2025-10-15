@@ -1,0 +1,116 @@
+2025-09-29 17:48:47,210 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:87 - APK解析フェーズ開始: manifest_analysis
+2025-09-29 17:48:47,210 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - manifest_analysis: 進捗 0/50
+2025-09-29 17:48:47,210 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - manifest_analysis: 進捗 20/50
+2025-09-29 17:48:47,210 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - manifest_analysis: 進捗 40/50
+2025-09-29 17:48:47,210 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:102 - APK解析フェーズ完了: manifest_analysis
+2025-09-29 17:48:47,212 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:87 - APK解析フェーズ開始: dex_analysis
+2025-09-29 17:48:47,212 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - dex_analysis: 進捗 0/100
+2025-09-29 17:48:47,213 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - dex_analysis: 進捗 20/100
+2025-09-29 17:48:47,213 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - dex_analysis: 進捗 40/100
+2025-09-29 17:48:47,213 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - dex_analysis: 進捗 60/100
+2025-09-29 17:48:47,213 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - dex_analysis: 進捗 80/100
+2025-09-29 17:48:47,213 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:102 - APK解析フェーズ完了: dex_analysis
+2025-09-29 17:48:47,213 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:87 - APK解析フェーズ開始: resource_analysis
+2025-09-29 17:48:47,214 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - resource_analysis: 進捗 0/75
+2025-09-29 17:48:47,214 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - resource_analysis: 進捗 20/75
+2025-09-29 17:48:47,214 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - resource_analysis: 進捗 40/75
+2025-09-29 17:48:47,214 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - resource_analysis: 進捗 60/75
+2025-09-29 17:48:47,214 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:102 - APK解析フェーズ完了: resource_analysis
+2025-09-29 17:48:47,214 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:87 - APK解析フェーズ開始: native_lib_analysis
+2025-09-29 17:48:47,215 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - native_lib_analysis: 進捗 0/25
+2025-09-29 17:48:47,215 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - native_lib_analysis: 進捗 20/25
+2025-09-29 17:48:47,215 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:102 - APK解析フェーズ完了: native_lib_analysis
+2025-09-29 17:48:47,216 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:87 - APK解析フェーズ開始: signature_verification
+2025-09-29 17:48:47,216 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:98 - signature_verification: 進捗 0/10
+2025-09-29 17:48:47,216 - enhanced_apk_analyzer - INFO - test_apk_analyzer_integration:102 - APK解析フェーズ完了: signature_verification
+2025-09-29 17:48:47,218 - unity_dll_analyzer - INFO - test_unity_analyzer_integration:124 - Unity解析開始: il2cpp_metadata
+2025-09-29 17:48:47,218 - unity_dll_analyzer - WARNING - test_unity_analyzer_integration:139 - il2cpp_metadata: メタデータ不整合を検出、継続処理
+2025-09-29 17:48:47,218 - unity_dll_analyzer - INFO - test_unity_analyzer_integration:141 - Unity解析完了: il2cpp_metadata (15ファイル)
+2025-09-29 17:48:47,218 - unity_dll_analyzer - INFO - test_unity_analyzer_integration:124 - Unity解析開始: managed_assemblies
+2025-09-29 17:48:47,218 - unity_dll_analyzer - INFO - test_unity_analyzer_integration:141 - Unity解析完了: managed_assemblies (30ファイル)
+2025-09-29 17:48:47,219 - unity_dll_analyzer - INFO - test_unity_analyzer_integration:124 - Unity解析開始: native_libraries
+2025-09-29 17:48:47,219 - unity_dll_analyzer - INFO - test_unity_analyzer_integration:141 - Unity解析完了: native_libraries (8ファイル)
+2025-09-29 17:48:47,219 - unity_dll_analyzer - INFO - test_unity_analyzer_integration:124 - Unity解析開始: unity_assets
+2025-09-29 17:48:47,219 - unity_dll_analyzer - INFO - test_unity_analyzer_integration:141 - Unity解析完了: unity_assets (50ファイル)
+2025-09-29 17:48:47,220 - dynamic_analysis_system - INFO - test_dynamic_analysis_integration:158 - 動的監視開始: memory
+2025-09-29 17:48:47,220 - dynamic_analysis_system - WARNING - test_dynamic_analysis_integration:173 - memory: 異常パターン検知
+2025-09-29 17:48:47,220 - dynamic_analysis_system - INFO - test_dynamic_analysis_integration:177 - 動的監視完了: memory
+2025-09-29 17:48:47,221 - dynamic_analysis_system - INFO - test_dynamic_analysis_integration:158 - 動的監視開始: network
+2025-09-29 17:48:47,221 - dynamic_analysis_system - WARNING - test_dynamic_analysis_integration:173 - network: 異常パターン検知
+2025-09-29 17:48:47,221 - dynamic_analysis_system - INFO - test_dynamic_analysis_integration:177 - 動的監視完了: network
+2025-09-29 17:48:47,221 - dynamic_analysis_system - INFO - test_dynamic_analysis_integration:158 - 動的監視開始: file_system
+2025-09-29 17:48:47,221 - dynamic_analysis_system - WARNING - test_dynamic_analysis_integration:173 - file_system: 異常パターン検知
+2025-09-29 17:48:47,221 - dynamic_analysis_system - INFO - test_dynamic_analysis_integration:177 - 動的監視完了: file_system
+2025-09-29 17:48:47,221 - dynamic_analysis_system - INFO - test_dynamic_analysis_integration:158 - 動的監視開始: process
+2025-09-29 17:48:47,221 - dynamic_analysis_system - WARNING - test_dynamic_analysis_integration:173 - process: 異常パターン検知
+2025-09-29 17:48:47,222 - dynamic_analysis_system - INFO - test_dynamic_analysis_integration:177 - 動的監視完了: process
+2025-09-29 17:48:47,222 - dynamic_analysis_system - INFO - test_dynamic_analysis_integration:158 - 動的監視開始: registry
+2025-09-29 17:48:47,222 - dynamic_analysis_system - WARNING - test_dynamic_analysis_integration:173 - registry: 異常パターン検知
+2025-09-29 17:48:47,222 - dynamic_analysis_system - INFO - test_dynamic_analysis_integration:177 - 動的監視完了: registry
+2025-09-29 17:48:47,223 - frida_hooking_system - INFO - test_frida_integration:198 - Fridaフック開始: api_hooking
+2025-09-29 17:48:47,223 - frida_hooking_system - INFO - test_frida_integration:206 - api_hooking: フック結果取得 1/100
+2025-09-29 17:48:47,224 - frida_hooking_system - INFO - test_frida_integration:206 - api_hooking: フック結果取得 26/100
+2025-09-29 17:48:47,224 - frida_hooking_system - INFO - test_frida_integration:206 - api_hooking: フック結果取得 51/100
+2025-09-29 17:48:47,224 - frida_hooking_system - INFO - test_frida_integration:206 - api_hooking: フック結果取得 76/100
+2025-09-29 17:48:47,224 - frida_hooking_system - ERROR - test_frida_integration:210 - api_hooking: フック失敗、再試行
+2025-09-29 17:48:47,224 - frida_hooking_system - INFO - test_frida_integration:214 - Fridaフック完了: api_hooking
+2025-09-29 17:48:47,225 - frida_hooking_system - INFO - test_frida_integration:198 - Fridaフック開始: function_tracing
+2025-09-29 17:48:47,225 - frida_hooking_system - INFO - test_frida_integration:206 - function_tracing: フック結果取得 1/150
+2025-09-29 17:48:47,225 - frida_hooking_system - INFO - test_frida_integration:206 - function_tracing: フック結果取得 26/150
+2025-09-29 17:48:47,225 - frida_hooking_system - INFO - test_frida_integration:206 - function_tracing: フック結果取得 51/150
+2025-09-29 17:48:47,225 - frida_hooking_system - INFO - test_frida_integration:206 - function_tracing: フック結果取得 76/150
+2025-09-29 17:48:47,225 - frida_hooking_system - INFO - test_frida_integration:206 - function_tracing: フック結果取得 101/150
+2025-09-29 17:48:47,226 - frida_hooking_system - INFO - test_frida_integration:206 - function_tracing: フック結果取得 126/150
+2025-09-29 17:48:47,226 - frida_hooking_system - ERROR - test_frida_integration:210 - function_tracing: フック失敗、再試行
+2025-09-29 17:48:47,226 - frida_hooking_system - INFO - test_frida_integration:214 - Fridaフック完了: function_tracing
+2025-09-29 17:48:47,226 - frida_hooking_system - INFO - test_frida_integration:198 - Fridaフック開始: memory_monitoring
+2025-09-29 17:48:47,226 - frida_hooking_system - INFO - test_frida_integration:206 - memory_monitoring: フック結果取得 1/200
+2025-09-29 17:48:47,226 - frida_hooking_system - INFO - test_frida_integration:206 - memory_monitoring: フック結果取得 26/200
+2025-09-29 17:48:47,227 - frida_hooking_system - INFO - test_frida_integration:206 - memory_monitoring: フック結果取得 51/200
+2025-09-29 17:48:47,227 - frida_hooking_system - INFO - test_frida_integration:206 - memory_monitoring: フック結果取得 76/200
+2025-09-29 17:48:47,227 - frida_hooking_system - INFO - test_frida_integration:206 - memory_monitoring: フック結果取得 101/200
+2025-09-29 17:48:47,227 - frida_hooking_system - INFO - test_frida_integration:206 - memory_monitoring: フック結果取得 126/200
+2025-09-29 17:48:47,227 - frida_hooking_system - INFO - test_frida_integration:206 - memory_monitoring: フック結果取得 151/200
+2025-09-29 17:48:47,228 - frida_hooking_system - INFO - test_frida_integration:206 - memory_monitoring: フック結果取得 176/200
+2025-09-29 17:48:47,228 - frida_hooking_system - ERROR - test_frida_integration:210 - memory_monitoring: フック失敗、再試行
+2025-09-29 17:48:47,228 - frida_hooking_system - INFO - test_frida_integration:214 - Fridaフック完了: memory_monitoring
+2025-09-29 17:48:47,228 - frida_hooking_system - INFO - test_frida_integration:198 - Fridaフック開始: crypto_analysis
+2025-09-29 17:48:47,228 - frida_hooking_system - INFO - test_frida_integration:206 - crypto_analysis: フック結果取得 1/75
+2025-09-29 17:48:47,228 - frida_hooking_system - INFO - test_frida_integration:206 - crypto_analysis: フック結果取得 26/75
+2025-09-29 17:48:47,229 - frida_hooking_system - INFO - test_frida_integration:206 - crypto_analysis: フック結果取得 51/75
+2025-09-29 17:48:47,229 - frida_hooking_system - ERROR - test_frida_integration:210 - crypto_analysis: フック失敗、再試行
+2025-09-29 17:48:47,229 - frida_hooking_system - INFO - test_frida_integration:214 - Fridaフック完了: crypto_analysis
+2025-09-29 17:48:47,230 - ml_pattern_recognition - INFO - test_ml_recognition_integration:236 - ML認識フェーズ開始: data_preprocessing
+2025-09-29 17:48:47,230 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - data_preprocessing: 予測完了 (信頼度: 85%)
+2025-09-29 17:48:47,230 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - data_preprocessing: 予測完了 (信頼度: 90%)
+2025-09-29 17:48:47,230 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - data_preprocessing: 予測完了 (信頼度: 95%)
+2025-09-29 17:48:47,230 - ml_pattern_recognition - INFO - test_ml_recognition_integration:254 - ML認識フェーズ完了: data_preprocessing
+2025-09-29 17:48:47,231 - ml_pattern_recognition - INFO - test_ml_recognition_integration:236 - ML認識フェーズ開始: feature_extraction
+2025-09-29 17:48:47,231 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - feature_extraction: 予測完了 (信頼度: 85%)
+2025-09-29 17:48:47,231 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - feature_extraction: 予測完了 (信頼度: 90%)
+2025-09-29 17:48:47,231 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - feature_extraction: 予測完了 (信頼度: 95%)
+2025-09-29 17:48:47,231 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - feature_extraction: 予測完了 (信頼度: 85%)
+2025-09-29 17:48:47,231 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - feature_extraction: 予測完了 (信頼度: 90%)
+2025-09-29 17:48:47,231 - ml_pattern_recognition - INFO - test_ml_recognition_integration:254 - ML認識フェーズ完了: feature_extraction
+2025-09-29 17:48:47,231 - ml_pattern_recognition - INFO - test_ml_recognition_integration:236 - ML認識フェーズ開始: pattern_matching
+2025-09-29 17:48:47,232 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - pattern_matching: 予測完了 (信頼度: 85%)
+2025-09-29 17:48:47,232 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - pattern_matching: 予測完了 (信頼度: 90%)
+2025-09-29 17:48:47,232 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - pattern_matching: 予測完了 (信頼度: 95%)
+2025-09-29 17:48:47,232 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - pattern_matching: 予測完了 (信頼度: 85%)
+2025-09-29 17:48:47,232 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - pattern_matching: 予測完了 (信頼度: 90%)
+2025-09-29 17:48:47,232 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - pattern_matching: 予測完了 (信頼度: 95%)
+2025-09-29 17:48:47,232 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - pattern_matching: 予測完了 (信頼度: 85%)
+2025-09-29 17:48:47,234 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - pattern_matching: 予測完了 (信頼度: 90%)
+2025-09-29 17:48:47,234 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - pattern_matching: 予測完了 (信頼度: 95%)
+2025-09-29 17:48:47,234 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - pattern_matching: 予測完了 (信頼度: 85%)
+2025-09-29 17:48:47,234 - ml_pattern_recognition - INFO - test_ml_recognition_integration:254 - ML認識フェーズ完了: pattern_matching
+2025-09-29 17:48:47,234 - ml_pattern_recognition - INFO - test_ml_recognition_integration:236 - ML認識フェーズ開始: result_classification
+2025-09-29 17:48:47,234 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - result_classification: 予測完了 (信頼度: 85%)
+2025-09-29 17:48:47,235 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - result_classification: 予測完了 (信頼度: 90%)
+2025-09-29 17:48:47,235 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - result_classification: 予測完了 (信頼度: 95%)
+2025-09-29 17:48:47,235 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - result_classification: 予測完了 (信頼度: 85%)
+2025-09-29 17:48:47,235 - ml_pattern_recognition - INFO - test_ml_recognition_integration:254 - ML認識フェーズ完了: result_classification
+2025-09-29 17:48:47,235 - ml_pattern_recognition - INFO - test_ml_recognition_integration:236 - ML認識フェーズ開始: confidence_scoring
+2025-09-29 17:48:47,235 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - confidence_scoring: 予測完了 (信頼度: 85%)
+2025-09-29 17:48:47,236 - ml_pattern_recognition - INFO - test_ml_recognition_integration:250 - confidence_scoring: 予測完了 (信頼度: 90%)
+2025-09-29 17:48:47,236 - ml_pattern_recognition - INFO - test_ml_recognition_integration:254 - ML認識フェーズ完了: confidence_scoring

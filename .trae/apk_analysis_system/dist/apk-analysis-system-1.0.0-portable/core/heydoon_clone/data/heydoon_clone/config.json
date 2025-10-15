@@ -1,0 +1,11 @@
+{
+  "score": 932,
+  "level": 1,
+  "lives": 0,
+  "high_score": 0,
+  "settings": {
+    "sound_enabled": true,
+    "music_enabled": true,
+    "difficulty": "normal"
+  }
+}

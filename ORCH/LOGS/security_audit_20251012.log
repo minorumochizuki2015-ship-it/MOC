@@ -1,0 +1,186 @@
+[2025-10-12 16:11:41] [INFO] === Security Audit Started ===
+[2025-10-12 16:11:41] [INFO] Project Root: C:/Users/User/Trae/Game_project
+[2025-10-12 16:11:41] [INFO] Config Path: C:/Users/User/Trae/Game_project/Scripts/security/secrets_scan_config.json
+[2025-10-12 16:11:41] [INFO] Output Directory: C:/Users/User/Trae/Game_project/ORCH/LOGS
+[2025-10-12 16:11:41] [INFO] Dry Run: True
+[2025-10-12 16:11:41] [INFO] Checking prerequisites...
+[2025-10-12 16:11:41] [INFO] Prerequisites check passed
+[2025-10-12 16:11:41] [INFO] Starting secrets scanning...
+[2025-10-12 16:11:41] [ERROR] Secrets scanning failed: At C:\Users\User\Trae\Game_project\Scripts\security\enhanced_secrets_scan.ps1:175 char:66
++ …       Write-Log "Secret detected: $($Rule.name) in $FilePath:$LineNum …
++                                                      ~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+
+At C:\Users\User\Trae\Game_project\Scripts\security\enhanced_secrets_scan.ps1:183 char:40
++         Write-Log "Error scanning file $FilePath: $($_.Exception.Mess …
++                                        ~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+[2025-10-12 16:11:41] [INFO] Starting rotation management...
+[2025-10-12 16:11:41] [ERROR] Rotation management failed: At C:\Users\User\Trae\Game_project\Scripts\security\secrets_rotation_manager.ps1:71 char:19
++     $HashInput = "$FilePath:$LineNumber:$($MatchText.Substring(0, [Ma …
++                   ~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+
+At C:\Users\User\Trae\Game_project\Scripts\security\secrets_rotation_manager.ps1:71 char:29
++     $HashInput = "$FilePath:$LineNumber:$($MatchText.Substring(0, [Ma …
++                             ~~~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+
+At C:\Users\User\Trae\Game_project\Scripts\security\secrets_rotation_manager.ps1:176 char:48
++ … $NotificationKey = "$($Secret.fingerprint):$NotificationType:$($Rotat …
++                                              ~~~~~~~~~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+
+At C:\Users\User\Trae\Game_project\Scripts\security\secrets_rotation_manager.ps1:216 char:41
++         Write-Log "Notification sent to $Channel: $NotificationMessag …
++                                         ~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+[2025-10-12 16:11:41] [INFO] Security report exported to C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_161141.json
+[2025-10-12 16:11:41] [INFO] === Security Audit Summary ===
+[2025-10-12 16:11:41] [INFO] Secrets Scan: FAILED
+[2025-10-12 16:11:41] [INFO] Rotation Check: FAILED
+[2025-10-12 16:11:41] [INFO] Overall Status: CRITICAL
+[2025-10-12 16:11:41] [INFO] Report Generated: C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_161141.json
+[2025-10-12 16:11:41] [ERROR] Security audit completed with issues
+[2025-10-12 16:11:41] [INFO] === Security Audit Completed ===
+[2025-10-12 16:12:20] [INFO] === Security Audit Started ===
+[2025-10-12 16:12:20] [INFO] Project Root: C:/Users/User/Trae/Game_project
+[2025-10-12 16:12:20] [INFO] Config Path: C:/Users/User/Trae/Game_project/Scripts/security/secrets_scan_config.json
+[2025-10-12 16:12:20] [INFO] Output Directory: C:/Users/User/Trae/Game_project/ORCH/LOGS
+[2025-10-12 16:12:20] [INFO] Dry Run: True
+[2025-10-12 16:12:20] [INFO] Checking prerequisites...
+[2025-10-12 16:12:20] [INFO] Prerequisites check passed
+[2025-10-12 16:12:20] [INFO] Starting secrets scanning...
+[2025-10-12 16:12:20] [ERROR] Secrets scanning failed: At C:\Users\User\Trae\Game_project\Scripts\security\enhanced_secrets_scan.ps1:175 char:66
++ …       Write-Log "Secret detected: $($Rule.name) in $FilePath:$LineNum …
++                                                      ~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+
+At C:\Users\User\Trae\Game_project\Scripts\security\enhanced_secrets_scan.ps1:183 char:40
++         Write-Log "Error scanning file $FilePath: $($_.Exception.Mess …
++                                        ~~~~~~~~~~
+Variable reference is not valid. ':' was not followed by a valid variable name character. Consider using ${} to delimit the name.
+[2025-10-12 16:12:20] [INFO] Starting rotation management...
+[2025-10-12 16:12:21] [INFO] Rotation management completed successfully
+[2025-10-12 16:12:21] [INFO] Security report exported to C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_161221.json
+[2025-10-12 16:12:21] [INFO] === Security Audit Summary ===
+[2025-10-12 16:12:21] [INFO] Secrets Scan: FAILED
+[2025-10-12 16:12:21] [INFO] Rotation Check: PASSED
+[2025-10-12 16:12:21] [INFO] Overall Status: CRITICAL
+[2025-10-12 16:12:21] [INFO] Report Generated: C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_161221.json
+[2025-10-12 16:12:21] [ERROR] Security audit completed with issues
+[2025-10-12 16:12:21] [INFO] === Security Audit Completed ===
+[2025-10-12 16:19:30] [INFO] === Security Audit Started ===
+[2025-10-12 16:19:30] [INFO] Project Root: C:/Users/User/Trae/Game_project
+[2025-10-12 16:19:30] [INFO] Config Path: C:/Users/User/Trae/Game_project/Scripts/security/secrets_scan_config.json
+[2025-10-12 16:19:30] [INFO] Output Directory: C:/Users/User/Trae/Game_project/ORCH/LOGS
+[2025-10-12 16:19:30] [INFO] Dry Run: True
+[2025-10-12 16:19:30] [INFO] Checking prerequisites...
+[2025-10-12 16:19:30] [INFO] Prerequisites check passed
+[2025-10-12 16:19:30] [INFO] Starting secrets scanning...
+[2025-10-12 16:25:35] [ERROR] Scan report not generated at C:/Users/User/Trae/Game_project/secrets_scan_report.json
+[2025-10-12 16:25:35] [INFO] Starting rotation management...
+[2025-10-12 16:25:35] [INFO] Rotation management completed successfully
+[2025-10-12 16:25:35] [INFO] Security report exported to C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_162535.json
+[2025-10-12 16:25:35] [INFO] === Security Audit Summary ===
+[2025-10-12 16:25:35] [INFO] Secrets Scan: FAILED
+[2025-10-12 16:25:35] [INFO] Rotation Check: PASSED
+[2025-10-12 16:25:35] [INFO] Overall Status: CRITICAL
+[2025-10-12 16:25:35] [INFO] Report Generated: C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_162535.json
+[2025-10-12 16:25:35] [ERROR] Security audit completed with issues
+[2025-10-12 16:25:35] [INFO] === Security Audit Completed ===
+[2025-10-12 16:27:43] [INFO] === Security Audit Started ===
+[2025-10-12 16:27:43] [INFO] Project Root: C:/Users/User/Trae/Game_project
+[2025-10-12 16:27:43] [INFO] Config Path: C:/Users/User/Trae/Game_project/Scripts/security/secrets_scan_config.json
+[2025-10-12 16:27:43] [INFO] Output Directory: C:/Users/User/Trae/Game_project/ORCH/LOGS
+[2025-10-12 16:27:43] [INFO] Dry Run: True
+[2025-10-12 16:27:43] [INFO] Checking prerequisites...
+[2025-10-12 16:27:43] [INFO] Prerequisites check passed
+[2025-10-12 16:27:43] [INFO] Starting secrets scanning...
+[2025-10-12 16:33:57] [ERROR] Scan report not generated at C:/Users/User/Trae/Game_project/secrets_scan_report.json
+[2025-10-12 16:33:57] [INFO] Starting rotation management...
+[2025-10-12 16:33:58] [INFO] Rotation management completed successfully
+[2025-10-12 16:33:58] [INFO] Security report exported to C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_163358.json
+[2025-10-12 16:33:58] [INFO] === Security Audit Summary ===
+[2025-10-12 16:33:58] [INFO] Secrets Scan: FAILED
+[2025-10-12 16:33:58] [INFO] Rotation Check: PASSED
+[2025-10-12 16:33:58] [INFO] Overall Status: CRITICAL
+[2025-10-12 16:33:58] [INFO] Report Generated: C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_163358.json
+[2025-10-12 16:33:58] [ERROR] Security audit completed with issues
+[2025-10-12 16:33:58] [INFO] === Security Audit Completed ===
+[2025-10-12 16:36:31] [INFO] === Security Audit Started ===
+[2025-10-12 16:36:31] [INFO] Project Root: C:/Users/User/Trae/Game_project
+[2025-10-12 16:36:31] [INFO] Config Path: C:/Users/User/Trae/Game_project/Scripts/security/secrets_scan_config.json
+[2025-10-12 16:36:31] [INFO] Output Directory: C:/Users/User/Trae/Game_project/ORCH/LOGS
+[2025-10-12 16:36:31] [INFO] Dry Run: True
+[2025-10-12 16:36:31] [INFO] Checking prerequisites...
+[2025-10-12 16:36:31] [INFO] Prerequisites check passed
+[2025-10-12 16:36:31] [INFO] Starting secrets scanning...
+[2025-10-12 16:42:31] [ERROR] Scan report not generated at C:/Users/User/Trae/Game_project/secrets_scan_report.json
+[2025-10-12 16:42:31] [INFO] Starting rotation management...
+[2025-10-12 16:42:31] [INFO] Rotation management completed successfully
+[2025-10-12 16:42:31] [INFO] Security report exported to C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_164231.json
+[2025-10-12 16:42:31] [INFO] === Security Audit Summary ===
+[2025-10-12 16:42:31] [INFO] Secrets Scan: FAILED
+[2025-10-12 16:42:31] [INFO] Rotation Check: PASSED
+[2025-10-12 16:42:31] [INFO] Overall Status: CRITICAL
+[2025-10-12 16:42:31] [INFO] Report Generated: C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_164231.json
+[2025-10-12 16:42:31] [ERROR] Security audit completed with issues
+[2025-10-12 16:42:31] [INFO] === Security Audit Completed ===
+[2025-10-12 16:44:14] [INFO] === Security Audit Started ===
+[2025-10-12 16:44:14] [INFO] Project Root: C:/Users/User/Trae/Game_project
+[2025-10-12 16:44:14] [INFO] Config Path: C:/Users/User/Trae/Game_project/Scripts/security/secrets_scan_config.json
+[2025-10-12 16:44:14] [INFO] Output Directory: C:/Users/User/Trae/Game_project/ORCH/LOGS
+[2025-10-12 16:44:14] [INFO] Dry Run: True
+[2025-10-12 16:44:14] [INFO] Checking prerequisites...
+[2025-10-12 16:44:14] [INFO] Prerequisites check passed
+[2025-10-12 16:44:14] [INFO] Starting secrets scanning...
+[2025-10-12 16:50:26] [ERROR] Scan report not generated at C:/Users/User/Trae/Game_project/secrets_scan_report.json
+[2025-10-12 16:50:26] [INFO] Starting rotation management...
+[2025-10-12 16:50:26] [INFO] Rotation management completed successfully
+[2025-10-12 16:50:26] [INFO] Security report exported to C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_165026.json
+[2025-10-12 16:50:26] [INFO] === Security Audit Summary ===
+[2025-10-12 16:50:26] [INFO] Secrets Scan: FAILED
+[2025-10-12 16:50:26] [INFO] Rotation Check: PASSED
+[2025-10-12 16:50:26] [INFO] Overall Status: CRITICAL
+[2025-10-12 16:50:26] [INFO] Report Generated: C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_165026.json
+[2025-10-12 16:50:26] [ERROR] Security audit completed with issues
+[2025-10-12 16:50:26] [INFO] === Security Audit Completed ===
+[2025-10-12 16:51:51] [INFO] === Security Audit Started ===
+[2025-10-12 16:51:51] [INFO] Project Root: C:/Users/User/Trae/Game_project
+[2025-10-12 16:51:51] [INFO] Config Path: C:/Users/User/Trae/Game_project/Scripts/security/secrets_scan_config.json
+[2025-10-12 16:51:51] [INFO] Output Directory: C:/Users/User/Trae/Game_project/ORCH/LOGS
+[2025-10-12 16:51:51] [INFO] Dry Run: True
+[2025-10-12 16:51:51] [INFO] Checking prerequisites...
+[2025-10-12 16:51:51] [INFO] Prerequisites check passed
+[2025-10-12 16:51:51] [INFO] Starting secrets scanning...
+[2025-10-12 16:57:46] [ERROR] Scan report not generated at C:/Users/User/Trae/Game_project/secrets_scan_report.json
+[2025-10-12 16:57:46] [INFO] Starting rotation management...
+[2025-10-12 16:57:47] [INFO] Rotation management completed successfully
+[2025-10-12 16:57:47] [INFO] Security report exported to C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_165747.json
+[2025-10-12 16:57:47] [INFO] === Security Audit Summary ===
+[2025-10-12 16:57:47] [INFO] Secrets Scan: FAILED
+[2025-10-12 16:57:47] [INFO] Rotation Check: PASSED
+[2025-10-12 16:57:47] [INFO] Overall Status: CRITICAL
+[2025-10-12 16:57:47] [INFO] Report Generated: C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_165747.json
+[2025-10-12 16:57:47] [ERROR] Security audit completed with issues
+[2025-10-12 16:57:47] [INFO] === Security Audit Completed ===
+[2025-10-12 17:04:44] [INFO] === Security Audit Started ===
+[2025-10-12 17:04:44] [INFO] Project Root: C:/Users/User/Trae/Game_project
+[2025-10-12 17:04:44] [INFO] Config Path: C:/Users/User/Trae/Game_project/Scripts/security/secrets_scan_config.json
+[2025-10-12 17:04:44] [INFO] Output Directory: C:/Users/User/Trae/Game_project/ORCH/LOGS
+[2025-10-12 17:04:44] [INFO] Dry Run: False
+[2025-10-12 17:04:44] [INFO] Checking prerequisites...
+[2025-10-12 17:04:44] [INFO] Prerequisites check passed
+[2025-10-12 17:04:44] [INFO] Starting secrets scanning...
+[2025-10-12 17:10:47] [INFO] Secrets scan completed. Found 67 potential secrets
+[2025-10-12 17:10:47] [INFO] Starting rotation management...
+[2025-10-12 17:10:50] [INFO] Rotation management completed successfully
+[2025-10-12 17:10:50] [INFO] Security report exported to C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_171050.json
+[2025-10-12 17:10:50] [INFO] === Security Audit Summary ===
+[2025-10-12 17:10:50] [INFO] Secrets Scan: PASSED
+[2025-10-12 17:10:50] [INFO] Rotation Check: PASSED
+[2025-10-12 17:10:50] [INFO] Overall Status: HEALTHY
+[2025-10-12 17:10:50] [INFO] Report Generated: C:\Users\User\Trae\Game_project\ORCH\LOGS\security_audit_report_20251012_171050.json
+[2025-10-12 17:10:50] [INFO] Security audit completed successfully
+[2025-10-12 17:10:50] [INFO] === Security Audit Completed ===

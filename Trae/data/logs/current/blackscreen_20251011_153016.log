@@ -1,0 +1,455 @@
+  --------- beginning of main
+  10-11 15:30:15.636 I/chatty  (  898): uid=1000(system) sf expire 34 lines
+> 10-11 15:30:15.652 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:15.661 D/DmUtilKeepAlive( 1495): isInKeepAliveList  iskeepAliveEnable = true
+  --------- beginning of system
+> 10-11 15:30:15.661 I/ActivityManager( 1495): Force stopping com.traegames.haidoon appid=10263 user=0: from pid 16408
+  10-11 15:30:15.662 I/chatty  ( 1495): uid=1000(system) Binder:1495_1A identical 38 lines
+  10-11 15:30:15.662 D/DmUtilKeepAlive( 1495): isInKeepAliveList  iskeepAliveEnable = true
+> 10-11 15:30:15.662 I/ActivityManager( 1495): Killing 16306:com.traegames.haidoon/u0a263 (adj 0): stop com.traegames.haidoon
+  10-11 15:30:15.662 I/Process ( 1495): killProcessQuiet pid = 16306
+> 10-11 15:30:15.666 W/ActivityTaskManager( 1495): Force removing ActivityRecord{588dd12 u0 com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity t1504 f}: app died, no saved state
+  10-11 15:30:15.666 I//vendor/bin/hw/vendor.qti.hardware.servicetracker@1.1-service(  845): killProcess is called for pid : 16306
+> 10-11 15:30:15.667 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:15.667 D/PhoneWindowManagerMifavor( 1495): setFullScreenOrNot false
+  10-11 15:30:15.673 I/ActivityTaskManager( 1495): ScheduleTopResumedActivityChanged Token{bcc246c ActivityRecord{37d291f u0 com.zte.mifavor.launcher/com.android.launcher3.Launcher t1462}} Set to true
+  10-11 15:30:15.677 E/ANDR-PERF-MPCTL(  835): perf_lock_rel: input handle=34236
+  10-11 15:30:15.679 D/ZTE-SH - AutomaticBrightnessController( 1495): ignoring newScreenAutoBrightness: 110.4 < 115 < 151.8
+> 10-11 15:30:15.680 W/ActivityManager( 1495): forceStop backtrace 
+> 10-11 15:30:15.680 W/ActivityManager( 1495): java.lang.RuntimeException: here
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at com.android.server.am.ActivityManagerService.forceStopPackage(ActivityManagerService.java:4584)
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at com.android.server.am.ActivityManagerShellCommand.runForceStop(ActivityManagerShellCommand.java:1028)
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at com.android.server.am.ActivityManagerShellCommand.onCommand(ActivityManagerShellCommand.java:208)
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at android.os.ShellCommand.exec(ShellCommand.java:104)
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at com.android.server.am.ActivityManagerService.onShellCommand(ActivityManagerService.java:10307)
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at android.os.Binder.shellCommand(Binder.java:881)
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at android.os.Binder.onTransact(Binder.java:765)
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at android.app.IActivityManager$Stub.onTransact(IActivityManager.java:4599)
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at com.android.server.am.ActivityManagerService.onTransact(ActivityManagerService.java:2919)
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at android.os.Binder.execTransactInternal(Binder.java:1021)
+> 10-11 15:30:15.680 W/ActivityManager( 1495): 	at android.os.Binder.execTransact(Binder.java:994)
+  10-11 15:30:15.683 V/SettingsProvider( 1495): Notifying for 0: content://settings/system/topfullscreenornot
+  10-11 15:30:15.683 D/SystemUI_GameModeFeature( 2272): onSettingsChanged mUserEnabled false,oldUserEnabled=false,mNavBarOriginShowing=true,uri=content://settings/system/topfullscreenornot
+  10-11 15:30:15.684 I/NotificationService( 1495): action=android.intent.action.PACKAGE_RESTARTED removing=false
+  10-11 15:30:15.684 I/NotificationService( 1495): pkgName=com.traegames.haidoon cancelNotifications=true,hideN:false,unhideN:false,UID:1000,PID:1495,reason:5
+> 10-11 15:30:15.685 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:15.686 D/CompatibilityInfo( 1495): mCompatibilityFlags - 0
+  10-11 15:30:15.686 D/CompatibilityInfo( 1495): applicationDensity - 480
+  10-11 15:30:15.694 I/LogHelper( 4647): RecordAppService.java[111](handleUpdateActionTime):handleUpdateActionTimecom.traegames.haidoon
+  10-11 15:30:15.694 I/ActivityThread( 2539): handleTopResumedActivityChanged ActivityRecord{ba75c4f token=android.os.BinderProxy@71b80c9 {com.zte.mifavor.launcher/com.android.launcher3.Launcher}} Set to true
+> 10-11 15:30:15.694 I/AppActionDBHelper( 4647): setAppTimeAction,item=VirusScanResult [pkgName=com.traegames.haidoon, startTime=1760164163361, endTime=1760164215676]
+  10-11 15:30:15.697 D/BaseActivity( 2539): onStart--mActivityFlags=0
+  10-11 15:30:15.697 D/Launcher( 2539): onStart--start
+  10-11 15:30:15.699 D/InstallShortcutReceiver( 2539): Getting and clearing APPS_PENDING_INSTALL: null
+  10-11 15:30:15.700 I/AppActionDBHelper( 4647):  1 setAppTimeAction,replace=pkgname=com.traegames.haidoon first_date=1760154110599 launch_duration=-6505935 launch_count=15 last_date=1760164163361
+> 10-11 15:30:15.701 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:15.702 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:15.702 W/LauncherAdapterService( 4238): initZenForbidShowBadgeMFV zen mode is 0
+  10-11 15:30:15.717 D/MediaSessionStack( 1495): updateMediaButtonSessionIfNeeded, callers=com.android.server.media.MediaSessionService.lambda$onStart$0$MediaSessionService:195 com.android.server.media.-$$Lambda$MediaSessionService$za_9dlUSlnaiZw6eCdPVEZq0XLw.onAudioPlayerActiveStateChanged:2 
+  10-11 15:30:15.717 V/Avrcp_ext( 2252): updateCurrentMediaState: mMediaController: null
+> 10-11 15:30:15.717 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:15.717 V/Avrcp_ext( 2252): isMusicActive: true getBluetoothPlayState: 2
+  10-11 15:30:15.717 V/Avrcp_ext( 2252): updateCurrentMediaState: isPlaying = false
+  10-11 15:30:15.722 D/HeadsetService( 2252):  isAudioOn: The number of audio connected devices 0
+  10-11 15:30:15.722 D/HeadsetService( 2252): isScoOrCallActive(): Call Active:falseCall is Ringing:falseSCO is Active:false
+> 10-11 15:30:15.725 W/ActivityManager( 1495): setHasOverlayUi called on unknown pid: 16306
+  10-11 15:30:15.729 I//vendor/bin/hw/vendor.qti.hardware.servicetracker@1.1-service(  845): bindService is called for service : com.zte.mifavor.launcher.adapter/.EmailUnReadIntentService and for client com.zte.mifavor.launcher
+  10-11 15:30:15.729 I//vendor/bin/hw/vendor.qti.hardware.servicetracker@1.1-service(  845): total connections for service : com.zte.mifavor.launcher.adapter/.EmailUnReadIntentServiceare :1
+  10-11 15:30:15.732 I/Avrcp_ext( 2252): Exit updatePlayStatusForDevice
+  10-11 15:30:15.733 D/OverviewProxyService( 2272): notifySystemUiStateFlags: 0x0,mOverviewProxy=com.android.systemui.shared.recents.IOverviewProxy$Stub$Proxy@bd3c51c
+> 10-11 15:30:15.735 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:15.735 D/Adaptor.ImageWallpaperAdapt( 2272): printOnOffsetsChanged:xOffset is 0.0,yOffset is 0.5
+  10-11 15:30:15.735 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:15.748 V/Avrcp_ext( 2252): Exit updatePlayerStateAndPosition
+  10-11 15:30:15.748 E/R-Loader-UNREAD( 2539): updateUnreadApps time:2
+> 10-11 15:30:15.751 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:15.751 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:15.752 D/LauncherAdapterService( 4238): getPkgBadgeStatus com.ss.android.ugc.trill/true/true/10219
+  10-11 15:30:15.819 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:15.825 D/ActivityTaskManager( 1495): isInSuperLauncher() mInSuperPowerMode = 0
+> 10-11 15:30:15.825 D/ActivityEventsService( 1495): sendActivityEvent eventid1024 pkgname=com.traegames.haidoon activity=com.unity3d.player.UnityPlayerActivity
+  10-11 15:30:15.825 I/ActivityTaskManager( 1495): startActivity 16415 Uid = 2000 false
+> 10-11 15:30:15.825 I/ActivityTaskManager( 1495): START u0 {flg=0x10000000 cmp=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity} from uid 2000 , pid: 16415 , packageName: com.android.shell
+  10-11 15:30:15.825 E/ANDR-PERF-MPCTL(  835): perf_lock_acq: client_pid=1495, client_tid=4325, inupt handle=0, duration=2000 ms, num_args=20, list=0x40C20000 0x28 0x40C1C000 0x32 0x40C20200 0x28 0x40C1C200 0x32 0x40804000 0xFFF 0x40804100 0xFFF 0x40804200 0xFFF 0x40800000 0x5C6 0x40800100 0x553 0x40800200 0x6AC 
+  10-11 15:30:15.826 E/ANDR-PERF-MPCTL(  835): perf_lock_acq: output handle=34237
+  10-11 15:30:15.829 E/ANDR-PERF-MPCTL(  835): perf_lock_acq: output handle=34241
+  10-11 15:30:15.829 I/ActivityTaskManager( 1495): ScheduleTopResumedActivityChanged Token{bcc246c ActivityRecord{37d291f u0 com.zte.mifavor.launcher/com.android.launcher3.Launcher t1462}} Set to false
+> 10-11 15:30:15.829 D/ActivityEventsService( 1495): sendActivityEvent eventid8 pkgname=com.traegames.haidoon activity=com.unity3d.player.UnityPlayerActivity
+  10-11 15:30:15.829 I/ActivityThread( 2539): handleTopResumedActivityChanged ActivityRecord{ba75c4f token=android.os.BinderProxy@71b80c9 {com.zte.mifavor.launcher/com.android.launcher3.Launcher}} Set to false
+  10-11 15:30:15.830 E/        (  835): perfGetProp: Return Val from Perf.cpp is false
+  10-11 15:30:15.839 E/ANDR-PERF-MPCTL(  835): perf_lock_acq: output handle=34243
+  10-11 15:30:15.839 D/R-Loader-UNREAD( 2539): setUnreadRefreshStatus false
+> 10-11 15:30:15.840 I/ActivityManager( 1495): ztelog is 0
+  10-11 15:30:15.840 D/DmUtilKeepAlive( 1495): isInKeepAliveList  iskeepAliveEnable = true
+  10-11 15:30:15.840 D/ZTE-SH - AutomaticBrightnessController( 1495): ignoring newScreenAutoBrightness: 110.4 < 115 < 151.8
+  10-11 15:30:15.846 D/Zygote  (  699): Forked child process 16425
+  10-11 15:30:15.848 E/libprocessgroup(16425): createProcessGroupFreezer initialPid '16425' uid:  10263: File exists
+> 10-11 15:30:15.852 I/ActivityManager( 1495): Start proc 16425:com.traegames.haidoon/u0a263 for activity {com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity}
+  10-11 15:30:15.852 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:15.863 D/Adaptor.ImageWallpaperAdapt( 2272): printOnOffsetsChanged:xOffset is 0.0,yOffset is 0.5
+  10-11 15:30:15.871 D/CompatibilityInfo( 1495): applicationDensity - 480
+  10-11 15:30:15.871 D/CompatibilityInfo( 1495): applicationScale - 1.0
+> 10-11 15:30:15.872 I/ActivityTaskManager( 1495): ScheduleTopResumedActivityChanged Token{2d89c9a ActivityRecord{af8cd45 u0 com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity t1505}} Set to true
+> 10-11 15:30:15.872 D/ActivityEventsService( 1495): sendActivityEvent eventid512 pkgname=com.traegames.haidoon activity=com.unity3d.player.UnityPlayerActivity
+> 10-11 15:30:15.872 D/ActivityEventsService( 1495): sendActivityEvent eventid128 pkgname=com.traegames.haidoon activity=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity
+> 10-11 15:30:15.873 D/ActivityEventsService( 1495): sendActivityEvent callback eventid=128; pkgname=com.traegames.haidoon; activity=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity; reserved=
+> 10-11 15:30:15.873 D/SystemUI_FakeNotchFeature( 2272): top activity: pkg = com.traegames.haidoon, activity = com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity, eventId = 0x80
+> 10-11 15:30:15.873 D/SystemUI_FakeNotchFeature( 2272): [pkg = com.traegames.haidoon, activity = com.unity3d.player.UnityPlayerActivity] match failed
+  10-11 15:30:15.873 I/chatty  ( 1495): uid=1000(system) Binder:1495_C identical 2 lines
+> 10-11 15:30:15.873 D/ActivityEventsService( 1495): sendActivityEvent callback eventid=128; pkgname=com.traegames.haidoon; activity=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity; reserved=
+  10-11 15:30:15.873 D/NrPowerOptimizer( 1495): NrPwrOptHandler, msg= { when=0 what=1 obj=com.traegames.haidoon target=com.android.server.ZteNrPowerOptimizerController$NrPwrOptHandler }
+  10-11 15:30:15.873 D/NrPowerOptimizer( 1495): NrPwrOptHandler, MSG_APP_SWITCH pkg=com.traegames.haidoon
+> 10-11 15:30:15.873 D/ActivityEventsService( 1495): sendActivityEvent callback eventid=128; pkgname=com.traegames.haidoon; activity=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity; reserved=
+  10-11 15:30:15.873 I/AppSwitchDispatcher( 4647): Get activity event:128 pkgname:com.traegames.haidoon
+> 10-11 15:30:15.873 D/SystemUI_NavigationBarZte( 2272): notifiyActivityEvent activity event: 0x80 pkgname:com.traegames.haidoon activity=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity reserved=
+  10-11 15:30:15.873 D/SystemUI_NavigationBarZte( 2272): notifiyActivityEvent mIsEmergencyOnTop=false
+  10-11 15:30:15.874 I/LogHelper( 4647): AppSwitchEventsDispatcher.java[105](processAppChangeEvent):isScreen=true, foregroundApp=com.traegames.haidoon
+  10-11 15:30:15.877 I/LogHelper( 4647): RecordAppService.java[173](onCreate):onCreate
+  10-11 15:30:15.878 I/LogHelper( 4647): RecordAppService.java[111](handleUpdateActionTime):handleUpdateActionTimecom.zte.mifavor.launcher
+> 10-11 15:30:15.878 I/AppActionDBHelper( 4647): setAppTimeAction,item=VirusScanResult [pkgName=com.zte.mifavor.launcher, startTime=1760164215676, endTime=1760164215874]
+  10-11 15:30:15.878 D/ActivityThread(16425): caller system = false
+  10-11 15:30:15.886 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:15.889 V/GraphicsEnvironment(16425): ANGLE whitelist: []
+  10-11 15:30:15.889 V/GraphicsEnvironment(16425): Neither Game Driver nor prerelease driver is supported.
+> 10-11 15:30:15.889 V/GraphicsEnv(16425): setGpuStats:
+  10-11 15:30:15.889 V/GraphicsEnv(16425): 	driverPackageName[system]
+  10-11 15:30:15.889 V/GraphicsEnv(16425): 	driverVersionName[]
+  10-11 15:30:15.889 V/GraphicsEnv(16425): 	driverBuildTime[0]
+  10-11 15:30:15.889 V/GraphicsEnv(16425): 	appPackageName[com.traegames.haidoon]
+> 10-11 15:30:15.889 V/GraphicsEnv(16425): 	vulkanVersion[4198400]
+  10-11 15:30:15.890 E/ANDR-IOP(  834): IOP HAL: Received pkg_name = com.traegames.haidoon pid = 0
+  10-11 15:30:15.894 D/PhoneWindowManagerMifavor( 1495): setFullScreenOrNot true
+  10-11 15:30:15.897 D/StatusBar( 2272): setSystemUiVisibility displayId=0 vis=8008 mask=ffffffff oldVal=8708 newVal=8008 diff=700
+  10-11 15:30:15.897 D/SystemUI_NavigationBarZte( 2272): setSystemUiVisibility vis=0x8008,mask=-1
+> 10-11 15:30:15.898 V/GraphicsEnv(16425): sendGpuStats:
+  10-11 15:30:15.898 V/GraphicsEnv(16425): 	driverPackageName[system]
+  10-11 15:30:15.898 V/GraphicsEnv(16425): 	driverVersionName[]
+  10-11 15:30:15.898 V/GraphicsEnv(16425): 	driverBuildTime[0]
+  10-11 15:30:15.898 V/GraphicsEnv(16425): 	appPackageName[com.traegames.haidoon]
+> 10-11 15:30:15.898 V/GraphicsEnv(16425): 	vulkanVersion[4198400]
+  10-11 15:30:15.898 V/GraphicsEnv(16425): 	api[0]
+  10-11 15:30:15.898 V/GraphicsEnv(16425): 	isDriverLoaded[1]
+  10-11 15:30:15.919 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:15.920 I/IL2CPP  (16425): JNI_OnLoad
+> 10-11 15:30:15.930 D/WindowClient(16425): Add to mViews: DecorView@90e4815[UnityPlayerActivity], this = android.view.WindowManagerGlobal@a49472amViews.size()=1
+  10-11 15:30:15.930 D/WindowClient(16425): Add to mViews packageName:com.traegames.haidoon
+  10-11 15:30:15.933 D/JANK    (16425): will start tracking: at 227082835
+> 10-11 15:30:15.933 I/ActivityThread(16425): handleTopResumedActivityChanged ActivityRecord{95e491b token=android.os.BinderProxy@dab2f88 {com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity}} Set to true
+  10-11 15:30:15.936 I/AOSP-MdnsDiscoveryManag(30075): (REDACTED) %s
+  10-11 15:30:15.936 I/AOSP-MdnsDiscoveryManag(30075): (REDACTED) %s
+  10-11 15:30:15.953 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:15.967 E/ANDR-IOP(  834): IOP HAL: Received pkg_name = com.traegames.haidoon pid = 0
+> 10-11 15:30:15.968 I/ActivityTaskManager( 1495): Displayed com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity: +140ms
+  10-11 15:30:15.969 E/ANDR-IOP(  834): IOP HAL: Received pkg_name = com.traegames.haidoon pid = 0
+  10-11 15:30:15.970 E/ANDR-PERF-MPCTL(  835): perf_lock_rel: input handle=34240
+  10-11 15:30:15.970 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+> 10-11 15:30:15.985 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:15.986 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:15.987 E/zteSecurityImeHelp( 1495): mayChangeInputMethodLocked  return false  ZTE_SECURITY_INPUT_ENABLE==false
+  10-11 15:30:15.992 I/Module  (30489): DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+  10-11 15:30:16.003 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+> 10-11 15:30:16.004 I/Unity   (16425): MemoryManager: Using 'Dynamic Heap' Allocator.
+> 10-11 15:30:16.014 I/Unity   (16425): SystemInfo CPU = ARM64 FP ASIMD AES, Cores = 8, Memory = 5453mb
+> 10-11 15:30:16.014 I/Unity   (16425): SystemInfo ARM big.LITTLE configuration: 2 big (mask: 0xc0), 6 little (mask: 0x3f)
+> 10-11 15:30:16.014 I/Unity   (16425): ApplicationInfo com.traegames.haidoon version 1.0.0
+> 10-11 15:30:16.014 I/Unity   (16425): Built from '2022.3/respin/2022.3.62f2-4af31df585-v2' branch, Version '2022.3.62f2 (7670c08855a9)', Build type 'Release', Scripting Backend 'il2cpp', CPU 'armeabi-v7a', Stripping 'Enabled'
+  10-11 15:30:16.020 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.036 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.070 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.078 E/libprocessgroup(16425): set_timerslack_ns write failed: Operation not permitted
+> 10-11 15:30:16.081 I/chatty  (16425): uid=10263(com.traegames.haidoon) UnityMain identical 14 lines
+  10-11 15:30:16.081 E/libprocessgroup(16425): set_timerslack_ns write failed: Operation not permitted
+  10-11 15:30:16.083 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:16.085 I/BackgroundService(15651): action=android.intent.action.BATTERY_CHANGED
+  10-11 15:30:16.085 I/BackgroundService(15651): statusInfo=5  sLastChargingState=5  level=100   sLastLevel=100
+> 10-11 15:30:16.086 W/UnityMain(16425): type=1400 audit(0.0:1078653): avc: denied { open } for path="/dev/__properties__/u:object_r:bootsound_prop:s0" dev="tmpfs" ino=24284 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:bootsound_prop:s0 tclass=file permissive=0
+> 10-11 15:30:16.086 W/UnityMain(16425): type=1400 audit(0.0:1078654): avc: denied { open } for path="/dev/__properties__/u:object_r:device_logging_prop:s0" dev="tmpfs" ino=24336 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:device_logging_prop:s0 tclass=file permissive=0
+> 10-11 15:30:16.086 W/UnityMain(16425): type=1400 audit(0.0:1078655): avc: denied { map } for path="/dev/__properties__/u:object_r:ftmd_default_prop:s0" dev="tmpfs" ino=24374 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:ftmd_default_prop:s0 tclass=file permissive=0
+> 10-11 15:30:16.086 W/UnityMain(16425): type=1400 audit(0.0:1078656): avc: denied { open } for path="/dev/__properties__/u:object_r:logpersistd_logging_prop:s0" dev="tmpfs" ino=24393 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:logpersistd_logging_prop:s0 tclass=file permissive=0
+> 10-11 15:30:16.086 W/UnityMain(16425): type=1400 audit(0.0:1078657): avc: denied { open } for path="/dev/__properties__/u:object_r:mmc_prop:s0" dev="tmpfs" ino=24399 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:mmc_prop:s0 tclass=file permissive=0
+  10-11 15:30:16.087 D/KeyguardUpdateMonitor( 2272): received broadcast android.intent.action.BATTERY_CHANGED
+  10-11 15:30:16.087 D/BatteryChargingHealthAlert( 2272): handleBatteryChangedBroadcast: level: 100, plugType: 2, pluggedIn: truehealthValue: 2, status: 5, charged: true, charging: true, oemChargerType: -1, isChargingExpired: 0
+  10-11 15:30:16.089 D/DeviceStatisticsService( 2709): chargerType=2 batteryLevel=100 totalBatteryCapacity=4027900
+  10-11 15:30:16.089 D/DeviceInfoHidlClient( 2709): isPowerInfoNeverSent()=true
+> 10-11 15:30:16.090 I/Unity   (16425): Company Name: Trae Games
+> 10-11 15:30:16.090 I/Unity   (16425): Product Name: 縺ｯ縺・ｼ√ラ繝ｼ繝ｳ・・
+> 10-11 15:30:16.094 V/GraphicsEnv(16425): sendGpuStats:
+  10-11 15:30:16.094 V/GraphicsEnv(16425): 	driverPackageName[system]
+  10-11 15:30:16.094 V/GraphicsEnv(16425): 	driverVersionName[]
+  10-11 15:30:16.094 V/GraphicsEnv(16425): 	driverBuildTime[0]
+  10-11 15:30:16.094 V/GraphicsEnv(16425): 	appPackageName[com.traegames.haidoon]
+> 10-11 15:30:16.094 V/GraphicsEnv(16425): 	vulkanVersion[4198400]
+  10-11 15:30:16.094 V/GraphicsEnv(16425): 	api[1]
+  10-11 15:30:16.094 V/GraphicsEnv(16425): 	isDriverLoaded[1]
+  10-11 15:30:16.094 V/GraphicsEnv(16425): 	driverLoadingTime[2458125]
+> 10-11 15:30:16.094 D/vulkan  (16425): searching for layers in '/data/app/com.traegames.haidoon-jCcVqG8qm72jUKm_ywUGhA==/lib/arm'
+> 10-11 15:30:16.095 D/vulkan  (16425): searching for layers in '/data/app/com.traegames.haidoon-jCcVqG8qm72jUKm_ywUGhA==/base.apk!/lib/armeabi-v7a'
+  10-11 15:30:16.099 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:16.099 I/BackgroundService(15651): onReceive____intent=Intent { act=android.intent.action.BATTERY_CHANGED flg=0x60000010 (has extras) }
+  10-11 15:30:16.103 I/AdrenoVK-0(16425): Reconstruct Branch      : NOTHING
+  10-11 15:30:16.103 I/AdrenoVK-0(16425): Build Config            : S P 8.0.12 AArch32
+> 10-11 15:30:16.103 I/AdrenoVK-0(16425): Driver Path             : /vendor/lib/hw/vulkan.lito.so
+  10-11 15:30:16.104 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.104 D/KeyguardUpdateMonitor( 2272): handleBatteryUpdate
+  10-11 15:30:16.109 I/AdrenoVK-0(16425): Reconstruct Branch      : NOTHING
+  10-11 15:30:16.109 I/AdrenoVK-0(16425): Build Config            : S P 8.0.12 AArch32
+> 10-11 15:30:16.109 I/AdrenoVK-0(16425): Driver Path             : /vendor/lib/hw/vulkan.lito.so
+  10-11 15:30:16.109 I/PowerTracker( 1495): bi night check use default, 1760164216109, r = false
+  10-11 15:30:16.110 D/DeviceStatisticsService( 2709): chargerType=2 batteryLevel=100 totalBatteryCapacity=4027900
+  10-11 15:30:16.110 D/ZteBatteryService( 1495): updateLightsLocked ledexsit=false
+  10-11 15:30:16.114 V/GraphicsEnv(16425): mAnglePath is empty, not creating ANGLE namespace
+> 10-11 15:30:16.114 I/AdrenoGLES-0(16425): QUALCOMM build                   : 681a6ce, I616530ec57
+> 10-11 15:30:16.114 I/AdrenoGLES-0(16425): Build Date                       : 07/12/20
+> 10-11 15:30:16.114 I/AdrenoGLES-0(16425): OpenGL ES Shader Compiler Version: EV031.29.00.13
+> 10-11 15:30:16.114 I/AdrenoGLES-0(16425): Local Branch                     : 
+> 10-11 15:30:16.114 I/AdrenoGLES-0(16425): Remote Branch                    : quic/gfx-adreno.lnx.1.0.r89-rel
+> 10-11 15:30:16.114 I/AdrenoGLES-0(16425): Remote Branch                    : NONE
+> 10-11 15:30:16.114 I/AdrenoGLES-0(16425): Reconstruct Branch               : NOTHING
+> 10-11 15:30:16.114 I/AdrenoGLES-0(16425): Build Config                     : S P 8.0.12 AArch32
+> 10-11 15:30:16.114 I/AdrenoGLES-0(16425): Driver Path                      : /vendor/lib/egl/libGLESv2_adreno.so
+> 10-11 15:30:16.116 I/AdrenoGLES-0(16425): PFP: 0x016dd087, ME: 0x00000000
+  10-11 15:30:16.120 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.120 D/KeyguardUpdateMonitor( 2272): handleBatteryUpdate
+  10-11 15:30:16.306 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.308 D/SystemUI_FakeNotchFeature( 2272): updateTopBlackBar: reason = bar showing change, isPanelExpand = false, statusBarShowing = false, currTopSettings = 0, barState = 0, shouldShow = false
+> 10-11 15:30:16.315 W/Unity   (16425): The referenced script on this Behaviour (Game Object 'GameManager') is missing!
+  10-11 15:30:16.322 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.322 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.338 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.338 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+> 10-11 15:30:16.355 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:16.356 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.356 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.372 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.372 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+> 10-11 15:30:16.376 I/ActivityTaskManager( 1495): Fully drawn com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity: +551ms
+> 10-11 15:30:16.388 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:16.388 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.388 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+> 10-11 15:30:16.404 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:16.405 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.405 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+> 10-11 15:30:16.422 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:16.422 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:30:16.422 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+> 10-11 15:30:16.438 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:16.941 I/chatty  (  898): uid=1000(system) sf identical 30 lines
+> 10-11 15:30:16.957 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:16.971 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:16.971 D/ZteBatteryService( 1495): ZTE level= 100 status= 5 mPlugType= 2  mLedBlinkEnabled= true  mLedTimeEnabled= true  mLedBlinkEnabled_batchg= true  mLedBlinkEnabled_batlow= true MFV FEATURE: false mLcdOn: true m_no_charge_indication_at_night= false ZTE_HOMEPHONE_ENABLE: false
+  10-11 15:30:16.974 D/BatteryChargingHealthAlert( 2272): handleBatteryChangedBroadcast: level: 100, plugType: 2, pluggedIn: truehealthValue: 2, status: 5, charged: true, charging: true, oemChargerType: -1, isChargingExpired: 0
+  10-11 15:30:16.974 D/BatteryChargingHealthAlert( 2272): handleBatteryChangedBroadcast, mDialogNeedShow false mDialogHasShown false mDialogShowing false mExpiredDialogHasShown false mExpiredDialogNeedShow=false
+> 10-11 15:30:16.974 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:16.974 D/MFVBatteryMeterView( 2272): onBatteryLevelChanged level = 100;;;pluggedIn = true;;;charging = true, isShowFastCharingIcon = false
+  10-11 15:30:16.974 D/ChargeIndicator( 2272): onBatteryLevelChanged: level: 100, pluggedIn: true, charging: true, showFastCharing: false, mChargeIndicatorInBattery = false
+  10-11 15:30:16.982 D/SystemUI_ChargingFeature( 2272): Power onReceive, battery power : 100.0 mChargingViewShowing:false,oemChargerType=-1, plugType: 2
+  10-11 15:30:16.982 D/KeyguardUpdateMonitor( 2272): handleBatteryUpdate
+> 10-11 15:30:16.991 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:17.008 I/chatty  (  898): uid=1000(system) sf identical 1 line
+> 10-11 15:30:17.025 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:17.031 D/NetworkController.WifiSignalController( 2272): setActivity: 2
+  10-11 15:30:17.032 D/NetworkController.WifiSignalController( 2272): Change in state from: connected=true,enabled=true,level=4,inetCondition=1,iconGroup=IconGroup(Wi-Fi Icons),activityIn=false,activityOut=false,activityDormant=false,rssi=-43,lastModified=10-11 15:30:01,ssid="Buffalo-G-10C0",wifiGenerationVersion=4,isReady=false,isTransient=false,statusLabel=null,metered=false
+  10-11 15:30:17.032 D/SystemUI_WifiSignalFeature( 2272): hasTransport=true, metered=false, level=4, srcId=com.android.systemui:drawable/zte_stat_sys_wifi_signal_4_fully
+  10-11 15:30:17.032 D/NetworkController.WifiSignalController( 2272): notifyListeners: wifiIcon=com.android.systemui:drawable/zte_stat_sys_wifi_signal_4_fully,resId=2131233480
+> 10-11 15:30:17.041 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:17.042 D/StatusIconContainer( 2272): calculateIconTranslations: start=276.0 width=276.0 underflow=false
+  10-11 15:30:17.042 D/StatusIconContainer( 2272): skipping child (zen) not visible
+  10-11 15:30:17.044 D/RemoteInput( 2272): defocusIfNeeded: false, true, com.android.systemui.statusbar.policy.RemoteInputView$RemoteEditText.onVisibilityChanged:557 android.view.View.dispatchVisibilityChanged:14308 android.view.ViewGroup.dispatchVisibilityChanged:1569 android.view.ViewGroup.dispatchVisibilityChanged:1569 android.view.ViewGroup.dispatchVisibilityChanged:1569 
+  10-11 15:30:17.047 D/QSAnimatorFeature( 2272): SetPosition: onFirstPage =true  position0.0
+> 10-11 15:30:17.058 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:17.311 I/chatty  (  898): uid=1000(system) sf identical 15 lines
+> 10-11 15:30:17.326 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:17.328 E/ANDR-PERF-MPCTL(  835): perf_lock_rel: input handle=34238
+> 10-11 15:30:17.344 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:17.796 I/chatty  (  898): uid=1000(system) sf identical 27 lines
+> 10-11 15:30:17.813 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:17.826 E/ANDR-PERF-MPCTL(  835): perf_lock_rel: input handle=34237
+> 10-11 15:30:17.829 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:17.847 I/chatty  (  898): uid=1000(system) sf identical 1 line
+> 10-11 15:30:17.863 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:17.868 E/ANDR-PERF-MPCTL(  835): perf_lock_rel: input handle=34244
+> 10-11 15:30:17.880 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:17.980 I/chatty  (  898): uid=1000(system) sf identical 6 lines
+> 10-11 15:30:17.997 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.000 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:18.000 D/ZteBatteryService( 1495): ZTE level= 100 status= 5 mPlugType= 2  mLedBlinkEnabled= true  mLedTimeEnabled= true  mLedBlinkEnabled_batchg= true  mLedBlinkEnabled_batlow= true MFV FEATURE: false mLcdOn: true m_no_charge_indication_at_night= false ZTE_HOMEPHONE_ENABLE: false
+  10-11 15:30:18.016 D/DeviceStatisticsService( 2709): chargerType=2 batteryLevel=100 totalBatteryCapacity=4027900
+  10-11 15:30:18.016 D/DeviceInfoHidlClient( 2709): isPowerInfoNeverSent()=true
+> 10-11 15:30:18.016 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.019 D/KeyguardUpdateMonitor( 2272): handleBatteryUpdate
+  10-11 15:30:18.019 D/KeyguardUpdateMonitor( 2272): received broadcast android.intent.action.BATTERY_CHANGED
+  10-11 15:30:18.020 D/SystemUI_ChargingFeature( 2272): Power onReceive, battery power : 100.0 mChargingViewShowing:false,oemChargerType=-1, plugType: 2
+  10-11 15:30:18.021 D/KeyguardUpdateMonitor( 2272): handleBatteryUpdate
+> 10-11 15:30:18.030 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.098 I/chatty  (  898): uid=1000(system) sf identical 4 lines
+> 10-11 15:30:18.114 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.121 I/system_server( 1495): Background concurrent copying GC freed 311717(16MB) AllocSpace objects, 343(7152KB) LOS objects, 42% free, 33MB/57MB, paused 82us total 121.782ms
+  10-11 15:30:18.127 W/System  ( 1495): A resource failed to call release. 
+  10-11 15:30:18.127 W/System  ( 1495): A resource failed to call release. 
+> 10-11 15:30:18.132 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.132 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+> 10-11 15:30:18.148 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.332 I/chatty  (  898): uid=1000(system) sf identical 11 lines
+> 10-11 15:30:18.349 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.355 D/WificondControl( 1495): Scan result ready event
+  10-11 15:30:18.356 I/LOWI-8.6.0.75( 1248): [LOWI-Scan] lowi_close_record:Scan done in 1004815741ms, 13 APs in scan results
+  10-11 15:30:18.361 D/HS20    ( 1495): ANQP initiated on f4:23:9c:70:9a:76
+  10-11 15:30:18.361 D/PasspointManager( 1495): ANQP entry not found for: f4:23:9c:70:9a:76:<F4239C709A75-5G>
+> 10-11 15:30:18.362 E/WifiService( 1495): Permission violation - getScanResults not allowed for uid=10135, packageName=com.google.android.gms, reason=java.lang.SecurityException: Location mode is disabled for the device
+  10-11 15:30:18.362 I/wpa_supplicant( 2344): wlan0: GAS-QUERY-START addr=f4:23:9c:70:9a:74 dialog_token=93 freq=2462
+  10-11 15:30:18.362 D/HS20    ( 1495): ANQP initiated on f4:23:9c:70:9a:74
+  10-11 15:30:18.364 D/WifiNetworkSelector( 1495): About to run NetworkSuggestionEvaluator :
+  10-11 15:30:18.364 D/WifiNetworkSelector( 1495): About to run PasspointNetworkEvaluator :
+> 10-11 15:30:18.366 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.370 D/ANQPRequestManager( 1495): Not allowed to send ANQP request to 268433785657974 for another 639 seconds
+  10-11 15:30:18.370 D/PasspointManager( 1495): ANQP entry not found for: f4:23:9c:70:9a:76:<F4239C709A75-5G>
+  10-11 15:30:18.371 D/WifiNetworkSelector( 1495): CompatibilityScorer chooses 3 score 219.965+/-10.0 expid 42504592
+  10-11 15:30:18.371 D/WifiNetworkSelector( 1495): ScoreCardBasedScorer would choose 3 score 200.0+/-10.0 expid 42902385
+> 10-11 15:30:18.382 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.395 D/DmUtilAudio( 1495): allowRecord code = 15
+  10-11 15:30:18.396 D/DmUtilAudio( 1495): allowRecord code = 15
+> 10-11 15:30:18.399 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.400 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+> 10-11 15:30:18.416 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+> 10-11 15:30:18.433 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+> 10-11 15:30:18.438 I/Unity   (16425): [GameBootstrap] 繧ｲ繝ｼ繝蛻晄悄蛹夜幕蟋・
+> 10-11 15:30:18.438 I/Unity   (16425): UnityEngine.Logger:Log(LogType, Object)
+> 10-11 15:30:18.438 I/Unity   (16425): Trae.Core.<InitializeGame>d__2:MoveNext()
+> 10-11 15:30:18.438 I/Unity   (16425): UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
+> 10-11 15:30:18.438 I/Unity   (16425): 
+> 10-11 15:30:18.439 I/Unity   (16425): [GameBootstrap] 蝓ｺ譛ｬ險ｭ螳壼ｮ御ｺ・
+> 10-11 15:30:18.439 I/Unity   (16425): UnityEngine.Logger:Log(LogType, Object)
+> 10-11 15:30:18.439 I/Unity   (16425): Trae.Core.<InitializeGame>d__2:MoveNext()
+> 10-11 15:30:18.439 I/Unity   (16425): UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
+> 10-11 15:30:18.439 I/Unity   (16425): 
+> 10-11 15:30:18.450 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+> 10-11 15:30:18.467 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.484 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+> 10-11 15:30:18.485 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.669 I/chatty  (  898): uid=1000(system) sf identical 11 lines
+> 10-11 15:30:18.686 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:18.687 E/LmProcController( 1495): getPressure mem_usage=[3729866752],memsw_usage=[4230381568],mem_pressure=88
+  10-11 15:30:18.687 D/LmLarvaLimit( 1495): handleNotifyPauseLarva pressure=88, down = 70
+> 10-11 15:30:18.703 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:19.004 I/chatty  (  898): uid=1000(system) sf identical 18 lines
+> 10-11 15:30:19.024 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:19.024 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:19.024 D/ZteBatteryService( 1495): ZTE level= 100 status= 5 mPlugType= 2  mLedBlinkEnabled= true  mLedTimeEnabled= true  mLedBlinkEnabled_batchg= true  mLedBlinkEnabled_batlow= true MFV FEATURE: false mLcdOn: true m_no_charge_indication_at_night= false ZTE_HOMEPHONE_ENABLE: false
+  10-11 15:30:19.037 D/DeviceInfoHidlClient( 2709): isPowerInfoNeverSent()=true
+  10-11 15:30:19.039 W/ftersaleservic( 3216): Reducing the number of considered missed Gc histogram windows from 175 to 100
+> 10-11 15:30:19.040 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:19.375 D/PowerManagerService( 1495): getCurrentAudioRunningUidsInternal, maudioWakelockList ={com.traegames.haidoon=10263}
+  10-11 15:30:19.424 I/chatty  (  898): uid=1000(system) sf identical 23 lines
+> 10-11 15:30:19.440 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+> 10-11 15:30:19.456 I/Unity   (16425): [GameBootstrap] 繝｡繧､繝ｳ繧ｷ繝ｼ繝ｳ繧偵Ο繝ｼ繝我ｸｭ...
+> 10-11 15:30:19.456 I/Unity   (16425): UnityEngine.Logger:Log(LogType, Object)
+> 10-11 15:30:19.456 I/Unity   (16425): Trae.Core.<InitializeGame>d__2:MoveNext()
+> 10-11 15:30:19.456 I/Unity   (16425): UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
+> 10-11 15:30:19.456 I/Unity   (16425): 
+> 10-11 15:30:19.458 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:20.010 I/chatty  (  898): uid=1000(system) sf identical 33 lines
+> 10-11 15:30:20.027 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:20.048 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:20.048 D/ZteBatteryService( 1495): ZTE level= 100 status= 5 mPlugType= 2  mLedBlinkEnabled= true  mLedTimeEnabled= true  mLedBlinkEnabled_batchg= true  mLedBlinkEnabled_batlow= true MFV FEATURE: false mLcdOn: true m_no_charge_indication_at_night= false ZTE_HOMEPHONE_ENABLE: false
+  10-11 15:30:20.053 D/DeviceStatisticsService( 2709): chargerType=2 batteryLevel=100 totalBatteryCapacity=4027900
+  10-11 15:30:20.053 D/DeviceInfoHidlClient( 2709): isPowerInfoNeverSent()=true
+> 10-11 15:30:20.053 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:20.059 D/StatusIconContainer( 2272): calculateIconTranslations: start=276.0 width=276.0 underflow=false
+  10-11 15:30:20.059 D/StatusIconContainer( 2272): skipping child (zen) not visible
+  10-11 15:30:20.060 D/StatusIconContainer( 2272): skipping child (vpn) not visible
+  10-11 15:30:20.061 D/systemUI_StatusBarWindowViewAdapt( 2272): onLayout getY = 0;;;;getlastY = 0;;;;gettransY = 0
+> 10-11 15:30:20.061 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:20.062 D/RemoteInput( 2272): defocusIfNeeded: false, true, com.android.systemui.statusbar.policy.RemoteInputView$RemoteEditText.onVisibilityChanged:557 android.view.View.dispatchVisibilityChanged:14308 android.view.ViewGroup.dispatchVisibilityChanged:1569 android.view.ViewGroup.dispatchVisibilityChanged:1569 android.view.ViewGroup.dispatchVisibilityChanged:1569 
+  10-11 15:30:20.062 D/RemoteInput( 2272): defocusIfNeeded: false, true, com.android.systemui.statusbar.policy.RemoteInputView$RemoteEditText.onVisibilityChanged:557 android.view.View.dispatchVisibilityChanged:14308 android.view.ViewGroup.dispatchVisibilityChanged:1569 android.view.ViewGroup.dispatchVisibilityChanged:1569 android.view.ViewGroup.dispatchVisibilityChanged:1569 
+  10-11 15:30:20.077 D/SystemUI_ChargingFeature( 2272): Power onReceive, battery power : 100.0 mChargingViewShowing:false,oemChargerType=-1, plugType: 2
+  10-11 15:30:20.077 D/KeyguardUpdateMonitor( 2272): handleBatteryUpdate
+> 10-11 15:30:20.079 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:20.362 I/chatty  (  898): uid=1000(system) sf identical 17 lines
+> 10-11 15:30:20.379 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:20.387 I/wpa_supplicant( 2344): wlan0: GAS-QUERY-DONE addr=f4:23:9c:70:9a:76 dialog_token=92 freq=5580 status_code=0 result=TIMEOUT
+  10-11 15:30:20.387 I/wpa_supplicant( 2344): wlan0: ANQP-QUERY-DONE addr=f4:23:9c:70:9a:76 result=FAILURE
+> 10-11 15:30:20.396 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:21.049 I/chatty  (  898): uid=1000(system) sf identical 39 lines
+> 10-11 15:30:21.067 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:21.072 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:21.072 D/ZteBatteryService( 1495): ZTE level= 100 status= 5 mPlugType= 2  mLedBlinkEnabled= true  mLedTimeEnabled= true  mLedBlinkEnabled_batchg= true  mLedBlinkEnabled_batlow= true MFV FEATURE: false mLcdOn: true m_no_charge_indication_at_night= false ZTE_HOMEPHONE_ENABLE: false
+  10-11 15:30:21.083 D/ChargeIndicator( 2272): onBatteryLevelChanged: level: 100, pluggedIn: true, charging: true, showFastCharing: false, mChargeIndicatorInBattery = false
+  10-11 15:30:21.083 D/MFVBatteryMeterView( 2272): onBatteryLevelChanged level = 100;;;pluggedIn = true;;;charging = true, isShowFastCharingIcon = false
+> 10-11 15:30:21.083 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:21.083 D/ChargeIndicator( 2272): onBatteryLevelChanged: level: 100, pluggedIn: true, charging: true, showFastCharing: false, mChargeIndicatorInBattery = true
+  10-11 15:30:21.083 D/ChargeIndicator( 2272): onBatteryLevelChanged: level: 100, pluggedIn: true, charging: true, showFastCharing: false, mChargeIndicatorInBattery = false
+  10-11 15:30:21.084 D/DeviceStatisticsService( 2709): chargerType=2 batteryLevel=100 totalBatteryCapacity=4027900
+  10-11 15:30:21.084 D/DeviceInfoHidlClient( 2709): isPowerInfoNeverSent()=true
+> 10-11 15:30:21.099 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:22.071 I/chatty  (  898): uid=1000(system) sf identical 58 lines
+> 10-11 15:30:22.088 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:22.096 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:22.096 D/ZteBatteryService( 1495): ZTE level= 100 status= 5 mPlugType= 2  mLedBlinkEnabled= true  mLedTimeEnabled= true  mLedBlinkEnabled_batchg= true  mLedBlinkEnabled_batlow= true MFV FEATURE: false mLcdOn: true m_no_charge_indication_at_night= false ZTE_HOMEPHONE_ENABLE: false
+  10-11 15:30:22.101 D/DeviceStatisticsService( 2709): chargerType=2 batteryLevel=100 totalBatteryCapacity=4027900
+  10-11 15:30:22.101 D/DeviceInfoHidlClient( 2709): isPowerInfoNeverSent()=true
+> 10-11 15:30:22.105 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:22.390 I/chatty  (  898): uid=1000(system) sf identical 17 lines
+> 10-11 15:30:22.407 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:22.411 I/wpa_supplicant( 2344): wlan0: GAS-QUERY-DONE addr=f4:23:9c:70:9a:74 dialog_token=93 freq=2462 status_code=0 result=TIMEOUT
+  10-11 15:30:22.411 I/wpa_supplicant( 2344): wlan0: ANQP-QUERY-DONE addr=f4:23:9c:70:9a:74 result=FAILURE
+> 10-11 15:30:22.423 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:23.663 I/chatty  (  898): uid=1000(system) sf identical 74 lines
+> 10-11 15:30:23.680 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:23.689 E/LmProcController( 1495): getPressure mem_usage=[3732930560],memsw_usage=[4233445376],mem_pressure=88
+  10-11 15:30:23.689 D/LmLarvaLimit( 1495): handleNotifyPauseLarva pressure=88, down = 70
+> 10-11 15:30:23.697 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:23.764 I/chatty  (  898): uid=1000(system) sf identical 4 lines
+> 10-11 15:30:23.781 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:23.790 D/QtiRadioIndication( 2709): onSignalStrengthChange: slotId = 0
+  10-11 15:30:23.790 D/QtiRadioIndication( 2709): onSignalStrengthChange: {.rsrp = -32768, .snr = -32768}
+  10-11 15:30:23.795 D/VTS_FiveGServiceClient( 2709): [0]handleMessage 12
+  10-11 15:30:23.796 D/VtsManagerProxyImpl( 2272): on5gSignalStrengthChange・嗷srp = -32768, snr = -3276.0
+> 10-11 15:30:23.798 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:23.982 I/chatty  (  898): uid=1000(system) sf identical 11 lines
+> 10-11 15:30:23.999 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:24.019 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:24.019 D/ZteBatteryService( 1495): ZTE level= 100 status= 5 mPlugType= 2  mLedBlinkEnabled= true  mLedTimeEnabled= true  mLedBlinkEnabled_batchg= true  mLedBlinkEnabled_batlow= true MFV FEATURE: false mLcdOn: true m_no_charge_indication_at_night= false ZTE_HOMEPHONE_ENABLE: false
+  10-11 15:30:24.024 D/DeviceStatisticsService( 2709): chargerType=2 batteryLevel=100 totalBatteryCapacity=4027900
+  10-11 15:30:24.024 D/DeviceInfoHidlClient( 2709): isPowerInfoNeverSent()=true
+> 10-11 15:30:24.025 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:24.534 I/chatty  (  898): uid=1000(system) sf identical 31 lines
+> 10-11 15:30:24.551 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:24.564 I//vendor/bin/hw/vendor.qti.hardware.servicetracker@1.1-service(  845): getClientConnections called for client: com.traegames.haidoon
+  10-11 15:30:24.564 E/ANDR-PERF-LM(  835): DependentServices: getServices() 97: Service Tracker HAL could not find Client Connections
+> 10-11 15:30:24.568 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:25.154 I/chatty  (  898): uid=1000(system) sf identical 35 lines
+> 10-11 15:30:25.172 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:25.188 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:25.188 D/ZteBatteryService( 1495): ZTE level= 100 status= 5 mPlugType= 2  mLedBlinkEnabled= true  mLedTimeEnabled= true  mLedBlinkEnabled_batchg= true  mLedBlinkEnabled_batlow= true MFV FEATURE: false mLcdOn: true m_no_charge_indication_at_night= false ZTE_HOMEPHONE_ENABLE: false
+  10-11 15:30:25.192 D/SystemUI_ChargingFeature( 2272): Power onReceive, battery power : 100.0 mChargingViewShowing:false,oemChargerType=-1, plugType: 2
+  10-11 15:30:25.192 D/KeyguardUpdateMonitor( 2272): handleBatteryUpdate
+> 10-11 15:30:25.193 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:25.193 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:25.194 D/ZteBatteryService( 1495): ZTE level= 100 status= 5 mPlugType= 2  mLedBlinkEnabled= true  mLedTimeEnabled= true  mLedBlinkEnabled_batchg= true  mLedBlinkEnabled_batlow= true MFV FEATURE: false mLcdOn: true m_no_charge_indication_at_night= false ZTE_HOMEPHONE_ENABLE: false
+  10-11 15:30:25.197 D/DeviceStatisticsService( 2709): chargerType=2 batteryLevel=100 totalBatteryCapacity=4027900
+  10-11 15:30:25.197 D/DeviceInfoHidlClient( 2709): isPowerInfoNeverSent()=true
+> 10-11 15:30:25.204 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:26.043 I/chatty  (  898): uid=1000(system) sf identical 50 lines
+> 10-11 15:30:26.060 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:26.078 D/QtiRadioIndication( 2709): onSignalStrengthChange: slotId = 0
+  10-11 15:30:26.078 D/QtiRadioIndication( 2709): onSignalStrengthChange: {.rsrp = -32768, .snr = -32768}
+  10-11 15:30:26.081 D/SystemUI_MobileSignalFeature( 2272): getStrengthLevel: 4
+  10-11 15:30:26.082 D/VendorTelephonyUtils( 2709): getMccMnc mccmnc = -
+> 10-11 15:30:26.083 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:26.084 D/VendorTelephonyUtils( 2709): getMccMnc mccmnc = -
+  10-11 15:30:26.084 D/VendorTeleService( 2709): onSignalStrengthsChanged : signalStrength is -89
+  10-11 15:30:26.086 D/SystemUI_MobileSignalFeature( 2272): updateDataNetType(): slot = 0, netType = 13
+  10-11 15:30:26.086 D/VtsManagerProxyImpl( 2272): on5gSignalStrengthChange・嗷srp = -32768, snr = -3276.0
+> 10-11 15:30:26.092 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:27.064 I/chatty  (  898): uid=1000(system) sf identical 58 lines
+> 10-11 15:30:27.082 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:27.088 I/ZteBatteryService( 1495): ZteUpdateLightsLocked update
+  10-11 15:30:27.088 D/ZteBatteryService( 1495): ZTE level= 100 status= 5 mPlugType= 2  mLedBlinkEnabled= true  mLedTimeEnabled= true  mLedBlinkEnabled_batchg= true  mLedBlinkEnabled_batlow= true MFV FEATURE: false mLcdOn: true m_no_charge_indication_at_night= false ZTE_HOMEPHONE_ENABLE: false
+  10-11 15:30:27.092 D/SystemUI_ChargingFeature( 2272): Power onReceive, battery power : 100.0 mChargingViewShowing:false,oemChargerType=-1, plugType: 2
+  10-11 15:30:27.092 D/KeyguardUpdateMonitor( 2272): handleBatteryUpdate
+> 10-11 15:30:27.099 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:30:27.099 I/PowerTracker( 1495): bi night check use default, 1760164227099, r = false
+  10-11 15:30:27.100 I/BackgroundService(15651): onReceive____intent=Intent { act=android.intent.action.BATTERY_CHANGED flg=0x60000010 (has extras) }
+  10-11 15:30:27.101 D/DeviceStatisticsService( 2709): chargerType=2 batteryLevel=100 totalBatteryCapacity=4027900
+  10-11 15:30:27.101 D/DeviceInfoHidlClient( 2709): isPowerInfoNeverSent()=true
+> 10-11 15:30:27.115 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)

@@ -1,0 +1,67 @@
+Manifest-Version: 1.0
+Built-By: Signflinger
+Created-By: Android Gradle 7.4.2
+
+Name: AndroidManifest.xml
+SHA-256-Digest: Hdl6OVXuLqwjY54OmVqylFsOP3/xHhzrWMrbAWIj3KM=
+
+Name: META-INF/com.android.games.engine.build_fingerprint
+SHA-256-Digest: rnIfiVSvbnk5Se3cRJdU6noLp4EPqxu/FP7KCbVycPI=
+
+Name: META-INF/com/android/build/gradle/app-metadata.properties
+SHA-256-Digest: pKhZciiDn8swt+/oEOgU3WaZ+rlFPYNU15keygYg8Tg=
+
+Name: assets/bin/Data/Managed/Metadata/global-metadata.dat
+SHA-256-Digest: UYe3ktmo4e+8gvcv6HwRXxnW1ji/ouvpBLGXZEc0jXQ=
+
+Name: assets/bin/Data/Managed/Resources/mscorlib.dll-resources.dat
+SHA-256-Digest: xbqhdqW3LNVFJmNA5CEC05Ol5D04yVeWvIKJGLuVJ38=
+
+Name: assets/bin/Data/RuntimeInitializeOnLoads.json
+SHA-256-Digest: 5HWnH64PYDTlxix4D0+RKTlgFWPZXPBgHG6DwBEWzJw=
+
+Name: assets/bin/Data/ScriptingAssemblies.json
+SHA-256-Digest: M6TCf+Es58wym7rERetlhxYwVKoVJL6tJc9mrdmBNZc=
+
+Name: assets/bin/Data/boot.config
+SHA-256-Digest: w2pJQ7u9Eo9vgiEPW/04H/2stGNvUZ3JUCTSbQPrOoY=
+
+Name: assets/bin/Data/data.unity3d
+SHA-256-Digest: LpSWVweTJlGmm27c3qZhUhJXZ58tnXG7INtXzwHRZfU=
+
+Name: assets/bin/Data/unity default resources
+SHA-256-Digest: qadKs2OIjePqFO8B54D4UaOV1Mb11bzrrXSio+R4XRY=
+
+Name: assets/bin/Data/unity_app_guid
+SHA-256-Digest: 5IniO/u1AP83sdAbiHOa0CmLDqGUH9Tr3+qGpA2I1NE=
+
+Name: classes.dex
+SHA-256-Digest: qFrBPXIPyEIS92aV4FYQhn4pHstZOqdNyznaA1wDj48=
+
+Name: lib/armeabi-v7a/libil2cpp.so
+SHA-256-Digest: dGOoQ7w2HT1eenYJHJAt10zhGUiPoQjOvazTEODe1lI=
+
+Name: lib/armeabi-v7a/libmain.so
+SHA-256-Digest: XikrYpiaOq2EKqY7Hx89rGZ8jz31bj0hyDvd2iajaPI=
+
+Name: lib/armeabi-v7a/libunity.so
+SHA-256-Digest: q7xYyEWn8Xr5d2smS7NvaB8sSjOS9NUGaJGcri62XlE=
+
+Name: res/3z.png
+SHA-256-Digest: aoEB2mIfSfstQv7ZggEIix00fIkGVtcEfrWLNBSojrc=
+
+Name: res/QZ.png
+SHA-256-Digest: DVDUZato4DP4EI7+4Keyi3jLzMt4ho8eAGDkELDNZLg=
+
+Name: res/Qu.xml
+SHA-256-Digest: a1yP4GYfyQu74G+uFdYwO/DLjHxdv789LYljUwmmqDk=
+
+Name: res/W5.png
+SHA-256-Digest: Up4XOulYR1OzwYKGSsa4uoCcbasJrtd7IXGExnxhxeQ=
+
+Name: res/hH.xml
+SHA-256-Digest: a1yP4GYfyQu74G+uFdYwO/DLjHxdv789LYljUwmmqDk=
+
+Name: resources.arsc
+SHA-256-Digest: F2W4Bb+jNGnYSkCk2bipQv/SIaKLJbrMVoWgmPQiZ+w=
+
