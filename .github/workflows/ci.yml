@@ -398,7 +398,7 @@ jobs:
           else
             PY="python"
           fi
-          "$PY" tools/apk_to_design_doc.py "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/Trae/Build/Android/TraeGame.apk"
+          "$PY" Tools/apk_to_design_doc.py "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/HeyDooon_1.20_APKPure.apk"
 
       - name: Assert artifacts exist (UI or MCP)
         if: always()
