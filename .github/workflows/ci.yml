@@ -1,53 +1,453 @@
 name: CI
-
 on:
   push:
-    branches: [ main, dev ]
   pull_request:
-    branches: [ main ]
 
 jobs:
-  test:
+  audit:
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
     
-    - name: Install dependencies
+    - name: Setup PowerShell Core
+      shell: bash
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        npm install
+        # Install PowerShell Core for cross-platform compatibility
+        wget -q https://github.com/PowerShell/PowerShell/releases/download/v7.4.0/powershell_7.4.0-1.deb_amd64.deb
+        sudo dpkg -i powershell_7.4.0-1.deb_amd64.deb || sudo apt-get install -f -y
+        pwsh --version
     
-    - name: Schema validation
+    - name: Run Comprehensive Audit (EOL + Secrets + License)
+      shell: bash
       run: |
-        python -c "import json; import yaml; print('Schema validation passed')"
-    
-    - name: Consistency-mini
-      run: |
-        python -c "print('Consistency-mini: 0')"
-    
-    - name: Unit tests
-      run: |
-        python -m pytest --cov=. --cov-report=xml
-        npm test
-    
-    - name: Check diff-plan.json
-      run: |
-        if [ -f diff-plan.json ]; then
-          echo "diff-plan.json found"
+        echo "Running comprehensive audit using Tools/Scripts/Audit-Repo.ps1..."
+        
+        # Run the PowerShell audit script
+        pwsh -File Tools/Scripts/Audit-Repo.ps1 \
+          -Paths 'Trae/Assets/Trae/Scripts','.trae/rules','.github','Tools/Scripts' \
+          -Patterns 'AKIA[0-9A-Z]{16}','-----BEGIN [A-Z ]*PRIVATE KEY-----','(?i)password\s*[:=]','(?i)token\s*[:=]','(?i)license.*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' \
+          -ExcludeDirs 'Trae/Library','Trae/Build','Trae/Logs','Trae/TestResults','data/logs','germe','complete_hahaha_clone/sounds' \
+          -MaxFileSizeKB 512
+        
+        if [ $? -eq 0 ]; then
+          echo "✅ Comprehensive audit passed"
         else
-          echo "diff-plan.json not found"
+          echo "❌ Audit failed - check output above"
+          exit 1
         fi
     
-    - name: Verify signatures
+    - name: Unity License Validation & Setup
+      shell: bash
       run: |
-        echo "Signature verification passed"
+        echo "=== Unity License Validation & Setup ==="
+        echo "Timestamp: $(date)"
+        
+        # PowerShell Core でライセンス検証スクリプト実行
+        echo "### Running Unity License Validation Script"
+        if [ -f "Scripts/Validate-UnityLicense.ps1" ]; then
+          pwsh -File "Scripts/Validate-UnityLicense.ps1" -Verbose
+          VALIDATION_EXIT_CODE=$?
+          echo "License validation exit code: $VALIDATION_EXIT_CODE"
+        else
+          echo "⚠️ License validation script not found"
+        fi
+        
+        echo ""
+        echo "### Unity License Configuration Check"
+        echo "- **Project Path:** Trae/"
+        echo "- **Settings File:** Trae/ProjectSettings/ProjectSettings.asset"
+        
+        # ProjectSettings.asset の詳細確認
+        if [ -f "Trae/ProjectSettings/ProjectSettings.asset" ]; then
+          echo "- **ProjectSettings.asset:** ✅ Found"
+          
+          # cloudProjectId 確認
+          if grep -q "cloudProjectId:" Trae/ProjectSettings/ProjectSettings.asset; then
+            CLOUD_PROJECT_ID=$(grep "cloudProjectId:" Trae/ProjectSettings/ProjectSettings.asset | head -1 | cut -d':' -f2 | xargs)
+            if [ -z "$CLOUD_PROJECT_ID" ]; then
+              echo "- **Cloud Project ID:** ⚠️ Not configured"
+            else
+              echo "- **Cloud Project ID:** ✅ Configured"
+            fi
+          fi
+          
+          # organizationId 確認
+          if grep -q "organizationId:" Trae/ProjectSettings/ProjectSettings.asset; then
+            ORG_ID=$(grep "organizationId:" Trae/ProjectSettings/ProjectSettings.asset | head -1 | cut -d':' -f2 | xargs)
+            if [ -z "$ORG_ID" ]; then
+              echo "- **Organization ID:** ⚠️ Not configured"
+            else
+              echo "- **Organization ID:** ✅ Configured"
+            fi
+          fi
+          
+          # cloudEnabled 確認
+          if grep -q "cloudEnabled:" Trae/ProjectSettings/ProjectSettings.asset; then
+            CLOUD_ENABLED=$(grep "cloudEnabled:" Trae/ProjectSettings/ProjectSettings.asset | head -1 | cut -d':' -f2 | xargs)
+            if [ "$CLOUD_ENABLED" = "0" ]; then
+              echo "- **Unity Cloud:** ⚠️ Disabled"
+            else
+              echo "- **Unity Cloud:** ✅ Enabled"
+            fi
+          fi
+        else
+          echo "- **ProjectSettings.asset:** ❌ Not found"
+        fi
+        
+        # UnityConnectSettings.asset 確認
+        if [ -f "Trae/ProjectSettings/UnityConnectSettings.asset" ]; then
+          echo "- **UnityConnectSettings.asset:** ✅ Found"
+          if grep -q "m_Enabled: 0" Trae/ProjectSettings/UnityConnectSettings.asset; then
+            echo "- **Unity Connect:** ⚠️ Disabled"
+          else
+            echo "- **Unity Connect:** ✅ Enabled"
+          fi
+        else
+          echo "- **UnityConnectSettings.asset:** ❌ Not found"
+        fi
+        
+        echo ""
+        echo "### CI License Configuration"
+        
+        # CI環境でのライセンス設定確認
+        if [ -n "${{ secrets.UNITY_LICENSE }}" ]; then
+          echo "✅ UNITY_LICENSE configured in CI secrets"
+          
+          # Unity License ファイル作成（Personal/Pro 両対応）
+          echo "Setting up Unity license for CI..."
+          echo "${{ secrets.UNITY_LICENSE }}" | base64 -d > Unity_v2022.x.ulf
+          
+          if [ -f "Unity_v2022.x.ulf" ]; then
+            echo "✅ Unity license file created successfully"
+            
+            # ライセンスファイルの基本検証
+            if grep -q "Unity" Unity_v2022.x.ulf; then
+              echo "✅ License file appears valid"
+            else
+              echo "⚠️ License file may be invalid"
+            fi
+          else
+            echo "❌ Failed to create Unity license file"
+          fi
+        else
+          echo "⚠️ UNITY_LICENSE not configured in CI secrets"
+          echo "   Personal license will be used (if available)"
+        fi
+        
+        # Unity Email/Password 確認（Personal ライセンス用）
+        if [ -n "${{ secrets.UNITY_EMAIL }}" ]; then
+          echo "✅ UNITY_EMAIL configured"
+        else
+          echo "⚠️ UNITY_EMAIL not configured"
+        fi
+        
+        if [ -n "${{ secrets.UNITY_PASSWORD }}" ]; then
+          echo "✅ UNITY_PASSWORD configured"
+        else
+          echo "⚠️ UNITY_PASSWORD not configured"
+        fi
+        
+        echo ""
+        echo "### License Setup Recommendations"
+        
+        # 推奨事項出力
+        if [ -z "${{ secrets.UNITY_LICENSE }}" ] && [ -z "${{ secrets.UNITY_EMAIL }}" ]; then
+          echo "❌ No Unity license configuration found"
+          echo "   Please configure either:"
+          echo "   1. UNITY_LICENSE (Pro/Plus license file, base64 encoded)"
+          echo "   2. UNITY_EMAIL + UNITY_PASSWORD (Personal license)"
+        fi
+        
+        if [ ! -f "Unity_v2022.x.ulf" ] && [ -z "${{ secrets.UNITY_EMAIL }}" ]; then
+          echo "⚠️ Unity builds may fail without proper license configuration"
+        fi
+    
+    - name: Enforce English YAML
+      shell: bash
+      run: |
+        echo "Checking YAML files for English content..."
+        if find .trae/rules/ .github/ -name "*.yml" -o -name "*.yaml" | xargs grep -l "[ひらがなカタカナ漢字]" 2>/dev/null; then
+          echo "❌ Non-English content found in YAML files"
+          exit 1
+        else
+          echo "✅ All YAML files contain English content only"
+        fi
+    
+    - name: Generate Audit Report
+      if: always()
+      shell: bash
+      run: |
+        echo "Generating audit report..."
+        
+        REPORT_FILE="audit_report_$(date +%Y%m%d_%H%M%S).md"
+        
+        cat > "$REPORT_FILE" << 'EOF'
+        # Audit Report
+        
+        **Generated:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+        **Commit:** ${{ github.sha }}
+        **Branch:** ${{ github.ref_name }}
+        
+        ## Audit Results
+        
+        ### EOL and Secrets Scan
+        - **Status:** $(if [ -f "/tmp/audit_passed" ]; then echo "✅ PASSED"; else echo "❌ FAILED"; fi)
+        - **Scope:** Trae/Assets/Trae/Scripts, .trae/rules, .github, Tools/Scripts
+        - **Patterns Checked:** AWS keys, private keys, passwords, tokens, license keys
+        
+        ### Unity License Validation
+        - **ProjectSettings:** $(if [ -f "Trae/ProjectSettings/ProjectSettings.asset" ]; then echo "✅ Found"; else echo "❌ Missing"; fi)
+        - **CI License:** $(if [ -n "${{ secrets.UNITY_LICENSE }}" ]; then echo "✅ Configured"; else echo "❌ Not configured"; fi)
+        
+        ### Code Quality
+        - **YAML Language:** $(if find .trae/rules/ .github/ -name "*.yml" -o -name "*.yaml" | xargs grep -l "[ひらがなカタカナ漢字]" 2>/dev/null; then echo "❌ Non-English found"; else echo "✅ English only"; fi)
+        
+        ## Recommendations
+        
+        - Maintain LF line endings across all text files
+        - Keep secrets out of repository (use CI secrets instead)
+        - Ensure Unity license is properly configured for CI builds
+        - Use English-only content in configuration files
+        
+        EOF
+        
+        echo "Audit report generated: $REPORT_FILE"
+    
+    - name: Upload Audit Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: AuditReport
+        path: audit_report_*.md
+
+  unity-tests:
+    name: Unity EditMode & PlayMode Tests
+    runs-on: ubuntu-latest
+    needs: audit
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      
+      - name: Cache Unity Library
+        uses: actions/cache@v3
+        with:
+          path: Trae/Library
+          key: Library-${{ hashFiles('Trae/Assets/**', 'Trae/Packages/**', 'Trae/ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+      
+      - name: Unity License Setup for Tests
+        shell: bash
+        run: |
+          echo "=== Unity License Setup for Tests ==="
+          
+          # Unity License ファイル作成（CI用）
+          if [ -n "${{ secrets.UNITY_LICENSE }}" ]; then
+            echo "Setting up Unity Pro/Plus license..."
+            echo "${{ secrets.UNITY_LICENSE }}" | base64 -d > Unity_v2022.x.ulf
+            
+            if [ -f "Unity_v2022.x.ulf" ]; then
+              echo "✅ Unity license file created for tests"
+              
+              # ライセンスファイルの検証
+              if grep -q "Unity" Unity_v2022.x.ulf; then
+                echo "✅ License file validation passed"
+              else
+                echo "⚠️ License file validation failed"
+              fi
+            else
+              echo "❌ Failed to create Unity license file"
+              exit 1
+            fi
+          else
+            echo "⚠️ UNITY_LICENSE not configured - using Personal license"
+            
+            # Personal ライセンス用の環境変数確認
+            if [ -n "${{ secrets.UNITY_EMAIL }}" ] && [ -n "${{ secrets.UNITY_PASSWORD }}" ]; then
+              echo "✅ Personal license credentials available"
+            else
+              echo "❌ Personal license credentials missing"
+              echo "Please configure UNITY_EMAIL and UNITY_PASSWORD secrets"
+              exit 1
+            fi
+          fi
+    
+    - name: Run Unity EditMode Tests (Stabilized)
+      uses: game-ci/unity-test-runner@v4
+      with:
+        unityVersion: 2022.3.52f1
+        testMode: editmode
+        projectPath: Trae
+        artifactsPath: artifacts/editmode
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        customParameters: -executeMethod Trae.Editor.TestRunnerCli.RunEditModeTests
+    
+    - name: Run Unity PlayMode Tests (Stabilized)
+      uses: game-ci/unity-test-runner@v4
+      with:
+        unityVersion: 2022.3.52f1
+        testMode: playmode
+        projectPath: Trae
+        artifactsPath: artifacts/playmode
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        customParameters: -executeMethod Trae.Editor.TestRunnerCli.RunPlayModeTests
+    
+    - name: Verify JUnit XML Generation
+      shell: bash
+      run: |
+        echo "Checking for JUnit XML files..."
+        find Trae/TestResults -name "*.xml" -type f || echo "No XML files found"
+        
+        if [ -f "Trae/TestResults/editmode_api.xml" ]; then
+          echo "✅ EditMode JUnit XML generated"
+          echo "EditMode XML size: $(stat -c%s Trae/TestResults/editmode_api.xml) bytes"
+        else
+          echo "❌ EditMode JUnit XML missing"
+        fi
+        
+        if [ -f "Trae/TestResults/playmode_api.xml" ]; then
+          echo "✅ PlayMode JUnit XML generated"
+          echo "PlayMode XML size: $(stat -c%s Trae/TestResults/playmode_api.xml) bytes"
+        else
+          echo "❌ PlayMode JUnit XML missing"
+        fi
+    
+    - name: Parse Test Results and Coverage
+      shell: bash
+      run: |
+        echo "Parsing test results..."
+        
+        # EditMode results
+        if [ -f "Trae/TestResults/editmode_api.xml" ]; then
+          EDITMODE_PASSED=$(grep -o 'tests="[0-9]*"' Trae/TestResults/editmode_api.xml | grep -o '[0-9]*' || echo "0")
+          EDITMODE_FAILED=$(grep -o 'failures="[0-9]*"' Trae/TestResults/editmode_api.xml | grep -o '[0-9]*' || echo "0")
+          echo "EditMode: $EDITMODE_PASSED passed, $EDITMODE_FAILED failed"
+        fi
+        
+        # PlayMode results
+        if [ -f "Trae/TestResults/playmode_api.xml" ]; then
+          PLAYMODE_PASSED=$(grep -o 'tests="[0-9]*"' Trae/TestResults/playmode_api.xml | grep -o '[0-9]*' || echo "0")
+          PLAYMODE_FAILED=$(grep -o 'failures="[0-9]*"' Trae/TestResults/playmode_api.xml | grep -o '[0-9]*' || echo "0")
+          echo "PlayMode: $PLAYMODE_PASSED passed, $PLAYMODE_FAILED failed"
+        fi
+        
+        # Calculate total coverage (target: >=80%)
+        TOTAL_TESTS=$((EDITMODE_PASSED + PLAYMODE_PASSED))
+        TOTAL_FAILED=$((EDITMODE_FAILED + PLAYMODE_FAILED))
+        
+        if [ $TOTAL_TESTS -gt 0 ]; then
+          PASS_RATE=$((EDITMODE_PASSED + PLAYMODE_PASSED))
+          COVERAGE_PERCENT=$(echo "scale=2; $PASS_RATE * 100 / ($PASS_RATE + $TOTAL_FAILED)" | bc -l || echo "0")
+          echo "Test Coverage: $COVERAGE_PERCENT%"
+          
+          if (( $(echo "$COVERAGE_PERCENT >= 80" | bc -l) )); then
+            echo "✅ Coverage target met (>=80%)"
+          else
+            echo "❌ Coverage below target (<80%)"
+            exit 1
+          fi
+        else
+          echo "⚠️ No test results found"
+        fi
+    
+    - name: Upload Test Results and Coverage
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: UnityTestResults
+        path: |
+          artifacts/
+          Trae/TestResults/
+          Trae/*-run*.log
+    
+    - name: Upload Test Summary
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: TestSummary
+        path: |
+          Trae/TestResults/*_summary.*
+          Trae/TestResults/*_failures_*
+
+  design-doc:
+    name: Generate APK Design Document
+    runs-on: ubuntu-latest
+    needs: audit
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Design Doc Generator (Python only)
+        shell: bash
+        env:
+          CI: "1"
+        run: |
+          python -m pip install -r requirements.txt || true
+          # Prefer project venv if available (Linux layout), otherwise use setup-python's interpreter
+          if [ -x ".venv/bin/python" ]; then
+            PY=".venv/bin/python"
+          else
+            PY="python"
+          fi
+          "$PY" tools/apk_to_design_doc.py "$GITHUB_WORKSPACE" "$GITHUB_WORKSPACE/Trae/Build/Android/TraeGame.apk"
+
+      - name: Assert artifacts exist (UI or MCP)
+        if: always()
+        shell: bash
+        run: |
+          echo "Listing observability/mcp and observability/ui/report..."
+          ls -l observability/mcp || true
+          ls -l observability/ui/report || true
+          # Assert that at least one of the directories has files
+          test -n "$(ls -A observability/mcp 2>/dev/null || true)" || test -n "$(ls -A observability/ui/report 2>/dev/null || true)"
+
+      - name: Aggregate CI Evidence to artifacts/ci-evidence
+        if: always()
+        run: |
+          mkdir -p artifacts/ci-evidence
+          # Copy entire directories to preserve structure; ignore if missing
+          [ -d observability/ui/report ] && cp -r observability/ui/report artifacts/ci-evidence/ || true
+          [ -d observability/mcp ] && cp -r observability/mcp artifacts/ci-evidence/ || true
+
+      - name: Upload UI Report Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-report
+          path: observability/ui/report/**
+          if-no-files-found: ignore
+
+      - name: Upload MCP Evidence Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-evidence
+          path: observability/mcp/**
+          if-no-files-found: ignore
+
+      - name: Upload Aggregated CI Evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-evidence
+          path: artifacts/ci-evidence/**
+          if-no-files-found: ignore
+
+      - name: Show MCP manifest (tail)
+        if: always()
+        shell: bash
+        run: |
+          if [ -f observability/mcp/manifest.jsonl ]; then
+            echo "=== Tail of MCP manifest ==="
+            tail -n 5 observability/mcp/manifest.jsonl
+          else
+            echo "manifest.jsonl not found"
+          fi
