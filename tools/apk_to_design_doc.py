@@ -10,7 +10,12 @@ from pathlib import Path
 
 
 def _import_analyzer(root: Path):
-    sys.path.insert(0, str(root / ".trae/apk_analysis_system"))
+    # Ensure both source and portable dist are available on sys.path
+    base = root / ".trae/apk_analysis_system"
+    portable = base / "dist" / "apk-analysis-system-1.0.0-portable"
+    sys.path.insert(0, str(base))
+    if portable.exists():
+        sys.path.insert(0, str(portable))
     try:
         from core.enhanced_apk_analyzer import EnhancedAPKAnalyzer
     except Exception:
