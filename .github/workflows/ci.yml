@@ -393,7 +393,9 @@ jobs:
         env:
           CI: "1"
         run: |
+          # Install minimal runtime deps required by EnhancedAPKAnalyzer
           python -m pip install -r requirements.txt || true
+          python -m pip install psutil || true
           # Prefer project venv if available (Linux layout), otherwise use setup-python's interpreter
           if [ -x ".venv/bin/python" ]; then
             PY=".venv/bin/python"
