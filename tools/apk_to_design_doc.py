@@ -163,16 +163,32 @@ def main():
             pass
         print(f"[ERROR] analyze failed: {e}", file=sys.stderr)
         sys.exit(1)
+
+    # 成功時: 出力用レポートの整形（analysis_result を優先）
+    report = res.get("analysis_result", res)
     # 解析結果に追加メモ
-    res["apk_path"] = str(apk)
-    res["resolved_metadata"] = str(ana.get_global_metadata_path())
+    report["apk_path"] = str(apk)
+    # EnhancedAPKAnalyzer に get_global_metadata_path が無い環境でも安全に解決
+    resolved_metadata = ""
+    try:
+        if hasattr(ana, "get_global_metadata_path"):
+            resolved_metadata = str(ana.get_global_metadata_path())
+        else:
+            # 環境変数の既定値を利用（存在チェックは任意）
+            meta_env = os.environ.get("ENHANCED_ANALYSIS_METADATA_DIR", "")
+            if meta_env:
+                resolved_metadata = meta_env
+    except Exception:
+        resolved_metadata = os.environ.get("ENHANCED_ANALYSIS_METADATA_DIR", "")
+    report["resolved_metadata"] = resolved_metadata
+
     ts = time.strftime("%Y%m%d_%H%M%S")
     json_path = out_ui / f"analysis_{apk.stem}_{ts}.json"
     md_path = out_ui / f"design_{apk.stem}_{ts}.md"
     json_path.write_text(
-        json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8"
+        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    md_path.write_text(_md(res), encoding="utf-8")
+    md_path.write_text(_md(report), encoding="utf-8")
     # 監査用にも複製
     if not is_ci:
         (out_log / f"analysis_{apk.stem}_{ts}.json").write_text(
@@ -187,7 +203,7 @@ def main():
             "status": "success",
             "exit_code": 0,
             "outputs": [str(json_path), str(md_path)],
-            "resolved_metadata": str(res.get("resolved_metadata", "")),
+            "resolved_metadata": str(report.get("resolved_metadata", "")),
             "apk_sha256": _sha256(apk),
             "duration_ms": int((time.time() - t0) * 1000),
             "commit": os.getenv("GITHUB_SHA", ""),
