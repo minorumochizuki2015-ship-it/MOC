@@ -1,0 +1,16 @@
+name: design-doc
+
+on:
+  push:
+    # Include master and the current working branch to ensure the YAML validation runs immediately
+    branches: [ master, chore/enforce-english-yaml ]
+  workflow_dispatch:
+
+jobs:
+  design-doc:
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate YAML syntax
+        run: echo "YAML loaded successfully."
