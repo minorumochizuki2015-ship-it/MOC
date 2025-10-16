@@ -376,7 +376,6 @@ jobs:
   design-doc:
     name: Generate APK Design Document
     runs-on: ubuntu-latest
-    needs: audit
     if: ${{ always() }}
     steps:
       - name: Checkout Repository
