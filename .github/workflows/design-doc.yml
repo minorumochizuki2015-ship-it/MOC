@@ -2,7 +2,7 @@ name: design-doc
 
 on:
   push:
-    # Include master and the current working branch to ensure the YAML validation runs immediately
+    # Include master and the current working branch to ensure the workflow runs immediately
     branches: [ master, chore/enforce-english-yaml ]
   workflow_dispatch:
 
@@ -11,6 +11,60 @@ jobs:
     runs-on: ubuntu-latest
     if: always()
     steps:
-      - uses: actions/checkout@v4
-      - name: Validate YAML syntax
-        run: echo "YAML loaded successfully."
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run design doc generator (always)
+        id: run-generator
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Workspace: ${GITHUB_WORKSPACE}"
+          python Tools/apk_to_design_doc.py "${GITHUB_WORKSPACE}" "${GITHUB_WORKSPACE}/Trae/Build/Android/TraeGame.apk"
+        continue-on-error: true
+
+      - name: Show manifest tail (if exists)
+        if: always()
+        shell: bash
+        run: |
+          MANIFEST="${GITHUB_WORKSPACE}/observability/mcp/manifest.jsonl"
+          if [ -f "$MANIFEST" ]; then
+            echo "--- manifest.jsonl (tail) ---"
+            tail -n 50 "$MANIFEST" || true
+          else
+            echo "manifest.jsonl not found."
+          fi
+
+      - name: Upload UI report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-report
+          path: observability/ui/report
+          if-no-files-found: warn
+
+      - name: Upload MCP evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mcp-evidence
+          path: observability/mcp
+          if-no-files-found: warn
+
+      - name: Upload CI evidence artifact (logs)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-evidence
+          path: data/logs/current
+          if-no-files-found: warn
