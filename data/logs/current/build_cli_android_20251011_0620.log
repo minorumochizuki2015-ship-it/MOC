@@ -1,0 +1,2356 @@
+[Licensing::Module] Trying to connect to existing licensing client channel...
+[Licensing::IpcConnector] Channel LicenseClient-User doesn't exist
+[Licensing::Module] Successfully launched the LicensingClient (PId: 45880)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-User" at "2025-10-11T01:44:59.2219758Z"
+[Licensing::Client] Code 10 while verifying Licensing Client signature (process Id: 36056, path: "C:/Program Files/Unity Hub/UnityLicensingClient_V1/Unity.Licensing.Client.exe")
+[Licensing::Module] LicensingClient has failed validation; ignoring
+[Licensing::Client] Handshaking with LicensingClient:
+  Version:                 1.17.3+a4e98f1
+  Session Id:              fee0672551ad405abdeacfe985ac4507
+  Correlation Id:          8665273ade17b1a46526934c16680541
+  External correlation Id: 8930823297420389580
+  Machine Id:              636YGZjRcpTsWOvApEgWDsbwxlk=
+[Licensing::Module] Successfully connected to LicensingClient on channel: "LicenseClient-User" (connect: 1.29s, validation: 0.28s, handshake: 0.12s)
+[Licensing::IpcConnector] Successfully connected to: "LicenseClient-User-notifications" at "2025-10-11T01:44:59.6172434Z"
+[Licensing::Module] Connected to LicensingClient (PId: 45880, launch time: 0.01, total connection time: 1.68s)
+[Licensing::Module] Error: Access token is unavailable; failed to update
+[Licensing::Client] Error: Code 500 while processing request (status: Unable to update licenses. Errors: No ULF license found.,Token not found in cache)
+[Licensing::Client] Error: Code 500 while updating license in client (status: Unable to update licenses. Errors: No ULF license found.,Token not found in cache)
+Built from '2022.3/respin/2022.3.62f2-4af31df585-v2' branch; Version is '2022.3.62f2 (7670c08855a9) revision 7762112'; Using compiler version '192829333'; Build Type 'Release'
+OS: 'Windows 11  (10.0.26100) 64bit ProfessionalWorkstation' Language: 'ja' Physical Memory: 130987 MB
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Module] Serial number assigned to: "15669618400951-UnityPersXXXX"
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+[Licensing::Client] Successfully resolved entitlement details
+
+COMMAND LINE ARGUMENTS:
+C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Unity.exe
+-quit
+-batchmode
+-nographics
+-projectPath
+C:\Users\User\Trae\Game_project\Trae
+-executeMethod
+Trae.Editor.BuildScript.BuildAndroid
+-logFile
+data\logs\current\build_cli_android_20251011_0620.log
+-buildPath
+Trae\Build\Android\Trae.apk
+-development
+Successfully changed project path to: C:\Users\User\Trae\Game_project\Trae
+C:/Users/User/Trae/Game_project/Trae
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [45564]  Target information:
+
+Player connection [45564]  * "[IP] 172.31.32.1 [Port] 55504 [Flags] 2 [Guid] 652120601 [EditorId] 652120601 [Version] 1048832 [Id] WindowsEditor(7,Moc) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [45564]  * "[IP] 192.168.11.18 [Port] 55504 [Flags] 2 [Guid] 652120601 [EditorId] 652120601 [Version] 1048832 [Id] WindowsEditor(7,Moc) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [45564] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [45564] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Input System module state changed to: Initialized.
+[PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+[Package Manager] UpmClient::Connect -- Connected to IPC stream "Upm-41016" after 1.2 seconds.
+[Package Manager] Done resolving packages in 5.85 seconds
+[Licensing::Client] Successfully resolved entitlement details
+[Package Manager] Registered 37 packages:
+  Packages from [https://packages.unity.com]:
+    com.unity.test-framework@1.1.33 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.test-framework@1.1.33)
+    com.unity.webrtc@3.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.webrtc@3.0.0)
+    com.unity.editorcoroutines@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.editorcoroutines@1.0.0)
+    com.unity.ext.nunit@1.0.6 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.ext.nunit@1.0.6)
+  Built-in packages:
+    com.unity.ugui@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.ugui@1.0.0)
+    com.unity.modules.ai@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.ai@1.0.0)
+    com.unity.modules.androidjni@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.androidjni@1.0.0)
+    com.unity.modules.animation@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.animation@1.0.0)
+    com.unity.modules.assetbundle@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.assetbundle@1.0.0)
+    com.unity.modules.audio@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.audio@1.0.0)
+    com.unity.modules.cloth@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.cloth@1.0.0)
+    com.unity.modules.director@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.director@1.0.0)
+    com.unity.modules.imageconversion@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.imageconversion@1.0.0)
+    com.unity.modules.imgui@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.imgui@1.0.0)
+    com.unity.modules.jsonserialize@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.jsonserialize@1.0.0)
+    com.unity.modules.particlesystem@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.particlesystem@1.0.0)
+    com.unity.modules.physics@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.physics@1.0.0)
+    com.unity.modules.physics2d@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.physics2d@1.0.0)
+    com.unity.modules.screencapture@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.screencapture@1.0.0)
+    com.unity.modules.terrain@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.terrain@1.0.0)
+    com.unity.modules.terrainphysics@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.terrainphysics@1.0.0)
+    com.unity.modules.tilemap@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.tilemap@1.0.0)
+    com.unity.modules.ui@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.ui@1.0.0)
+    com.unity.modules.uielements@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.uielements@1.0.0)
+    com.unity.modules.umbra@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.umbra@1.0.0)
+    com.unity.modules.unityanalytics@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.unityanalytics@1.0.0)
+    com.unity.modules.unitywebrequest@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.unitywebrequest@1.0.0)
+    com.unity.modules.unitywebrequestassetbundle@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.unitywebrequestassetbundle@1.0.0)
+    com.unity.modules.unitywebrequestaudio@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.unitywebrequestaudio@1.0.0)
+    com.unity.modules.unitywebrequesttexture@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.unitywebrequesttexture@1.0.0)
+    com.unity.modules.unitywebrequestwww@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.unitywebrequestwww@1.0.0)
+    com.unity.modules.vehicles@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.vehicles@1.0.0)
+    com.unity.modules.video@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.video@1.0.0)
+    com.unity.modules.vr@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.vr@1.0.0)
+    com.unity.modules.wind@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.wind@1.0.0)
+    com.unity.modules.xr@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.xr@1.0.0)
+    com.unity.modules.subsystems@1.0.0 (location: C:\Users\User\Trae\Game_project\Trae\Library\PackageCache\com.unity.modules.subsystems@1.0.0)
+[Subsystems] No new subsystems found in resolved package list.
+Package Manager log level set to [2]
+[Package Manager] Done registering packages in 0.20 seconds
+Refreshing native plugins compatible for Editor in 8.10 ms, found 1 plugins.
+Preloading 1 native plugins for Editor in 6.15 ms.
+Initialize engine version: 2022.3.62f2 (7670c08855a9)
+[Subsystems] Discovering subsystems at path C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/User/Trae/Game_project/Trae/Assets
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0; jobified=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+[Licensing::Client] Successfully resolved entitlement details
+Initialize mono
+Mono path[0] = 'C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/Managed'
+Mono path[1] = 'C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56016
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+Using cacheserver namespaces - metadata:defaultmetadata, artifacts:defaultartifacts
+ImportWorker Server TCP listen port: 0
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+[Licensing::Client] Successfully resolved entitlement details
+Register platform support module: C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
+[Licensing::Client] Successfully resolved entitlement details
+Register platform support module: C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll
+Register platform support module: C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 1.199355 seconds.
+- Loaded All Assemblies, in 20.370 seconds
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+Android Extension - Scanning For ADB Devices 3160 ms
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  4.705 seconds
+Domain Reload Profiling: 25069ms
+	BeginReloadAssembly (13498ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (2ms)
+	RebuildCommonClasses (1179ms)
+	RebuildNativeTypeToScriptingClass (25ms)
+	initialDomainReloadingComplete (1341ms)
+	LoadAllAssembliesAndSetupDomain (4319ms)
+		LoadAssemblies (13525ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (4279ms)
+			TypeCache.Refresh (4275ms)
+				TypeCache.ScanAssembly (3513ms)
+			ScanForSourceGeneratedMonoScriptInfo (1ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (4706ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (4581ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (4141ms)
+			SetLoadedEditorAssemblies (11ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (5ms)
+			ProcessInitializeOnLoadAttributes (304ms)
+			ProcessInitializeOnLoadMethodAttributes (120ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+[Licensing::Client] Successfully resolved entitlement details
+Application.AssetDatabase Initial Refresh Start
+[ScriptCompilation] Requested script compilation because: Assetdatabase observed changes in script compilation related files
+Clearing Bee directory 'Library/Bee', since bee backend hash ('Library/Bee/bee_backend.info') is different, previous hash was 854b8c3e5b129fed3ed46d4f4af5cd25397f3e3c751cf07d759ea7d71a90b18f (Unity version: 2022.3.52f1), current hash is 64225927bf75f194ba7a5ff2ea41ace646942556c12c8b0f00c350c0b56a81c1 (Unity version: 2022.3.62f2).
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssemblies
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 4 Duration: 0s97ms
+[             ] Require frontend run.  Library/Bee/1900b0aE.dag couldn't be loaded
+DisplayProgressbar: Compiling Scripts
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\Tools\netcorerun\netcorerun.exe "C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\Tools\BuildPipeline\ScriptCompilationBuildProgram.exe" "Library/Bee/1900b0aE.dag.json" "Library/Bee/1900b0aE-inputdata.json" "Library\Bee\buildprogram0.traceevents"
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 0 Duration: 2s891ms
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aE.dag" --continue-on-failure --dagfilejson="Library\Bee\1900b0aE.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssemblies
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 0 Duration: 16s
+Finished compiling graph: 272 nodes, 2993 flattened edges (2679 ToBuild, 42 ToUse), maximum node priority 170
+[  1/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityAnalyticsCommonModule.dll_030C49DC71CB10C7.mvfrm
+[  2/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestAudioModule.dll_DFC9E076DE4D3D01.mvfrm
+[  3/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TerrainPhysicsModule.dll_10B66DDCB0BBBB9D.mvfrm
+[  4/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UmbraModule.dll_52D0A1DB4DC391E2.mvfrm
+[  5/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UIModule.dll_301E0C23273F829F.mvfrm
+[  6/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SubsystemsModule.dll_DCD9D6B75D532AAF.mvfrm
+[  7/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestWWWModule.dll_09FC972C20829372.mvfrm
+[  8/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextCoreTextEngineModule.dll_3F3A51D030C2D706.mvfrm
+[  9/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityTestProtocolModule.dll_74404AE6720DD818.mvfrm
+[ 10/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextRenderingModule.dll_799148E2C337F8B8.mvfrm
+[ 11/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.XRModule.dll_B5AEF5AD52345575.mvfrm
+[ 12/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VehiclesModule.dll_AEFBC38757536BE2.mvfrm
+[ 13/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TLSModule.dll_F06AB2D51C3D4DF4.mvfrm
+[ 14/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SubstanceModule.dll_F23F9C76BF133209.mvfrm
+[ 15/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SpriteShapeModule.dll_D085D750BE7F7595.mvfrm
+[ 16/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VRModule.dll_82F032A8C8FA0817.mvfrm
+[ 17/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Android.Types.dll_E1DF8271F8B2A145.mvfrm
+[ 18/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VFXModule.dll_71494B43F2AAB761.mvfrm
+[ 19/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Android.GradleProject.dll_9DB047F943A9793E.mvfrm
+[ 20/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityConnectModule.dll_39EDE13E2DA53760.mvfrm
+[ 21/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TerrainModule.dll_0F54DF181C078E0E.mvfrm
+[ 22/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AssetBundleModule.dll_B724A9F608DD3D8B.mvfrm
+[ 23/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestAssetBundleModule.dll_2F7DD86A15879EDD.mvfrm
+[ 24/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.Android.Gradle.dll_E1EB9B073C08D1E7.mvfrm
+[ 25/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VideoModule.dll_FD057A2D832F0214.mvfrm
+[ 26/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.StreamingModule.dll_1594882D73C033FB.mvfrm
+[ 27/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VirtualTexturingModule.dll_9BA43225B7512DC8.mvfrm
+[ 28/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SpriteMaskModule.dll_722C70558F0B429C.mvfrm
+[ 29/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityAnalyticsModule.dll_2FDB35D343A0130C.mvfrm
+[ 30/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityCurlModule.dll_941C3C0E944C6EAA.mvfrm
+[ 31/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestTextureModule.dll_3B419DD5F3E2ECF6.mvfrm
+[ 32/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextCoreFontEngineModule.dll_F7521B5EA13F1DE8.mvfrm
+[ 33/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.WindModule.dll_03D932BE5ED73213.mvfrm
+[ 34/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TilemapModule.dll_AE51469933C46F17.mvfrm
+[ 35/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestModule.dll_196431EE549DA669.mvfrm
+[ 36/269    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UIElementsModule.dll_E118381F607F66A6.mvfrm
+[ 37/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll_4C88086E6AE6891B.mvfrm
+[ 38/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ProfilerModule.dll_697F033E76832354.mvfrm
+[ 39/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PerformanceReportingModule.dll_67CD8C9857E27269.mvfrm
+[ 40/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SharedInternalsModule.dll_8BD66919C0D7073A.mvfrm
+[ 41/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GIModule.dll_CCE6B70366A7650D.mvfrm
+[ 42/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.JSONSerializeModule.dll_366A2952F7944C61.mvfrm
+[ 43/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GameCenterModule.dll_88FFFDC56D9BAD22.mvfrm
+[ 44/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ParticleSystemModule.dll_103BC5099778C110.mvfrm
+[ 45/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.HotReloadModule.dll_E24858E2FF6B983F.mvfrm
+[ 46/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PhysicsModule.dll_F50E63A946494520.mvfrm
+[ 47/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.IMGUIModule.dll_105B952986CE7A50.mvfrm
+[ 48/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.InputModule.dll_3E71BD7336D50B13.mvfrm
+[ 49/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.LocalizationModule.dll_0A779C977C20FC74.mvfrm
+[ 50/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ClusterRendererModule.dll_9BD32C93C78453F6.mvfrm
+[ 51/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ImageConversionModule.dll_07C52A4449A90BEA.mvfrm
+[ 52/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.Physics2DModule.dll_ADA58ACDC5357452.mvfrm
+[ 53/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.DirectorModule.dll_3738CA07DD299C47.mvfrm
+[ 54/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.InputLegacyModule.dll_4869C514A0CEF37C.mvfrm
+[ 55/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.dll_C74CFA7EB98BE5CB.mvfrm
+[ 56/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ScreenCaptureModule.dll_5051D6D80C0078C3.mvfrm
+[ 57/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.DSPGraphModule.dll_3C8A2B714F8A6D68.mvfrm
+[ 58/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.UnityAdditionalFile.txt
+[ 59/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.rsp2
+[ 60/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.TestRunner.rsp2
+[ 61/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.TestRunner.UnityAdditionalFile.txt
+[ 62/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.TestRunner.dll.mvfrm.rsp
+[ 63/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.TestRunner.rsp
+[ 64/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.dll.mvfrm.rsp
+[ 65/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.rsp
+[ 66/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.TestRunner.rsp2
+[ 67/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.TestRunner.UnityAdditionalFile.txt
+[ 68/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ClothModule.dll_3EE452BD9AB9C553.mvfrm
+[ 69/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.TestRunner.dll.mvfrm.rsp
+[ 70/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GridModule.dll_6AFB7383E5F549A1.mvfrm
+[ 71/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.TestRunner.rsp
+[ 72/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.UnityAdditionalFile.txt
+[ 73/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.rsp2
+[ 74/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.dll.mvfrm.rsp
+[ 75/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.rsp
+[ 76/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AudioModule.dll_D7FBF5C2C09CE66F.mvfrm
+[ 77/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ARModule.dll_EE1D32F92815DBBC.mvfrm
+[ 78/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Core.UnityAdditionalFile.txt
+[ 79/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Core.rsp2
+[ 80/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ContentLoadModule.dll_503B0336D75FE578.mvfrm
+[ 81/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Core.dll.mvfrm.rsp
+[ 82/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Core.rsp
+[ 83/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.CrashReportingModule.dll_BD297BBD29673582.mvfrm
+[ 84/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Input.rsp2
+[ 85/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Input.UnityAdditionalFile.txt
+[ 86/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Data.rsp2
+[ 87/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Audio.rsp2
+[ 88/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Audio.UnityAdditionalFile.txt
+[ 89/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Data.UnityAdditionalFile.txt
+[ 90/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.EditorCoroutines.Editor.UnityAdditionalFile.txt
+[ 91/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.EditorCoroutines.Editor.rsp2
+[ 92/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.UnityAdditionalFile.txt
+[ 93/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.rsp2
+[ 94/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.EditorCoroutines.Editor.dll.mvfrm.rsp
+[ 95/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Input.dll.mvfrm.rsp
+[ 96/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Data.dll.mvfrm.rsp
+[ 97/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Audio.dll.mvfrm.rsp
+[ 98/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.dll.mvfrm.rsp
+[ 99/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Input.rsp
+[100/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Data.rsp
+[101/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Audio.rsp
+[102/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.rsp
+[103/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.EditorCoroutines.Editor.rsp
+[104/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Gameplay.UnityAdditionalFile.txt
+[105/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Gameplay.rsp2
+[106/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Gameplay.dll.mvfrm.rsp
+[107/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.Editor.rsp2
+[108/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.Editor.UnityAdditionalFile.txt
+[109/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Gameplay.rsp
+[110/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.Editor.dll.mvfrm.rsp
+[111/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.UI.UnityAdditionalFile.txt
+[112/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.UI.rsp2
+[113/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.Editor.rsp
+[114/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Voice.rsp2
+[115/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Editor.rsp2
+[116/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Voice.UnityAdditionalFile.txt
+[117/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.UI.dll.mvfrm.rsp
+[118/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Editor.UnityAdditionalFile.txt
+[119/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Voice.dll.mvfrm.rsp
+[120/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Editor.dll.mvfrm.rsp
+[121/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.UI.rsp
+[122/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Voice.rsp
+[123/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Editor.rsp
+[124/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.rsp2
+[125/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.UnityAdditionalFile.txt
+[126/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll.mvfrm.rsp
+[127/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.rsp
+[128/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.PlayModeTests.rsp2
+[129/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Tests.UnityAdditionalFile.txt
+[130/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.PlayModeTests.dll.mvfrm.rsp
+[131/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.iOS.Extensions.Common.dll_39088A117CB2BEE4.mvfrm
+[132/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.PlayModeTests.UnityAdditionalFile.txt
+[133/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Tests.rsp2
+[134/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.rsp2
+[135/269    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PropertiesModule.dll_B63B3D03E087115E.mvfrm
+[136/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Tests.dll.mvfrm.rsp
+[137/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/TraeVoicePlayModeTests.UnityAdditionalFile.txt
+[138/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/TraeVoiceEditModeTests.UnityAdditionalFile.txt
+[139/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/TraeVoiceEditModeTests.rsp2
+[140/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/TraeVoicePlayModeTests.rsp2
+[141/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.UnityAdditionalFile.txt
+[142/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/TraeVoicePlayModeTests.dll.mvfrm.rsp
+[143/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll.mvfrm.rsp
+[144/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/TraeVoiceEditModeTests.dll.mvfrm.rsp
+[145/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.Tests.rsp
+[146/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Trae.PlayModeTests.rsp
+[147/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/TraeVoicePlayModeTests.rsp
+[148/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/TraeVoiceEditModeTests.rsp
+[149/269    0s] WriteText Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.rsp
+[150/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AndroidJNIModule.dll_5EB2B3AAA75ABC31.mvfrm
+[151/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AnimationModule.dll_60FF9ADD24387CBD.mvfrm
+[152/269    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.CoreModule.dll_8D8A5795CDA0B3AA.mvfrm
+[153/269    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ClusterInputModule.dll_CC2AD244E4A5097B.mvfrm
+[154/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AIModule.dll_34AA6DF5CAF87CF3.mvfrm
+[155/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AccessibilityModule.dll_D652A016F858EBD7.mvfrm
+[156/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UnityConnectModule.dll_4C8E5D2F331D36B5.mvfrm
+[157/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SceneViewModule.dll_D12A01BC3EFE7525.mvfrm
+[158/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIElementsSamplesModule.dll_B87D94F4181282C2.mvfrm
+[159/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.EditorToolbarModule.dll_800DC3C1F8F61A02.mvfrm
+[160/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIElementsModule.dll_E069CAD75E3B4D5B.mvfrm
+[161/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UIBuilderModule.dll_E702CBD0BC94214B.mvfrm
+[162/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TextCoreFontEngineModule.dll_78F2A00B8E415F1D.mvfrm
+[163/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.QuickSearchModule.dll_733B7704A6768899.mvfrm
+[164/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.dll_94A8B3A65B1858E6.mvfrm
+[165/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.SceneTemplateModule.dll_A3AD347FF7E2C43A.mvfrm
+[166/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.DiagnosticsModule.dll_E82BF5F74D9F8C40.mvfrm
+[167/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.GraphViewModule.dll_927A1EB449DBA817.mvfrm
+[168/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.iOS.Extensions.Xcode.dll_A22F76B554FF08A8.mvfrm
+[169/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.PresetsUIModule.dll_4DE057964C34001C.mvfrm
+[170/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.iOS.Extensions.dll_87DE0662F7E2AD81.mvfrm
+[171/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TextCoreTextEngineModule.dll_C0DAD67D1DC5183B.mvfrm
+[172/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.NVIDIAModule.dll_A1E5FA45753F6156.mvfrm
+[173/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.Graphs.dll_8AC74B2BA23A93B1.mvfrm
+[174/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.DeviceSimulatorModule.dll_96266A2257C94672.mvfrm
+[175/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.WindowsStandalone.Extensions.dll_146D446F5A16B811.mvfrm
+[176/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.Android.Extensions.dll_65B59065EF8F3487.mvfrm
+[177/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.CoreModule.dll_6A698443259B487F.mvfrm
+[178/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/UnityEngine.TestRunner.dll.mvfrm
+[179/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.dll.mvfrm
+[180/269    4s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEngine.TestRunner.dll (+2 others)
+[181/269    4s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEngine.TestRunner.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[182/269    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.TestRunner.pdb
+[183/269    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.UI.pdb
+[184/269    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.TestRunner.dll
+[185/269    0s] CopyFiles Library/ScriptAssemblies/UnityEngine.UI.dll
+[186/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TestRunner.ref.dll_E55D0F7C63F01D9E.mvfrm
+[187/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UI.ref.dll_08FEAA520A2EFD60.mvfrm
+[188/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/UnityEditor.TestRunner.dll.mvfrm
+[189/269    1s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.TestRunner.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.TestRunner.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[190/269    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.TestRunner.pdb
+[191/269    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.TestRunner.dll
+[192/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.TestRunner.ref.dll_193EC4CE382CBFB3.mvfrm
+[193/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.dll.mvfrm
+[194/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[195/269    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.pdb
+[196/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEditor.UI.ref.dll_4C98D3F7040CD4F5.mvfrm
+[197/269    0s] CopyFiles Library/ScriptAssemblies/UnityEditor.UI.dll
+[198/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Trae.PlayModeTests.dll.mvfrm
+[199/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Trae.Core.dll.mvfrm
+[200/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Trae.Editor.dll.mvfrm
+[201/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Trae.UI.dll.mvfrm
+[202/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/TraeVoiceEditModeTests.dll.mvfrm
+[203/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Trae.Gameplay.dll.mvfrm
+[204/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.dll.mvfrm
+[205/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Trae.Input.dll.mvfrm
+[206/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Trae.Data.dll.mvfrm
+[207/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Unity.EditorCoroutines.Editor.dll.mvfrm
+[208/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Trae.Audio.dll.mvfrm
+[209/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Trae.Voice.dll.mvfrm
+[210/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Trae.Tests.dll.mvfrm
+[211/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/TraeVoicePlayModeTests.dll.mvfrm
+[212/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Trae.Core.dll (+2 others)
+[213/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/TraeVoiceEditModeTests.dll (+2 others)
+[214/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Core.pdb
+[215/269    0s] CopyFiles Library/ScriptAssemblies/TraeVoiceEditModeTests.dll
+[216/269    0s] CopyFiles Library/ScriptAssemblies/TraeVoiceEditModeTests.pdb
+[217/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Core.dll
+[218/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Trae.Voice.dll (+2 others)
+[219/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Voice.dll
+[220/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Voice.pdb
+[221/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.EditorCoroutines.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.EditorCoroutines.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[222/269    0s] CopyFiles Library/ScriptAssemblies/Unity.EditorCoroutines.Editor.pdb
+[223/269    0s] CopyFiles Library/ScriptAssemblies/Unity.EditorCoroutines.Editor.dll
+[224/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[225/269    0s] CopyFiles Library/ScriptAssemblies/Unity.WebRTC.pdb
+[226/269    0s] CopyFiles Library/ScriptAssemblies/Unity.WebRTC.dll
+[227/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/TraeVoicePlayModeTests.dll (+2 others)
+[228/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Trae.Audio.dll (+2 others)
+Assets\Trae\Scripts\Audio\AudioManager.cs(19,40): warning CS0414: The field 'AudioManager.defaultFadeDuration' is assigned but its value is never used
+[229/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Trae.Input.dll (+2 others)
+Assets\Trae\Scripts\TouchProcessor.cs(12,40): warning CS0414: The field 'TouchProcessor.touchSensitivity' is assigned but its value is never used
+[230/269    0s] CopyFiles Library/ScriptAssemblies/TraeVoicePlayModeTests.pdb
+[231/269    0s] CopyFiles Library/ScriptAssemblies/TraeVoicePlayModeTests.dll
+[232/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Trae.Data.dll (+2 others)
+[233/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Audio.dll
+[234/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Audio.pdb
+[235/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Input.pdb
+[236/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Input.dll
+[237/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Data.dll
+[238/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Data.pdb
+[239/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.EditorCoroutines.Editor.ref.dll_34ED10A34098B2DB.mvfrm
+[240/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.WebRTC.ref.dll_CF837AC6DB98867B.mvfrm
+[241/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Trae.Gameplay.dll (+2 others)
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(5,7): warning CS0105: The using directive for 'UnityEngine.SceneManagement' appeared previously in this namespace
+
+Assets\Trae\Scripts\Gameplay\HaiDoonGameManager.cs(43,34): warning CS0067: The event 'HaiDoonGameManager.OnScoreUpdated' is never used
+
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(16,41): warning CS0414: The field 'GameSceneManager.gameplaySceneName' is assigned but its value is never used
+
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(15,41): warning CS0414: The field 'GameSceneManager.mainMenuSceneName' is assigned but its value is never used
+[242/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Gameplay.pdb
+[243/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Gameplay.dll
+[244/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.Editor.dll.mvfrm
+[245/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Trae.Editor.dll (+2 others)
+[246/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Editor.pdb
+[247/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Trae.UI.dll (+2 others)
+[248/269    0s] CopyFiles Library/ScriptAssemblies/Trae.UI.pdb
+[249/269    0s] CopyFiles Library/ScriptAssemblies/Trae.UI.dll
+[250/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Editor.dll
+[251/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.Editor.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1900b0aE.dag/Unity.WebRTC.Editor.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[252/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Trae.PlayModeTests.dll (+2 others)
+[253/269    0s] CopyFiles Library/ScriptAssemblies/Unity.WebRTC.Editor.pdb
+[254/269    0s] CopyFiles Library/ScriptAssemblies/Trae.PlayModeTests.pdb
+[255/269    0s] CopyFiles Library/ScriptAssemblies/Trae.PlayModeTests.dll
+[256/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Trae.Tests.dll (+2 others)
+Assets\Trae\Scripts\Tests\PlayMode\UIIntegrationTests.cs(143,17): warning CS0219: The variable 'testScore' is assigned but its value is never used
+
+Assets\Trae\Scripts\Tests\PlayMode\UIIntegrationTests.cs(144,17): warning CS0219: The variable 'testHighScore' is assigned but its value is never used
+
+Assets\Trae\Scripts\Tests\EditMode\HaiDoonGameManagerTests.cs(440,44): warning CS0067: The event 'MockAudioManager.OnBGMPlaybackCompleted' is never used
+
+Assets\Trae\Scripts\Tests\EditMode\HaiDoonGameManagerTests.cs(441,44): warning CS0067: The event 'MockAudioManager.OnSFXPlaybackCompleted' is never used
+
+Assets\Trae\Scripts\Tests\EditMode\HaiDoonGameManagerTests.cs(442,44): warning CS0067: The event 'MockAudioManager.OnAudioPlaybackCompleted' is never used
+[257/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Tests.pdb
+[258/269    0s] CopyFiles Library/ScriptAssemblies/Trae.Tests.dll
+[259/269    0s] CopyFiles Library/ScriptAssemblies/Unity.WebRTC.Editor.dll
+[260/269    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.WebRTC.Editor.ref.dll_659D5830A80421E6.mvfrm
+[261/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll.mvfrm
+[262/269    0s] MovedFromExtractorCombine Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll.mvfrm
+[263/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp.dll (+2 others)
+[264/269    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.pdb
+[265/269    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp.dll
+[266/269    0s] Csc Library/Bee/artifacts/1900b0aE.dag/Assembly-CSharp-Editor.dll (+2 others)
+[267/269    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.pdb
+[268/269    0s] CopyFiles Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+*** Tundra build success (16.35 seconds), 268 items updated, 269 evaluated
+Assets\Trae\Scripts\Audio\AudioManager.cs(19,40): warning CS0414: The field 'AudioManager.defaultFadeDuration' is assigned but its value is never used
+Assets\Trae\Scripts\TouchProcessor.cs(12,40): warning CS0414: The field 'TouchProcessor.touchSensitivity' is assigned but its value is never used
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(5,7): warning CS0105: The using directive for 'UnityEngine.SceneManagement' appeared previously in this namespace
+Assets\Trae\Scripts\Gameplay\HaiDoonGameManager.cs(43,34): warning CS0067: The event 'HaiDoonGameManager.OnScoreUpdated' is never used
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(16,41): warning CS0414: The field 'GameSceneManager.gameplaySceneName' is assigned but its value is never used
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(15,41): warning CS0414: The field 'GameSceneManager.mainMenuSceneName' is assigned but its value is never used
+Assets\Trae\Scripts\Tests\PlayMode\UIIntegrationTests.cs(143,17): warning CS0219: The variable 'testScore' is assigned but its value is never used
+Assets\Trae\Scripts\Tests\PlayMode\UIIntegrationTests.cs(144,17): warning CS0219: The variable 'testHighScore' is assigned but its value is never used
+Assets\Trae\Scripts\Tests\EditMode\HaiDoonGameManagerTests.cs(440,44): warning CS0067: The event 'MockAudioManager.OnBGMPlaybackCompleted' is never used
+Assets\Trae\Scripts\Tests\EditMode\HaiDoonGameManagerTests.cs(441,44): warning CS0067: The event 'MockAudioManager.OnSFXPlaybackCompleted' is never used
+Assets\Trae\Scripts\Tests\EditMode\HaiDoonGameManagerTests.cs(442,44): warning CS0067: The event 'MockAudioManager.OnAudioPlaybackCompleted' is never used
+AssetDatabase: script compilation time: 21.848053s
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  6.494 seconds
+Refreshing native plugins compatible for Editor in 5.00 ms, found 1 plugins.
+Preloading 1 native plugins for Editor in 0.21 ms.
+Start importing Packages/com.unity.ugui/Tests/Runtime/InputField/GenericInputFieldTests.cs using Guid(513613320b52fdb40a26dd5b73d89afe) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '86dde1ae015b97ff18fa06f8486d0e12') in 0.046589 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/InputField.cs using Guid(d199490a83bb2b844b9695cbf13b01ef) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '669f638b96cf1d917fd77831271cb0b7') in 0.006345 seconds
+Start importing Packages/com.unity.ugui/Runtime/UI/Core/MultipleDisplayUtilities.cs using Guid(5ebeb75bd91642048bb3f6c1939fde66) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '0302882b61d4c20d3793826fe2daeee1') in 0.005748 seconds
+Refreshing native plugins compatible for Editor in 4.80 ms, found 1 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for iOS target not found
+Native extension for Android target not found
+[CI] RunnerCallbackBootstrap loaded (InitializeOnLoad)
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:Log (object)
+Trae.Tools.Editor.TestRunnerCli/RunnerCallbackBootstrap:.cctor () (at Assets/Trae/Scripts/Editor/TestRunnerCli.cs:311)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor (System.RuntimeTypeHandle)
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes (System.Type[])
+
+(Filename: Assets/Trae/Scripts/Editor/TestRunnerCli.cs Line: 311)
+
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.979 seconds
+Domain Reload Profiling: 7464ms
+	BeginReloadAssembly (399ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (14ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (56ms)
+	RebuildCommonClasses (81ms)
+	RebuildNativeTypeToScriptingClass (24ms)
+	initialDomainReloadingComplete (73ms)
+	LoadAllAssembliesAndSetupDomain (5908ms)
+		LoadAssemblies (5743ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (379ms)
+			TypeCache.Refresh (358ms)
+				TypeCache.ScanAssembly (332ms)
+			ScanForSourceGeneratedMonoScriptInfo (14ms)
+			ResolveRequiredComponents (5ms)
+	FinalizeReload (980ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (643ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (86ms)
+			SetLoadedEditorAssemblies (11ms)
+			RefreshPlugins (0ms)
+			BeforeProcessingInitializeOnLoad (113ms)
+			ProcessInitializeOnLoadAttributes (361ms)
+			ProcessInitializeOnLoadMethodAttributes (45ms)
+			AfterProcessingInitializeOnLoad (26ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (21ms)
+Start importing Assets/Images/common_google_signin_btn_icon_dark_normal_background.9_3.png using Guid(20a0a6d6e0c69234e9e3a9bdc4ab2234) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'da8ea197823eb2145287fb415d9591a5') in 0.037705 seconds
+Start importing Assets/Images/common_google_signin_btn_icon_light_normal_background.9_1.png using Guid(a05b4f8f085da264cbc5bfdbc0db407e) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'e4f8f3b7045fee22f773e3f1cce51ab9') in 0.007718 seconds
+Start importing Assets/Images/notification_bg_normal_pressed.9_1.png using Guid(c06b0e453de3a2a4bae1107aa6f1374b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '519acf3c65e5cb51043d957b0a5c3fa6') in 0.006344 seconds
+Start importing Assets/Images/googleg_standard_color_18_2.png using Guid(51456b01c206a974a9056b5bb49f5f98) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '4a29dc4b327404204cade997f9f6962a') in 0.005902 seconds
+Start importing Assets/Images/common_google_signin_btn_text_light_normal_background.9_3.png using Guid(7235d406bbf9f164881180e18bdb18d6) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'd754d3de72d8f60d0b6e2bf6069f2a6b') in 0.009570 seconds
+Start importing Assets/Images/notify_panel_notification_icon_bg_2.png using Guid(72f68585742b00144be67fdc8146cc26) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'a139744d2301c6c8140e114966492cd7') in 0.005733 seconds
+Start importing Assets/Images/app_icon_round.png using Guid(a219b13e645d5614bb54b6a3b71ff48a) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'cbed40d2b40258e56e51cd5be83a7096') in 0.006941 seconds
+Start importing Assets/Images/app_icon_1.png using Guid(b2d5bdf1424772d4dafee56100110335) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'a84b6fdd87be4bf292e025e9e5f49ff6') in 0.005733 seconds
+Start importing Assets/Images/app_icon_round_3.png using Guid(c207f17c8ecdb1647bd04d7a4e7e4cb4) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '80cdd1a9f2d310ef035be089c468f6b1') in 0.008068 seconds
+Start importing Assets/Images/notification_bg_low_normal.9_1.png using Guid(e2f1125b0cd08a246ba1924b17706008) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '980d5f10c9d59a323004baf0d5c8c574') in 0.006437 seconds
+Start importing Assets/Images/app_icon_2.png using Guid(53c529d0aa2aca040a83be32d40df7ed) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'be90be378832bc4c1e6b872f6960323d') in 0.006917 seconds
+Start importing Assets/Images/notify_panel_notification_icon_bg.png using Guid(741303e060ef9f84987aae49f5c1e8dd) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '3a05f18e2beb14869b669c57debb337e') in 0.006214 seconds
+Start importing Assets/Images/app_icon_3.png using Guid(74da2f3d7fe38f949a931f88ca2bee27) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '35c73b72fa8bbe2e1ee04dc41cc23d07') in 0.010045 seconds
+Start importing Assets/Images/app_icon_round_5.png using Guid(84862c4f68499474da02503994e68c5a) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'df8f152c1fc58dd8a0d02340466e1551') in 0.011791 seconds
+Start importing Assets/Images/app_icon_round_1.png using Guid(c421c51784718f542add113d805a2103) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '4e49905752403ca77ad9e428558b97b9') in 0.006079 seconds
+Start importing Assets/Images/notification_bg_normal.9_1.png using Guid(e43027c9dc249064cac419a865f26b7f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'c6fd5dc5dea603fca4b9e05f82a86b6e') in 0.007197 seconds
+Start importing Assets/Images/notification_bg_low_pressed.9_1.png using Guid(f41d56c5a506aac4aaf6a36a1cf6e6bd) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'e446735aa8790f3d0e8610a58e67b02d') in 0.006567 seconds
+Start importing Assets/Images/notification_bg_low_normal.9.png using Guid(453563ee3e318494ea7427be0e010784) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '0ac6eff8c8bfccbee2a73c298fc1a74e') in 0.005626 seconds
+Start importing Assets/Images/common_full_open_on_phone_1.png using Guid(950ca000c52a82a41a8ee71d5c27de31) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '22a6e1bfcbef7e3c9144dafddd8528e1') in 0.006391 seconds
+Start importing Assets/Images/common_google_signin_btn_text_dark_normal_background.9_1.png using Guid(e586a4715c83b114895351331b7fd009) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'eb30648fb57f10c783c3bbc823944435') in 0.006483 seconds
+Start importing Assets/Images/notification_bg_normal.9.png using Guid(f5746da43676eb946981869026512e40) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '4124a8157ad1ce377bfb8dcf3fade0fe') in 0.005422 seconds
+Start importing Assets/Images/googleg_standard_color_18.png using Guid(a654964eab965c149a0a76c7924e4b8d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '4459c9157a73ca1afae6132eddb4fb17') in 0.005885 seconds
+Start importing Assets/Images/common_google_signin_btn_text_dark_normal_background.9_2.png using Guid(f6ece4377d57c324b89c4431a86a322f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'bfe8a6317ab9bf1beb35aab7a3d12fee') in 0.008055 seconds
+Start importing Assets/Images/common_google_signin_btn_text_light_normal_background.9_1.png using Guid(b7e5ea7a2ec5210458af216c66c8e337) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '8eaf4af0e75fbe95d985ba1b404e1346') in 0.007894 seconds
+Start importing Assets/Images/app_icon_4.png using Guid(c791f73c3bfb6e04084b27d3cb830665) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '507a012ca522b77314adfd545142c327') in 0.009076 seconds
+Start importing Assets/Images/googleg_disabled_color_18.png using Guid(187188f88e92feb43b8a2dc439e2da38) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '3d323074ab630e2bf5eb339b73d92a69') in 0.005809 seconds
+Start importing Assets/Images/app_icon.png using Guid(489edde50a66ec144bf4411ff42203ef) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'cff15d62a2308874c95cad3251ecc98a') in 0.007221 seconds
+Start importing Assets/Images/notification_bg_low_pressed.9.png using Guid(78cc77fdbb480bc459d7c77f62569c62) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '912a36867510ecbcb138f3b208340d9e') in 0.005764 seconds
+Start importing Assets/Images/common_google_signin_btn_icon_dark_normal_background.9_2.png using Guid(8810cceab1863504db042a2f9407831d) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '788512dcaa361ba3d790647e7fef0cc1') in 0.006544 seconds
+Start importing Assets/Images/common_full_open_on_phone.png using Guid(c813789020178f144811034176652e58) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '46ccb3e60488225c9d5041ccc4d07409') in 0.006555 seconds
+Start importing Assets/Images/common_google_signin_btn_icon_light_normal_background.9_2.png using Guid(e87c8b533a30aca4b84e6d697bd4762c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'fa9e8e98eb992f3c0b80c663a53db5ca') in 0.006354 seconds
+Start importing Assets/Images/googleg_standard_color_18_1.png using Guid(29c24f9d0e4f6c84fba9a7da32492b1b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'a81514afaed52f2fe888d03a58be4089') in 0.005425 seconds
+Start importing Assets/Images/common_google_signin_btn_icon_light_normal_background.9.png using Guid(a99362539daa19a4ba0a047293c75599) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '376715b10c40a9ebf71661249bc30de9') in 0.005945 seconds
+Start importing Assets/Images/googleg_standard_color_18_3.png using Guid(e973d078506fda24d82dd66e0b7cfb89) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'dc9b5d805548dfc39005cc64b412765f') in 0.006011 seconds
+Start importing Assets/Images/common_google_signin_btn_text_dark_normal_background.9_3.png using Guid(8a87464bc1b1afc478c8d0892dd3c75c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'afdbcb77a1e9a7b0686e6c708291ab79') in 0.009254 seconds
+Start importing Assets/Images/notification_bg_low_normal.9_2.png using Guid(aac0bf99ffd3cec47ac698abe79832cd) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '249a9443275df1e2b40a6d36e08e973a') in 0.005458 seconds
+Start importing Assets/Images/common_google_signin_btn_text_dark_normal_background.9.png using Guid(1b34248c7f0e31547b092a17ad210edd) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '5affd480c7ca72b8c2bf1d010e350a39') in 0.006561 seconds
+Start importing Assets/Images/notification_bg_normal_pressed.9_2.png using Guid(6b2fd4ed9e1928846823bd047cf766bc) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '99da7c56313d4953ab121e3ac1bcfb51') in 0.005346 seconds
+Start importing Assets/Images/googleg_disabled_color_18_3.png using Guid(ab6ea31eb6492bf4c9544ea22d730d05) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '010d90d8f6914c2dc1f74db8bea1356f') in 0.005916 seconds
+Start importing Assets/Images/googleg_disabled_color_18_1.png using Guid(1c02b0931f6776e468f2559519f58d2a) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'db79da1b61c92c2895361d64074045b8') in 0.006174 seconds
+Start importing Assets/Images/app_icon_round_2.png using Guid(dc0768a2d4cb03b40acf8970ec5e4c4c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'c8369e134aea7780f8d6ec8d31e7ea83') in 0.005948 seconds
+Start importing Assets/Images/common_google_signin_btn_text_light_normal_background.9_2.png using Guid(fc513e667c556f44aab059fced8fc186) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '577be9b6bf24fe1cb6a952b80e9bff94') in 0.008585 seconds
+Start importing Assets/Images/common_google_signin_btn_icon_dark_normal_background.9.png using Guid(fc2bfc1d8cc7a8d488031666ecaa4afa) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '037769c64b87eedf5b8316d065a6dba0') in 0.005705 seconds
+Start importing Assets/Images/common_google_signin_btn_icon_light_normal_background.9_3.png using Guid(1d4d86d6fe284544abf7ca42e85d79b0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '38c59432fd4a6abac4fd6ed9b54fe55e') in 0.007079 seconds
+Start importing Assets/Images/common_google_signin_btn_text_light_normal_background.9.png using Guid(5dcaab5c55f524646bc1dc2886df54f1) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '11187b32327d1e9149db47592c2606a6') in 0.006297 seconds
+Start importing Assets/Images/notification_bg_normal_pressed.9.png using Guid(7d65db50763f3134aab1249142bc7dc0) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '11ba11a1d346273214e15f0e9c161268') in 0.006079 seconds
+Start importing Assets/Images/notification_bg_low_pressed.9_2.png using Guid(7def5d1a05391c54bbc448f70a77179b) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '490ac1a4e959a4195039a70735c4d1a3') in 0.005752 seconds
+Start importing Assets/Images/app_icon_5.png using Guid(ed9c3fbbd87237b46833077964392881) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '93e3d2283ce21a6318503513c5956a0a') in 0.010847 seconds
+Start importing Assets/Images/googleg_disabled_color_18_2.png using Guid(4eec1aa4642bdcf43ac9f5150b176e1c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'a20a69c088b68394677762ed177a053e') in 0.005652 seconds
+Start importing Assets/Images/notification_bg_normal.9_2.png using Guid(cefc24450e489f8479bf2b6e8780649f) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '42d518082cfef6bdf2ae5b19f7ae2b0f') in 0.009351 seconds
+Start importing Assets/Images/common_google_signin_btn_icon_dark_normal_background.9_1.png using Guid(3f3f8bafb079fae49b0087e6df3bdeed) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: 'f86689e8884093750b41ecf4ccff8510') in 0.005908 seconds
+Start importing Assets/Images/app_icon_round_4.png using Guid(4ff6b98b96687f74792fc44312fb2b66) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '1563b8948a35db2f8b9535515e6f429f') in 0.008892 seconds
+Start importing Assets/Images/notify_panel_notification_icon_bg_1.png using Guid(ff55b07057f4c9f4dab0306912cea94c) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '4a968fc1352487d0b30553db4772bb98') in 0.005393 seconds
+Loading style catalogs (6)
+	StyleSheets/Extensions/base/common.uss
+	UIPackageResources/StyleSheets/Default/Variables/Public/common.uss
+	StyleSheets/Northstar/common.uss
+	StyleSheets/Extensions/fonts/inter.uss
+	StyleSheets/Extensions/base/dark.uss
+	UIPackageResources/StyleSheets/Default/Northstar/Palette/dark.uss
+Refreshing native plugins compatible for Editor in 5.90 ms, found 1 plugins.
+Preloading 1 native plugins for Editor in 0.30 ms.
+Asset Pipeline Refresh (id=6f33eaeaa0c54c042896d8ff9c6439aa): Total: 31.188 seconds - Initiated by InitialRefreshV2(ForceSynchronousImport)
+	Summary:
+		Imports: total=56 (actual=56, local cache=0, cache server=0)
+		Asset DB Process Time: managed=15 ms, native=1311 ms
+		Asset DB Callback time: managed=383 ms, native=15 ms
+		Scripting: domain reloads=1, domain reload time=7560 ms, compile time=21852 ms, other=48 ms
+		Project Asset Count: scripts=886, non-scripts=125
+		Asset File Changes: new=0, changed=3, moved=0, deleted=0
+		Scan Filter Count: 0
+	InvokeBeforeRefreshCallbacks: 2.433ms
+	ApplyChangesToAssetFolders: 0.083ms
+	Scan: 98.593ms
+	OnSourceAssetsModified: 4.571ms
+	GetAllGuidsForCategorization: 0.313ms
+	CategorizeAssets: 43.966ms
+	ImportOutOfDateAssets: 1529.167ms (-20861.135ms without children)
+		ImportManagerImport: 518.337ms (16.531ms without children)
+			ImportInProcess: 501.275ms
+			UpdateCategorizedAssets: 0.530ms
+		CompileScripts: 21851.915ms
+		ReloadNativeAssets: 0.001ms
+		UnloadImportedAssets: 16.442ms
+		ReloadImportedAssets: 2.265ms
+		EnsureUptoDateAssetsAreRegisteredWithGuidPM: 0.496ms
+		InitializingProgressBar: 0.032ms
+		PostProcessAllAssetNotificationsAddChangedAssets: 0.018ms
+		OnDemandSchedulerStart: 0.795ms
+	PostProcessAllAssets: 383.812ms
+	Hotreload: 8.407ms
+	GatherAllCurrentPrimaryArtifactRevisions: 0.001ms
+	UnloadStreamsBegin: 1.275ms
+	PersistCurrentRevisions: 0.911ms
+	UnloadStreamsEnd: 0.011ms
+	GenerateScriptTypeHashes: 1.024ms
+	Untracked: 29114.468ms
+Application.AssetDatabase Initial Refresh End
+Scanning for USB devices : 9.347ms
+Initializing Unity extensions:
+[Licensing::Client] Successfully resolved entitlement details
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-はい！ドーン！
+[PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ProgressiveSceneManager::Cancel()
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 26 unused Assets / (470.0 KB). Loaded Objects now: 1136.
+Memory consumption went from 89.8 MB to 89.3 MB.
+Total: 9.740200 ms (FindLiveObjects: 0.169600 ms CreateObjectMapping: 0.057000 ms MarkObjects: 9.068000 ms  DeleteObjects: 0.444000 ms)
+
+WebRTC apps require a target architecture to be set ARM64. Currently set to ARMv7
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Unity.WebRTC.Editor.PreprocessBuild:EnsureAndroidArchitecture () (at ./Library/PackageCache/com.unity.webrtc@3.0.0/Editor/BuildProcessor.cs:91)
+Unity.WebRTC.Editor.PreprocessBuild:UnityEditor.Build.IPreprocessBuildWithReport.OnPreprocessBuild (UnityEditor.Build.Reporting.BuildReport) (at ./Library/PackageCache/com.unity.webrtc@3.0.0/Editor/BuildProcessor.cs:56)
+UnityEditor.Build.BuildPipelineInterfaces/<>c__DisplayClass16_0:<OnBuildPreProcess>b__1 (UnityEditor.Build.IPreprocessBuildWithReport)
+UnityEditor.Build.BuildPipelineInterfaces:InvokeCallbackInterfacesPair<UnityEditor.Build.IPreprocessBuild, UnityEditor.Build.IPreprocessBuildWithReport> (System.Collections.Generic.List`1<UnityEditor.Build.IPreprocessBuild>,System.Action`1<UnityEditor.Build.IPreprocessBuild>,System.Collections.Generic.List`1<UnityEditor.Build.IPreprocessBuildWithReport>,System.Action`1<UnityEditor.Build.IPreprocessBuildWithReport>,bool)
+UnityEditor.Build.BuildPipelineInterfaces:OnBuildPreProcess (UnityEditor.Build.Reporting.BuildReport)
+UnityEditor.BuildPipeline:BuildPlayerInternal (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (UnityEditor.BuildPlayerOptions)
+Trae.Editor.BuildScript:BuildAndroid () (at Assets/Trae/Editor/BuildScript.cs:20)
+
+(Filename: ./Library/PackageCache/com.unity.webrtc@3.0.0/Editor/BuildProcessor.cs Line: 91)
+
+WebRTC apps require a internet permission on Android devices.Please check the "Internet Access" on your Build Settings.
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+Unity.WebRTC.Editor.PreprocessBuild:EnsureAndroidInternetPermission () (at ./Library/PackageCache/com.unity.webrtc@3.0.0/Editor/BuildProcessor.cs:101)
+Unity.WebRTC.Editor.PreprocessBuild:UnityEditor.Build.IPreprocessBuildWithReport.OnPreprocessBuild (UnityEditor.Build.Reporting.BuildReport) (at ./Library/PackageCache/com.unity.webrtc@3.0.0/Editor/BuildProcessor.cs:57)
+UnityEditor.Build.BuildPipelineInterfaces/<>c__DisplayClass16_0:<OnBuildPreProcess>b__1 (UnityEditor.Build.IPreprocessBuildWithReport)
+UnityEditor.Build.BuildPipelineInterfaces:InvokeCallbackInterfacesPair<UnityEditor.Build.IPreprocessBuild, UnityEditor.Build.IPreprocessBuildWithReport> (System.Collections.Generic.List`1<UnityEditor.Build.IPreprocessBuild>,System.Action`1<UnityEditor.Build.IPreprocessBuild>,System.Collections.Generic.List`1<UnityEditor.Build.IPreprocessBuildWithReport>,System.Action`1<UnityEditor.Build.IPreprocessBuildWithReport>,bool)
+UnityEditor.Build.BuildPipelineInterfaces:OnBuildPreProcess (UnityEditor.Build.Reporting.BuildReport)
+UnityEditor.BuildPipeline:BuildPlayerInternal (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (UnityEditor.BuildPlayerOptions)
+Trae.Editor.BuildScript:BuildAndroid () (at Assets/Trae/Editor/BuildScript.cs:20)
+
+(Filename: ./Library/PackageCache/com.unity.webrtc@3.0.0/Editor/BuildProcessor.cs Line: 101)
+
+Start importing ProjectSettings/ProjectSettings.asset using Guid(00000000000000004000000000000000) Importer(-1,00000000000000000000000000000000) [PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+ -> (artifact id: '04975c8b3a0893ef2f31e4ecb7603092') in 0.008170 seconds
+Refreshing native plugins compatible for Editor in 4.64 ms, found 1 plugins.
+Preloading 1 native plugins for Editor in 0.21 ms.
+Asset Pipeline Refresh (id=c4ad61ad3ded28a46b404ac32209eeb5): Total: 0.032 seconds - Initiated by StopAssetImportingV2(NoUpdateAssetOptions)
+DisplayProgressbar: Checking prerequisites
+You are making an Android IL2CPP build, but it does not have native 64-bit support.
+It is recommended to enable ARM64 in Player Settings: Target Architecture in to natively support 64-bit devices.
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogWarning (object)
+UnityEditor.Android.PostProcessor.Tasks.CheckPrerequisites:Execute (UnityEditor.Android.PostProcessor.PostProcessorContext) (at /home/bokken/build/output/unity/unity/PlatformDependent/AndroidPlayer/Editor/Managed/PostProcessor/Tasks/CheckPrerequisites.cs:96)
+UnityEditor.Android.PostProcessor.PostProcessRunner:RunAllTasks (UnityEditor.Android.PostProcessor.PostProcessorContext) (at /home/bokken/build/output/unity/unity/PlatformDependent/AndroidPlayer/Editor/Managed/PostProcessor/AndroidPostProcessor.cs:112)
+UnityEditor.Android.PostProcessAndroidPlayer:PrepareForBuild (UnityEditor.BuildPlayerOptions) (at /home/bokken/build/output/unity/unity/PlatformDependent/AndroidPlayer/Editor/Managed/PostProcessAndroidPlayer.cs:58)
+UnityEditor.Android.AndroidBuildPostprocessor:PrepareForBuild (UnityEditor.BuildPlayerOptions) (at /home/bokken/build/output/unity/unity/PlatformDependent/AndroidPlayer/Editor/Managed/ExtensionModule.cs:1004)
+UnityEditor.PostprocessBuildPlayer:PrepareForBuild (UnityEditor.BuildPlayerOptions)
+UnityEditor.BuildPipeline:BuildPlayerInternal (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (UnityEditor.BuildPlayerOptions)
+Trae.Editor.BuildScript:BuildAndroid () (at Assets/Trae/Editor/BuildScript.cs:20)
+
+(Filename: /home/bokken/build/output/unity/unity/PlatformDependent/AndroidPlayer/Editor/Managed/PostProcessor/Tasks/CheckPrerequisites.cs Line: 96)
+
+Android PostProcess task "Checking prerequisites" took 43.3863 ms
+DisplayProgressbar: Detect Java Development Kit (JDK)
+Android PostProcess task "Detect Java Development Kit (JDK)" took 657.8856 ms
+DisplayProgressbar: Detecting Android SDK
+AndroidSDKTools:
+
+	root          : C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\PlaybackEngines\AndroidPlayer\SDK
+	cmdline-tools : C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\PlaybackEngines\AndroidPlayer\SDK\cmdline-tools\6.0
+	platform-tools: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\PlaybackEngines\AndroidPlayer\SDK\platform-tools
+	build-tools   : C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\PlaybackEngines\AndroidPlayer\SDK\build-tools\34.0.0
+
+	adb           : C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\PlaybackEngines\AndroidPlayer\SDK\platform-tools\adb.exe
+
+Android PostProcess task "Detecting Android SDK" took 16434.3572 ms
+DisplayProgressbar: Detect Android NDK
+Android PostProcess task "Detect Android NDK" took 28.9142 ms
+Android PostProcess task "Trying to find a suitable Android device" took 0.9138 ms
+DisplayProgressbar: Checking Graphics API compatibility
+Android PostProcess task "Checking Graphics API compatibility" took 2.3244 ms
+DisplayProgressbar: Check resources
+Android PostProcess task "Check resources" took 0.6556 ms
+DisplayProgressbar: Check Android Player Settings
+Android PostProcess task "Check Android Player Settings" took 0.619 ms
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.14 seconds
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aESkipCompile.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssembliesAndTypeDB
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 4 Duration: 0s91ms
+[             ] Require frontend run.  Library/Bee/1900b0aESkipCompile.dag couldn't be loaded
+DisplayProgressbar: Compiling Scripts
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\Tools\netcorerun\netcorerun.exe "C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\Tools\BuildPipeline\ScriptCompilationBuildProgram.exe" "Library/Bee/1900b0aESkipCompile.dag.json" "Library/Bee/1900b0aESkipCompile-inputdata.json" "Library\Bee\buildprogram0.traceevents"
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 0 Duration: 0s552ms
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1900b0aESkipCompile.dag" --continue-on-failure --dagfilejson="Library\Bee\1900b0aESkipCompile.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssembliesAndTypeDB
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 0 Duration: 1s590ms
+Finished compiling graph: 4 nodes, 5 flattened edges (5 ToBuild, 0 ToUse), maximum node priority 3
+[2/3        1s] BuildPlayerDataGenerator Library/BuildPlayerData/Editor/TypeDb-All.json
+*** Tundra build success (1.52 seconds), 1 items updated, 3 evaluated
+Asset Pipeline Refresh (id=7072d73e1886f8348a5e95191d897826): Total: 0.009 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+[ScriptCompilation] Requested script compilation because: Recompiling scripts for player build.
+BuildPlayer: start building target 13
+[Licensing::Client] Successfully resolved entitlement details
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1300b0aP.dag" --continue-on-failure --profile="Library/Bee/backend1.traceevents" ScriptAssembliesAndTypeDB
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 4 Duration: 0s71ms
+[             ] Require frontend run.  Library/Bee/1300b0aP.dag couldn't be loaded
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\Tools\netcorerun\netcorerun.exe "C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\Tools\BuildPipeline\ScriptCompilationBuildProgram.exe" "Library/Bee/1300b0aP.dag.json" "Library/Bee/1300b0aP-inputdata.json" "Library\Bee\buildprogram0.traceevents"
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 0 Duration: 0s652ms
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\bee_backend.exe --ipc --defer-dag-verification --dagfile="Library/Bee/1300b0aP.dag" --continue-on-failure --dagfilejson="Library\Bee\1300b0aP.dag.json" --profile="Library/Bee/backend2.traceevents" ScriptAssembliesAndTypeDB
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 0 Duration: 9s475ms
+Finished compiling graph: 158 nodes, 1186 flattened edges (1080 ToBuild, 22 ToUse), maximum node priority 74
+[  1/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.RuntimeInitializeOnLoadManagerInitializerModule.dll_116709D1AB79E3DF.mvfrm
+[  2/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SubstanceModule.dll_9560C9E6CE6B04CD.mvfrm
+[  3/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GIModule.dll_FB4FB568F5E03609.mvfrm
+[  4/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ClothModule.dll_CDF6BE26D0C94717.mvfrm
+[  5/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GridModule.dll_36AF7BE2BFFC521D.mvfrm
+[  6/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.DirectorModule.dll_DBE8FC3EC398E3C3.mvfrm
+[  7/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.JSONSerializeModule.dll_D8239E479D40B025.mvfrm
+[  8/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.StreamingModule.dll_B8B5B59D831806BF.mvfrm
+[  9/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SpriteShapeModule.dll_739CFF5538E708D9.mvfrm
+[ 10/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ProfilerModule.dll_0E2F35755CF26AD0.mvfrm
+[ 11/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.HotReloadModule.dll_856986530EC36B03.mvfrm
+[ 12/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.LocalizationModule.dll_C939F806B19042F0.mvfrm
+[ 13/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.CrashReportingModule.dll_C50F835D8DF2637E.mvfrm
+[ 14/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TerrainPhysicsModule.dll_189C757D1546E999.mvfrm
+[ 15/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ScreenCaptureModule.dll_F20B4BCCB1ACDC87.mvfrm
+[ 16/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SharedInternalsModule.dll_4540ED1C323F4B7E.mvfrm
+[ 17/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.dll_2410C17EC36BF48F.mvfrm
+[ 18/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.InputModule.dll_CD8428DC6CE48CD7.mvfrm
+[ 19/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.Physics2DModule.dll_50C6B83DD48D4716.mvfrm
+[ 20/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PerformanceReportingModule.dll_AC62B3AD8ED8F6E5.mvfrm
+[ 21/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ImageConversionModule.dll_C12FAE46BB11502E.mvfrm
+[ 22/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TilemapModule.dll_4825D7272C3F915B.mvfrm
+[ 23/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.GameCenterModule.dll_A4C72C0BDCA0FC1E.mvfrm
+[ 24/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PhysicsModule.dll_8EE2F4373EC46764.mvfrm
+[ 25/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SpriteMaskModule.dll_8DF39E9BFE109198.mvfrm
+[ 26/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextRenderingModule.dll_1B4ABDD768E45C7C.mvfrm
+[ 27/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.SubsystemsModule.dll_F8A104FDCC5879AB.mvfrm
+[ 28/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ContentLoadModule.dll_F3522B3B51C778BC.mvfrm
+[ 29/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.InputLegacyModule.dll_EB80ED191B3686C0.mvfrm
+[ 30/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/UnityEngine.UI.UnityAdditionalFile.txt
+[ 31/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/UnityEngine.UI.rsp2
+[ 32/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/UnityEngine.UI.dll.mvfrm.rsp
+[ 33/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/UnityEngine.UI.rsp
+[ 34/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Core.UnityAdditionalFile.txt
+[ 35/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Core.rsp2
+[ 36/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Core.dll.mvfrm.rsp
+[ 37/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Core.rsp
+[ 38/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Input.rsp2
+[ 39/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Audio.rsp2
+[ 40/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Audio.UnityAdditionalFile.txt
+[ 41/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Input.UnityAdditionalFile.txt
+[ 42/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Data.rsp2
+[ 43/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Data.UnityAdditionalFile.txt
+[ 44/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Input.dll.mvfrm.rsp
+[ 45/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Data.dll.mvfrm.rsp
+[ 46/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Audio.dll.mvfrm.rsp
+[ 47/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Audio.rsp
+[ 48/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Input.rsp
+[ 49/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Data.rsp
+[ 50/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Unity.WebRTC.rsp2
+[ 51/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Unity.WebRTC.UnityAdditionalFile.txt
+[ 52/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Gameplay.rsp2
+[ 53/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Gameplay.UnityAdditionalFile.txt
+[ 54/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Unity.WebRTC.dll.mvfrm.rsp
+[ 55/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Gameplay.dll.mvfrm.rsp
+[ 56/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Unity.WebRTC.rsp
+[ 57/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextCoreFontEngineModule.dll_F28495D3884FEAE4.mvfrm
+[ 58/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Voice.rsp2
+[ 59/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Gameplay.rsp
+[ 60/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Voice.UnityAdditionalFile.txt
+[ 61/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.UI.rsp2
+[ 62/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.UI.UnityAdditionalFile.txt
+[ 63/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Voice.dll.mvfrm.rsp
+[ 64/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.UI.dll.mvfrm.rsp
+[ 65/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.UI.rsp
+[ 66/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Trae.Voice.rsp
+[ 67/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Assembly-CSharp.rsp2
+[ 68/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Assembly-CSharp.dll.mvfrm.rsp
+[ 69/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/UnityEngine.TestRunner.dll.mvfrm.rsp
+[ 70/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/UnityEngine.TestRunner.rsp2
+[ 71/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/UnityEngine.TestRunner.UnityAdditionalFile.txt
+[ 72/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Assembly-CSharp.UnityAdditionalFile.txt
+[ 73/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/Assembly-CSharp.rsp
+[ 74/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ParticleSystemModule.dll_1821CCA9FC03EF0C.mvfrm
+[ 75/157    0s] WriteText Library/Bee/artifacts/1300b0aP.dag/UnityEngine.TestRunner.rsp
+[ 76/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TerrainModule.dll_A9296FA61482B052.mvfrm
+[ 77/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.PropertiesModule.dll_D2026B4A4F8C605A.mvfrm
+[ 78/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TextCoreTextEngineModule.dll_3A6CCC4517D3A402.mvfrm
+[ 79/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.IMGUIModule.dll_9F6E0092BCDDFC14.mvfrm
+[ 80/157    1s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.CoreModule.dll_593E5FF4A7A7BC26.mvfrm
+[ 81/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.WindModule.dll_CF8D3B1D38DE3A8F.mvfrm
+[ 82/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.ARModule.dll_1C86315EB74EACB8.mvfrm
+[ 83/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AssetBundleModule.dll_5A3BD1FA8344D0CF.mvfrm
+[ 84/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VehiclesModule.dll_53ABF5BE3DC2B35E.mvfrm
+[ 85/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AccessibilityModule.dll_780C150B9E054F9B.mvfrm
+[ 86/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VideoModule.dll_8C17E596B93E83D8.mvfrm
+[ 87/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AudioModule.dll_670E612BF6AC6833.mvfrm
+[ 88/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VFXModule.dll_092465D21F3DA8A5.mvfrm
+[ 89/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityTestProtocolModule.dll_6572F7A3AC2B0CDC.mvfrm
+[ 90/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestTextureModule.dll_B9AC5817CC6918F2.mvfrm
+[ 91/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AnimationModule.dll_0420C84D33904F81.mvfrm
+[ 92/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestWWWModule.dll_052F11A10793606E.mvfrm
+[ 93/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AIModule.dll_63136C5B5A314DEF.mvfrm
+[ 94/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.XRModule.dll_E417F412E16D2671.mvfrm
+[ 95/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestAssetBundleModule.dll_97C06F002C62E9D9.mvfrm
+[ 96/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.VRModule.dll_B159310E5832D913.mvfrm
+[ 97/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.DSPGraphModule.dll_E13A5DA835F9B4E4.mvfrm
+[ 98/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UmbraModule.dll_E1E30D4483D313A6.mvfrm
+[ 99/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestAudioModule.dll_245F078C1543C17D.mvfrm
+[100/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.AndroidJNIModule.dll_7A79E1F116600B2D.mvfrm
+[101/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityConnectModule.dll_F8B03CAD63147DDC.mvfrm
+[102/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityCurlModule.dll_373D697EA3A4416E.mvfrm
+[103/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityAnalyticsCommonModule.dll_47A170F1A8C19543.mvfrm
+[104/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.TLSModule.dll_8845CD6348D03F38.mvfrm
+[105/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UIModule.dll_5E870A88B678539B.mvfrm
+[106/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityWebRequestModule.dll_D2CEB5F0C605EAAD.mvfrm
+[107/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UnityAnalyticsModule.dll_37C13D73A82B4108.mvfrm
+[108/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UIElementsModule.dll_FCDF6665CF84B5A2.mvfrm
+[109/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/UnityEngine.UI.dll.mvfrm
+[110/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/UnityEngine.TestRunner.dll.mvfrm
+[111/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/UnityEngine.TestRunner.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1300b0aP.dag/UnityEngine.TestRunner.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[112/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/UnityEngine.TestRunner.pdb
+[113/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/UnityEngine.UI.dll (+2 others)
+[114/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/UnityEngine.TestRunner.dll
+[           0s] Csc Library/Bee/artifacts/1300b0aP.dag/UnityEngine.UI.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[115/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/UnityEngine.UI.pdb
+[116/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/UnityEngine.UI.dll
+[117/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/UnityEngine.UI.ref.dll_AFC2E85BC2EDBC0B.mvfrm
+[118/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/Trae.Core.dll.mvfrm
+[119/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/Unity.WebRTC.dll.mvfrm
+[120/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/Trae.Gameplay.dll.mvfrm
+[121/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/Trae.Voice.dll.mvfrm
+[122/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/Trae.Audio.dll.mvfrm
+[123/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/Trae.UI.dll.mvfrm
+[124/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/Trae.Data.dll.mvfrm
+[125/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/Trae.Input.dll.mvfrm
+[126/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/Trae.Voice.dll (+2 others)
+[127/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Voice.pdb
+[128/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/Trae.Core.dll (+2 others)
+[129/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Voice.dll
+[130/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Core.dll
+[131/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Core.pdb
+[132/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/Unity.WebRTC.dll (+2 others)
+[           0s] Csc Library/Bee/artifacts/1300b0aP.dag/Unity.WebRTC.dll (+2 others) [CacheWrite 00000000000000000000000000000003]
+[133/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Unity.WebRTC.pdb
+[134/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Unity.WebRTC.dll
+[135/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/Trae.Input.dll (+2 others)
+Assets\Trae\Scripts\TouchProcessor.cs(12,40): warning CS0414: The field 'TouchProcessor.touchSensitivity' is assigned but its value is never used
+[136/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Input.pdb
+[137/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/Trae.Audio.dll (+2 others)
+Assets\Trae\Scripts\Audio\AudioManager.cs(19,40): warning CS0414: The field 'AudioManager.defaultFadeDuration' is assigned but its value is never used
+[138/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Input.dll
+[139/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Audio.pdb
+[140/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/Trae.Data.dll (+2 others)
+[141/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Audio.dll
+[142/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Data.pdb
+[143/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Data.dll
+[144/157    0s] MovedFromExtractor Library/Bee/artifacts/mvdfrm/Unity.WebRTC.ref.dll_6DDC5F2117A79DC6.mvfrm
+[145/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/Trae.Gameplay.dll (+2 others)
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(5,7): warning CS0105: The using directive for 'UnityEngine.SceneManagement' appeared previously in this namespace
+
+Assets\Trae\Scripts\Gameplay\HaiDoonGameManager.cs(43,34): warning CS0067: The event 'HaiDoonGameManager.OnScoreUpdated' is never used
+
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(16,41): warning CS0414: The field 'GameSceneManager.gameplaySceneName' is assigned but its value is never used
+
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(15,41): warning CS0414: The field 'GameSceneManager.mainMenuSceneName' is assigned but its value is never used
+[146/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Gameplay.pdb
+[147/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.Gameplay.dll
+[148/157    0s] MovedFromExtractorCombine Library/Bee/artifacts/1300b0aP.dag/Assembly-CSharp.dll.mvfrm
+[149/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/Trae.UI.dll (+2 others)
+[150/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.UI.pdb
+[151/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Trae.UI.dll
+[152/157    0s] Csc Library/Bee/artifacts/1300b0aP.dag/Assembly-CSharp.dll (+2 others)
+[153/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Assembly-CSharp.pdb
+[154/157    0s] CopyFiles Library/Bee/PlayerScriptAssemblies/Assembly-CSharp.dll
+[156/157    0s] BuildPlayerDataGenerator Library/BuildPlayerData/Player/RuntimeInitializeOnLoads.json (+1 other)
+*** Tundra build success (9.40 seconds), 155 items updated, 157 evaluated
+Assets\Trae\Scripts\TouchProcessor.cs(12,40): warning CS0414: The field 'TouchProcessor.touchSensitivity' is assigned but its value is never used
+Assets\Trae\Scripts\Audio\AudioManager.cs(19,40): warning CS0414: The field 'AudioManager.defaultFadeDuration' is assigned but its value is never used
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(5,7): warning CS0105: The using directive for 'UnityEngine.SceneManagement' appeared previously in this namespace
+Assets\Trae\Scripts\Gameplay\HaiDoonGameManager.cs(43,34): warning CS0067: The event 'HaiDoonGameManager.OnScoreUpdated' is never used
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(16,41): warning CS0414: The field 'GameSceneManager.gameplaySceneName' is assigned but its value is never used
+Assets\Trae\Scripts\Gameplay\GameSceneManager.cs(15,41): warning CS0414: The field 'GameSceneManager.mainMenuSceneName' is assigned but its value is never used
+Rebuilding Data files because they were built with a different Unity version 2022.3.62f2 vs 2022.3.52f1
+[Licensing::Client] Successfully resolved entitlement details
+[Licensing::Client] Successfully resolved entitlement details
+Refreshing native plugins compatible for Editor in 5.21 ms, found 1 plugins.
+Preloading 1 native plugins for Editor in 0.21 ms.
+Asset Pipeline Refresh (id=a80492c1e6f341240b2e2314ad91c021): Total: 0.038 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=c36456386c72036408a035a9fd484ee6): Total: 0.014 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+Asset Pipeline Refresh (id=137d2876aacc7a047909510a00cb9f4c): Total: 0.013 seconds - Initiated by RefreshV2(NoUpdateAssetOptions)
+Opening scene 'Assets/Trae/Scenes/BootScene.unity'
+[PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/Trae/Scenes/BootScene.unity'
+	Deserialize:            9.045 ms
+	Integration:            12.629 ms
+	Integration of assets:  0.011 ms
+	Thread Wait Time:       0.038 ms
+	Total Operation Time:   21.723 ms
+Unloading 27 unused Assets / (0.7 MB). Loaded Objects now: 1186.
+Memory consumption went from 91.2 MB to 90.5 MB.
+Total: 9.625700 ms (FindLiveObjects: 0.161800 ms CreateObjectMapping: 0.041900 ms MarkObjects: 8.811900 ms  DeleteObjects: 0.609000 ms)
+
+Created GICache directory at C:/Users/User/AppData/LocalLow/Unity/Caches/GiCache. Took: 0.090s, timestamps: [103.236 - 103.326]
+gi::BakeBackendSwitch: switching bake backend from 3 to 1.
+GfxDevice renderer is null. Unity cannot update the Ambient Probe and Reflection Probes that the SkyManager generates. Run the Editor without the -nographics argument or generate lighting for your scene.
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEditor.BuildPipeline:BuildPlayerInternal (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (UnityEditor.BuildPlayerOptions)
+Trae.Editor.BuildScript:BuildAndroid () (at Assets/Trae/Editor/BuildScript.cs:20)
+
+[Assets/Trae/Editor/BuildScript.cs line 20]
+
+Script attached to 'GameManager' in scene 'Assets/Trae/Scenes/BootScene.unity' is missing or no valid script is attached.
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEditor.BuildPipeline:BuildPlayerInternal (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (UnityEditor.BuildPlayerOptions)
+Trae.Editor.BuildScript:BuildAndroid () (at Assets/Trae/Editor/BuildScript.cs:20)
+
+[Assets/Trae/Editor/BuildScript.cs line 20]
+
+Opening scene 'Assets/Trae/Scenes/MainScene.unity'
+[PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+Loaded scene 'Assets/Trae/Scenes/MainScene.unity'
+	Deserialize:            1.880 ms
+	Integration:            8.814 ms
+	Integration of assets:  0.003 ms
+	Thread Wait Time:       0.035 ms
+	Total Operation Time:   10.732 ms
+Unloading 17 unused Assets / (0.7 MB). Loaded Objects now: 1188.
+Memory consumption went from 91.2 MB to 90.5 MB.
+Total: 9.157200 ms (FindLiveObjects: 0.154000 ms CreateObjectMapping: 0.042700 ms MarkObjects: 8.389800 ms  DeleteObjects: 0.569500 ms)
+
+GfxDevice renderer is null. Unity cannot update the Ambient Probe and Reflection Probes that the SkyManager generates. Run the Editor without the -nographics argument or generate lighting for your scene.
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEditor.BuildPipeline:BuildPlayerInternal (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (string[],string,string,UnityEditor.BuildTargetGroup,UnityEditor.BuildTarget,int,UnityEditor.BuildOptions,string[])
+UnityEditor.BuildPipeline:BuildPlayer (UnityEditor.BuildPlayerOptions)
+Trae.Editor.BuildScript:BuildAndroid () (at Assets/Trae/Editor/BuildScript.cs:20)
+
+[Assets/Trae/Editor/BuildScript.cs line 20]
+
+
+
+Mono dependencies included in the build
+Dependency assembly - System.Net.AuthenticationManager.dll
+Dependency assembly - System.Reflection.DispatchProxy.dll
+Dependency assembly - System.Linq.dll
+Dependency assembly - Accessibility.dll
+Dependency assembly - System.IO.FileSystem.Watcher.dll
+Dependency assembly - System.Reflection.Emit.ILGeneration.dll
+Dependency assembly - System.Runtime.InteropServices.RuntimeInformation.dll
+Dependency assembly - System.Runtime.InteropServices.dll
+Dependency assembly - System.IdentityModel.Selectors.dll
+Dependency assembly - System.Net.Security.dll
+Dependency assembly - System.Net.WebSockets.Client.dll
+Dependency assembly - System.Runtime.Serialization.Json.dll
+Dependency assembly - System.Reflection.Context.dll
+Dependency assembly - System.Net.NetworkInformation.dll
+Dependency assembly - System.Messaging.dll
+Dependency assembly - System.dll
+Dependency assembly - System.ComponentModel.Primitives.dll
+Dependency assembly - System.Diagnostics.TextWriterTraceListener.dll
+Dependency assembly - System.Security.Cryptography.Primitives.dll
+Dependency assembly - System.Security.Cryptography.Csp.dll
+Dependency assembly - System.Management.dll
+Dependency assembly - System.Windows.Forms.dll
+Dependency assembly - System.Net.ServicePoint.dll
+Dependency assembly - System.Security.Cryptography.Encryption.ECDsa.dll
+Dependency assembly - System.Runtime.Numerics.dll
+Dependency assembly - System.ServiceModel.Primitives.dll
+Dependency assembly - System.ServiceModel.Web.dll
+Dependency assembly - System.DirectoryServices.dll
+Dependency assembly - System.Reflection.Primitives.dll
+Dependency assembly - System.Collections.Concurrent.dll
+Dependency assembly - System.Security.Cryptography.OpenSsl.dll
+Dependency assembly - System.Data.Linq.dll
+Dependency assembly - System.DirectoryServices.Protocols.dll
+Dependency assembly - System.Diagnostics.TraceEvent.dll
+Dependency assembly - System.ComponentModel.EventBasedAsync.dll
+Dependency assembly - System.Net.WebHeaderCollection.dll
+Dependency assembly - System.IO.FileSystem.dll
+Dependency assembly - System.Net.Requests.dll
+Dependency assembly - System.ServiceProcess.ServiceController.dll
+Dependency assembly - System.Runtime.InteropServices.WindowsRuntime.dll
+Dependency assembly - System.ServiceProcess.dll
+Dependency assembly - System.Net.WebSockets.dll
+Dependency assembly - UnityEngine.UI.dll
+Dependency assembly - System.Configuration.dll
+Dependency assembly - System.Security.AccessControl.dll
+Dependency assembly - System.Diagnostics.Debug.dll
+Dependency assembly - System.Windows.Forms.DataVisualization.dll
+Dependency assembly - System.Collections.NonGeneric.dll
+Dependency assembly - System.Xaml.dll
+Dependency assembly - System.EnterpriseServices.dll
+Dependency assembly - System.Runtime.DurableInstancing.dll
+Dependency assembly - System.Web.DynamicData.dll
+Dependency assembly - System.Security.Cryptography.ProtectedData.dll
+Dependency assembly - System.Security.Cryptography.X509Certificates.dll
+Dependency assembly - Trae.Audio.dll
+Dependency assembly - System.Collections.dll
+Dependency assembly - System.Web.dll
+Dependency assembly - System.ServiceModel.dll
+Dependency assembly - System.Resources.ReaderWriter.dll
+Dependency assembly - System.Net.Cache.dll
+Dependency assembly - System.ServiceModel.Discovery.dll
+Dependency assembly - System.Web.Extensions.Design.dll
+Dependency assembly - System.Linq.Parallel.dll
+Dependency assembly - System.IO.IsolatedStorage.dll
+Dependency assembly - System.Xml.Xsl.Primitives.dll
+Dependency assembly - System.Runtime.Remoting.dll
+Dependency assembly - System.Diagnostics.Contracts.dll
+Dependency assembly - System.Xml.XmlSerializer.dll
+Dependency assembly - Assembly-CSharp.dll
+Dependency assembly - Trae.Core.dll
+Dependency assembly - Mono.Security.dll
+Dependency assembly - System.Xml.Linq.dll
+Dependency assembly - System.Drawing.Design.dll
+Dependency assembly - System.Linq.Expressions.dll
+Dependency assembly - System.Runtime.Loader.dll
+Dependency assembly - System.Resources.Reader.dll
+Dependency assembly - System.Transactions.dll
+Dependency assembly - System.ServiceModel.Security.dll
+Dependency assembly - System.Data.Services.dll
+Dependency assembly - System.Linq.Queryable.dll
+Dependency assembly - System.Reflection.Emit.Lightweight.dll
+Dependency assembly - System.ServiceModel.Http.dll
+Dependency assembly - System.Resources.Writer.dll
+Dependency assembly - System.IO.UnmanagedMemoryStream.dll
+Dependency assembly - System.Threading.Overlapped.dll
+Dependency assembly - System.Xml.dll
+Dependency assembly - System.Xml.XDocument.dll
+Dependency assembly - System.Xml.XPath.XmlDocument.dll
+Dependency assembly - Microsoft.Win32.Registry.dll
+Dependency assembly - System.ComponentModel.TypeConverter.dll
+Dependency assembly - System.Xml.XPath.XDocument.dll
+Dependency assembly - Microsoft.CSharp.dll
+Dependency assembly - System.Security.Cryptography.Hashing.Algorithms.dll
+Dependency assembly - System.Windows.dll
+Dependency assembly - System.Net.Utilities.dll
+Dependency assembly - System.ComponentModel.DataAnnotations.dll
+Dependency assembly - System.IO.Compression.FileSystem.dll
+Dependency assembly - System.Security.Cryptography.Encoding.dll
+Dependency assembly - System.Text.Encoding.CodePages.dll
+Dependency assembly - System.Buffers.dll
+Dependency assembly - System.Xml.Serialization.dll
+Dependency assembly - System.Security.Cryptography.RSA.dll
+Dependency assembly - System.Net.Ping.dll
+Dependency assembly - System.Configuration.Install.dll
+Dependency assembly - System.Resources.ResourceManager.dll
+Dependency assembly - System.IO.Compression.dll
+Dependency assembly - System.IO.FileSystem.DriveInfo.dll
+Dependency assembly - System.Runtime.Extensions.dll
+Dependency assembly - System.Net.Primitives.dll
+Dependency assembly - System.Reflection.dll
+Dependency assembly - mscorlib.dll
+Dependency assembly - System.Dynamic.Runtime.dll
+Dependency assembly - Microsoft.Win32.Primitives.dll
+Dependency assembly - System.Xml.ReaderWriter.dll
+Dependency assembly - System.ComponentModel.dll
+Dependency assembly - System.ServiceModel.NetTcp.dll
+Dependency assembly - Microsoft.Win32.Registry.AccessControl.dll
+Dependency assembly - System.Web.Services.dll
+Dependency assembly - System.IO.Compression.ZipFile.dll
+Dependency assembly - System.ServiceModel.Activation.dll
+Dependency assembly - System.Web.RegularExpressions.dll
+Dependency assembly - System.Text.Encoding.Extensions.dll
+Dependency assembly - System.AppContext.dll
+Dependency assembly - System.Net.Http.WebRequest.dll
+Dependency assembly - System.Security.Cryptography.Pkcs.dll
+Dependency assembly - System.Threading.Tasks.dll
+Dependency assembly - Trae.Data.dll
+Dependency assembly - System.Net.Sockets.dll
+Dependency assembly - System.Security.SecureString.dll
+Dependency assembly - System.Net.Http.dll
+Dependency assembly - netstandard.dll
+Dependency assembly - System.ServiceModel.Internals.dll
+Dependency assembly - Trae.UI.dll
+Dependency assembly - System.Data.SqlClient.dll
+Dependency assembly - System.IO.dll
+Dependency assembly - System.Security.Principal.dll
+Dependency assembly - System.Data.Services.Client.dll
+Dependency assembly - System.ObjectModel.dll
+Dependency assembly - System.Diagnostics.StackTrace.dll
+Dependency assembly - System.Xml.XPath.dll
+Dependency assembly - System.Runtime.Caching.dll
+Dependency assembly - System.Diagnostics.Tracing.dll
+Dependency assembly - System.Design.dll
+Dependency assembly - System.Runtime.dll
+Dependency assembly - System.Drawing.dll
+Dependency assembly - System.Diagnostics.Tools.dll
+Dependency assembly - System.Text.RegularExpressions.dll
+Dependency assembly - System.Security.Cryptography.Algorithms.dll
+Dependency assembly - System.Numerics.dll
+Dependency assembly - System.Xml.XmlDocument.dll
+Dependency assembly - System.IO.MemoryMappedFiles.dll
+Dependency assembly - System.IO.FileSystem.AccessControl.dll
+Dependency assembly - System.Threading.Tasks.Parallel.dll
+Dependency assembly - Trae.Input.dll
+Dependency assembly - System.Numerics.Vectors.dll
+Dependency assembly - System.ComponentModel.Composition.dll
+Dependency assembly - System.IO.Pipes.dll
+Dependency assembly - System.Security.Cryptography.DeriveBytes.dll
+Dependency assembly - System.Globalization.dll
+Dependency assembly - System.Runtime.CompilerServices.VisualC.dll
+Dependency assembly - System.Net.Mail.dll
+Dependency assembly - System.Net.HttpListener.dll
+Dependency assembly - System.Globalization.Calendars.dll
+Dependency assembly - System.ValueTuple.dll
+Dependency assembly - System.Reflection.TypeExtensions.dll
+Dependency assembly - System.Reflection.Extensions.dll
+Dependency assembly - System.Security.Cryptography.Encryption.ECDiffieHellman.dll
+Dependency assembly - System.Data.Entity.dll
+Dependency assembly - System.Diagnostics.TraceSource.dll
+Dependency assembly - System.ComponentModel.Annotations.dll
+Dependency assembly - System.Net.NameResolution.dll
+Dependency assembly - System.Threading.Thread.dll
+Dependency assembly - System.Data.dll
+Dependency assembly - System.Runtime.Serialization.Formatters.Soap.dll
+Dependency assembly - System.Threading.Timer.dll
+Dependency assembly - System.Runtime.Serialization.Xml.dll
+Dependency assembly - System.IO.FileSystem.Primitives.dll
+Dependency assembly - System.IdentityModel.dll
+Dependency assembly - System.Runtime.Serialization.dll
+Dependency assembly - System.Text.Encoding.dll
+Dependency assembly - System.ServiceModel.Routing.dll
+Dependency assembly - System.Runtime.Handles.dll
+Dependency assembly - System.Runtime.Serialization.Primitives.dll
+Dependency assembly - System.Reflection.Emit.dll
+Dependency assembly - System.Security.dll
+Dependency assembly - System.ServiceModel.Duplex.dll
+Dependency assembly - System.Threading.Tasks.Extensions.dll
+Dependency assembly - System.Runtime.Serialization.Formatters.dll
+Dependency assembly - System.Data.OracleClient.dll
+Dependency assembly - System.Security.Principal.Windows.dll
+Dependency assembly - System.Console.dll
+Dependency assembly - System.Threading.ThreadPool.dll
+Dependency assembly - System.Diagnostics.Process.dll
+Dependency assembly - System.Web.ApplicationServices.dll
+Dependency assembly - System.Diagnostics.FileVersionInfo.dll
+Dependency assembly - System.Collections.Specialized.dll
+Dependency assembly - System.Security.Claims.dll
+Dependency assembly - System.Memory.dll
+Dependency assembly - System.Security.Cryptography.Hashing.dll
+Dependency assembly - System.Security.Cryptography.Encryption.Aes.dll
+Dependency assembly - Trae.Voice.dll
+Dependency assembly - System.Web.Extensions.dll
+Dependency assembly - Mono.Data.Tds.dll
+Dependency assembly - System.Net.dll
+Dependency assembly - System.Security.Cryptography.Encryption.dll
+Dependency assembly - System.Threading.dll
+Dependency assembly - Mono.Data.Sqlite.dll
+Dependency assembly - Trae.Gameplay.dll
+Dependency assembly - Unity.WebRTC.dll
+Dependency assembly - System.Core.dll
+Dependency assembly - System.Data.Common.dll
+Dependency assembly - System.Drawing.Primitives.dll
+Dependency assembly - System.Threading.AccessControl.dll
+Dependency assembly - System.Security.Cryptography.Cng.dll
+Dependency assembly - System.Json.dll
+Dependency assembly - System.Data.DataSetExtensions.dll
+Dependency assembly - System.Security.Cryptography.RandomNumberGenerator.dll
+Dependency assembly - System.Globalization.Extensions.dll
+
+DisplayProgressbar: Fetching assembly references
+[PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 1 unused Assets / (2.7 KB). Loaded Objects now: 1179.
+Memory consumption went from 91.3 MB to 91.3 MB.
+Total: 8.791500 ms (FindLiveObjects: 0.108800 ms CreateObjectMapping: 0.040400 ms MarkObjects: 8.601600 ms  DeleteObjects: 0.039100 ms)
+
+[EnlightenBakeManager] m_Clear = false;
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 0 unused Assets / (0 B). Loaded Objects now: 1179.
+Memory consumption went from 91.3 MB to 91.3 MB.
+Total: 8.373800 ms (FindLiveObjects: 0.132000 ms CreateObjectMapping: 0.039500 ms MarkObjects: 8.190700 ms  DeleteObjects: 0.009800 ms)
+
+[PhysX] Initialized MultithreadedTaskDispatcher with 36 workers.
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 166 unused Assets / (131.9 MB). Loaded Objects now: 1179.
+Memory consumption went from 224.3 MB to 92.4 MB.
+Total: 47.205900 ms (FindLiveObjects: 0.119600 ms CreateObjectMapping: 0.048900 ms MarkObjects: 9.199000 ms  DeleteObjects: 37.836600 ms)
+
+Compiling shader "Skybox/Procedural" pass "" (vp)
+    Full variant space:         6
+    After settings filtering:   6
+    After built-in stripping:   18
+    After scriptable stripping: 18
+    Processed in 0.01 seconds
+    starting compilation...
+    finished in 1.10 seconds. Local cache hits 18 (19.78s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Skybox/Procedural in 0.00s
+    gles3 (total internal programs: 9, unique: 3)
+    vulkan (total internal programs: 9, unique: 3)
+Compiling shader "Legacy Shaders/VertexLit" pass "" (vp)
+    Full variant space:         24
+    After settings filtering:   24
+    After built-in stripping:   18
+    After scriptable stripping: 18
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 18 (0.01s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Legacy Shaders/VertexLit" pass "" (vp)
+    Full variant space:         8
+    After settings filtering:   8
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Legacy Shaders/VertexLit" pass "ShadowCaster" (vp)
+    Full variant space:         8
+    After settings filtering:   8
+    After built-in stripping:   12
+    After scriptable stripping: 12
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 12 (0.01s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Legacy Shaders/VertexLit in 0.00s
+    gles3 (total internal programs: 18, unique: 6)
+    vulkan (total internal programs: 18, unique: 6)
+Compiling shader "Legacy Shaders/Diffuse" pass "FORWARD" (vp)
+    Full variant space:         1328
+    After settings filtering:   1328
+    After built-in stripping:   48
+    After scriptable stripping: 48
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 48 (0.05s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Legacy Shaders/Diffuse" pass "FORWARD" (vp)
+    Full variant space:         40
+    After settings filtering:   40
+    After built-in stripping:   30
+    After scriptable stripping: 30
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 30 (0.03s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Legacy Shaders/Diffuse" pass "DEFERRED" (vp)
+    Full variant space:         152
+    After settings filtering:   152
+    After built-in stripping:   24
+    After scriptable stripping: 24
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 24 (0.02s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Legacy Shaders/Diffuse in 0.00s
+    gles3 (total internal programs: 51, unique: 17)
+    vulkan (total internal programs: 51, unique: 17)
+Compiling shader "Hidden/Internal-StencilWrite" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-StencilWrite in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/Internal-DepthNormalsTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DepthNormalsTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DepthNormalsTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DepthNormalsTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DepthNormalsTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DepthNormalsTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DepthNormalsTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DepthNormalsTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DepthNormalsTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DepthNormalsTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-DepthNormalsTexture in 0.00s
+    gles3 (total internal programs: 30, unique: 10)
+    vulkan (total internal programs: 30, unique: 10)
+Compiling shader "Hidden/Internal-ScreenSpaceShadows" pass "" (vp)
+    Full variant space:         8
+    After settings filtering:   8
+    After built-in stripping:   24
+    After scriptable stripping: 24
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 24 (0.02s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ScreenSpaceShadows" pass "" (vp)
+    Full variant space:         8
+    After settings filtering:   8
+    After built-in stripping:   24
+    After scriptable stripping: 24
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 24 (0.02s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ScreenSpaceShadows" pass "" (vp)
+    Full variant space:         8
+    After settings filtering:   8
+    After built-in stripping:   24
+    After scriptable stripping: 24
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 24 (0.02s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ScreenSpaceShadows" pass "" (vp)
+    Full variant space:         8
+    After settings filtering:   8
+    After built-in stripping:   24
+    After scriptable stripping: 24
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 24 (0.02s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-ScreenSpaceShadows in 0.00s
+    gles3 (total internal programs: 48, unique: 16)
+    vulkan (total internal programs: 48, unique: 16)
+Compiling shader "Hidden/Internal-CombineDepthNormals" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-CombineDepthNormals in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/BlitCopy" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/BlitCopy in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/BlitCopyDepth" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/BlitCopyDepth in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/ConvertTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/ConvertTexture in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/Internal-DeferredShading" pass "" (vp)
+    Full variant space:         188
+    After settings filtering:   188
+    After built-in stripping:   156
+    After scriptable stripping: 156
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 156 (0.15s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DeferredShading" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-DeferredShading in 0.00s
+    gles3 (total internal programs: 81, unique: 53)
+    vulkan (total internal programs: 81, unique: 53)
+Compiling shader "Hidden/Internal-DeferredReflections" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DeferredReflections" pass "" (vp)
+    Full variant space:         4
+    After settings filtering:   4
+    After built-in stripping:   12
+    After scriptable stripping: 12
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 12 (0.01s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-DeferredReflections in 0.00s
+    gles3 (total internal programs: 9, unique: 4)
+    vulkan (total internal programs: 9, unique: 4)
+Compiling shader "Hidden/Internal-MotionVectors" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-MotionVectors" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-MotionVectors" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-MotionVectors in 0.00s
+    gles3 (total internal programs: 9, unique: 3)
+    vulkan (total internal programs: 9, unique: 3)
+Compiling shader "Hidden/Internal-Flare" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-Flare in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/Internal-Halo" pass "" (vp)
+    Full variant space:         8
+    After settings filtering:   8
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-Halo in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/BlitCopyWithDepth" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/BlitCopyWithDepth in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/BlitToDepth" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/BlitToDepth in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/BlitToDepth_MSAA" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/BlitToDepth_MSAA in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/BlitCopyHDRTonemap" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/BlitCopyHDRTonemap in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/Internal-DebugPattern" pass "Target Color and DepthStencil" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DebugPattern" pass "Target only Color" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-DebugPattern" pass "Target only DepthStencil" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-DebugPattern in 0.00s
+    gles3 (total internal programs: 9, unique: 3)
+    vulkan (total internal programs: 9, unique: 3)
+Compiling shader "Hidden/Internal-GUITextureClip" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-GUITextureClip" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-GUITextureClip in 0.00s
+    gles3 (total internal programs: 6, unique: 1)
+    vulkan (total internal programs: 6, unique: 1)
+Compiling shader "Hidden/Internal-GUITextureClipText" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-GUITextureClipText" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-GUITextureClipText in 0.00s
+    gles3 (total internal programs: 6, unique: 1)
+    vulkan (total internal programs: 6, unique: 1)
+Compiling shader "Hidden/Internal-GUITexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-GUITexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-GUITexture in 0.00s
+    gles3 (total internal programs: 6, unique: 1)
+    vulkan (total internal programs: 6, unique: 1)
+Compiling shader "Hidden/Internal-GUITextureBlit" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-GUITextureBlit" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-GUITextureBlit in 0.00s
+    gles3 (total internal programs: 6, unique: 1)
+    vulkan (total internal programs: 6, unique: 1)
+Compiling shader "Hidden/Internal-GUIRoundedRect" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-GUIRoundedRect" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-GUIRoundedRect in 0.00s
+    gles3 (total internal programs: 6, unique: 1)
+    vulkan (total internal programs: 6, unique: 1)
+Compiling shader "Hidden/Internal-GUIRoundedRectWithColorPerBorder" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-GUIRoundedRectWithColorPerBorder" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-GUIRoundedRectWithColorPerBorder in 0.00s
+    gles3 (total internal programs: 6, unique: 1)
+    vulkan (total internal programs: 6, unique: 1)
+Compiling shader "Hidden/Internal-UIRDefault" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-UIRDefault" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-UIRDefault in 0.00s
+    gles3 (total internal programs: 6, unique: 2)
+    vulkan (total internal programs: 6, unique: 2)
+Compiling shader "Hidden/Internal-UIRAtlasBlitCopy" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-UIRAtlasBlitCopy in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/Internal-UIRDefaultWorld" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-UIRDefaultWorld" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-UIRDefaultWorld in 0.00s
+    gles3 (total internal programs: 6, unique: 2)
+    vulkan (total internal programs: 6, unique: 2)
+Compiling shader "Sprites/Default" pass "" (vp)
+    Full variant space:         16
+    After settings filtering:   16
+    After built-in stripping:   24
+    After scriptable stripping: 24
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 24 (0.02s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Sprites/Default in 0.00s
+    gles3 (total internal programs: 12, unique: 4)
+    vulkan (total internal programs: 12, unique: 4)
+Compiling shader "Sprites/Mask" pass "" (vp)
+    Full variant space:         8
+    After settings filtering:   8
+    After built-in stripping:   24
+    After scriptable stripping: 24
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 24 (0.02s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Sprites/Mask in 0.00s
+    gles3 (total internal programs: 12, unique: 4)
+    vulkan (total internal programs: 12, unique: 4)
+Compiling shader "UI/Default" pass "Default" (vp)
+    Full variant space:         8
+    After settings filtering:   8
+    After built-in stripping:   24
+    After scriptable stripping: 24
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 24 (0.02s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader UI/Default in 0.00s
+    gles3 (total internal programs: 12, unique: 4)
+    vulkan (total internal programs: 12, unique: 4)
+Compiling shader "UI/DefaultETC1" pass "Default" (vp)
+    Full variant space:         8
+    After settings filtering:   8
+    After built-in stripping:   24
+    After scriptable stripping: 24
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 24 (0.02s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader UI/DefaultETC1 in 0.00s
+    gles3 (total internal programs: 12, unique: 4)
+    vulkan (total internal programs: 12, unique: 4)
+Compiling shader "Hidden/CubeBlur" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/CubeBlur" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/CubeBlur in 0.00s
+    gles3 (total internal programs: 6, unique: 2)
+    vulkan (total internal programs: 6, unique: 2)
+Compiling shader "Hidden/CubeCopy" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/CubeCopy" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/CubeCopy in 0.00s
+    gles3 (total internal programs: 6, unique: 1)
+    vulkan (total internal programs: 6, unique: 1)
+Compiling shader "Hidden/CubeBlend" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/CubeBlend" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/CubeBlend in 0.00s
+    gles3 (total internal programs: 6, unique: 1)
+    vulkan (total internal programs: 6, unique: 1)
+Compiling shader "Hidden/VR/BlitTexArraySlice" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/VR/BlitTexArraySlice in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/Internal-ODSWorldTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ODSWorldTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ODSWorldTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ODSWorldTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ODSWorldTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ODSWorldTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ODSWorldTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ODSWorldTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ODSWorldTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/Internal-ODSWorldTexture" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-ODSWorldTexture in 0.00s
+    gles3 (total internal programs: 30, unique: 9)
+    vulkan (total internal programs: 30, unique: 9)
+Compiling shader "Hidden/Internal-CubemapToEquirect" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/Internal-CubemapToEquirect in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/VR/BlitFromTex2DToTexArraySlice" pass "" (vp)
+    Full variant space:         1
+    After settings filtering:   1
+    After built-in stripping:   3
+    After scriptable stripping: 3
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 3 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/VR/BlitFromTex2DToTexArraySlice" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/VR/BlitFromTex2DToTexArraySlice in 0.00s
+    gles3 (total internal programs: 6, unique: 2)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/VideoComposite" pass "Default" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/VideoComposite in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+Compiling shader "Hidden/VideoDecode" pass "YCbCr_To_RGB1" (vp)
+    Full variant space:         4
+    After settings filtering:   4
+    After built-in stripping:   12
+    After scriptable stripping: 12
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 12 (0.01s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/VideoDecode" pass "YCbCrA_To_RGBAFull" (vp)
+    Full variant space:         4
+    After settings filtering:   4
+    After built-in stripping:   12
+    After scriptable stripping: 12
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 12 (0.01s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/VideoDecode" pass "YCbCrA_To_RGBA" (vp)
+    Full variant space:         4
+    After settings filtering:   4
+    After built-in stripping:   12
+    After scriptable stripping: 12
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 12 (0.01s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/VideoDecode" pass "Flip_RGBA_To_RGBA" (vp)
+    Full variant space:         4
+    After settings filtering:   4
+    After built-in stripping:   12
+    After scriptable stripping: 12
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 12 (0.01s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/VideoDecode" pass "Flip_RGBASplit_To_RGBA" (vp)
+    Full variant space:         4
+    After settings filtering:   4
+    After built-in stripping:   12
+    After scriptable stripping: 12
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 12 (0.01s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/VideoDecode" pass "Flip_NV12_To_RGB1" (vp)
+    Full variant space:         4
+    After settings filtering:   4
+    After built-in stripping:   12
+    After scriptable stripping: 12
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 12 (0.01s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/VideoDecode" pass "Flip_NV12_To_RGBA" (vp)
+    Full variant space:         4
+    After settings filtering:   4
+    After built-in stripping:   12
+    After scriptable stripping: 12
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 12 (0.01s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/VideoDecode" pass "Flip_P010_To_RGB1" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/VideoDecode in 0.00s
+    gles3 (total internal programs: 45, unique: 15)
+    vulkan (total internal programs: 45, unique: 15)
+Compiling shader "Hidden/VideoDecodeAndroid" pass "RGBAExternal_To_RGBA" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Compiling shader "Hidden/VideoDecodeAndroid" pass "RGBASplitExternal_To_RGBA" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/VideoDecodeAndroid in 0.00s
+    gles3 (total internal programs: 12, unique: 12)
+    vulkan (total internal programs: 0, unique: 0)
+Compiling shader "Hidden/TextCore/Distance Field SSD" pass "" (vp)
+    Full variant space:         2
+    After settings filtering:   2
+    After built-in stripping:   6
+    After scriptable stripping: 6
+    Processed in 0.00 seconds
+    starting compilation...
+    finished in 0.00 seconds. Local cache hits 6 (0.00s CPU time), remote cache hits 0 (0.00s CPU time), compiled 0 variants (0.00s CPU time), skipped 0 variants
+    Prepared data for serialisation in 0.00s
+Serialized binary data for shader Hidden/TextCore/Distance Field SSD in 0.00s
+    gles3 (total internal programs: 3, unique: 1)
+    vulkan (total internal programs: 3, unique: 1)
+
+***Player size statistics***
+Level 0 'Assets/Trae/Scenes/BootScene.unity' uses 405.7 KB compressed / 1.8 MB uncompressed.
+Level 1 'Assets/Trae/Scenes/MainScene.unity' uses 20.3 KB compressed / 103.7 KB uncompressed.
+Total compressed size 426.4 KB. Total uncompressed size 1.9 MB.
+DisplayProgressbar: Initializing
+Android PostProcess task "Initializing" took 1.31 ms
+DisplayProgressbar: Check gradle project collisions
+Android PostProcess task "Check gradle project collisions" took 0.6964 ms
+DisplayProgressbar: Preparing banner
+Android PostProcess task "Preparing banner" took 1.0427 ms
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\bee_backend.exe --ipc --dagfile="Library/Bee/Playerf6821801.dag" --profile="Library/Bee/backend1.traceevents" Player
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\Tools\netcorerun\netcorerun.exe "C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\PlaybackEngines\AndroidPlayer\AndroidPlayerBuildProgram.exe" "C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/PlaybackEngines/AndroidPlayer/Bee;C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/Tools/BuildPipeline" "Library/Bee/Playerf6821801.dag.json" "Library/Bee/Playerf6821801-inputdata.json" "Library\Bee\buildprogram0.traceevents"
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 4 Duration: 0s72ms
+DisplayProgressbar: Incremental Player Build
+ExitCode: 0 Duration: 5s604ms
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\bee_backend.exe --ipc --dagfile="Library/Bee/Playerf6821801.dag" --dagfilejson="Library\Bee\Playerf6821801.dag.json" --profile="Library/Bee/backend2.traceevents" Player
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\Tools\netcorerun\netcorerun.exe "C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\PlaybackEngines\AndroidPlayer\AndroidPlayerBuildProgram.exe" "C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/PlaybackEngines/AndroidPlayer/Bee;C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/Tools/BuildPipeline" "Library/Bee/Playerf6821801.dag.json" "Library/Bee/Playerf6821801-inputdata.json" "Library\Bee\buildprogram1.traceevents"
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 4 Duration: 50s
+ExitCode: 0 Duration: 1s519ms
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\bee_backend.exe --ipc --dagfile="Library/Bee/Playerf6821801.dag" --dagfilejson="Library\Bee\Playerf6821801.dag.json" --profile="Library/Bee/backend3.traceevents" Player
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\Tools\netcorerun\netcorerun.exe "C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\PlaybackEngines\AndroidPlayer\AndroidPlayerBuildProgram.exe" "C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/PlaybackEngines/AndroidPlayer/Bee;C:/Users/User/Trae/Game_project/2022.3.62f2/Editor/Data/Tools/BuildPipeline" "Library/Bee/Playerf6821801.dag.json" "Library/Bee/Playerf6821801-inputdata.json" "Library\Bee\buildprogram2.traceevents"
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 4 Duration: 10s
+ExitCode: 0 Duration: 1s638ms
+Starting: C:\Users\User\Trae\Game_project\2022.3.62f2\Editor\Data\bee_backend.exe --ipc --dagfile="Library/Bee/Playerf6821801.dag" --dagfilejson="Library\Bee\Playerf6821801.dag.json" --profile="Library/Bee/backend4.traceevents" Player
+WorkingDir: C:/Users/User/Trae/Game_project/Trae
+ExitCode: 0 Duration: 1m:26s
+DisplayProgressbar: Calling IPostGenerateGradleAndroidProject callbacks
+Calling IPostGenerateGradleAndroidProject callbacks on 'C:\Users\User\Trae\Game_project\Trae\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary':
+Android PostProcess task "Calling IPostGenerateGradleAndroidProject callbacks" took 4.6773 ms
+Android PostProcess task "Cloud Diagnostics Symbol Upload" took 0.5983 ms
+DisplayProgressbar: Building Gradle project

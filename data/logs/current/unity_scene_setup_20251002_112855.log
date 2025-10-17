@@ -1,0 +1,14 @@
+[2025-10-02 11:28:55] [INFO] Unity シーンセットアップスクリプトを開始
+[2025-10-02 11:28:55] [INFO] プロジェクトパス: Trae
+[2025-10-02 11:28:55] [INFO] Dry-Run モード: True
+[2025-10-02 11:28:55] [INFO] Unity パス: C:\Program Files\Unity\Hub\Editor\6000.2.6f1\Editor\Unity.exe
+[2025-10-02 11:28:55] [INFO] Unity プロジェクト確認: ✅ 正常
+[2025-10-02 11:28:55] [INFO] シーン作成: BootScene
+[2025-10-02 11:28:55] [INFO] [Dry-Run] Unity コマンド: C:\Program Files\Unity\Hub\Editor\6000.2.6f1\Editor\Unity.exe -batchmode -quit -projectPath C:\Users\User\Trae\Game_project\Trae -executeMethod Trae.Editor.SceneSetup.CreateScene -sceneName BootScene -scenePath C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scenes\BootScene.unity -logFile data\logs\current\unity_scene_setup_20251002_112855.log
+[2025-10-02 11:28:55] [INFO] シーン作成: MainScene
+[2025-10-02 11:28:56] [INFO] [Dry-Run] Unity コマンド: C:\Program Files\Unity\Hub\Editor\6000.2.6f1\Editor\Unity.exe -batchmode -quit -projectPath C:\Users\User\Trae\Game_project\Trae -executeMethod Trae.Editor.SceneSetup.CreateScene -sceneName MainScene -scenePath C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scenes\MainScene.unity -logFile data\logs\current\unity_scene_setup_20251002_112855.log
+[2025-10-02 11:28:56] [INFO] === Unity シーンセットアップ結果 ===
+[2025-10-02 11:28:56] [INFO] 作成予定シーン数: 2
+[2025-10-02 11:28:56] [INFO] 成功シーン数: 2
+[2025-10-02 11:28:56] [INFO] プロジェクトパス: C:\Users\User\Trae\Game_project\Trae
+[2025-10-02 11:28:56] [INFO] Dry-Run完了。-Apply で実行します。

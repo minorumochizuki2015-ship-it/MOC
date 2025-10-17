@@ -1,0 +1,68 @@
+[2025-10-02 11:49:14] [INFO] Android SDK 自動セットアップを開始
+[2025-10-02 11:49:14] [INFO] 対象パス: C:\Users\User\AppData\Local\Android\Sdk
+[2025-10-02 11:49:15] [INFO] Dry-Run モード: False
+[2025-10-02 11:49:15] [INFO] Android SDK インストール状況を確認中...
+[2025-10-02 11:49:15] [INFO] === Android SDK セットアップ結果 ===
+[2025-10-02 11:49:15] [INFO] SDK パス: C:\Users\User\AppData\Local\Android\Sdk
+[2025-10-02 11:49:15] [INFO] SDK 存在: False
+[2025-10-02 11:49:15] [INFO] ADB 存在: False
+[2025-10-02 11:49:15] [INFO] Build Tools 存在: False
+[2025-10-02 11:49:15] [INFO] Platforms 存在: False
+[2025-10-02 11:49:15] [INFO] セットアップ完了: False
+[2025-10-02 11:49:15] [WARN] Android SDK セットアップに問題があります
+[2025-10-02 11:49:15] [INFO] Java インストール状況を確認中...
+[2025-10-02 11:49:15] [INFO] Java 出力: java version "11.0.27" 2025-04-15 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.27+8-LTS-232)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.27+8-LTS-232, mixed mode)
+
+[2025-10-02 11:49:15] [INFO] Java バージョン検出: 11 (パス: C:\Program Files\Java\jdk-11\bin\java.exe)
+[2025-10-02 11:49:15] [INFO] Java バージョン要件チェック: 11 >= 11 = True
+[2025-10-02 11:49:15] [INFO] Android Command Line Tools をダウンロード中...
+[2025-10-02 11:49:20] [INFO] Command Line Tools ダウンロード完了
+[2025-10-02 11:49:24] [INFO] Command Line Tools セットアップ完了
+[2025-10-02 11:49:24] [INFO] Android SDK コンポーネントをインストール中...
+[2025-10-02 11:49:24] [INFO] Android SDK ライセンスを承認中...
+エラー: メイン・クラスcom.android.sdklib.tool.sdkmanager.SdkManagerCliのロード中にLinkageErrorが発生しました
+	java.lang.UnsupportedClassVersionError: com/android/sdklib/tool/sdkmanager/SdkManagerCli has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
+[2025-10-02 11:49:25] [INFO] インストール中: platform-tools
+エラー: メイン・クラスcom.android.sdklib.tool.sdkmanager.SdkManagerCliのロード中にLinkageErrorが発生しました
+	java.lang.UnsupportedClassVersionError: com/android/sdklib/tool/sdkmanager/SdkManagerCli has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
+[2025-10-02 11:49:25] [WARN] コンポーネント インストール失敗: platform-tools
+[2025-10-02 11:49:25] [INFO] インストール中: platforms;android-34
+エラー: メイン・クラスcom.android.sdklib.tool.sdkmanager.SdkManagerCliのロード中にLinkageErrorが発生しました
+	java.lang.UnsupportedClassVersionError: com/android/sdklib/tool/sdkmanager/SdkManagerCli has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
+[2025-10-02 11:49:26] [WARN] コンポーネント インストール失敗: platforms;android-34
+[2025-10-02 11:49:26] [INFO] インストール中: platforms;android-33
+エラー: メイン・クラスcom.android.sdklib.tool.sdkmanager.SdkManagerCliのロード中にLinkageErrorが発生しました
+	java.lang.UnsupportedClassVersionError: com/android/sdklib/tool/sdkmanager/SdkManagerCli has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
+[2025-10-02 11:49:26] [WARN] コンポーネント インストール失敗: platforms;android-33
+[2025-10-02 11:49:26] [INFO] インストール中: platforms;android-32
+エラー: メイン・クラスcom.android.sdklib.tool.sdkmanager.SdkManagerCliのロード中にLinkageErrorが発生しました
+	java.lang.UnsupportedClassVersionError: com/android/sdklib/tool/sdkmanager/SdkManagerCli has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
+[2025-10-02 11:49:27] [WARN] コンポーネント インストール失敗: platforms;android-32
+[2025-10-02 11:49:27] [INFO] インストール中: build-tools;34.0.0
+エラー: メイン・クラスcom.android.sdklib.tool.sdkmanager.SdkManagerCliのロード中にLinkageErrorが発生しました
+	java.lang.UnsupportedClassVersionError: com/android/sdklib/tool/sdkmanager/SdkManagerCli has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
+[2025-10-02 11:49:28] [WARN] コンポーネント インストール失敗: build-tools;34.0.0
+[2025-10-02 11:49:28] [INFO] インストール中: build-tools;33.0.2
+エラー: メイン・クラスcom.android.sdklib.tool.sdkmanager.SdkManagerCliのロード中にLinkageErrorが発生しました
+	java.lang.UnsupportedClassVersionError: com/android/sdklib/tool/sdkmanager/SdkManagerCli has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
+[2025-10-02 11:49:28] [WARN] コンポーネント インストール失敗: build-tools;33.0.2
+[2025-10-02 11:49:28] [INFO] インストール中: ndk;25.1.8937393
+エラー: メイン・クラスcom.android.sdklib.tool.sdkmanager.SdkManagerCliのロード中にLinkageErrorが発生しました
+	java.lang.UnsupportedClassVersionError: com/android/sdklib/tool/sdkmanager/SdkManagerCli has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
+[2025-10-02 11:49:29] [WARN] コンポーネント インストール失敗: ndk;25.1.8937393
+[2025-10-02 11:49:29] [INFO] Android 環境変数を設定中...
+[2025-10-02 11:50:25] [INFO] PATH に platform-tools を追加
+[2025-10-02 11:50:44] [INFO] PATH に cmdline-tools を追加
+[2025-10-02 11:50:44] [INFO] 環境変数設定完了
+[2025-10-02 11:50:47] [INFO] Android SDK インストール状況を確認中...
+[2025-10-02 11:50:47] [INFO] === Android SDK セットアップ結果 ===
+[2025-10-02 11:50:47] [INFO] SDK パス: C:\Users\User\AppData\Local\Android\Sdk
+[2025-10-02 11:50:47] [INFO] SDK 存在: True
+[2025-10-02 11:50:47] [INFO] ADB 存在: False
+[2025-10-02 11:50:47] [INFO] Build Tools 存在: False
+[2025-10-02 11:50:47] [INFO] Platforms 存在: False
+[2025-10-02 11:50:47] [INFO] セットアップ完了: False
+[2025-10-02 11:50:47] [WARN] Android SDK セットアップに問題があります
+[2025-10-02 11:50:47] [ERROR] セットアップに問題が発生しました。ログを確認してください。

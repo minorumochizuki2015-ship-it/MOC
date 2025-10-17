@@ -1,0 +1,48 @@
+[2025-10-02 11:47:53] [INFO] Android SDK 自動セットアップを開始
+[2025-10-02 11:47:53] [INFO] 対象パス: C:\Users\User\AppData\Local\Android\Sdk
+[2025-10-02 11:47:53] [INFO] Dry-Run モード: False
+[2025-10-02 11:47:53] [INFO] Android SDK インストール状況を確認中...
+[2025-10-02 11:47:53] [INFO] === Android SDK セットアップ結果 ===
+[2025-10-02 11:47:53] [INFO] SDK パス: C:\Users\User\AppData\Local\Android\Sdk
+[2025-10-02 11:47:53] [INFO] SDK 存在: False
+[2025-10-02 11:47:53] [INFO] ADB 存在: False
+[2025-10-02 11:47:53] [INFO] Build Tools 存在: False
+[2025-10-02 11:47:53] [INFO] Platforms 存在: False
+[2025-10-02 11:47:53] [INFO] セットアップ完了: False
+[2025-10-02 11:47:53] [WARN] Android SDK セットアップに問題があります
+[2025-10-02 11:47:53] [INFO] Java インストール状況を確認中...
+[2025-10-02 11:47:53] [INFO] Java 出力: java version "11.0.27" 2025-04-15 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.27+8-LTS-232)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.27+8-LTS-232, mixed mode)
+
+[2025-10-02 11:47:53] [INFO] Java バージョン検出: 11 (パス: C:\Program Files\Java\jdk-11\bin\java.exe)
+[2025-10-02 11:47:53] [WARN] Java 実行エラー: C:\Program Files\Java\jdk-11\bin\java.exe - Cannot convert value "java version "11.0.27" 2025-04-15 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.27+8-LTS-232)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.27+8-LTS-232, mixed mode)
+" to type "System.Int32". Error: "The input string 'java version "11.0.27" 2025-04-15 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.27+8-LTS-232)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.27+8-LTS-232, mixed mode)' was not in a correct format."
+[2025-10-02 11:47:54] [INFO] Java 出力: java version "11.0.27" 2025-04-15 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.27+8-LTS-232)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.27+8-LTS-232, mixed mode)
+
+[2025-10-02 11:47:54] [INFO] Java バージョン検出: 11 (パス: C:\Program Files\Java\jdk-11\bin\java.exe)
+[2025-10-02 11:47:54] [WARN] Java 実行エラー: C:\Program Files\Java\jdk-11\bin\java.exe - Cannot convert value "java version "11.0.27" 2025-04-15 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.27+8-LTS-232)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.27+8-LTS-232, mixed mode)
+" to type "System.Int32". Error: "The input string 'java version "11.0.27" 2025-04-15 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.27+8-LTS-232)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.27+8-LTS-232, mixed mode)' was not in a correct format."
+[2025-10-02 11:47:54] [INFO] Java 出力 (PATH経由): java version "11.0.27" 2025-04-15 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.27+8-LTS-232)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.27+8-LTS-232, mixed mode)
+
+[2025-10-02 11:47:54] [INFO] Java バージョン検出: 11 (PATH経由)
+[2025-10-02 11:47:54] [WARN] Java が見つかりません - Cannot convert value "java version "11.0.27" 2025-04-15 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.27+8-LTS-232)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.27+8-LTS-232, mixed mode)
+" to type "System.Int32". Error: "The input string 'java version "11.0.27" 2025-04-15 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.27+8-LTS-232)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.27+8-LTS-232, mixed mode)' was not in a correct format."
+[2025-10-02 11:47:54] [ERROR] Java 11 以上が必要です。先にJavaをインストールしてください。
+[2025-10-02 11:47:54] [ERROR] Java が不足しているため、セットアップを中断します

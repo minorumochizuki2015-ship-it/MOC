@@ -1,0 +1,16 @@
+[2025-10-02 10:44:26] [INFO] Unity 2022.3.52f1 インストールプロセスを開始...
+[2025-10-02 10:44:26] [INFO] Dry-Run モード: True
+[2025-10-02 10:44:26] [INFO] Android サポート: True
+[2025-10-02 10:44:26] [INFO] iOS サポート: True
+[2025-10-02 10:44:26] [INFO] Unity Hubのインストール状況を確認中...
+[2025-10-02 10:44:26] [WARNING] Unity Hub が見つかりません。
+[2025-10-02 10:44:26] [INFO] Unity Hub のダウンロードとインストールを開始...
+[2025-10-02 10:44:26] [INFO] [Dry-Run] Unity Hub をダウンロード・インストール: https://public-cdn.cloud.unity3d.com/hub/prod/UnityHubSetup.exe
+[2025-10-02 10:44:26] [INFO] Unity Editor 2022.3.52f1 のインストールを開始...
+[2025-10-02 10:44:26] [INFO] [Dry-Run] Unity Editor 2022.3.52f1 をインストール
+[2025-10-02 10:44:26] [INFO] [Dry-Run] モジュール: android, ios
+[2025-10-02 10:44:26] [INFO] Unity 設定の構成を開始...
+[2025-10-02 10:44:26] [INFO] [Dry-Run] Unity Hub 設定の構成
+[2025-10-02 10:44:26] [INFO] [Dry-Run] プロジェクトテンプレート設定
+[2025-10-02 10:44:26] [SUCCESS] Unity 2022.3.52f1 インストールプロセスが完了しました。
+[2025-10-02 10:44:26] [INFO] ログファイル: data\logs\current\unity_install_20251002_104426.log

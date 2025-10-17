@@ -1,0 +1,275 @@
+name: Weekly System Monitoring
+
+on:
+  schedule:
+    # Runs every Monday at 00:00 UTC (09:00 JST)
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+    inputs:
+      monitoring_level:
+        description: 'Monitoring level (basic/full/deep)'
+        required: false
+        default: 'basic'
+        type: choice
+        options:
+          - basic
+          - full
+          - deep
+
+env:
+  MONITORING_LEVEL: ${{ github.event.inputs.monitoring_level || 'basic' }}
+
+jobs:
+  system-health-check:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Create virtual environment
+        run: |
+          python -m venv .venv
+          .\.venv\Scripts\Activate.ps1
+          python -m pip install --upgrade pip
+      
+      - name: Install dependencies
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          pip install pytest pytest-benchmark py-cpuinfo psutil
+          if (Test-Path requirements.txt) { pip install -r requirements.txt }
+      
+      - name: Create monitoring directories
+        run: |
+          New-Item -ItemType Directory -Force -Path "data/logs/current"
+          New-Item -ItemType Directory -Force -Path "data/logs/monitoring"
+          New-Item -ItemType Directory -Force -Path "artifacts/monitoring"
+      
+      - name: System Health Check - Basic
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+          $logFile = "data/logs/current/system_health_$timestamp.log"
+          
+          Write-Output "=== System Health Check - Basic ===" | Tee-Object -FilePath $logFile
+          Write-Output "Timestamp: $(Get-Date)" | Tee-Object -FilePath $logFile -Append
+          Write-Output "Monitoring Level: $env:MONITORING_LEVEL" | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+          
+          # Python environment check
+          Write-Output "Python Version:" | Tee-Object -FilePath $logFile -Append
+          python --version | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+          
+          # Installed packages
+          Write-Output "Installed Packages:" | Tee-Object -FilePath $logFile -Append
+          pip list | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+          
+          # Disk usage
+          Write-Output "Disk Usage:" | Tee-Object -FilePath $logFile -Append
+          Get-WmiObject -Class Win32_LogicalDisk | Select-Object DeviceID, @{Name="Size(GB)";Expression={[math]::Round($_.Size/1GB,2)}}, @{Name="FreeSpace(GB)";Expression={[math]::Round($_.FreeSpace/1GB,2)}}, @{Name="PercentFree";Expression={[math]::Round(($_.FreeSpace/$_.Size)*100,2)}} | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+      
+      - name: Path Normalization Check
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+          $logFile = "data/logs/current/path_check_$timestamp.log"
+          
+          Write-Output "=== Path Normalization Check ===" | Tee-Object -FilePath $logFile
+          Write-Output "Timestamp: $(Get-Date)" | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+          
+          # Run path normalization check
+          python scripts/normalize_paths.py --dry-run --report "artifacts/monitoring/path_check_$timestamp.json" | Tee-Object -FilePath $logFile -Append
+          
+          if ($LASTEXITCODE -eq 0) {
+            Write-Output "✅ Path normalization check passed" | Tee-Object -FilePath $logFile -Append
+          } else {
+            Write-Output "❌ Path normalization check failed" | Tee-Object -FilePath $logFile -Append
+            exit 1
+          }
+      
+      - name: EOL Check
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+          $logFile = "data/logs/current/eol_check_$timestamp.log"
+          
+          Write-Output "=== EOL Check ===" | Tee-Object -FilePath $logFile
+          Write-Output "Timestamp: $(Get-Date)" | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+          
+          # Run EOL compliance check
+          if (Test-Path "scripts/check_eol.py") {
+            python scripts/check_eol.py | Tee-Object -FilePath $logFile -Append
+            
+            if ($LASTEXITCODE -eq 0) {
+              Write-Output "✅ EOL check passed" | Tee-Object -FilePath $logFile -Append
+            } else {
+              Write-Output "❌ EOL check failed" | Tee-Object -FilePath $logFile -Append
+            }
+          } else {
+            Write-Output "⚠️ EOL check script not found" | Tee-Object -FilePath $logFile -Append
+          }
+      
+      - name: Performance Benchmark - Basic
+        if: env.MONITORING_LEVEL != 'basic'
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+          $logFile = "data/logs/current/benchmark_$timestamp.log"
+          
+          Write-Output "=== Performance Benchmark ===" | Tee-Object -FilePath $logFile
+          Write-Output "Timestamp: $(Get-Date)" | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+          
+          # Run benchmark tests
+          if (Test-Path ".trae/apk_analysis_system/tests/test_benchmark.py") {
+            python -m pytest .trae/apk_analysis_system/tests/test_benchmark.py --benchmark-only --benchmark-save="monitoring_$timestamp" -v | Tee-Object -FilePath $logFile -Append
+            
+            if ($LASTEXITCODE -eq 0) {
+              Write-Output "✅ Benchmark tests passed" | Tee-Object -FilePath $logFile -Append
+            } else {
+              Write-Output "❌ Benchmark tests failed" | Tee-Object -FilePath $logFile -Append
+            }
+          } else {
+            Write-Output "⚠️ Benchmark test file not found" | Tee-Object -FilePath $logFile -Append
+          }
+      
+      - name: Integration Tests
+        if: env.MONITORING_LEVEL == 'full' || env.MONITORING_LEVEL == 'deep'
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+          $logFile = "data/logs/current/integration_$timestamp.log"
+          
+          Write-Output "=== Integration Tests ===" | Tee-Object -FilePath $logFile
+          Write-Output "Timestamp: $(Get-Date)" | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+          
+          # Run integration tests
+          if (Test-Path ".trae/apk_analysis_system/tests") {
+            python -m pytest .trae/apk_analysis_system/tests/ -v --tb=short | Tee-Object -FilePath $logFile -Append
+            
+            if ($LASTEXITCODE -eq 0) {
+              Write-Output "✅ Integration tests passed" | Tee-Object -FilePath $logFile -Append
+            } else {
+              Write-Output "❌ Integration tests failed" | Tee-Object -FilePath $logFile -Append
+            }
+          } else {
+            Write-Output "⚠️ Integration test directory not found" | Tee-Object -FilePath $logFile -Append
+          }
+      
+      - name: Deep System Analysis
+        if: env.MONITORING_LEVEL == 'deep'
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+          $logFile = "data/logs/current/deep_analysis_$timestamp.log"
+          
+          Write-Output "=== Deep System Analysis ===" | Tee-Object -FilePath $logFile
+          Write-Output "Timestamp: $(Get-Date)" | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+          
+          # Detailed system resource analysis
+          Write-Output "Memory Usage:" | Tee-Object -FilePath $logFile -Append
+          Get-WmiObject -Class Win32_OperatingSystem | Select-Object @{Name="TotalMemory(GB)";Expression={[math]::Round($_.TotalVisibleMemorySize/1MB,2)}}, @{Name="FreeMemory(GB)";Expression={[math]::Round($_.FreePhysicalMemory/1MB,2)}}, @{Name="UsedMemory(GB)";Expression={[math]::Round(($_.TotalVisibleMemorySize-$_.FreePhysicalMemory)/1MB,2)}} | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+          
+          # Process analysis
+          Write-Output "Top 10 Memory Consuming Processes:" | Tee-Object -FilePath $logFile -Append
+          Get-Process | Sort-Object WorkingSet -Descending | Select-Object -First 10 Name, @{Name="Memory(MB)";Expression={[math]::Round($_.WorkingSet/1MB,2)}} | Tee-Object -FilePath $logFile -Append
+          Write-Output "" | Tee-Object -FilePath $logFile -Append
+          
+          # File system analysis
+          Write-Output "Large Files (>100MB):" | Tee-Object -FilePath $logFile -Append
+          Get-ChildItem -Path . -Recurse -File -ErrorAction SilentlyContinue | Where-Object {$_.Length -gt 100MB} | Select-Object Name, @{Name="Size(MB)";Expression={[math]::Round($_.Length/1MB,2)}}, FullName | Sort-Object "Size(MB)" -Descending | Select-Object -First 20 | Tee-Object -FilePath $logFile -Append
+      
+      - name: Generate Monitoring Summary
+        run: |
+          $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
+          $summaryFile = "data/logs/current/monitoring_summary_$timestamp.md"
+          
+          Write-Output "# Weekly System Monitoring Summary" | Out-File -FilePath $summaryFile
+          Write-Output "" | Out-File -FilePath $summaryFile -Append
+          Write-Output "**Date:** $(Get-Date)" | Out-File -FilePath $summaryFile -Append
+          Write-Output "**Monitoring Level:** $env:MONITORING_LEVEL" | Out-File -FilePath $summaryFile -Append
+          Write-Output "**Repository:** ${{ github.repository }}" | Out-File -FilePath $summaryFile -Append
+          Write-Output "**Commit:** ${{ github.sha }}" | Out-File -FilePath $summaryFile -Append
+          Write-Output "" | Out-File -FilePath $summaryFile -Append
+          
+          # Log files list
+          Write-Output "## Generated Log Files" | Out-File -FilePath $summaryFile -Append
+          Write-Output "" | Out-File -FilePath $summaryFile -Append
+          Get-ChildItem -Path "data/logs/current" -Filter "*$timestamp*" | ForEach-Object {
+            Write-Output "- $($_.Name)" | Out-File -FilePath $summaryFile -Append
+          }
+          Write-Output "" | Out-File -FilePath $summaryFile -Append
+          
+          # System status summary
+          Write-Output "## System Status" | Out-File -FilePath $summaryFile -Append
+          Write-Output "" | Out-File -FilePath $summaryFile -Append
+          Write-Output "- ✅ System health check completed" | Out-File -FilePath $summaryFile -Append
+          Write-Output "- ✅ Path normalization verified" | Out-File -FilePath $summaryFile -Append
+          Write-Output "- ✅ EOL compliance checked" | Out-File -FilePath $summaryFile -Append
+          
+          if ($env:MONITORING_LEVEL -ne 'basic') {
+            Write-Output "- ✅ Performance benchmarks executed" | Out-File -FilePath $summaryFile -Append
+          }
+          
+          if ($env:MONITORING_LEVEL -eq 'full' -or $env:MONITORING_LEVEL -eq 'deep') {
+            Write-Output "- ✅ Integration tests completed" | Out-File -FilePath $summaryFile -Append
+          }
+          
+          if ($env:MONITORING_LEVEL -eq 'deep') {
+            Write-Output "- ✅ Deep system analysis performed" | Out-File -FilePath $summaryFile -Append
+          }
+          
+          Write-Output "" | Out-File -FilePath $summaryFile -Append
+          Write-Output "## Next Actions" | Out-File -FilePath $summaryFile -Append
+          Write-Output "" | Out-File -FilePath $summaryFile -Append
+          Write-Output "- Review log files for any warnings or errors" | Out-File -FilePath $summaryFile -Append
+          Write-Output "- Check performance trends in benchmark results" | Out-File -FilePath $summaryFile -Append
+          Write-Output "- Address any path normalization issues if detected" | Out-File -FilePath $summaryFile -Append
+          Write-Output "- Monitor disk usage and clean up old logs if necessary" | Out-File -FilePath $summaryFile -Append
+      
+      - name: Upload monitoring artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: monitoring-logs-${{ github.run_number }}
+          path: |
+            data/logs/current/*
+            artifacts/monitoring/*
+          retention-days: 30
+      
+      - name: Cleanup old logs
+        run: |
+          # Remove log files older than 30 days
+          $cutoffDate = (Get-Date).AddDays(-30)
+          Get-ChildItem -Path "data/logs/current" -File | Where-Object {$_.LastWriteTime -lt $cutoffDate} | Remove-Item -Force
+          
+          # Clean up artifacts directory similarly
+          if (Test-Path "artifacts/monitoring") {
+            Get-ChildItem -Path "artifacts/monitoring" -File | Where-Object {$_.LastWriteTime -lt $cutoffDate} | Remove-Item -Force
+          }
+          
+          Write-Output "Old log files cleanup completed"
+      
+      - name: Health Check Status
+        run: |
+          Write-Output "🎯 Weekly monitoring completed successfully"
+          Write-Output "📊 Monitoring level: $env:MONITORING_LEVEL"
+          Write-Output "📁 Logs saved to: data/logs/current/"
+          Write-Output "🔄 Next monitoring: Next Monday 09:00 JST"

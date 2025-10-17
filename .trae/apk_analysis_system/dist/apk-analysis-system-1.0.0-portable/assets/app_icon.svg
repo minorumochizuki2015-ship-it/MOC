@@ -1,0 +1,75 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2D3748;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1A202C;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cubeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4FD1C7;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#38B2AC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2C7A7B;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F56565;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E53E3E;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="256" height="256" rx="32" ry="32" fill="url(#bgGradient)"/>
+  
+  <!-- Main 3D Cube (APK representation) -->
+  <g transform="translate(128, 100)" filter="url(#shadow)">
+    <!-- Top face -->
+    <path d="M -40 -20 L 0 -40 L 40 -20 L 0 0 Z" fill="url(#cubeGradient)" opacity="0.9"/>
+    <!-- Left face -->
+    <path d="M -40 -20 L 0 0 L 0 40 L -40 20 Z" fill="url(#cubeGradient)" opacity="0.7"/>
+    <!-- Right face -->
+    <path d="M 0 0 L 40 -20 L 40 20 L 0 40 Z" fill="url(#cubeGradient)" opacity="0.8"/>
+  </g>
+  
+  <!-- Analysis waves/signals -->
+  <g transform="translate(128, 100)" opacity="0.6">
+    <circle cx="0" cy="0" r="60" fill="none" stroke="url(#accentGradient)" stroke-width="2" opacity="0.4">
+      <animate attributeName="r" values="60;80;60" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.4;0.1;0.4" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="0" cy="0" r="70" fill="none" stroke="url(#accentGradient)" stroke-width="1.5" opacity="0.3">
+      <animate attributeName="r" values="70;90;70" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.3;0.05;0.3" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  
+  <!-- Binary code pattern -->
+  <g opacity="0.2" fill="#4FD1C7" font-family="monospace" font-size="8">
+    <text x="20" y="30">01101001</text>
+    <text x="180" y="45">11010110</text>
+    <text x="30" y="220">10110101</text>
+    <text x="170" y="235">01011010</text>
+  </g>
+  
+  <!-- APK text indicator -->
+  <g transform="translate(128, 180)">
+    <rect x="-25" y="-8" width="50" height="16" rx="8" fill="url(#accentGradient)" opacity="0.8"/>
+    <text x="0" y="2" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10" font-weight="bold">APK</text>
+  </g>
+  
+  <!-- Analysis indicator dots -->
+  <g transform="translate(128, 200)" opacity="0.7">
+    <circle cx="-15" cy="0" r="3" fill="#4FD1C7">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite" begin="0s"/>
+    </circle>
+    <circle cx="0" cy="0" r="3" fill="#4FD1C7">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite" begin="0.3s"/>
+    </circle>
+    <circle cx="15" cy="0" r="3" fill="#4FD1C7">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1s" repeatCount="indefinite" begin="0.6s"/>
+    </circle>
+  </g>
+  
+  <!-- Corner accent -->
+  <path d="M 224 32 L 256 32 L 256 64 Z" fill="url(#accentGradient)" opacity="0.3"/>
+</svg>

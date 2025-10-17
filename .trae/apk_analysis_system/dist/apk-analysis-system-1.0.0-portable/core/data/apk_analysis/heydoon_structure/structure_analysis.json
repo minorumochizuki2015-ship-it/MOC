@@ -1,0 +1,73 @@
+{
+  "basic_info": {
+    "filename": "HeyDooon_1.20_APKPure.apk",
+    "size_bytes": 105597884,
+    "size_mb": 100.71
+  },
+  "file_structure": {
+    "dex": 1,
+    "so": 3,
+    "xml": 36,
+    "png": 53,
+    "assets": 17,
+    "res": 88,
+    "meta": 39,
+    "other": 13
+  },
+  "manifest_info": {
+    "exists": true,
+    "size_bytes": 16312
+  },
+  "resources": [
+    "res/color/common_google_signin_btn_text_dark.xml",
+    "res/color/common_google_signin_btn_text_light.xml",
+    "res/color/common_google_signin_btn_tint.xml",
+    "res/drawable/admob_close_button_black_circle_white_cross.xml",
+    "res/drawable/admob_close_button_white_circle_black_cross.xml",
+    "res/drawable/common_google_signin_btn_icon_dark.xml",
+    "res/drawable/common_google_signin_btn_icon_dark_focused.xml",
+    "res/drawable/common_google_signin_btn_icon_dark_normal.xml",
+    "res/drawable/common_google_signin_btn_icon_disabled.xml",
+    "res/drawable/common_google_signin_btn_icon_light.xml"
+  ],
+  "assets": [
+    "assets/bin/Data/Managed/Metadata/global-metadata.dat",
+    "assets/bin/Data/Managed/Resources/mscorlib.dll-resources.dat",
+    "assets/bin/Data/RuntimeInitializeOnLoads.json",
+    "assets/bin/Data/ScriptingAssemblies.json",
+    "assets/bin/Data/boot.config",
+    "assets/bin/Data/data.unity3d",
+    "assets/bin/Data/sharedassets1.resource",
+    "assets/bin/Data/sharedassets12.resource",
+    "assets/bin/Data/sharedassets15.resource",
+    "assets/bin/Data/sharedassets20.resource"
+  ],
+  "native_libs": [
+    "lib/arm64-v8a/libil2cpp.so",
+    "lib/arm64-v8a/libmain.so",
+    "lib/arm64-v8a/libunity.so"
+  ],
+  "dex_files": [
+    "classes.dex"
+  ],
+  "game_files": [
+    "META-INF/com.android.games.engine.build_fingerprint",
+    "play-services-ads-base.properties",
+    "play-services-ads-identifier.properties",
+    "play-services-ads-lite.properties",
+    "play-services-ads.properties",
+    "play-services-appset.properties",
+    "play-services-base.properties",
+    "play-services-basement.properties",
+    "play-services-measurement-base.properties",
+    "play-services-measurement-sdk-api.properties",
+    "play-services-tasks.properties"
+  ],
+  "unity_files": [
+    "assets/bin/Data/data.unity3d",
+    "assets/bin/Data/unity default resources",
+    "assets/bin/Data/unity_app_guid",
+    "lib/arm64-v8a/libil2cpp.so",
+    "lib/arm64-v8a/libunity.so"
+  ]
+}

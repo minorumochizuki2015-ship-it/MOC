@@ -1,0 +1,15 @@
+{
+  "ts": "20251015_130844",
+  "retcodes": {
+    "e2e": 0,
+    "perf": 0
+  },
+  "paths": {
+    "python": "C:\\Users\\User\\Trae\\Game_project\\.venv\\Scripts\\python.exe",
+    "app": "C:\\Users\\User\\Trae\\Game_project\\.trae\\apk_analysis_system\\apk_analyzer_app.py",
+    "perf_script": "C:\\Users\\User\\Trae\\Game_project\\.trae\\apk_analysis_system\\tests\\test_performance.py"
+  },
+  "env": {
+    "ENHANCED_ANALYSIS_METADATA_DIR": "C:\\Users\\User\\Trae\\Game_project\\Trae\\Build\\Android\\TraeGame_extracted\\assets\\bin\\Data\\Managed\\Metadata"
+  }
+}

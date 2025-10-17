@@ -1,0 +1,186 @@
+  10-11 15:31:52.281 D/DmUtilKeepAlive( 1495): isInKeepAliveList  iskeepAliveEnable = true
+  --------- beginning of system
+> 10-11 15:31:52.281 I/ActivityManager( 1495): Force stopping com.traegames.haidoon appid=10263 user=0: from pid 16586
+  10-11 15:31:52.282 I/chatty  ( 1495): uid=1000(system) Binder:1495_1F identical 37 lines
+  10-11 15:31:52.282 D/DmUtilKeepAlive( 1495): isInKeepAliveList  iskeepAliveEnable = true
+> 10-11 15:31:52.283 W/ActivityManager( 1495): forceStop backtrace 
+> 10-11 15:31:52.283 W/ActivityManager( 1495): java.lang.RuntimeException: here
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at com.android.server.am.ActivityManagerService.forceStopPackage(ActivityManagerService.java:4584)
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at com.android.server.am.ActivityManagerShellCommand.runForceStop(ActivityManagerShellCommand.java:1028)
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at com.android.server.am.ActivityManagerShellCommand.onCommand(ActivityManagerShellCommand.java:208)
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at android.os.ShellCommand.exec(ShellCommand.java:104)
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at com.android.server.am.ActivityManagerService.onShellCommand(ActivityManagerService.java:10307)
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at android.os.Binder.shellCommand(Binder.java:881)
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at android.os.Binder.onTransact(Binder.java:765)
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at android.app.IActivityManager$Stub.onTransact(IActivityManager.java:4599)
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at com.android.server.am.ActivityManagerService.onTransact(ActivityManagerService.java:2919)
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at android.os.Binder.execTransactInternal(Binder.java:1021)
+> 10-11 15:31:52.283 W/ActivityManager( 1495): 	at android.os.Binder.execTransact(Binder.java:994)
+  10-11 15:31:52.283 I/NotificationService( 1495): action=android.intent.action.PACKAGE_RESTARTED removing=false
+  10-11 15:31:52.283 I/NotificationService( 1495): pkgName=com.traegames.haidoon cancelNotifications=true,hideN:false,unhideN:false,UID:1000,PID:1495,reason:5
+  10-11 15:31:52.290 D/RegisteredNfcFServicesCache( 3913): Service unchanged, not updating
+  10-11 15:31:52.428 D/ActivityTaskManager( 1495): isInSuperLauncher() mInSuperPowerMode = 0
+> 10-11 15:31:52.428 D/ActivityEventsService( 1495): sendActivityEvent eventid1024 pkgname=com.traegames.haidoon activity=com.unity3d.player.UnityPlayerActivity
+  10-11 15:31:52.428 I/ActivityTaskManager( 1495): startActivity 16591 Uid = 2000 false
+> 10-11 15:31:52.429 I/ActivityTaskManager( 1495): START u0 {flg=0x10000000 cmp=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity} from uid 2000 , pid: 16591 , packageName: com.android.shell
+  10-11 15:31:52.431 E/ANDR-PERF-MPCTL(  835): perf_lock_acq: client_pid=1495, client_tid=3883, inupt handle=0, duration=2000 ms, num_args=20, list=0x40C20000 0x28 0x40C1C000 0x32 0x40C20200 0x28 0x40C1C200 0x32 0x40804000 0xFFF 0x40804100 0xFFF 0x40804200 0xFFF 0x40800000 0x5C6 0x40800100 0x553 0x40800200 0x6AC 
+  10-11 15:31:52.432 E/ANDR-PERF-MPCTL(  835): perf_lock_acq: output handle=34248
+  10-11 15:31:52.437 E/        (  835): perfGetProp: Return Val from Perf.cpp is 0
+  10-11 15:31:52.439 I/ActivityTaskManager( 1495): ScheduleTopResumedActivityChanged Token{bcc246c ActivityRecord{37d291f u0 com.zte.mifavor.launcher/com.android.launcher3.Launcher t1462}} Set to false
+> 10-11 15:31:52.439 D/ActivityEventsService( 1495): sendActivityEvent eventid8 pkgname=com.traegames.haidoon activity=com.unity3d.player.UnityPlayerActivity
+  10-11 15:31:52.439 I/ActivityThread( 2539): handleTopResumedActivityChanged ActivityRecord{ba75c4f token=android.os.BinderProxy@71b80c9 {com.zte.mifavor.launcher/com.android.launcher3.Launcher}} Set to false
+  10-11 15:31:52.440 E/ANDR-IOP(  834): io prefetch is disabled
+  10-11 15:31:52.445 E/ANDR-PERF-MPCTL(  835): perf_lock_acq: client_pid=1495, client_tid=3861, inupt handle=0, duration=400 ms, num_args=12, list=0x40804000 0xFFF 0x40804100 0xFFF 0x40804200 0xFFF 0x40800000 0xFFF 0x40800100 0xFFF 0x40800200 0xFFF 
+  10-11 15:31:52.446 E/ANDR-PERF-MPCTL(  835): perf_lock_acq: output handle=34253
+> 10-11 15:31:52.447 I/ActivityManager( 1495): ztelog is 0
+  10-11 15:31:52.447 D/DmUtilKeepAlive( 1495): isInKeepAliveList  iskeepAliveEnable = true
+  10-11 15:31:52.448 D/ZTE-SH - AutomaticBrightnessController( 1495): ignoring newScreenAutoBrightness: 110.4 < 115 < 151.8
+  10-11 15:31:52.461 D/Adaptor.ImageWallpaperAdapt( 2272): printOnOffsetsChanged:xOffset is 0.0,yOffset is 0.5
+  10-11 15:31:52.463 D/Zygote  (  698): Forked child process 16600
+> 10-11 15:31:52.464 I/ActivityManager( 1495): Start proc 16600:com.traegames.haidoon/u0a263 for activity {com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity}
+  10-11 15:31:52.467 E/libprocessgroup(16600): createProcessGroupFreezer initialPid '16600' uid:  10263: File exists
+  10-11 15:31:52.471 E/aegames.haidoo(16600): Not starting debugger since process cannot load the jdwp agent.
+  10-11 15:31:52.476 D/CompatibilityInfo( 1495): applicationDensity - 480
+  10-11 15:31:52.476 D/CompatibilityInfo( 1495): applicationScale - 1.0
+> 10-11 15:31:52.476 I/ActivityTaskManager( 1495): ScheduleTopResumedActivityChanged Token{7806b0 ActivityRecord{f25d9f3 u0 com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity t1506}} Set to true
+> 10-11 15:31:52.477 D/ActivityEventsService( 1495): sendActivityEvent eventid512 pkgname=com.traegames.haidoon activity=com.unity3d.player.UnityPlayerActivity
+> 10-11 15:31:52.477 D/ActivityEventsService( 1495): sendActivityEvent eventid128 pkgname=com.traegames.haidoon activity=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity
+> 10-11 15:31:52.477 D/ActivityEventsService( 1495): sendActivityEvent callback eventid=128; pkgname=com.traegames.haidoon; activity=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity; reserved=
+  10-11 15:31:52.477 I/chatty  ( 1495): uid=1000(system) Binder:1495_15 identical 2 lines
+> 10-11 15:31:52.477 D/ActivityEventsService( 1495): sendActivityEvent callback eventid=128; pkgname=com.traegames.haidoon; activity=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity; reserved=
+> 10-11 15:31:52.477 D/SystemUI_FakeNotchFeature( 2272): top activity: pkg = com.traegames.haidoon, activity = com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity, eventId = 0x80
+> 10-11 15:31:52.477 D/SystemUI_FakeNotchFeature( 2272): [pkg = com.traegames.haidoon, activity = com.unity3d.player.UnityPlayerActivity] match failed
+  10-11 15:31:52.477 I/AppSwitchDispatcher( 4647): Get activity event:128 pkgname:com.traegames.haidoon
+  10-11 15:31:52.477 D/NrPowerOptimizer( 1495): NrPwrOptHandler, msg= { when=0 what=1 obj=com.traegames.haidoon target=com.android.server.ZteNrPowerOptimizerController$NrPwrOptHandler }
+  10-11 15:31:52.478 I/LogHelper( 4647): AppSwitchEventsDispatcher.java[119](handleDelayProcess): 6 onReceive, switch lastApp=com.zte.mifavor.launchers,foregroundApp=com.traegames.haidoon
+  10-11 15:31:52.478 W/ContextImpl( 4647): Calling a method in the system process without a qualified user: android.app.ContextImpl.startService:1570 android.content.ContextWrapper.startService:669 com.zte.heartyservice.strategy.service.RecordAppService.startUpdateAppTime:60 com.zte.heartyservice.strategy.utils.AppSwitchEventsDispatcher.handleDelayProcess:126 com.zte.heartyservice.strategy.utils.AppSwitchEventsDispatcher.processAppChangeEvent:110 
+> 10-11 15:31:52.478 D/ActivityEventsService( 1495): sendActivityEvent callback eventid=128; pkgname=com.traegames.haidoon; activity=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity; reserved=
+  10-11 15:31:52.479 D/ActivityThread(16600): haha: installLogMonitor
+  10-11 15:31:52.479 D/ActivityThread(16600): haha: installLogMonitor disabled
+  10-11 15:31:52.480 D/ActivityThread(16600): caller system = false
+> 10-11 15:31:52.481 D/SystemUI_NavigationBarZte( 2272): notifiyActivityEvent activity event: 0x80 pkgname:com.traegames.haidoon activity=com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity reserved=
+  10-11 15:31:52.481 D/SystemUI_NavigationBarZte( 2272): notifiyActivityEvent mIsEmergencyOnTop=false
+  10-11 15:31:52.481 D/CompatibilityInfo( 1495): mCompatibilityFlags - 0
+  10-11 15:31:52.486 I/LogHelper( 4647): RecordAppService.java[173](onCreate):onCreate
+  10-11 15:31:52.487 I/LogHelper( 4647): RecordAppService.java[111](handleUpdateActionTime):handleUpdateActionTimecom.zte.mifavor.launcher
+> 10-11 15:31:52.487 I/AppActionDBHelper( 4647): setAppTimeAction,item=VirusScanResult [pkgName=com.zte.mifavor.launcher, startTime=1760164310300, endTime=1760164312478]
+  10-11 15:31:52.490 I/Perf    (16600): Connecting to perf service.
+  10-11 15:31:52.493 V/GraphicsEnvironment(16600): ANGLE Developer option for 'com.traegames.haidoon' set to: 'default'
+  10-11 15:31:52.493 V/GraphicsEnvironment(16600): ANGLE whitelist: []
+  10-11 15:31:52.493 V/GraphicsEnvironment(16600): Neither Game Driver nor prerelease driver is supported.
+> 10-11 15:31:52.493 V/GraphicsEnv(16600): setGpuStats:
+  10-11 15:31:52.493 V/GraphicsEnv(16600): 	driverPackageName[system]
+  10-11 15:31:52.493 V/GraphicsEnv(16600): 	driverVersionName[]
+  10-11 15:31:52.497 I/AppActionDBHelper( 4647):  1 setAppTimeAction,replace=pkgname=com.zte.mifavor.launcher first_date=1626068005234 launch_duration=-5102333660 launch_count=2385 last_date=1760164310300
+  10-11 15:31:52.499 D/PhoneWindowManagerMifavor( 1495): setFullScreenOrNot true
+> 10-11 15:31:52.501 V/GraphicsEnv(16600): sendGpuStats:
+  10-11 15:31:52.501 V/GraphicsEnv(16600): 	driverPackageName[system]
+  10-11 15:31:52.501 V/GraphicsEnv(16600): 	driverVersionName[]
+  10-11 15:31:52.535 D/audio_hw_extn(  803): audio_extn_fm_set_parameters: Enter
+  10-11 15:31:52.535 D/audio_hw_hfp(  803): hfp_set_parameters: enter
+> 10-11 15:31:52.535 D/WindowClient(16600): Add to mViews: DecorView@90e4815[UnityPlayerActivity], this = android.view.WindowManagerGlobal@a49472amViews.size()=1
+  10-11 15:31:52.535 D/WindowClient(16600): Add to mViews packageName:com.traegames.haidoon
+  10-11 15:31:52.537 D/JANK    (16600): will start tracking: at 227179439
+> 10-11 15:31:52.537 I/ActivityThread(16600): handleTopResumedActivityChanged ActivityRecord{95e491b token=android.os.BinderProxy@dab2f88 {com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity}} Set to true
+  10-11 15:31:52.543 D/StatusBar( 2272): setSystemUiVisibility displayId=0 vis=800f mask=ffffffff oldVal=8008 newVal=800f diff=7
+  10-11 15:31:52.543 D/systemUI_MusicLockFeature( 2272): setMediaNotificationInit,,mMediaNotification is null
+  10-11 15:31:52.559 D/systemUI_StatusBarWindowViewAdapt( 2272): onLayout getY = 0;;;;getlastY = 0;;;;gettransY = 0
+  10-11 15:31:52.570 E/ANDR-IOP(  834): IOP HAL: Received pkg_name = com.traegames.haidoon pid = 0
+> 10-11 15:31:52.570 I/ActivityTaskManager( 1495): Displayed com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity: +139ms
+  10-11 15:31:52.571 E/ANDR-IOP(  834): IOP HAL: Received pkg_name = com.traegames.haidoon pid = 0
+  10-11 15:31:52.571 E/ANDR-PERF-MPCTL(  835): perf_lock_rel: input handle=34252
+  10-11 15:31:52.588 I/Module  (30489): DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 0, locked = false
+  10-11 15:31:52.588 I/GoogleInputMethodService(30489): GoogleInputMethodService.onStartInput():1345 onStartInput(EditorInfo{EditorInfo{packageName=com.traegames.haidoon, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=2130837504, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
+> 10-11 15:31:52.589 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+  10-11 15:31:52.590 I/Module  (30489): DeviceLockedStatusModuleProvider$Module.updateDeviceLockedStatus():103 repeatCheckTimes = 1, locked = false
+> 10-11 15:31:52.600 I/Unity   (16600): MemoryManager: Using 'Dynamic Heap' Allocator.
+> 10-11 15:31:52.606 E/SurfaceFlinger(  898): error registering vsync callback: Invalid argument (-22)
+> 10-11 15:31:52.610 I/Unity   (16600): SystemInfo CPU = ARM64 FP ASIMD AES, Cores = 8, Memory = 5453mb
+> 10-11 15:31:52.610 I/Unity   (16600): SystemInfo ARM big.LITTLE configuration: 2 big (mask: 0xc0), 6 little (mask: 0x3f)
+> 10-11 15:31:52.611 I/Unity   (16600): ApplicationInfo com.traegames.haidoon version 1.0.0
+> 10-11 15:31:52.611 I/Unity   (16600): Built from '2022.3/respin/2022.3.62f2-4af31df585-v2' branch, Version '2022.3.62f2 (7670c08855a9)', Build type 'Release', Scripting Backend 'il2cpp', CPU 'arm64-v8a', Stripping 'Enabled'
+  10-11 15:31:52.660 D/StatusBar( 2272): setSystemUiVisibility displayId=0 vis=970f mask=ffffffff oldVal=800f newVal=970f diff=1700
+  10-11 15:31:52.660 D/SystemUI_NavigationBarZte( 2272): setSystemUiVisibility vis=0x970f,mask=-1
+  10-11 15:31:52.698 I/chatty  (16600): uid=10263(com.traegames.haidoon) identical 14 lines
+  10-11 15:31:52.698 E/libprocessgroup(16600): set_timerslack_ns write failed: Operation not permitted
+> 10-11 15:31:52.716 I/Unity   (16600): Company Name: Trae Games
+> 10-11 15:31:52.716 I/Unity   (16600): Product Name: 縺ｯ縺・ｼ√ラ繝ｼ繝ｳ・・
+  10-11 15:31:52.719 E/vulkan  (16600): invalid vkGetInstanceProcAddr(VK_NULL_HANDLE, "vkGetInstanceProcAddr") call
+> 10-11 15:31:52.726 W/UnityMain(16600): type=1400 audit(0.0:1078671): avc: denied { open } for path="/dev/__properties__/u:object_r:bootsound_prop:s0" dev="tmpfs" ino=24284 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:bootsound_prop:s0 tclass=file permissive=0
+> 10-11 15:31:52.726 W/UnityMain(16600): type=1400 audit(0.0:1078672): avc: denied { open } for path="/dev/__properties__/u:object_r:device_logging_prop:s0" dev="tmpfs" ino=24336 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:device_logging_prop:s0 tclass=file permissive=0
+> 10-11 15:31:52.726 W/UnityMain(16600): type=1400 audit(0.0:1078673): avc: denied { map } for path="/dev/__properties__/u:object_r:ftmd_default_prop:s0" dev="tmpfs" ino=24374 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:ftmd_default_prop:s0 tclass=file permissive=0
+> 10-11 15:31:52.726 W/UnityMain(16600): type=1400 audit(0.0:1078674): avc: denied { open } for path="/dev/__properties__/u:object_r:logpersistd_logging_prop:s0" dev="tmpfs" ino=24393 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:logpersistd_logging_prop:s0 tclass=file permissive=0
+> 10-11 15:31:52.726 W/UnityMain(16600): type=1400 audit(0.0:1078675): avc: denied { open } for path="/dev/__properties__/u:object_r:mmc_prop:s0" dev="tmpfs" ino=24399 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:mmc_prop:s0 tclass=file permissive=0
+> 10-11 15:31:52.726 W/UnityMain(16600): type=1400 audit(0.0:1078676): avc: denied { open } for path="/dev/__properties__/u:object_r:safemode_prop:s0" dev="tmpfs" ino=24423 scontext=u:r:untrusted_app:s0:c7,c257,c512,c768 tcontext=u:object_r:safemode_prop:s0 tclass=file permissive=0
+> 10-11 15:31:52.734 V/GraphicsEnv(16600): sendGpuStats:
+  10-11 15:31:52.734 V/GraphicsEnv(16600): 	driverPackageName[system]
+  10-11 15:31:52.734 V/GraphicsEnv(16600): 	driverVersionName[]
+  10-11 15:31:52.764 E/CRASH   (16600): ABI: 'arm64'
+  10-11 15:31:52.764 E/CRASH   (16600): Timestamp: 2025-10-11 15:31:52.764438891+0900
+> 10-11 15:31:52.764 E/CRASH   (16600): pid: 16600, tid: 16625, name: UnityMain  >>> com.traegames.haidoon <<<
+  10-11 15:31:52.764 E/CRASH   (16600): uid: 10263
+  10-11 15:31:52.764 E/CRASH   (16600): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr --------
+  10-11 15:31:52.764 E/CRASH   (16600):       #01 pc 0000000000019b9c  /system/lib64/libvulkan.so (BuildId: abdc60d4994da0b5d6ded03243a4ced3)
+  10-11 15:31:52.764 E/CRASH   (16600):       #02 pc 0000000000011c40  /system/lib64/libvulkan.so (BuildId: abdc60d4994da0b5d6ded03243a4ced3)
+> 10-11 15:31:52.764 E/CRASH   (16600):       #03 pc 00000000001305ac  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/lib/arm64/libwebrtc.so (unity::webrtc::Hook_vkCreateInstance(VkInstanceCreateInfo const*, VkAllocationCallbacks const*, VkInstance_T**)+584)
+> 10-11 15:31:52.764 E/CRASH   (16600):       #04 pc 00000000007ab1c8  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/lib/arm64/libunity.so (BuildId: 81755cf54ed188e5)
+> 10-11 15:31:52.764 E/CRASH   (16600):       #05 pc 00000000007a847c  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/lib/arm64/libunity.so (BuildId: 81755cf54ed188e5)
+> 10-11 15:31:52.764 E/CRASH   (16600):       #06 pc 000000000071041c  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/lib/arm64/libunity.so (BuildId: 81755cf54ed188e5)
+> 10-11 15:31:52.764 E/CRASH   (16600):       #07 pc 00000000004bd574  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/lib/arm64/libunity.so (BuildId: 81755cf54ed188e5)
+> 10-11 15:31:52.764 E/CRASH   (16600):       #08 pc 00000000004bfb30  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/lib/arm64/libunity.so (BuildId: 81755cf54ed188e5)
+> 10-11 15:31:52.764 E/CRASH   (16600):       #09 pc 00000000004c0888  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/lib/arm64/libunity.so (BuildId: 81755cf54ed188e5)
+> 10-11 15:31:52.764 E/CRASH   (16600):       #10 pc 00000000004d59d0  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/lib/arm64/libunity.so (BuildId: 81755cf54ed188e5)
+  10-11 15:31:52.764 E/CRASH   (16600):       #11 pc 000000000000bf8c  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/oat/arm64/base.odex
+  10-11 15:31:52.774 E/InputDispatcher( 1495): Window handle nav_input_consumer has no registered input channel
+  10-11 15:31:53.300 E/CRASH   (16600): Forwarding signal 11
+  --------- beginning of crash
+> 10-11 15:31:53.300 F/libc    (16600): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x64696f72646e61 in tid 16625 (UnityMain), pid 16600 (aegames.haidoon)
+  10-11 15:31:53.335 I/crash_dump64(16653): obtaining output fd from tombstoned, type: kDebuggerdTombstone
+  10-11 15:31:53.339 I//system/bin/tombstoned( 1325): received crash request for pid 16625
+  10-11 15:31:53.345 F/DEBUG   (16653): ABI: 'arm64'
+  10-11 15:31:53.345 F/DEBUG   (16653): Timestamp: 2025-10-11 15:31:53+0900
+> 10-11 15:31:53.346 F/DEBUG   (16653): pid: 16600, tid: 16625, name: UnityMain  >>> com.traegames.haidoon <<<
+  10-11 15:31:53.346 F/DEBUG   (16653): uid: 10263
+  10-11 15:31:53.346 F/DEBUG   (16653): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x64696f72646e61
+  10-11 15:31:53.351 F/DEBUG   (16653):       #01 pc 0000000000019b9c  /system/lib64/libvulkan.so (vulkan::driver::CreateInstance(VkInstanceCreateInfo const*, VkAllocationCallbacks const*, VkInstance_T**)+800) (BuildId: abdc60d4994da0b5d6ded03243a4ced3)
+  10-11 15:31:53.351 F/DEBUG   (16653):       #02 pc 0000000000011c40  /system/lib64/libvulkan.so (vulkan::api::CreateInstance(VkInstanceCreateInfo const*, VkAllocationCallbacks const*, VkInstance_T**)+3116) (BuildId: abdc60d4994da0b5d6ded03243a4ced3)
+> 10-11 15:31:53.351 F/DEBUG   (16653):       #03 pc 00000000001305ac  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/lib/arm64/libwebrtc.so (unity::webrtc::Hook_vkCreateInstance(VkInstanceCreateInfo const*, VkAllocationCallbacks const*, VkInstance_T**)+584)
+> 10-11 15:31:53.351 F/DEBUG   (16653):       #04 pc 00000000007a71c8  /data/app/com.traegames.haidoon-w_BAMMrsojII0PfH930VSg==/lib/arm64/libunity.so!libunity.so (offset 0x265000) (BuildId: 81755cf54ed188e5)
+  10-11 15:31:53.388 D/QtiRadioIndication( 2709): onSignalStrengthChange: slotId = 0
+  10-11 15:31:53.388 D/QtiRadioIndication( 2709): onSignalStrengthChange: {.rsrp = -32768, .snr = -32768}
+  10-11 15:31:53.672 I/DropBoxManagerService( 1495): add tag=SYSTEM_TOMBSTONE isTagEnabled=true flags=0x2
+  10-11 15:31:53.683 I/DropBoxManagerService( 1495): add tag=data_app_native_crash isTagEnabled=true flags=0x2
+> 10-11 15:31:53.692 W/ActivityTaskManager( 1495):   Force finishing activity com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity
+> 10-11 15:31:53.693 I/ActivityTaskManager( 1495): ScheduleTopResumedActivityChanged Token{7806b0 ActivityRecord{f25d9f3 u0 com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity t1506 f}} Set to false
+  10-11 15:31:53.693 D/ActivityEventsService( 1495): sendActivityEvent eventid512 pkgname=com.zte.mifavor.launcher activity=com.android.launcher3.Launcher
+  10-11 15:31:53.693 D/ActivityEventsService( 1495): sendActivityEvent eventid512 pkgname=com.zte.mifavor.launcher activity=com.android.launcher3.Launcher
+  10-11 15:31:53.700 D/ActivityTrigger( 1495): ActivityTrigger activityPauseTrigger 
+> 10-11 15:31:53.700 D/ActivityEventsService( 1495): sendActivityEvent eventid64 pkgname=com.traegames.haidoon activity=com.unity3d.player.UnityPlayerActivity
+  10-11 15:31:53.701 E/ANDR-PERF-MPCTL(  835): perf_lock_rel: input handle=34255
+  10-11 15:31:53.702 W/ANDR-PERF-LM(  835): MetaMeter: handleAsync() 169: GameOptimization Invalid state for appName com.traegames.haidoon 
+  10-11 15:31:53.710 V/GraphicsEnv( 1495): mAnglePath is empty, not creating ANGLE namespace
+  10-11 15:31:53.710 V/GraphicsEnv( 1495): mAnglePath is empty, not creating ANGLE namespace
+> 10-11 15:31:53.710 W/InputDispatcher( 1495): channel '1e8a44b com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity (server)' ~ Consumer closed input channel or an error occurred.  events=0x9
+> 10-11 15:31:53.710 E/InputDispatcher( 1495): channel '1e8a44b com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity (server)' ~ Channel is unrecoverably broken and will be disposed!
+  10-11 15:31:53.710 I/chatty  ( 1495): uid=1000(system) RenderThread expire 19 lines
+  10-11 15:31:53.710 V/GraphicsEnv( 1495): mAnglePath is empty, not creating ANGLE namespace
+> 10-11 15:31:53.710 I/WindowManager( 1495): WIN DEATH: Window{1e8a44b u0 com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity}
+> 10-11 15:31:53.710 W/InputDispatcher( 1495): Attempted to unregister already unregistered input channel '1e8a44b com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity (server)'
+> 10-11 15:31:53.710 I/ActivityManager( 1495): Process com.traegames.haidoon (pid 16600) has died: fore TOP 
+  10-11 15:31:53.711 I/libprocessgroup( 1495): Successfully killed process cgroup uid 10263 pid 16600 in 0ms
+  10-11 15:31:53.711 I/Zygote  (  698): Process 16600 exited due to signal 11 (Segmentation fault)
+  10-11 15:31:53.755 I//vendor/bin/hw/vendor.qti.hardware.servicetracker@1.1-service(  845): startService() is called for servicecom.zte.heartyservice.strategy/.service.RecordAppService
+  10-11 15:31:53.755 I/KeyboardDefCache(30489): MemoryFileCache$1.onTrimMemory():124 clearMemory() for trim memory: 10
+> 10-11 15:31:53.758 W/ActivityManager( 1495): setHasOverlayUi called on unknown pid: 16600
+  10-11 15:31:53.758 I//vendor/bin/hw/vendor.qti.hardware.servicetracker@1.1-service(  845): unbindService is called for service : com.zte.mifavor.launcher.adapter/.EmailUnReadIntentService and for client com.zte.mifavor.launcher
+  10-11 15:31:53.758 I//vendor/bin/hw/vendor.qti.hardware.servicetracker@1.1-service(  845): size of service connections for service: com.zte.mifavor.launcher.adapter/.EmailUnReadIntentServiceafter removal is 0
+  10-11 15:31:53.769 W/AbstractFloatingView( 2539): getOpenView--return null
+  10-11 15:31:53.769 I/LogHelper( 4647): RecordAppService.java[111](handleUpdateActionTime):handleUpdateActionTimecom.traegames.haidoon
+> 10-11 15:31:53.769 I/AppActionDBHelper( 4647): setAppTimeAction,item=VirusScanResult [pkgName=com.traegames.haidoon, startTime=1760164312478, endTime=1760164313721]
+  10-11 15:31:53.769 W/AbstractFloatingView( 2539): getOpenView--return null
+  10-11 15:31:53.769 I/chatty  ( 2539): uid=10061(com.zte.mifavor.launcher) identical 3 lines
+  10-11 15:31:54.181 D/DmUtilAudio( 1495): allowRecord code = 43
+  10-11 15:31:54.182 D/DmUtilAudio( 1495): allowRecord code = 43
+> 10-11 15:31:54.194 W/ActivityTaskManager( 1495): Activity top resumed state loss timeout for ActivityRecord{f25d9f3 u0 com.traegames.haidoon/com.unity3d.player.UnityPlayerActivity t-1 f}
+  10-11 15:31:54.194 I/ActivityTaskManager( 1495): ScheduleTopResumedActivityChanged Token{bcc246c ActivityRecord{37d291f u0 com.zte.mifavor.launcher/com.android.launcher3.Launcher t1462}} Set to true
+  10-11 15:31:54.194 I/ActivityThread( 2539): handleTopResumedActivityChanged ActivityRecord{ba75c4f token=android.os.BinderProxy@71b80c9 {com.zte.mifavor.launcher/com.android.launcher3.Launcher}} Set to true

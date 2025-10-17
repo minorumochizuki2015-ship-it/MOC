@@ -1,0 +1,74 @@
+{
+    "themes": {
+        "必要": {
+            "count": 5,
+            "note_count": 0,
+            "pass_count": 4,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "利用": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "サービス": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "ソフトウェア": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "ファイル": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "プラットフォーム": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "テスト": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "自分": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "作成": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        },
+        "実施": {
+            "count": 1,
+            "note_count": 0,
+            "pass_count": 1,
+            "entropy_sum": 0.0,
+            "entropy_n": 0
+        }
+    }
+}

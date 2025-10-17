@@ -1,0 +1,13 @@
+{
+  "scan_results": {},
+  "timestamp": "2025-10-12 16:50:26",
+  "recommendations": [],
+  "rotation_status": {
+    "total_tracked_secrets": 0,
+    "last_rotation": "Never",
+    "active_secrets": 0,
+    "overdue_rotations": 0,
+    "total_rotations_performed": 0
+  },
+  "overall_status": "CRITICAL"
+}
