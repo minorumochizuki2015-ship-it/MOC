@@ -1,0 +1,38 @@
+2025-09-29 17:56:29,830 - enhanced_apk_analyzer - INFO - APK解析開始: HeyDooon_1.20_APKPure.apk (通常ログ)
+2025-09-29 17:56:29,830 - enhanced_apk_analyzer - INFO - ファイルサイズ: 105,597,884 bytes
+2025-09-29 17:56:29,830 - enhanced_apk_analyzer - INFO - Phase 1: APK基本情報解析開始
+2025-09-29 17:56:29,831 - enhanced_apk_analyzer - INFO - マニフェスト解析進捗: 0/50
+2025-09-29 17:56:29,831 - enhanced_apk_analyzer - INFO - Phase 1: APK基本情報解析完了
+2025-09-29 17:56:29,831 - enhanced_apk_analyzer - INFO - Phase 2: DEXファイル解析開始
+2025-09-29 17:56:29,833 - enhanced_apk_analyzer - INFO - DEXファイル解析進捗: 0/20
+2025-09-29 17:56:29,833 - enhanced_apk_analyzer - INFO - Phase 2: DEXファイル解析完了
+2025-09-29 17:56:29,833 - enhanced_apk_analyzer - INFO - Phase 3: リソース解析開始
+2025-09-29 17:56:29,833 - enhanced_apk_analyzer - INFO - リソース解析進捗: 0/14
+2025-09-29 17:56:29,833 - enhanced_apk_analyzer - INFO - Phase 3: リソース解析完了
+2025-09-29 17:56:29,834 - enhanced_apk_analyzer - INFO - Phase 4: ネイティブライブラリ解析開始
+2025-09-29 17:56:29,834 - enhanced_apk_analyzer - INFO - ネイティブライブラリ解析進捗: 0/5
+2025-09-29 17:56:29,834 - enhanced_apk_analyzer - INFO - Phase 4: ネイティブライブラリ解析完了
+2025-09-29 17:56:29,834 - enhanced_apk_analyzer - INFO - Phase 5: セキュリティ解析開始
+2025-09-29 17:56:29,834 - enhanced_apk_analyzer - WARNING - 潜在的なセキュリティリスクを検出: 不明な権限要求
+2025-09-29 17:56:29,834 - enhanced_apk_analyzer - WARNING - 証明書の検証に問題があります
+2025-09-29 17:56:29,834 - enhanced_apk_analyzer - INFO - Phase 5: セキュリティ解析完了
+2025-09-29 17:56:29,834 - enhanced_apk_analyzer - INFO - APK解析完了: HeyDooon_1.20_APKPure.apk
+2025-09-29 17:58:57,141 - enhanced_apk_analyzer - INFO - APK解析開始: HeyDooon_1.20_APKPure.apk (通常ログ)
+2025-09-29 17:58:57,142 - enhanced_apk_analyzer - INFO - ファイルサイズ: 105,597,884 bytes
+2025-09-29 17:58:57,142 - enhanced_apk_analyzer - INFO - Phase 1: APK基本情報解析開始
+2025-09-29 17:58:57,142 - enhanced_apk_analyzer - INFO - マニフェスト解析進捗: 0/50
+2025-09-29 17:58:57,143 - enhanced_apk_analyzer - INFO - Phase 1: APK基本情報解析完了
+2025-09-29 17:58:57,143 - enhanced_apk_analyzer - INFO - Phase 2: DEXファイル解析開始
+2025-09-29 17:58:57,143 - enhanced_apk_analyzer - INFO - DEXファイル解析進捗: 0/20
+2025-09-29 17:58:57,143 - enhanced_apk_analyzer - INFO - Phase 2: DEXファイル解析完了
+2025-09-29 17:58:57,143 - enhanced_apk_analyzer - INFO - Phase 3: リソース解析開始
+2025-09-29 17:58:57,143 - enhanced_apk_analyzer - INFO - リソース解析進捗: 0/14
+2025-09-29 17:58:57,143 - enhanced_apk_analyzer - INFO - Phase 3: リソース解析完了
+2025-09-29 17:58:57,143 - enhanced_apk_analyzer - INFO - Phase 4: ネイティブライブラリ解析開始
+2025-09-29 17:58:57,144 - enhanced_apk_analyzer - INFO - ネイティブライブラリ解析進捗: 0/5
+2025-09-29 17:58:57,144 - enhanced_apk_analyzer - INFO - Phase 4: ネイティブライブラリ解析完了
+2025-09-29 17:58:57,144 - enhanced_apk_analyzer - INFO - Phase 5: セキュリティ解析開始
+2025-09-29 17:58:57,144 - enhanced_apk_analyzer - WARNING - 潜在的なセキュリティリスクを検出: 不明な権限要求
+2025-09-29 17:58:57,144 - enhanced_apk_analyzer - WARNING - 証明書の検証に問題があります
+2025-09-29 17:58:57,144 - enhanced_apk_analyzer - INFO - Phase 5: セキュリティ解析完了
+2025-09-29 17:58:57,144 - enhanced_apk_analyzer - INFO - APK解析完了: HeyDooon_1.20_APKPure.apk

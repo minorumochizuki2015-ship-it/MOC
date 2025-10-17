@@ -1,0 +1,369 @@
+2025-09-29 17:56:29,839 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 1/30
+2025-09-29 17:56:29,840 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 1/50
+2025-09-29 17:56:29,840 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 1/40
+2025-09-29 17:56:29,842 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 2/30
+2025-09-29 17:56:29,842 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 1/20
+2025-09-29 17:56:29,842 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 2/50
+2025-09-29 17:56:29,843 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 2/40
+2025-09-29 17:56:29,844 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 3/30
+2025-09-29 17:56:29,845 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 3/50
+2025-09-29 17:56:29,845 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 2/20
+2025-09-29 17:56:29,845 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 3/40
+2025-09-29 17:56:29,845 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 4/30
+2025-09-29 17:56:29,846 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 4/50
+2025-09-29 17:56:29,847 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 4/40
+2025-09-29 17:56:29,847 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 3/20
+2025-09-29 17:56:29,848 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 5/30
+2025-09-29 17:56:29,848 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 5/50
+2025-09-29 17:56:29,849 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 5/40
+2025-09-29 17:56:29,849 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 6/30
+2025-09-29 17:56:29,849 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 4/20
+2025-09-29 17:56:29,850 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 6/50
+2025-09-29 17:56:29,850 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 6/40
+2025-09-29 17:56:29,851 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 7/30
+2025-09-29 17:56:29,851 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 5/20
+2025-09-29 17:56:29,852 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 7/50
+2025-09-29 17:56:29,852 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 7/40
+2025-09-29 17:56:29,853 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 8/30
+2025-09-29 17:56:29,853 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 8/50
+2025-09-29 17:56:29,853 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 6/20
+2025-09-29 17:56:29,854 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 8/40
+2025-09-29 17:56:29,854 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 9/30
+2025-09-29 17:56:29,855 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 9/50
+2025-09-29 17:56:29,856 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 9/40
+2025-09-29 17:56:29,856 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 7/20
+2025-09-29 17:56:29,856 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 10/30
+2025-09-29 17:56:29,857 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 10/50
+2025-09-29 17:56:29,857 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 10/40
+2025-09-29 17:56:29,858 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 8/20
+2025-09-29 17:56:29,858 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 11/30
+2025-09-29 17:56:29,858 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 11/50
+2025-09-29 17:56:29,859 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 11/40
+2025-09-29 17:56:29,860 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 12/30
+2025-09-29 17:56:29,860 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 9/20
+2025-09-29 17:56:29,860 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 12/50
+2025-09-29 17:56:29,861 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 12/40
+2025-09-29 17:56:29,861 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 13/30
+2025-09-29 17:56:29,862 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 13/50
+2025-09-29 17:56:29,862 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 10/20
+2025-09-29 17:56:29,862 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 13/40
+2025-09-29 17:56:29,863 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 14/30
+2025-09-29 17:56:29,864 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 14/50
+2025-09-29 17:56:29,864 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 11/20
+2025-09-29 17:56:29,864 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 14/40
+2025-09-29 17:56:29,865 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 15/30
+2025-09-29 17:56:29,865 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 15/50
+2025-09-29 17:56:29,866 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 12/20
+2025-09-29 17:56:29,866 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 16/30
+2025-09-29 17:56:29,866 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 15/40
+2025-09-29 17:56:29,867 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 16/50
+2025-09-29 17:56:29,867 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 13/20
+2025-09-29 17:56:29,868 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 17/30
+2025-09-29 17:56:29,868 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 17/50
+2025-09-29 17:56:29,868 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 16/40
+2025-09-29 17:56:29,869 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 14/20
+2025-09-29 17:56:29,869 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 18/30
+2025-09-29 17:56:29,870 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 18/50
+2025-09-29 17:56:29,870 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 15/20
+2025-09-29 17:56:29,870 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 17/40
+2025-09-29 17:56:29,871 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 19/30
+2025-09-29 17:56:29,871 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 19/50
+2025-09-29 17:56:29,872 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 16/20
+2025-09-29 17:56:29,872 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 20/30
+2025-09-29 17:56:29,872 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 18/40
+2025-09-29 17:56:29,873 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 20/50
+2025-09-29 17:56:29,874 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 17/20
+2025-09-29 17:56:29,874 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 21/30
+2025-09-29 17:56:29,875 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 21/50
+2025-09-29 17:56:29,875 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 19/40
+2025-09-29 17:56:29,875 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 18/20
+2025-09-29 17:56:29,876 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 22/30
+2025-09-29 17:56:29,876 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 22/50
+2025-09-29 17:56:29,877 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 19/20
+2025-09-29 17:56:29,877 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 20/40
+2025-09-29 17:56:29,877 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 23/30
+2025-09-29 17:56:29,878 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 23/50
+2025-09-29 17:56:29,878 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 20/20
+2025-09-29 17:56:29,879 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 21/40
+2025-09-29 17:56:29,879 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 24/30
+2025-09-29 17:56:29,879 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 24/50
+2025-09-29 17:56:29,880 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 22/40
+2025-09-29 17:56:29,881 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 25/30
+2025-09-29 17:56:29,881 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 25/50
+2025-09-29 17:56:29,882 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 23/40
+2025-09-29 17:56:29,882 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 26/30
+2025-09-29 17:56:29,883 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 26/50
+2025-09-29 17:56:29,883 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 24/40
+2025-09-29 17:56:29,884 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 27/30
+2025-09-29 17:56:29,884 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 27/50
+2025-09-29 17:56:29,885 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 25/40
+2025-09-29 17:56:29,885 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 28/30
+2025-09-29 17:56:29,886 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 28/50
+2025-09-29 17:56:29,887 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 26/40
+2025-09-29 17:56:29,887 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 29/30
+2025-09-29 17:56:29,888 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 29/50
+2025-09-29 17:56:29,888 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 27/40
+2025-09-29 17:56:29,889 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 30/30
+2025-09-29 17:56:29,889 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 30/50
+2025-09-29 17:56:29,890 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 28/40
+2025-09-29 17:56:29,891 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 31/50
+2025-09-29 17:56:29,891 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 29/40
+2025-09-29 17:56:29,892 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 32/50
+2025-09-29 17:56:29,893 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 30/40
+2025-09-29 17:56:29,894 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 33/50
+2025-09-29 17:56:29,894 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 31/40
+2025-09-29 17:56:29,895 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 34/50
+2025-09-29 17:56:29,896 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 32/40
+2025-09-29 17:56:29,897 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 35/50
+2025-09-29 17:56:29,897 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 33/40
+2025-09-29 17:56:29,898 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 36/50
+2025-09-29 17:56:29,899 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 34/40
+2025-09-29 17:56:29,900 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 37/50
+2025-09-29 17:56:29,900 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 35/40
+2025-09-29 17:56:29,901 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 38/50
+2025-09-29 17:56:29,902 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 36/40
+2025-09-29 17:56:29,903 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 39/50
+2025-09-29 17:56:29,903 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 37/40
+2025-09-29 17:56:29,904 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 40/50
+2025-09-29 17:56:29,905 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 38/40
+2025-09-29 17:56:29,906 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 41/50
+2025-09-29 17:56:29,907 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 39/40
+2025-09-29 17:56:29,908 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 42/50
+2025-09-29 17:56:29,908 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 40/40
+2025-09-29 17:56:29,909 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 43/50
+2025-09-29 17:56:29,911 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 44/50
+2025-09-29 17:56:29,912 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 45/50
+2025-09-29 17:56:29,914 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 46/50
+2025-09-29 17:56:29,915 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 47/50
+2025-09-29 17:56:29,917 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 48/50
+2025-09-29 17:56:29,919 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 49/50
+2025-09-29 17:56:29,920 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 50/50
+2025-09-29 17:56:29,923 - high_load_apk - INFO - test_high_load_apk_processing:241 - 高負荷APK処理開始: 1000ファイル
+2025-09-29 17:56:29,923 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 0/1000
+2025-09-29 17:56:29,924 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 100/1000
+2025-09-29 17:56:29,924 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 200/1000
+2025-09-29 17:56:29,924 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 300/1000
+2025-09-29 17:56:29,924 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 400/1000
+2025-09-29 17:56:29,925 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 500/1000
+2025-09-29 17:56:29,925 - high_load_apk - ERROR - test_high_load_apk_processing:253 - 処理中にエラーが発生しましたが、継続します
+2025-09-29 17:56:29,925 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 600/1000
+2025-09-29 17:56:29,925 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 700/1000
+2025-09-29 17:56:29,926 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 800/1000
+2025-09-29 17:56:29,926 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 900/1000
+2025-09-29 17:56:29,926 - high_load_apk - INFO - test_high_load_apk_processing:256 - 高負荷APK処理完了: 0.003秒
+2025-09-29 17:56:29,927 - error_handling_apk - INFO - test_error_handling_scenarios:279 - エラーシナリオテスト: APKファイル破損
+2025-09-29 17:56:29,927 - error_handling_apk - ERROR - test_error_handling_scenarios:288 - エラーハンドリング: APKファイル破損が発生しました
+Traceback (most recent call last):
+  File "C:\Users\User\Trae\MOC\core\tests\test_real_apk_analysis.py", line 283, in test_error_handling_scenarios
+    raise Exception(f"{error_type}が発生しました")
+Exception: APKファイル破損が発生しました
+2025-09-29 17:56:29,937 - error_handling_apk - INFO - test_error_handling_scenarios:279 - エラーシナリオテスト: メモリ不足
+2025-09-29 17:56:29,937 - error_handling_apk - WARNING - test_error_handling_scenarios:285 - メモリ不足: 警告レベルで処理継続
+2025-09-29 17:56:29,938 - error_handling_apk - INFO - test_error_handling_scenarios:279 - エラーシナリオテスト: ディスク容量不足
+2025-09-29 17:56:29,938 - error_handling_apk - ERROR - test_error_handling_scenarios:288 - エラーハンドリング: ディスク容量不足が発生しました
+Traceback (most recent call last):
+  File "C:\Users\User\Trae\MOC\core\tests\test_real_apk_analysis.py", line 283, in test_error_handling_scenarios
+    raise Exception(f"{error_type}が発生しました")
+Exception: ディスク容量不足が発生しました
+2025-09-29 17:56:29,938 - error_handling_apk - INFO - test_error_handling_scenarios:279 - エラーシナリオテスト: ネットワークタイムアウト
+2025-09-29 17:56:29,938 - error_handling_apk - WARNING - test_error_handling_scenarios:285 - ネットワークタイムアウト: 警告レベルで処理継続
+2025-09-29 17:56:29,939 - error_handling_apk - INFO - test_error_handling_scenarios:279 - エラーシナリオテスト: 権限不足エラー
+2025-09-29 17:56:29,939 - error_handling_apk - ERROR - test_error_handling_scenarios:288 - エラーハンドリング: 権限不足エラーが発生しました
+Traceback (most recent call last):
+  File "C:\Users\User\Trae\MOC\core\tests\test_real_apk_analysis.py", line 283, in test_error_handling_scenarios
+    raise Exception(f"{error_type}が発生しました")
+Exception: 権限不足エラーが発生しました
+2025-09-29 17:58:57,147 - enhanced_apk_analyzer - INFO - info:135 - APK解析開始: HeyDooon_1.20_APKPure.apk (最適化ログ)
+2025-09-29 17:58:57,148 - enhanced_apk_analyzer - INFO - info:135 - ファイルサイズ: 105,597,884 bytes
+2025-09-29 17:58:57,148 - enhanced_apk_analyzer - INFO - info:135 - Phase 1: APK基本情報解析開始
+2025-09-29 17:58:57,148 - enhanced_apk_analyzer - INFO - info:135 - マニフェスト解析進捗: 0/50
+2025-09-29 17:58:57,149 - enhanced_apk_analyzer - INFO - info:135 - Phase 1: APK基本情報解析完了
+2025-09-29 17:58:57,149 - enhanced_apk_analyzer - INFO - info:135 - Phase 2: DEXファイル解析開始
+2025-09-29 17:58:57,150 - enhanced_apk_analyzer - INFO - info:135 - DEXファイル解析進捗: 0/20
+2025-09-29 17:58:57,150 - enhanced_apk_analyzer - INFO - info:135 - Phase 2: DEXファイル解析完了
+2025-09-29 17:58:57,150 - enhanced_apk_analyzer - INFO - info:135 - Phase 3: リソース解析開始
+2025-09-29 17:58:57,151 - enhanced_apk_analyzer - INFO - info:135 - リソース解析進捗: 0/14
+2025-09-29 17:58:57,151 - enhanced_apk_analyzer - INFO - info:135 - Phase 3: リソース解析完了
+2025-09-29 17:58:57,151 - enhanced_apk_analyzer - INFO - info:135 - Phase 4: ネイティブライブラリ解析開始
+2025-09-29 17:58:57,152 - enhanced_apk_analyzer - INFO - info:135 - ネイティブライブラリ解析進捗: 0/5
+2025-09-29 17:58:57,152 - enhanced_apk_analyzer - INFO - info:135 - Phase 4: ネイティブライブラリ解析完了
+2025-09-29 17:58:57,153 - enhanced_apk_analyzer - INFO - info:135 - Phase 5: セキュリティ解析開始
+2025-09-29 17:58:57,153 - enhanced_apk_analyzer - WARNING - warning:143 - 潜在的なセキュリティリスクを検出: 不明な権限要求
+2025-09-29 17:58:57,153 - enhanced_apk_analyzer - WARNING - warning:143 - 証明書の検証に問題があります
+2025-09-29 17:58:57,154 - enhanced_apk_analyzer - INFO - info:135 - Phase 5: セキュリティ解析完了
+2025-09-29 17:58:57,154 - enhanced_apk_analyzer - INFO - info:135 - APK解析完了: HeyDooon_1.20_APKPure.apk
+2025-09-29 17:58:57,158 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 1/30
+2025-09-29 17:58:57,159 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 1/50
+2025-09-29 17:58:57,159 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 1/40
+2025-09-29 17:58:57,160 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 1/20
+2025-09-29 17:58:57,160 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 2/30
+2025-09-29 17:58:57,161 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 2/50
+2025-09-29 17:58:57,162 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 2/40
+2025-09-29 17:58:57,162 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 2/20
+2025-09-29 17:58:57,163 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 3/50
+2025-09-29 17:58:57,163 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 3/30
+2025-09-29 17:58:57,163 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 3/40
+2025-09-29 17:58:57,164 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 3/20
+2025-09-29 17:58:57,164 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 4/50
+2025-09-29 17:58:57,165 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 4/30
+2025-09-29 17:58:57,165 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 4/40
+2025-09-29 17:58:57,165 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 4/20
+2025-09-29 17:58:57,166 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 5/50
+2025-09-29 17:58:57,166 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 5/30
+2025-09-29 17:58:57,168 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 5/40
+2025-09-29 17:58:57,168 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 5/20
+2025-09-29 17:58:57,168 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 6/50
+2025-09-29 17:58:57,169 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 6/30
+2025-09-29 17:58:57,169 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 6/40
+2025-09-29 17:58:57,170 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 7/50
+2025-09-29 17:58:57,170 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 6/20
+2025-09-29 17:58:57,170 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 7/30
+2025-09-29 17:58:57,171 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 7/40
+2025-09-29 17:58:57,171 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 8/50
+2025-09-29 17:58:57,172 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 8/30
+2025-09-29 17:58:57,172 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 7/20
+2025-09-29 17:58:57,172 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 8/40
+2025-09-29 17:58:57,173 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 9/50
+2025-09-29 17:58:57,174 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 8/20
+2025-09-29 17:58:57,174 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 9/30
+2025-09-29 17:58:57,174 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 9/40
+2025-09-29 17:58:57,174 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 10/50
+2025-09-29 17:58:57,176 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 10/30
+2025-09-29 17:58:57,176 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 9/20
+2025-09-29 17:58:57,176 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 11/50
+2025-09-29 17:58:57,176 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 10/40
+2025-09-29 17:58:57,178 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 11/30
+2025-09-29 17:58:57,178 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 10/20
+2025-09-29 17:58:57,178 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 12/50
+2025-09-29 17:58:57,179 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 11/40
+2025-09-29 17:58:57,179 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 12/30
+2025-09-29 17:58:57,180 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 11/20
+2025-09-29 17:58:57,180 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 12/40
+2025-09-29 17:58:57,180 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 13/50
+2025-09-29 17:58:57,181 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 13/30
+2025-09-29 17:58:57,181 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 12/20
+2025-09-29 17:58:57,182 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 14/50
+2025-09-29 17:58:57,182 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 13/40
+2025-09-29 17:58:57,183 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 14/30
+2025-09-29 17:58:57,183 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 13/20
+2025-09-29 17:58:57,184 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 15/50
+2025-09-29 17:58:57,185 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 15/30
+2025-09-29 17:58:57,185 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 14/40
+2025-09-29 17:58:57,185 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 14/20
+2025-09-29 17:58:57,186 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 16/50
+2025-09-29 17:58:57,187 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 15/40
+2025-09-29 17:58:57,187 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 16/30
+2025-09-29 17:58:57,188 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 15/20
+2025-09-29 17:58:57,188 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 17/50
+2025-09-29 17:58:57,189 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 17/30
+2025-09-29 17:58:57,189 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 16/40
+2025-09-29 17:58:57,190 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 18/50
+2025-09-29 17:58:57,190 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 16/20
+2025-09-29 17:58:57,191 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 18/30
+2025-09-29 17:58:57,192 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 19/50
+2025-09-29 17:58:57,192 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 17/40
+2025-09-29 17:58:57,192 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 17/20
+2025-09-29 17:58:57,193 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 19/30
+2025-09-29 17:58:57,194 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 20/50
+2025-09-29 17:58:57,194 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 18/40
+2025-09-29 17:58:57,194 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 18/20
+2025-09-29 17:58:57,195 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 20/30
+2025-09-29 17:58:57,196 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 21/50
+2025-09-29 17:58:57,196 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 19/40
+2025-09-29 17:58:57,196 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 19/20
+2025-09-29 17:58:57,197 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 21/30
+2025-09-29 17:58:57,197 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 22/50
+2025-09-29 17:58:57,198 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 20/40
+2025-09-29 17:58:57,198 - concurrent_apk_analyzer - INFO - analyze_component:206 - ネイティブ解析: 解析 20/20
+2025-09-29 17:58:57,199 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 22/30
+2025-09-29 17:58:57,200 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 23/50
+2025-09-29 17:58:57,201 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 21/40
+2025-09-29 17:58:57,201 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 23/30
+2025-09-29 17:58:57,202 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 24/50
+2025-09-29 17:58:57,202 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 22/40
+2025-09-29 17:58:57,203 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 24/30
+2025-09-29 17:58:57,203 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 25/50
+2025-09-29 17:58:57,204 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 23/40
+2025-09-29 17:58:57,204 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 25/30
+2025-09-29 17:58:57,205 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 26/50
+2025-09-29 17:58:57,205 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 24/40
+2025-09-29 17:58:57,206 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 26/30
+2025-09-29 17:58:57,206 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 27/50
+2025-09-29 17:58:57,207 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 25/40
+2025-09-29 17:58:57,208 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 27/30
+2025-09-29 17:58:57,208 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 28/50
+2025-09-29 17:58:57,209 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 26/40
+2025-09-29 17:58:57,209 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 28/30
+2025-09-29 17:58:57,210 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 29/50
+2025-09-29 17:58:57,210 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 27/40
+2025-09-29 17:58:57,211 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 29/30
+2025-09-29 17:58:57,211 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 30/50
+2025-09-29 17:58:57,212 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 28/40
+2025-09-29 17:58:57,212 - concurrent_apk_analyzer - INFO - analyze_component:206 - マニフェスト解析: 解析 30/30
+2025-09-29 17:58:57,213 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 31/50
+2025-09-29 17:58:57,213 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 29/40
+2025-09-29 17:58:57,214 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 32/50
+2025-09-29 17:58:57,215 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 30/40
+2025-09-29 17:58:57,216 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 33/50
+2025-09-29 17:58:57,217 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 31/40
+2025-09-29 17:58:57,218 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 34/50
+2025-09-29 17:58:57,218 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 32/40
+2025-09-29 17:58:57,219 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 35/50
+2025-09-29 17:58:57,220 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 33/40
+2025-09-29 17:58:57,221 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 36/50
+2025-09-29 17:58:57,221 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 34/40
+2025-09-29 17:58:57,222 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 37/50
+2025-09-29 17:58:57,223 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 35/40
+2025-09-29 17:58:57,224 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 38/50
+2025-09-29 17:58:57,224 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 36/40
+2025-09-29 17:58:57,225 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 39/50
+2025-09-29 17:58:57,226 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 37/40
+2025-09-29 17:58:57,227 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 40/50
+2025-09-29 17:58:57,228 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 38/40
+2025-09-29 17:58:57,229 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 41/50
+2025-09-29 17:58:57,229 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 39/40
+2025-09-29 17:58:57,230 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 42/50
+2025-09-29 17:58:57,231 - concurrent_apk_analyzer - INFO - analyze_component:206 - リソース解析: 解析 40/40
+2025-09-29 17:58:57,232 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 43/50
+2025-09-29 17:58:57,233 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 44/50
+2025-09-29 17:58:57,235 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 45/50
+2025-09-29 17:58:57,237 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 46/50
+2025-09-29 17:58:57,239 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 47/50
+2025-09-29 17:58:57,240 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 48/50
+2025-09-29 17:58:57,242 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 49/50
+2025-09-29 17:58:57,243 - concurrent_apk_analyzer - INFO - analyze_component:206 - DEX解析: 解析 50/50
+2025-09-29 17:58:57,246 - high_load_apk - INFO - test_high_load_apk_processing:241 - 高負荷APK処理開始: 1000ファイル
+2025-09-29 17:58:57,246 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 0/1000
+2025-09-29 17:58:57,247 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 100/1000
+2025-09-29 17:58:57,248 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 200/1000
+2025-09-29 17:58:57,248 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 300/1000
+2025-09-29 17:58:57,249 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 400/1000
+2025-09-29 17:58:57,250 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 500/1000
+2025-09-29 17:58:57,250 - high_load_apk - ERROR - test_high_load_apk_processing:253 - 処理中にエラーが発生しましたが、継続します
+2025-09-29 17:58:57,250 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 600/1000
+2025-09-29 17:58:57,250 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 700/1000
+2025-09-29 17:58:57,251 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 800/1000
+2025-09-29 17:58:57,251 - high_load_apk - INFO - test_high_load_apk_processing:249 - 処理進捗: 900/1000
+2025-09-29 17:58:57,251 - high_load_apk - INFO - test_high_load_apk_processing:256 - 高負荷APK処理完了: 0.005秒
+2025-09-29 17:58:57,252 - error_handling_apk - INFO - test_error_handling_scenarios:279 - エラーシナリオテスト: APKファイル破損
+2025-09-29 17:58:57,252 - error_handling_apk - ERROR - test_error_handling_scenarios:288 - エラーハンドリング: APKファイル破損が発生しました
+Traceback (most recent call last):
+  File "C:\Users\User\Trae\MOC\core\tests\test_real_apk_analysis.py", line 283, in test_error_handling_scenarios
+    raise Exception(f"{error_type}が発生しました")
+Exception: APKファイル破損が発生しました
+2025-09-29 17:58:57,263 - error_handling_apk - INFO - test_error_handling_scenarios:279 - エラーシナリオテスト: メモリ不足
+2025-09-29 17:58:57,263 - error_handling_apk - WARNING - test_error_handling_scenarios:285 - メモリ不足: 警告レベルで処理継続
+2025-09-29 17:58:57,263 - error_handling_apk - INFO - test_error_handling_scenarios:279 - エラーシナリオテスト: ディスク容量不足
+2025-09-29 17:58:57,263 - error_handling_apk - ERROR - test_error_handling_scenarios:288 - エラーハンドリング: ディスク容量不足が発生しました
+Traceback (most recent call last):
+  File "C:\Users\User\Trae\MOC\core\tests\test_real_apk_analysis.py", line 283, in test_error_handling_scenarios
+    raise Exception(f"{error_type}が発生しました")
+Exception: ディスク容量不足が発生しました
+2025-09-29 17:58:57,264 - error_handling_apk - INFO - test_error_handling_scenarios:279 - エラーシナリオテスト: ネットワークタイムアウト
+2025-09-29 17:58:57,264 - error_handling_apk - WARNING - test_error_handling_scenarios:285 - ネットワークタイムアウト: 警告レベルで処理継続
+2025-09-29 17:58:57,265 - error_handling_apk - INFO - test_error_handling_scenarios:279 - エラーシナリオテスト: 権限不足エラー
+2025-09-29 17:58:57,265 - error_handling_apk - ERROR - test_error_handling_scenarios:288 - エラーハンドリング: 権限不足エラーが発生しました
+Traceback (most recent call last):
+  File "C:\Users\User\Trae\MOC\core\tests\test_real_apk_analysis.py", line 283, in test_error_handling_scenarios
+    raise Exception(f"{error_type}が発生しました")
+Exception: 権限不足エラーが発生しました

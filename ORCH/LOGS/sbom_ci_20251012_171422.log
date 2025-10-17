@@ -1,0 +1,15 @@
+[2025-10-12 17:14:22] [INFO] SBOM CI統合プロセスを開始
+[2025-10-12 17:14:22] [INFO] プロジェクトルート: .
+[2025-10-12 17:14:22] [INFO] 出力ディレクトリ: ORCH/SBOM
+[2025-10-12 17:14:22] [INFO] 形式: spdx
+[2025-10-12 17:14:22] [INFO] 前提条件チェックを開始...
+[2025-10-12 17:14:22] [INFO] SBOM出力ディレクトリを作成: .\ORCH\SBOM
+[2025-10-12 17:14:22] [WARNING] 依存関係ファイルが見つかりません
+[2025-10-12 17:14:22] [INFO] 前提条件チェック完了
+[2025-10-12 17:14:22] [INFO] CI統合設定ファイルを生成
+[2025-10-12 17:14:22] [INFO] CI統合設定ファイル作成: ORCH/CONFIG/sbom_ci_config.json
+[2025-10-12 17:14:22] [INFO] SBOM生成を開始 (形式: spdx)
+[2025-10-12 17:14:22] [INFO] DryRun: .venv/Scripts/python.exe Scripts/ops/generate_sbom.py --project-root . --output .\ORCH\SBOM\sbom_20251012_171422.spdx.json --format spdx --verify --verbose
+[2025-10-12 17:14:22] [INFO] SBOM品質チェックを開始: .\ORCH\SBOM\sbom_20251012_171422.spdx.json
+[2025-10-12 17:14:22] [ERROR] SBOMファイルが見つかりません: .\ORCH\SBOM\sbom_20251012_171422.spdx.json
+[2025-10-12 17:14:22] [ERROR] SBOM CI統合プロセスでエラーが発生しました

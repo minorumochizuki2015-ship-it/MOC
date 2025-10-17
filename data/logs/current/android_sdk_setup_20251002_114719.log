@@ -1,0 +1,21 @@
+[2025-10-02 11:47:19] [INFO] Android SDK 自動セットアップを開始
+[2025-10-02 11:47:19] [INFO] 対象パス: C:\Users\User\AppData\Local\Android\Sdk
+[2025-10-02 11:47:19] [INFO] Dry-Run モード: False
+[2025-10-02 11:47:19] [INFO] Android SDK インストール状況を確認中...
+[2025-10-02 11:47:19] [INFO] === Android SDK セットアップ結果 ===
+[2025-10-02 11:47:19] [INFO] SDK パス: C:\Users\User\AppData\Local\Android\Sdk
+[2025-10-02 11:47:19] [INFO] SDK 存在: False
+[2025-10-02 11:47:20] [INFO] ADB 存在: False
+[2025-10-02 11:47:20] [INFO] Build Tools 存在: False
+[2025-10-02 11:47:20] [INFO] Platforms 存在: False
+[2025-10-02 11:47:20] [INFO] セットアップ完了: False
+[2025-10-02 11:47:20] [WARN] Android SDK セットアップに問題があります
+[2025-10-02 11:47:20] [INFO] Java インストール状況を確認中...
+[2025-10-02 11:47:20] [INFO] Java バージョン検出: 0 (パス: C:\Program Files\Java\jdk-11\bin\java.exe)
+[2025-10-02 11:47:20] [WARN] Java 実行エラー: C:\Program Files\Java\jdk-11\bin\java.exe
+[2025-10-02 11:47:20] [INFO] Java バージョン検出: 0 (パス: C:\Program Files\Java\jdk-11\bin\java.exe)
+[2025-10-02 11:47:20] [WARN] Java 実行エラー: C:\Program Files\Java\jdk-11\bin\java.exe
+[2025-10-02 11:47:21] [INFO] Java バージョン検出: 0 (PATH経由)
+[2025-10-02 11:47:21] [WARN] Java が見つかりません
+[2025-10-02 11:47:21] [ERROR] Java 11 以上が必要です。先にJavaをインストールしてください。
+[2025-10-02 11:47:21] [ERROR] Java が不足しているため、セットアップを中断します

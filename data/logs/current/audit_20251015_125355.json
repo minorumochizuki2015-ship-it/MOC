@@ -1,0 +1,497 @@
+{
+  "ts": "20251015_125355",
+  "apply": true,
+  "env": {
+    "ENHANCED_ANALYSIS_METADATA_DIR": "C:\\Users\\User\\Trae\\Game_project\\Trae\\Build\\Android\\TraeGame_extracted\\assets\\bin\\Data\\Managed\\Metadata"
+  },
+  "paths": {
+    "root": "C:\\Users\\User\\Trae\\Game_project",
+    "toolRoot": "C:\\Users\\User\\Trae\\Game_project\\.trae\\apk_analysis_system",
+    "shim": "C:\\Users\\User\\Trae\\Game_project\\.trae\\apk_analysis_system\\core\\enhanced_apk_analyzer.py",
+    "impl": "C:\\Users\\User\\Trae\\Game_project\\.trae\\apk_analysis_system\\core\\utils\\enhanced_apk_analyzer.py",
+    "metaEnv": "C:\\Users\\User\\Trae\\Game_project\\Trae\\Build\\Android\\TraeGame_extracted\\assets\\bin\\Data\\Managed\\Metadata",
+    "apkDir": "C:\\Users\\User\\Trae\\Game_project\\APK",
+    "buildAndroid": "C:\\Users\\User\\Trae\\Game_project\\Trae\\Build\\Android"
+  },
+  "filesystem": {
+    "shim_exists": true,
+    "impl_exists": true,
+    "meta_env_dir_exists": true,
+    "metadata_dat_exists": true,
+    "apk_dir_exists": false,
+    "any_apk_in_build": "C:\\Users\\User\\Trae\\Game_project\\Trae\\Build\\Android\\TraeGame.apk"
+  },
+  "processes": [
+    {
+      "Name": "python",
+      "Id": 2936,
+      "CPU": 0.0,
+      "StartTime": "2025-10-15T11:12:12.6635137+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 3384,
+      "CPU": 5.40625,
+      "StartTime": "2025-10-15T11:12:35.2930572+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 5992,
+      "CPU": 1.609375,
+      "StartTime": "2025-10-15T12:21:44.8920216+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 8296,
+      "CPU": 3.984375,
+      "StartTime": "2025-10-15T11:04:00.3643894+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 9024,
+      "CPU": 0.046875,
+      "StartTime": "2025-10-15T11:03:59.5997241+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 10364,
+      "CPU": 8.9375,
+      "StartTime": "2025-10-15T11:03:44.1196796+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 10924,
+      "CPU": 8.9375,
+      "StartTime": "2025-10-15T11:03:44.2609724+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 13680,
+      "CPU": 6.734375,
+      "StartTime": "2025-10-15T11:12:35.33047+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 15752,
+      "CPU": 3.59375,
+      "StartTime": "2025-10-15T11:03:59.6993416+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 16184,
+      "CPU": 0.046875,
+      "StartTime": "2025-10-15T11:03:59.2779228+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 18020,
+      "CPU": 2.25,
+      "StartTime": "2025-10-15T11:12:12.6867104+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 23200,
+      "CPU": 0.03125,
+      "StartTime": "2025-10-15T11:03:44.0453082+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 24592,
+      "CPU": 0.015625,
+      "StartTime": "2025-10-15T11:04:05.3235198+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 28732,
+      "CPU": 8.78125,
+      "StartTime": "2025-10-15T11:03:44.0013336+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 28872,
+      "CPU": 0.0,
+      "StartTime": "2025-10-15T11:03:43.6140037+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 30160,
+      "CPU": 0.015625,
+      "StartTime": "2025-10-15T11:03:43.7971934+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 30236,
+      "CPU": 2.6875,
+      "StartTime": "2025-10-15T11:04:00.2502357+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 30388,
+      "CPU": 0.03125,
+      "StartTime": "2025-10-15T11:04:05.1663444+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 30952,
+      "CPU": 0.03125,
+      "StartTime": "2025-10-15T11:03:43.6756588+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 30964,
+      "CPU": 3.28125,
+      "StartTime": "2025-10-15T11:04:05.8093595+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 31076,
+      "CPU": 3.96875,
+      "StartTime": "2025-10-15T11:04:05.83832+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 31340,
+      "CPU": 0.015625,
+      "StartTime": "2025-10-15T11:39:56.5997994+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 31472,
+      "CPU": 0.015625,
+      "StartTime": "2025-10-15T11:03:43.7994617+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 31872,
+      "CPU": 0.0,
+      "StartTime": "2025-10-15T11:03:58.3498956+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 32032,
+      "CPU": 2.890625,
+      "StartTime": "2025-10-15T11:03:59.6381432+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 32036,
+      "CPU": 3.34375,
+      "StartTime": "2025-10-15T11:03:58.7426475+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 32364,
+      "CPU": 8.796875,
+      "StartTime": "2025-10-15T11:03:44.1453537+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 32544,
+      "CPU": 9.09375,
+      "StartTime": "2025-10-15T11:03:43.928926+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 32984,
+      "CPU": 2.953125,
+      "StartTime": "2025-10-15T11:03:58.7358675+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 33068,
+      "CPU": 33.0625,
+      "StartTime": "2025-10-15T11:39:56.6200217+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 33344,
+      "CPU": 0.03125,
+      "StartTime": "2025-10-15T11:04:05.4698729+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 33604,
+      "CPU": 0.0,
+      "StartTime": "2025-10-15T11:03:59.1937358+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 33696,
+      "CPU": 0.015625,
+      "StartTime": "2025-10-15T11:03:46.049203+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 34056,
+      "CPU": 2.625,
+      "StartTime": "2025-10-15T11:04:05.8004546+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 34532,
+      "CPU": 0.015625,
+      "StartTime": "2025-10-15T11:03:59.1326233+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 34980,
+      "CPU": 0.03125,
+      "StartTime": "2025-10-15T11:03:58.5699584+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 35136,
+      "CPU": 0.0,
+      "StartTime": "2025-10-15T12:21:44.8686091+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 35272,
+      "CPU": 8.53125,
+      "StartTime": "2025-10-15T11:03:46.0960516+09:00"
+    },
+    {
+      "Name": "python",
+      "Id": 36684,
+      "CPU": 2.421875,
+      "StartTime": "2025-10-15T11:12:35.2602503+09:00"
+    }
+  ],
+  "listening": [
+    {
+      "LocalAddress": "::1",
+      "LocalPort": 65029,
+      "OwningProcess": 14308
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 49670,
+      "OwningProcess": 1996
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 49669,
+      "OwningProcess": 6252
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 49668,
+      "OwningProcess": 4612
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 49667,
+      "OwningProcess": 4472
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 49666,
+      "OwningProcess": 2916
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 49665,
+      "OwningProcess": 1876
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 49664,
+      "OwningProcess": 1424
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 16992,
+      "OwningProcess": 13864
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 7680,
+      "OwningProcess": 5316
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 7070,
+      "OwningProcess": 6448
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 3389,
+      "OwningProcess": 2440
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 2179,
+      "OwningProcess": 4384
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 623,
+      "OwningProcess": 13864
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 445,
+      "OwningProcess": 4
+    },
+    {
+      "LocalAddress": "::",
+      "LocalPort": 135,
+      "OwningProcess": 2168
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 65163,
+      "OwningProcess": 10520
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 65035,
+      "OwningProcess": 13864
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 63074,
+      "OwningProcess": 29072
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 58948,
+      "OwningProcess": 11272
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 51251,
+      "OwningProcess": 6624
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 51247,
+      "OwningProcess": 24452
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 51228,
+      "OwningProcess": 15096
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 51220,
+      "OwningProcess": 13128
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 51000,
+      "OwningProcess": 2664
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 49674,
+      "OwningProcess": 6496
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 49673,
+      "OwningProcess": 6496
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 49670,
+      "OwningProcess": 1996
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 49669,
+      "OwningProcess": 6252
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 49668,
+      "OwningProcess": 4612
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 49667,
+      "OwningProcess": 4472
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 49666,
+      "OwningProcess": 2916
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 49665,
+      "OwningProcess": 1876
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 49664,
+      "OwningProcess": 1424
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 17788,
+      "OwningProcess": 3900
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 16992,
+      "OwningProcess": 13864
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 11434,
+      "OwningProcess": 28984
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 7070,
+      "OwningProcess": 6448
+    },
+    {
+      "LocalAddress": "127.0.0.1",
+      "LocalPort": 6880,
+      "OwningProcess": 6496
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 5040,
+      "OwningProcess": 10480
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 5000,
+      "OwningProcess": 33068
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 3389,
+      "OwningProcess": 2440
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 2179,
+      "OwningProcess": 4384
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 623,
+      "OwningProcess": 13864
+    },
+    {
+      "LocalAddress": "192.168.11.18",
+      "LocalPort": 139,
+      "OwningProcess": 4
+    },
+    {
+      "LocalAddress": "172.23.0.1",
+      "LocalPort": 139,
+      "OwningProcess": 4
+    },
+    {
+      "LocalAddress": "0.0.0.0",
+      "LocalPort": 135,
+      "OwningProcess": 2168
+    }
+  ]
+}

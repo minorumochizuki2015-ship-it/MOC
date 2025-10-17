@@ -1,0 +1,8 @@
+
+10-11 06:57:06.521  2574  2656 D EGL_emulation: app_time_stats: avg=1271.05ms min=407.62ms max=2134.47ms count=2
+10-11 06:57:08.330  2574  2656 D EGL_emulation: app_time_stats: avg=562.32ms min=20.94ms max=1103.70ms count=2
+10-11 06:57:09.588  2574  2656 D EGL_emulation: app_time_stats: avg=976.60ms min=976.60ms max=976.60ms count=1
+10-11 06:57:11.350  2574  2656 D EGL_emulation: app_time_stats: avg=1704.83ms min=1704.83ms max=1704.83ms count=1
+10-11 06:57:12.554  2574  2656 D EGL_emulation: app_time_stats: avg=617.86ms min=617.86ms max=617.86ms count=1
+10-11 06:57:14.985  2574  2656 D EGL_emulation: app_time_stats: avg=1735.75ms min=1735.75ms max=1735.75ms count=1
+

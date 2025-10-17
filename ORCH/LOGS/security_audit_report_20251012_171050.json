@@ -1,0 +1,21 @@
+{
+  "scan_results": {
+    "high_risk": 0,
+    "total_findings": 67,
+    "low_risk": 1,
+    "medium_risk": 66,
+    "files_scanned": null,
+    "scan_duration_ms": null,
+    "allowlist_exclusions": null
+  },
+  "timestamp": "2025-10-12 17:10:50",
+  "recommendations": [],
+  "rotation_status": {
+    "total_tracked_secrets": 58,
+    "last_rotation": "Never",
+    "active_secrets": 58,
+    "overdue_rotations": 0,
+    "total_rotations_performed": 0
+  },
+  "overall_status": "HEALTHY"
+}

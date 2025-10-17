@@ -1,0 +1,24 @@
+[2025-10-02 11:34:16] [INFO] Android SDK 自動セットアップを開始
+[2025-10-02 11:34:16] [INFO] 対象パス: C:\Users\User\AppData\Local\Android\Sdk
+[2025-10-02 11:34:16] [INFO] Dry-Run モード: True
+[2025-10-02 11:34:16] [INFO] Android SDK インストール状況を確認中...
+[2025-10-02 11:34:16] [INFO] === Android SDK セットアップ結果 ===
+[2025-10-02 11:34:16] [INFO] SDK パス: C:\Users\User\AppData\Local\Android\Sdk
+[2025-10-02 11:34:16] [INFO] SDK 存在: False
+[2025-10-02 11:34:16] [INFO] ADB 存在: False
+[2025-10-02 11:34:16] [INFO] Build Tools 存在: False
+[2025-10-02 11:34:16] [INFO] Platforms 存在: False
+[2025-10-02 11:34:16] [INFO] セットアップ完了: False
+[2025-10-02 11:34:16] [WARN] Android SDK セットアップに問題があります
+[2025-10-02 11:34:16] [INFO] Java インストール状況を確認中...
+[2025-10-02 11:34:16] [WARN] Java が見つかりません
+[2025-10-02 11:34:16] [ERROR] Java 11 以上が必要です。先にJavaをインストールしてください。
+[2025-10-02 11:34:16] [INFO] Dry-Run: Java インストールが必要
+[2025-10-02 11:34:16] [INFO] Dry-Run 完了。-Apply で実際のセットアップを実行します。
+[2025-10-02 11:34:16] [INFO] 実行予定の操作:
+[2025-10-02 11:34:16] [INFO]   1. Android Command Line Tools のダウンロードとインストール
+[2025-10-02 11:34:16] [INFO]   2. 必要な SDK コンポーネントのインストール
+[2025-10-02 11:34:16] [INFO]   3. 環境変数の設定 (ANDROID_HOME, PATH)
+[2025-10-02 11:34:16] [INFO]   4. Unity 用の設定確認
+[2025-10-02 11:34:16] [INFO] Android SDK セットアップスクリプト完了
+[2025-10-02 11:34:16] [INFO] ログファイル: data\logs\current\android_sdk_setup_20251002_113416.log

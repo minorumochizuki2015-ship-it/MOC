@@ -1,0 +1,23 @@
+[2025-10-02 10:43:00] [INFO] Unity環境完全クリーンアップを開始...
+[2025-10-02 10:43:00] [INFO] Dry-Run モード: True
+[2025-10-02 10:43:00] [INFO] Unity関連プロセスの停止を開始...
+[2025-10-02 10:43:00] [INFO] Unity関連ディレクトリの削除を開始...
+[2025-10-02 10:43:00] [INFO] ディレクトリを削除: C:\Program Files\Unity
+[2025-10-02 10:43:00] [INFO] ディレクトリが存在しません: C:\Program Files (x86)\Unity
+[2025-10-02 10:43:00] [INFO] ディレクトリを削除: C:\Users\User\AppData\Roaming\Unity
+[2025-10-02 10:43:00] [INFO] ディレクトリを削除: C:\Users\User\AppData\Roaming\UnityHub
+[2025-10-02 10:43:00] [INFO] ディレクトリを削除: C:\Users\User\AppData\Local\Unity
+[2025-10-02 10:43:00] [INFO] ディレクトリが存在しません: C:\Users\User\AppData\Local\UnityHub
+[2025-10-02 10:43:00] [INFO] ディレクトリを削除: C:\Users\User\AppData\Roaming\Unity
+[2025-10-02 10:43:00] [INFO] ディレクトリを削除: C:\Users\User\AppData\Roaming\UnityHub
+[2025-10-02 10:43:00] [INFO] Unity関連レジストリエントリのクリーンアップを開始...
+[2025-10-02 10:43:00] [INFO] レジストリキーを削除: HKCU:\Software\Unity Technologies
+[2025-10-02 10:43:00] [INFO] レジストリキーを削除: HKCU:\Software\Unity
+[2025-10-02 10:43:00] [INFO] レジストリキーを削除: HKLM:\SOFTWARE\Unity Technologies
+[2025-10-02 10:43:00] [INFO] レジストリキーが存在しません: HKLM:\SOFTWARE\Unity
+[2025-10-02 10:43:00] [INFO] プロジェクトキャッシュのクリーンアップを開始...
+[2025-10-02 10:43:00] [INFO] キャッシュディレクトリを削除: C:\Users\User\Trae\Game_project\Trae\Library
+[2025-10-02 10:43:00] [INFO] キャッシュディレクトリを削除: C:\Users\User\Trae\Game_project\Trae\Logs
+[2025-10-02 10:43:00] [INFO] キャッシュディレクトリを削除: C:\Users\User\Trae\Game_project\Trae\Temp
+[2025-10-02 10:43:00] [INFO] キャッシュディレクトリを削除: C:\Users\User\Trae\Game_project\Trae\UserSettings
+[2025-10-02 10:43:00] [INFO] ログファイル: data\logs\current\unity_cleanup_20251002_104300.log

@@ -1,0 +1,76 @@
+[2025-10-02 11:17:22] [INFO] Unity プロジェクト構造セットアップを開始
+[2025-10-02 11:17:22] [INFO] プロジェクトルート: Trae
+[2025-10-02 11:17:22] [INFO] Dry-Run モード: False
+[2025-10-02 11:17:22] [INFO] プロジェクトパス: C:\Users\User\Trae\Game_project\Trae (既存)
+[2025-10-02 11:17:22] [INFO] 既存ディレクトリ: C:\Users\User\Trae\Game_project\Trae\Assets
+[2025-10-02 11:17:22] [INFO] 既存ディレクトリ: C:\Users\User\Trae\Game_project\Trae\ProjectSettings
+[2025-10-02 11:17:22] [INFO] 既存ディレクトリ: C:\Users\User\Trae\Game_project\Trae\Packages
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scripts
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scripts\Core
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scripts\UI
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scripts\Gameplay
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scripts\Audio
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scripts\Utils
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scripts\Data
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scripts\Services
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scripts\Controllers
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scenes
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scenes\Boot
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scenes\Main
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scenes\UI
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Prefabs
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Prefabs\UI
+[2025-10-02 11:17:22] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Prefabs\Gameplay
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Prefabs\Audio
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Prefabs\Effects
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Art
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Art\Textures
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Art\Materials
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Art\Sprites
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Art\UI
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Art\Icons
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Audio
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Audio\Music
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Audio\SFX
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Audio\Voice
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Audio\Mixers
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Shaders
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Shaders\UI
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Shaders\Effects
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Settings
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Settings\Audio
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Settings\Graphics
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Settings\Gameplay
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\AddressableAssets
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\AddressableAssets\Audio
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\AddressableAssets\Textures
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Assets\AddressableAssets\Prefabs
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Build
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Build\Android
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\Build\iOS
+[2025-10-02 11:17:23] [INFO] 既存ディレクトリ: C:\Users\User\Trae\Game_project\Trae\Tools
+[2025-10-02 11:17:23] [INFO] 既存ディレクトリ: C:\Users\User\Trae\Game_project\Trae\Tools\Editor
+[2025-10-02 11:17:23] [INFO] 既存ディレクトリ: C:\Users\User\Trae\Game_project\Trae\Tools\Scripts
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\docs
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\docs\API
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\docs\Design
+[2025-10-02 11:17:23] [INFO] ディレクトリ作成: C:\Users\User\Trae\Game_project\Trae\docs\Technical
+[2025-10-02 11:17:23] [INFO] プレースホルダーファイル作成: C:\Users\User\Trae\Game_project\Trae\docs\README.md
+[2025-10-02 11:17:23] [INFO] プレースホルダーファイル作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Shaders\.gitkeep
+[2025-10-02 11:17:23] [INFO] プレースホルダーファイル作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Art\.gitkeep
+[2025-10-02 11:17:23] [INFO] プレースホルダーファイル作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Prefabs\.gitkeep
+[2025-10-02 11:17:24] [INFO] プレースホルダーファイル作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Settings\.gitkeep
+[2025-10-02 11:17:24] [INFO] プレースホルダーファイル作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Audio\.gitkeep
+[2025-10-02 11:17:24] [INFO] プレースホルダーファイル作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scenes\.gitkeep
+[2025-10-02 11:17:24] [INFO] プレースホルダーファイル作成: C:\Users\User\Trae\Game_project\Trae\Assets\Trae\Scripts\.gitkeep
+[2025-10-02 11:17:24] [INFO] プロジェクト構造を検証中...
+[2025-10-02 11:17:24] [SUCCESS] プロジェクト構造検証: 成功
+[2025-10-02 11:17:24] [SUCCESS] プロジェクト構造セットアップが正常に完了しました！
+[2025-10-02 11:17:24] [INFO] === プロジェクト構造サマリー ===
+[2025-10-02 11:17:24] [INFO] プロジェクトルート: C:\Users\User\Trae\Game_project\Trae
+[2025-10-02 11:17:24] [INFO] 総ディレクトリ数: 61
+[2025-10-02 11:17:24] [INFO] 総ファイル数: 170
+[2025-10-02 11:17:24] [INFO] Trae構造: Art, Audio, Prefabs, Scenes, Scripts, Settings, Shaders
+[2025-10-02 11:17:24] [INFO] プロジェクト構造セットアップスクリプト完了
+[2025-10-02 11:17:24] [INFO] ログファイル: data\logs\current\project_structure_setup_20251002_111722.log

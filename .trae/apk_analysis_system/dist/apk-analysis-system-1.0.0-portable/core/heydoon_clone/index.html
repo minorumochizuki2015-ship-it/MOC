@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeyDooon Clone - Reaction Game</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="screen active">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h2>HeyDooon Clone</h2>
+                <p>Loading...</p>
+            </div>
+        </div>
+
+        <!-- Main Menu -->
+        <div id="menu-screen" class="screen">
+            <div class="menu-content">
+                <h1 class="game-title">HeyDooon</h1>
+                <p class="game-subtitle">Reaction Speed Challenge</p>
+                
+                <div class="menu-buttons">
+                    <button id="start-btn" class="menu-btn primary">START GAME</button>
+                    <button id="difficulty-btn" class="menu-btn">DIFFICULTY: <span id="difficulty-text">NORMAL</span></button>
+                    <button id="highscore-btn" class="menu-btn">HIGH SCORE: <span id="highscore-text">0</span></button>
+                </div>
+                
+                <div class="game-info">
+                    <p>Test your reaction speed with color, shape, and multi-tap challenges!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <!-- Game UI -->
+            <div class="game-ui">
+                <div class="ui-top">
+                    <div class="score-display">
+                        <span class="label">SCORE</span>
+                        <span id="current-score" class="value">0</span>
+                    </div>
+                    <div class="challenge-counter">
+                        <span class="label">CHALLENGE</span>
+                        <span id="challenge-progress" class="value">1/15</span>
+                    </div>
+                    <div class="timer-display">
+                        <span class="label">TIME</span>
+                        <span id="challenge-timer" class="value">2.0</span>
+                    </div>
+                </div>
+                
+                <button id="pause-btn" class="pause-button">⏸</button>
+            </div>
+
+            <!-- Challenge Area -->
+            <div id="challenge-area" class="challenge-container">
+                <div id="instruction-text" class="instruction">Get Ready!</div>
+                <div id="challenge-content" class="challenge-content">
+                    <!-- Dynamic challenge content will be inserted here -->
+                </div>
+                <div id="reaction-feedback" class="reaction-feedback"></div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div id="time-progress" class="progress-bar">
+                    <div id="time-fill" class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pause Menu -->
+        <div id="pause-screen" class="screen overlay">
+            <div class="pause-content">
+                <h2>PAUSED</h2>
+                <div class="pause-buttons">
+                    <button id="resume-btn" class="menu-btn primary">RESUME</button>
+                    <button id="restart-btn" class="menu-btn">RESTART</button>
+                    <button id="menu-btn" class="menu-btn">MAIN MENU</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameover-screen" class="screen">
+            <div class="gameover-content">
+                <h2 id="result-title">GAME COMPLETE!</h2>
+                
+                <div class="final-score">
+                    <div class="score-big">
+                        <span class="label">FINAL SCORE</span>
+                        <span id="final-score" class="value">0</span>
+                    </div>
+                </div>
+
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Accuracy</span>
+                        <span id="accuracy-stat" class="stat-value">0%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Avg Reaction</span>
+                        <span id="reaction-stat" class="stat-value">0.0s</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Challenges</span>
+                        <span id="challenges-stat" class="stat-value">0/15</span>
+                    </div>
+                </div>
+
+                <div id="new-highscore" class="new-highscore hidden">
+                    <div class="highscore-badge">🏆 NEW HIGH SCORE! 🏆</div>
+                </div>
+
+                <div class="gameover-buttons">
+                    <button id="play-again-btn" class="menu-btn primary">PLAY AGAIN</button>
+                    <button id="main-menu-btn" class="menu-btn">MAIN MENU</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="correct-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT" type="audio/wav">
+    </audio>
+    <audio id="wrong-sound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT" type="audio/wav">
+    </audio>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+</body>
+</html>

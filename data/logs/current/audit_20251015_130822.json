@@ -1,0 +1,42 @@
+{
+  "ts": "20251015_130822",
+  "env": {
+    "ENHANCED_ANALYSIS_METADATA_DIR": ""
+  },
+  "paths": {
+    "toolRoot": "C:\\Users\\User\\Trae\\Game_project\\.trae\\apk_analysis_system",
+    "shim": "C:\\Users\\User\\Trae\\Game_project\\.trae\\apk_analysis_system\\core\\enhanced_apk_analyzer.py",
+    "impl": "C:\\Users\\User\\Trae\\Game_project\\.trae\\apk_analysis_system\\core\\utils\\enhanced_apk_analyzer.py",
+    "apkDir": "C:\\Users\\User\\Trae\\Game_project\\APK",
+    "buildAndroid": "C:\\Users\\User\\Trae\\Game_project\\Trae\\Build\\Android"
+  },
+  "filesystem": {
+    "shim_exists": true,
+    "impl_exists": true,
+    "meta_env_dir_exists": false,
+    "apk_dir_exists": false,
+    "any_apk_in_build": "C:\\Users\\User\\Trae\\Game_project\\Trae\\Build\\Android\\TraeGame.apk"
+  },
+  "processes_sample": [
+    "System",
+    "System",
+    "Secure",
+    "Registry",
+    "smss.exe",
+    "csrss.exe",
+    "wininit.exe",
+    "csrss.exe",
+    "winlogon.exe",
+    "services.exe",
+    "LsaIso.exe",
+    "lsass.exe",
+    "svchost.exe",
+    "fontdrvhost.exe",
+    "fontdrvhost.exe",
+    "svchost.exe",
+    "svchost.exe",
+    "dwm.exe",
+    "svchost.exe",
+    "svchost.exe"
+  ]
+}
