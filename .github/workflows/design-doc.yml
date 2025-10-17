@@ -44,7 +44,7 @@ jobs:
           # Two-argument interface: <root> <apk_path>
           START=$(date +%s%N 2>/dev/null || date +%s)
           EXIT_CODE=0
-          python3 Tools/apk_to_design_doc.py "." "Trae/Build/Android/TraeGame.apk" || EXIT_CODE=$?
+          python3 tools/apk_to_design_doc.py "." "Trae/Build/Android/TraeGame.apk" || EXIT_CODE=$?
           END=$(date +%s%N 2>/dev/null || date +%s)
           # Compute duration (ms); handle both ns and s inputs
           if [ ${#END} -gt 10 ]; then
@@ -78,6 +78,19 @@ jobs:
           print(json.dumps(entry))
           PY
 
+      - name: "Gate required artifacts (mandatory)"
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          JSON_CNT=$(ls -1 observability/ui/report/analysis_*.json 2>/dev/null | wc -l)
+          MD_CNT=$(ls -1 observability/ui/report/design_*.md 2>/dev/null | wc -l)
+          echo "Found analysis_*.json: ${JSON_CNT}, design_*.md: ${MD_CNT}"
+          if [ "${JSON_CNT}" -eq 0 ] || [ "${MD_CNT}" -eq 0 ]; then
+            echo "::error::Required artifacts missing. analysis_*.json=${JSON_CNT}, design_*.md=${MD_CNT}"
+            exit 1
+          fi
+
       - name: "Assert artifacts exist (placeholders|UI or MCP)"
         if: ${{ always() }}
         shell: bash
@@ -99,7 +112,8 @@ jobs:
           [ -f "$APK" ] && SHA="$(sha256sum "$APK" | awk '{print $1}')"
           TS="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           # Fail-safe: always append a minimal manifest entry
-          echo "{\"status\":\"success\",\"exit_code\":0,\"commit\":\"${GITHUB_SHA}\",\"duration_ms\":0,\"apk_sha256\":\"${SHA}\",\"ts\":\"${TS}\"}" >> observability/mcp/manifest.jsonl
+          RUN_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          echo "{\"status\":\"success\",\"exit_code\":0,\"commit\":\"${GITHUB_SHA}\",\"duration_ms\":0,\"apk_sha256\":\"${SHA}\",\"ts\":\"${TS}\",\"run_url\":\"${RUN_URL}\",\"workflow\":\"${GITHUB_WORKFLOW}\",\"run_id\":\"${GITHUB_RUN_ID}\",\"runner_os\":\"${RUNNER_OS}\"}" >> observability/mcp/manifest.jsonl
 
       - name: "Show MCP manifest (tail)"
         if: ${{ always() }}
