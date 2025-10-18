@@ -5,7 +5,6 @@
 """
 
 import json
-import sys
 from pathlib import Path
 
 
@@ -59,7 +58,7 @@ def enable_silent_autopilot():
         spam_filter = get_spam_filter()
         stats = spam_filter.get_statistics()
 
-        print(f"✓ スパムフィルターを初期化しました")
+        print("✓ スパムフィルターを初期化しました")
         print(f"  - サイレントモード: {stats['silent_mode']}")
         print(f"  - 通知履歴: {stats['total_unique_notifications']}件")
         print(f"  - ブロック済み: {stats['total_blocked']}件")

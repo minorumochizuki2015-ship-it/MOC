@@ -25,7 +25,6 @@ locks_eol_guard.py
 
 import argparse
 import logging
-import os
 import sys
 import time
 from datetime import datetime
@@ -61,21 +60,21 @@ def normalize_file(path: Path) -> tuple[bool, dict]:
     """
     try:
         info = {
-            'path': str(path),
-            'timestamp': datetime.now().isoformat(),
-            'prev_size': 0,
-            'new_size': 0,
-            'delta_size': 0,
-            'replaced_count': 0,
+            "path": str(path),
+            "timestamp": datetime.now().isoformat(),
+            "prev_size": 0,
+            "new_size": 0,
+            "delta_size": 0,
+            "replaced_count": 0,
         }
         if not path.exists():
             return False, info
         raw = path.read_bytes()
-        info['prev_size'] = len(raw)
+        info["prev_size"] = len(raw)
         if not _has_crlf(raw):
             return False, info
         fixed, replaced = _normalize_crlf_to_lf(raw)
-        info['replaced_count'] = replaced
+        info["replaced_count"] = replaced
         if fixed == raw:
             return False, info
         # UTF-8 + newline='\n' で書き戻し
@@ -88,10 +87,10 @@ def normalize_file(path: Path) -> tuple[bool, dict]:
             # バイナリで書き戻し（改行は既に LF 化済み）
             path.write_bytes(fixed)
         try:
-            info['new_size'] = path.stat().st_size
+            info["new_size"] = path.stat().st_size
         except Exception:
-            info['new_size'] = len(fixed)
-        info['delta_size'] = info['new_size'] - info['prev_size']
+            info["new_size"] = len(fixed)
+        info["delta_size"] = info["new_size"] - info["prev_size"]
         return True, info
     except Exception as e:
         print(f"[locks_eol_guard] normalize failed for {path}: {e}", file=sys.stderr)
@@ -111,12 +110,12 @@ def scan_once() -> int:
                 if LOGGER:
                     LOGGER.info(
                         "normalized: path=%s replaced=%d prev=%d new=%d delta=%d ts=%s",
-                        info.get('path'),
-                        info.get('replaced_count', 0),
-                        info.get('prev_size', 0),
-                        info.get('new_size', 0),
-                        info.get('delta_size', 0),
-                        info.get('timestamp'),
+                        info.get("path"),
+                        info.get("replaced_count", 0),
+                        info.get("prev_size", 0),
+                        info.get("new_size", 0),
+                        info.get("delta_size", 0),
+                        info.get("timestamp"),
                     )
     return changed
 
@@ -133,7 +132,9 @@ def _write_heartbeat(heartbeat_file: Path) -> None:
 
 
 def run_guard(interval: float, heartbeat_file: Path | None = None) -> None:
-    print(f"[locks_eol_guard] Watching {LOCKS_DIR} every {interval:.2f}s for CRLF -> LF normalization")
+    print(
+        f"[locks_eol_guard] Watching {LOCKS_DIR} every {interval:.2f}s for CRLF -> LF normalization"
+    )
     last_mtimes = {}
     # 起動時にもハートビートを発行
     if heartbeat_file:
@@ -157,12 +158,12 @@ def run_guard(interval: float, heartbeat_file: Path | None = None) -> None:
                         if LOGGER:
                             LOGGER.info(
                                 "normalized: path=%s replaced=%d prev=%d new=%d delta=%d ts=%s",
-                                info.get('path'),
-                                info.get('replaced_count', 0),
-                                info.get('prev_size', 0),
-                                info.get('new_size', 0),
-                                info.get('delta_size', 0),
-                                info.get('timestamp'),
+                                info.get("path"),
+                                info.get("replaced_count", 0),
+                                info.get("prev_size", 0),
+                                info.get("new_size", 0),
+                                info.get("delta_size", 0),
+                                info.get("timestamp"),
                             )
                     last_mtimes[entry] = mtime
         except Exception as e:
@@ -178,7 +179,10 @@ def _setup_logger(log_file: Path) -> logging.Logger:
     logger = logging.getLogger("locks_eol_guard")
     logger.setLevel(logging.INFO)
     # Avoid duplicate handlers on re-run
-    if not any(isinstance(h, logging.FileHandler) and getattr(h, 'baseFilename', None) == str(log_file) for h in logger.handlers):
+    if not any(
+        isinstance(h, logging.FileHandler) and getattr(h, "baseFilename", None) == str(log_file)
+        for h in logger.handlers
+    ):
         fh = logging.FileHandler(log_file, encoding="utf-8")
         fmt = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
         fh.setFormatter(fmt)
@@ -190,8 +194,18 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="LOCKS EOL Guard (CRLF -> LF)")
     parser.add_argument("--interval", type=float, default=1.0, help="polling interval seconds")
     parser.add_argument("--once", action="store_true", help="run single scan and exit")
-    parser.add_argument("--log-file", type=str, default=str(Path("data/logs/current/locks_eol_guard.log")), help="path to log file")
-    parser.add_argument("--heartbeat-file", type=str, default=str(Path("data/logs/current/locks_eol_guard.heartbeat")), help="path to heartbeat file")
+    parser.add_argument(
+        "--log-file",
+        type=str,
+        default=str(Path("data/logs/current/locks_eol_guard.log")),
+        help="path to log file",
+    )
+    parser.add_argument(
+        "--heartbeat-file",
+        type=str,
+        default=str(Path("data/logs/current/locks_eol_guard.heartbeat")),
+        help="path to heartbeat file",
+    )
     args = parser.parse_args(argv)
 
     # 監視対象の存在確認

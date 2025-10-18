@@ -49,10 +49,23 @@ graph TD
 
 5. **リリース候補ビルド**:
    - ビルドスクリプト実行、SBOM生成 (Rule 21)。
+   - SBOM 生成手順（CycloneDX + 署名/検証 PoC）:
+     1. 依存のインストール: `pip install cyclonedx-bom`
+     2. 生成コマンド: `cyclonedx-bom -o observability/sbom/sbom.json`
+     3. 成果物の保存: `observability/sbom/sbom.json` をアーティファクトにアップロード
+     4. 署名: `python scripts/sbom/sign_sbom.py --sbom observability/sbom/sbom.json --out observability/sbom/sbom.sig --keys-dir observability/sbom/keys`
+     5. 検証: `python scripts/sbom/verify_sbom.py --sbom observability/sbom/sbom.json --sig observability/sbom/sbom.sig --keys-dir observability/sbom/keys`
+     6. 失敗時の扱い: 検証が失敗した場合はリリース候補を破棄（CI は FAIL）
+
+   - CI での自動化（.github/workflows/ci.yml の該当ステップ）:
+     - Secret scan: `python scripts/ops/scan_secrets.py`
+     - EOL check: `python scripts/ops/check_eol.py`
+     - SBOM artifact upload: `actions/upload-artifact@v4`
 
 6. **最終検証 & リリース**:
    - ユーザー検証後、mainに統合。
    - 回避策: 機能フラグで段階的リリース (Rule 23)。
+   - 成果物検証: SBOM の整合性（JSON schema/必須フィールド）と署名検討の実施。
 
 ## 3. 成功指標
 - リリース成功率: 100% (失敗ゼロ)。
@@ -61,3 +74,5 @@ graph TD
 
 ## 更新履歴
 - 2025-10-06: 初版作成
+- 2025-10-10: SBOM 生成・CI 強化の手順を追記
+ - 2025-10-10: SBOM 署名/検証（PoC）手順を追加

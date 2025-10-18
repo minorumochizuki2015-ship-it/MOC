@@ -1,0 +1,15 @@
+[run]
+source =
+    src
+    app
+disable_warnings = module-not-imported
+
+[report]
+include =
+    src/*
+    app/*
+omit =
+    */tests/*
+    */venv/*
+    */.venv/*
+    */generated/*

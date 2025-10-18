@@ -5,13 +5,12 @@ import json
 import logging
 import os
 import platform
-import re
 import subprocess
 import sys
 import threading
 import time
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -19,14 +18,11 @@ import psutil
 from flask import (
     Flask,
     Response,
-    flash,
     jsonify,
-    redirect,
     render_template,
     request,
     send_from_directory,
     stream_with_context,
-    url_for,
 )
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
@@ -107,7 +103,9 @@ class OrchDashboard:
         # Flask app setup with template directory
         template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
         self.app = Flask(
-            __name__, template_folder=template_dir, static_folder=self.config.static_folder
+            __name__,
+            template_folder=template_dir,
+            static_folder=self.config.static_folder,
         )
 
         # CORS設定
@@ -221,8 +219,6 @@ class OrchDashboard:
         import json
         import os
 
-        from flask import render_template
-
         @self.app.route("/")
         def dashboard():
             """Main dashboard page"""
@@ -274,7 +270,11 @@ class OrchDashboard:
                     )
                 routes_sorted = sorted(routes, key=lambda r: r["rule"])
                 return jsonify(
-                    {"success": True, "count": len(routes_sorted), "routes": routes_sorted}
+                    {
+                        "success": True,
+                        "count": len(routes_sorted),
+                        "routes": routes_sorted,
+                    }
                 )
             except Exception as e:
                 return jsonify({"success": False, "error": str(e)}), 500
@@ -523,7 +523,9 @@ class OrchDashboard:
 
                 # Task metrics
                 task_completion = Gauge(
-                    "orch_task_completion_rate", "Task completion rate", registry=registry
+                    "orch_task_completion_rate",
+                    "Task completion rate",
+                    registry=registry,
                 )
                 task_completion.set(self._get_quality_metrics().get("task_completion_rate", 0))
 
@@ -537,12 +539,18 @@ class OrchDashboard:
 
                 # AI-driven anomaly detection (simple example)
                 anomaly_count = Counter(
-                    "orch_anomalies_detected", "Number of detected anomalies", registry=registry
+                    "orch_anomalies_detected",
+                    "Number of detected anomalies",
+                    registry=registry,
                 )
                 alerts = self._get_quality_alerts()
                 anomaly_count.inc(len(alerts))
 
-                return generate_latest(registry), 200, {"Content-Type": "text/plain; version=0.0.4"}
+                return (
+                    generate_latest(registry),
+                    200,
+                    {"Content-Type": "text/plain; version=0.0.4"},
+                )
             except Exception as e:
                 self.logger.error(f"Error generating metrics: {e}")
                 return str(e), 500
@@ -609,7 +617,8 @@ class OrchDashboard:
             self.instructions_path.parent.mkdir(parents=True, exist_ok=True)
             if not self.audit_md_path.exists():
                 self.audit_md_path.write_text(
-                    "# NonStop Audit\n\n初期化: 監査ログはここに追記されます。\n", encoding="utf-8"
+                    "# NonStop Audit\n\n初期化: 監査ログはここに追記されます。\n",
+                    encoding="utf-8",
                 )
             if not self.instructions_path.exists():
                 self.instructions_path.write_text("[]", encoding="utf-8")
@@ -1151,7 +1160,12 @@ class OrchDashboard:
                     return jsonify({"success": True, "pid": pid, "command": cmd})
                 else:
                     return (
-                        jsonify({"success": False, "message": "Dispatcher起動に失敗しました"}),
+                        jsonify(
+                            {
+                                "success": False,
+                                "message": "Dispatcher起動に失敗しました",
+                            }
+                        ),
                         500,
                     )
             except Exception as e:
@@ -1209,7 +1223,10 @@ class OrchDashboard:
                     pass
 
                 summary = {
-                    "dispatcher": {"running": len(dispatchers) > 0, "processes": dispatchers},
+                    "dispatcher": {
+                        "running": len(dispatchers) > 0,
+                        "processes": dispatchers,
+                    },
                     "locks": locks,
                     "tasks": tasks,
                     "milestones": milestones,
@@ -1397,7 +1414,12 @@ class OrchDashboard:
                     )
                 else:
                     return (
-                        jsonify({"success": False, "message": "パラメーターが見つかりません"}),
+                        jsonify(
+                            {
+                                "success": False,
+                                "message": "パラメーターが見つかりません",
+                            }
+                        ),
                         404,
                     )
             except Exception as e:
@@ -1447,7 +1469,12 @@ class OrchDashboard:
                 data = request.get_json()
 
                 # 必須フィールドの検証
-                required_fields = ["task_id", "operation_type", "success", "execution_time_ms"]
+                required_fields = [
+                    "task_id",
+                    "operation_type",
+                    "success",
+                    "execution_time_ms",
+                ]
                 for field in required_fields:
                     if field not in data:
                         return jsonify({"error": f"必須フィールドが不足: {field}"}), 400
@@ -2095,7 +2122,6 @@ class OrchDashboard:
     def _get_git_graph_data(self):
         """Git グラフデータを取得"""
         try:
-            import json
             import subprocess
             from datetime import datetime
 
@@ -2193,7 +2219,10 @@ class OrchDashboard:
 
             # ブランチ一覧を取得
             result = subprocess.run(
-                ["git", "branch", "-a"], capture_output=True, text=True, cwd=self.base_dir
+                ["git", "branch", "-a"],
+                capture_output=True,
+                text=True,
+                cwd=self.base_dir,
             )
 
             branches = []
@@ -2436,7 +2465,11 @@ class OrchDashboard:
                                 status = "modified"
 
                             files.append(
-                                {"name": filename, "status": status, "changes": 1}  # 簡略化
+                                {
+                                    "name": filename,
+                                    "status": status,
+                                    "changes": 1,
+                                }  # 簡略化
                             )
 
             return files

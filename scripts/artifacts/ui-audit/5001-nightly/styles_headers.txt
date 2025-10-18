@@ -1,0 +1,14 @@
+Key                           Value
+---                           -----
+Date                         Fri, 17 Oct 2025 15:01:47 GMT
+Access-Control-Allow-Methods GET, POST, PUT, DELETE, OPTIONS
+Server                       waitress
+Cache-Control                must-revalidate, max-age=0, private
+ETag                         "63ed71de02fe40ec5951ca0f1483818abac344219c35962268cfb06f1730fe44"
+X-Source                     dashboard
+Content-Type                 application/json; charset=utf-8
+Access-Control-Allow-Origin  *
+Access-Control-Allow-Headers Content-Type, Authorization, X-Style-Base-Url
+Access-Control-Expose-Headers X-Preview-Origin, X-Preview-Target, X-Upstream-Status, X-Disable-ServiceWorker, X-Preview-Same-Origin, ETag
+Content-Length               285
+

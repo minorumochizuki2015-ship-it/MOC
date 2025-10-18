@@ -52,6 +52,9 @@ source .venv/bin/activate
 # 依存関係インストール
 pip install -r requirements.txt
 
+# テスト実行
+.venv\Scripts\python.exe -m pytest -v --cov=src --cov=app --cov-report=xml:coverage.xml
+
 # 設定ファイル作成
 cp data/config/example.env data/config/.env.local
 ```
@@ -65,8 +68,12 @@ uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 # バックグラウンド監視開始
 python src/monitor.py --daemon
 
-# メトリクス確認
+# メトリクス確認（開発サーバ）
 curl http://localhost:8000/metrics
+
+# 運用URLの既定（Windows/NSSM + Waitress）
+# ダッシュボード／プレビュー等の既定 Base URL は http://127.0.0.1:5001
+# 監視・E2E・Playwright の既定も同一です
 ```
 
 ## API エンドポイント
@@ -116,8 +123,8 @@ pytest
 # カバレッジ付き
 pytest --cov=src --cov-report=html
 
-# 負荷テスト
-locust -f tests/load/test_sse.py --host=http://localhost:8000
+# 負荷テスト（既定 Base URL を 5001 に統一）
+locust -f tests/load/test_sse.py --host=http://127.0.0.1:5001
 ```
 
 ### コード品質
@@ -150,6 +157,26 @@ tail -f data/logs/orch.log | jq .
 
 # エラーログ抽出
 grep "ERROR" data/logs/orch.log | jq .
+```
+
+#### ロギング方針と使用例
+- 共通ロガー取得: `from app.shared.logging_config import get_logger, _in_pytest`
+- pytest 実行時は FileHandler を自動抑止（stderr のみ）。通常は INFO、pytest は WARNING。`LOG_LEVEL`/`ORCH_LOG_LEVEL` で上書き可。
+- 使用例:
+```python
+from app.shared.logging_config import get_logger, _in_pytest
+logger = get_logger(__name__, in_pytest=_in_pytest())
+logger.info("started", extra={"operation": "boot"})
+```
+- 環境変数によるレベル指定:
+```env
+LOG_LEVEL=DEBUG  # または ORCH_LOG_LEVEL=DEBUG
+```
+- テストでのノイズ抑止:
+```python
+def test_example(caplog):
+    caplog.set_level("WARNING")
+    # ...
 ```
 
 ### セルフヒーリング
@@ -195,6 +222,38 @@ sudo systemctl start orch-next
 ### よくある問題
 - **ポート競合**: `lsof -i :8000` でプロセス確認
 - **DB接続エラー**: `data/orch.db` の権限確認
+
+## Kernel 最小API と CI プリフライト
+
+本プロジェクトには、テキスト生成機能のための最小 Kernel API が含まれます。公開関数は以下のとおりです（`kernel` モジュール経由で提供）。
+
+- `generate(prompt, *, temperature=0.7, max_tokens=256, top_p=1.0, stop=None, model=None, stream=False)`
+- `generate_chat(messages, *, temperature=0.7, max_tokens=256, top_p=1.0, stop=None, model=None, stream=False)`
+- `read_paths(path_key=None)`
+- `healthcheck()`
+- `_model_id()`
+
+整合性と CI の早期検知のため、Windows ジョブではプリフライトとして `healthcheck()` を実行し、`status=="ok"` 以外の場合はジョブを失敗させます。
+
+```bash
+python -c "import importlib, sys; mod=importlib.import_module('kernel'); s=mod.healthcheck().get('status'); print(f'kernel health: {s}'); sys.exit(0 if s=='ok' else 1)"
+```
+
+また、差分カバレッジを `diff-cover --fail-under=80` でゲートしています。テストとカバレッジは以下で確認できます。
+
+```bash
+pytest -v --cov=src --cov=app --cov-report=xml:coverage.xml
+diff-cover coverage.xml --compare-branch origin/main --fail-under=80 --html-report diff-cover.html
+```
+
+CI（Windows）では次のディレクトリが事前に作成されます：
+
+- `data/`
+- `data/baseline/`
+- `data/baseline/milestones/`
+- `data/baseline/tasks/`
+- `data/baseline/metrics/`
+
 - **メトリクス取得失敗**: Prometheus設定確認
 
 ### ログ確認

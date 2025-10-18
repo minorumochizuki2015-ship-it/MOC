@@ -11,9 +11,9 @@ import json
 import logging
 import time
 from contextlib import asynccontextmanager
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 import uvicorn
 from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request
@@ -27,7 +27,10 @@ from .dispatcher import DispatchRequest, TaskDispatcher, TaskPriority, TaskStatu
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("data/logs/orchestrator.log"), logging.StreamHandler()],
+    handlers=[
+        logging.FileHandler("data/logs/orchestrator.log"),
+        logging.StreamHandler(),
+    ],
 )
 logger = logging.getLogger(__name__)
 
@@ -276,7 +279,10 @@ async def handle_webhook(
         # Process webhook in background
         background_tasks.add_task(process_webhook, payload)
 
-        return {"status": "accepted", "timestamp": datetime.now(timezone.utc).isoformat()}
+        return {
+            "status": "accepted",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
 
     except HTTPException:
         raise
@@ -313,7 +319,9 @@ async def get_job_events(job_id: str):
 
 @app.put("/jobs/{job_id}")
 async def update_job(
-    job_id: str, update: TaskUpdateModel, dispatcher: TaskDispatcher = Depends(get_dispatcher)
+    job_id: str,
+    update: TaskUpdateModel,
+    dispatcher: TaskDispatcher = Depends(get_dispatcher),
 ):
     """Update job status and metadata"""
     try:

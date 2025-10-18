@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Quality Dashboard Recent Metrics",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "timestamp": { "type": "string", "format": "date-time" },
+      "test_coverage": { "type": "number", "minimum": 0, "maximum": 1 },
+      "code_complexity": { "type": "number", "minimum": 0 },
+      "error_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+      "performance_score": { "type": "number", "minimum": 0, "maximum": 1 },
+      "quality_issue": {
+        "anyOf": [
+          { "type": "boolean" },
+          { "type": "integer", "enum": [0, 1] }
+        ]
+      }
+    },
+    "required": [
+      "timestamp",
+      "test_coverage",
+      "code_complexity",
+      "error_rate",
+      "performance_score",
+      "quality_issue"
+    ],
+    "additionalProperties": true
+  }
+}

@@ -9,7 +9,6 @@ import hmac
 import json
 import logging
 import sqlite3
-import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
@@ -19,7 +18,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import bcrypt
 import jwt
-from fastapi import Depends, HTTPException, Request
+from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 logger = logging.getLogger(__name__)
@@ -249,7 +248,14 @@ class SecurityManager:
                     INSERT INTO users (user_id, username, email, password_hash, role, created_at)
                     VALUES (?, ?, ?, ?, ?, ?)
                 """,
-                    (user_id, username, email, password_hash, role.value, now.isoformat()),
+                    (
+                        user_id,
+                        username,
+                        email,
+                        password_hash,
+                        role.value,
+                        now.isoformat(),
+                    ),
                 )
                 self._conn.commit()
             else:
@@ -261,7 +267,14 @@ class SecurityManager:
                         INSERT INTO users (user_id, username, email, password_hash, role, created_at)
                     VALUES (?, ?, ?, ?, ?, ?)
                     """,
-                        (user_id, username, email, password_hash, role.value, now.isoformat()),
+                        (
+                            user_id,
+                            username,
+                            email,
+                            password_hash,
+                            role.value,
+                            now.isoformat(),
+                        ),
                     )
 
                     conn.commit()
@@ -383,7 +396,10 @@ class SecurityManager:
                         "failed_auth",
                         user_id,
                         ip_address=ip_address,
-                        details={"reason": "invalid_password", "attempts": new_failed_attempts},
+                        details={
+                            "reason": "invalid_password",
+                            "attempts": new_failed_attempts,
+                        },
                     )
                     return None
 
@@ -481,7 +497,13 @@ class SecurityManager:
                     INSERT INTO jwt_tokens (token_id, user_id, token_hash, issued_at, expires_at)
                     VALUES (?, ?, ?, ?, ?)
                 """,
-                    (token_id, user.user_id, token_hash, now.isoformat(), expires_at.isoformat()),
+                    (
+                        token_id,
+                        user.user_id,
+                        token_hash,
+                        now.isoformat(),
+                        expires_at.isoformat(),
+                    ),
                 )
 
                 conn.commit()
@@ -576,12 +598,17 @@ class SecurityManager:
                         self._log_security_event(
                             "hmac_fail",
                             None,
-                            details={"reason": "timestamp_out_of_range", "time_diff": time_diff},
+                            details={
+                                "reason": "timestamp_out_of_range",
+                                "time_diff": time_diff,
+                            },
                         )
                         return False
                 except ValueError:
                     self._log_security_event(
-                        "hmac_fail", None, details={"reason": "invalid_timestamp_format"}
+                        "hmac_fail",
+                        None,
+                        details={"reason": "invalid_timestamp_format"},
                     )
                     return False
 
@@ -606,7 +633,9 @@ class SecurityManager:
         except Exception as e:
             logger.error(f"HMAC verification error: {e}")
             self._log_security_event(
-                "hmac_fail", None, details={"reason": "verification_error", "error": str(e)}
+                "hmac_fail",
+                None,
+                details={"reason": "verification_error", "error": str(e)},
             )
             return False
 
@@ -708,7 +737,12 @@ class SecurityManager:
         return None
 
     def _record_rate_limit_request(
-        self, identifier: str, endpoint: str, method: str, timestamp: datetime, window_seconds: int
+        self,
+        identifier: str,
+        endpoint: str,
+        method: str,
+        timestamp: datetime,
+        window_seconds: int,
     ):
         """Record a rate limit request"""
         import uuid
@@ -728,7 +762,13 @@ class SecurityManager:
                     WHERE identifier = ? AND endpoint = ? AND method = ? 
                     AND window_start <= ? AND window_end > ?
                 """,
-                    (identifier, endpoint, method, timestamp.isoformat(), timestamp.isoformat()),
+                    (
+                        identifier,
+                        endpoint,
+                        method,
+                        timestamp.isoformat(),
+                        timestamp.isoformat(),
+                    ),
                 )
 
                 if cursor.rowcount == 0:
@@ -897,7 +937,11 @@ def get_security_manager() -> SecurityManager:
     # This would be configured with actual settings
     config = {
         "database": {"path": "data/security.db"},
-        "jwt": {"secret_key": "your-jwt-secret-key", "algorithm": "HS256", "expiry_hours": 24},
+        "jwt": {
+            "secret_key": "your-jwt-secret-key",
+            "algorithm": "HS256",
+            "expiry_hours": 24,
+        },
         "webhook": {"secret": "your-webhook-secret", "time_tolerance": 120},
         "rate_limits": {"rules": []},
     }

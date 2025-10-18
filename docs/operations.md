@@ -145,7 +145,51 @@ nssm set ORCH-Next Start SERVICE_AUTO_START
 nssm start ORCH-Next
 ```
 
+##### Windows Dashboard Service (Waitress/NSSM) — default port 5001
+本番ダッシュボードは Waitress + NSSM により `127.0.0.1:5001` で常駐します。インストールは以下のスクリプトを利用します。
+
+```powershell
+pwsh scripts/ops/nssm_install_5001.ps1 -Apply
+```
+
+設定の要点:
+- AppDirectory: リポジトリルート（例: `C:\Users\User\Trae\ORCH-Next`）
+- AppEnvironmentExtra: `ORCH_HOST=127.0.0.1;ORCH_PORT=5001;ORCH_MCP_TOKEN=<managed in NSSM env>`
+- Start: `SERVICE_AUTO_START`
+- ログ: `data\logs\current\service_stdout.log` / `service_stderr.log`（ローテーション: Files=5, Bytes=10MB, Seconds=86400）
+
+ヘルスエンドポイント（例）:
+- `GET http://127.0.0.1:5001/healthz`
+- `OPTIONS http://127.0.0.1:5001/preview`（プリフライト: `Access-Control-Max-Age: 600`, `Vary: Origin`）
+- `GET http://127.0.0.1:5001/mcp/ping`（未認証は 401, `Server: waitress`）
+- `GET http://127.0.0.1:5001/events/health`（SSE: `Content-Type: text/event-stream`, `Cache-Control: no-cache`）
+
 ## Configuration
+
+### Logging Policy and Usage
+
+- 共通ロガー取得は `app.shared.logging_config.get_logger` を使用します。pytest 実行時は自動的に FileHandler が抑止され、stderr への StreamHandler のみ有効になります（通常運用は INFO、pytest は WARNING。`LOG_LEVEL` または `ORCH_LOG_LEVEL` 環境変数で上書き可能）。
+- 互換ヘルパー `_in_pytest` を提供しています。
+
+使用例:
+```python
+from app.shared.logging_config import get_logger, _in_pytest
+logger = get_logger(__name__, in_pytest=_in_pytest())
+logger.info("operation started", extra={"operation": "dispatch"})
+```
+
+環境変数例:
+```env
+LOG_LEVEL=DEBUG  # または ORCH_LOG_LEVEL=DEBUG
+```
+
+テストでのログノイズ抑止:
+```python
+def test_dispatch(caplog):
+    caplog.set_level("WARNING")
+    # ...
+```
+
 
 ### Configuration File Structure
 
@@ -196,8 +240,32 @@ notifications:
     webhook_url: "${SLACK_WEBHOOK_URL}"
     channel: "#orch-alerts"
     username: "ORCH-Next"
-    mention_on_critical: true
+  mention_on_critical: true
   
+## CI プリフライトとヘルスチェック
+
+運用前の早期検知と安定性向上のため、CI に以下のプリフライトを導入しています。
+
+1. Kernel healthcheck の実行
+   - `kernel.healthcheck()` を CI（Windows ジョブ）開始直後に実行し、`status=="ok"` 以外は失敗扱いにします。
+   - 実行例：
+     ```powershell
+     python -c "import importlib, sys; mod=importlib.import_module('kernel'); s=mod.healthcheck().get('status'); print(f'kernel health: {s}'); sys.exit(0 if s=='ok' else 1)"
+     ```
+
+2. 差分カバレッジの品質ゲート
+   - `diff-cover coverage.xml --compare-branch origin/main --fail-under=80` を実行し、必要十分なテストが新規差分に対して伴っていることを検証します。
+
+3. ディレクトリ準備（Windows）
+   - 次のディレクトリを事前作成：
+     - `data/`
+     - `data/baseline/`
+     - `data/baseline/milestones/`
+     - `data/baseline/tasks/`
+     - `data/baseline/metrics/`
+
+上記は GitHub Actions の `test` ジョブに組み込まれており、詳細は `.github/workflows/ci.yml` を参照してください。
+
   email:
     smtp_server: "${SMTP_SERVER}"
     smtp_port: 587
@@ -1483,3 +1551,42 @@ if __name__ == "__main__":
 ---
 
 This operations guide provides comprehensive procedures for managing ORCH-Next in production environments. Regular review and updates of these procedures ensure reliable system operation and quick issue resolution.
+
+## SBOM 発行と CI 強化手順（付録）
+
+本プロジェクトでは、セキュリティとコンプライアンスのため SBOM（Software Bill of Materials）の自動生成と、機密情報スキャン／EOL チェックを CI に組み込みます。
+
+### SBOM 生成（CycloneDX）
+
+- 依存のインストール: `pip install cyclonedx-bom`
+- 生成コマンド: `cyclonedx-bom -o observability/sbom/sbom.json`
+- 成果物の保存: `observability/sbom/sbom.json` をアーティファクトへアップロード
+- 署名・検証（PoC）: RSA-PSS(SHA256) による SBOM 署名と検証を導入
+
+### SBOM 署名/検証（PoC RSA）
+
+SBOM の改ざん検知のため、PoC として RSA-PSS(SHA256) による署名・検証を実施します。
+
+```bash
+# 署名
+python scripts/sbom/sign_sbom.py --sbom observability/sbom/sbom.json \
+  --out observability/sbom/sbom.sig --keys-dir observability/sbom/keys
+
+# 検証（失敗時は非ゼロ終了）
+python scripts/sbom/verify_sbom.py --sbom observability/sbom/sbom.json \
+  --sig observability/sbom/sbom.sig --keys-dir observability/sbom/keys
+```
+
+CI では `.github/workflows/ci.yml` に署名/検証ステップを組み込み、検証失敗時はジョブを fail にします。鍵は CI 実行時に短命で生成され、`observability/sbom/keys/` に保存されます（将来的に KMS/Keyless Sigstore へ移行）。
+
+### CI 追加ステップ
+
+`.github/workflows/ci.yml` に以下のステップを追加しています:
+
+- Secret scan: `python scripts/ops/scan_secrets.py`
+- EOL check: `python scripts/ops/check_eol.py`
+- SBOM artifact upload: `actions/upload-artifact@v4`
+
+### リソースガード（準備）
+
+将来的なデーモン同梱に向け、CPU 使用率・ディスク空き容量の簡易チェックを行う `scripts/ops/resource_guard.py` を追加予定（閾値既定: CPU 80%、ディスク空き 1GB）。CI では non-blocking とし、閾値超過時は警告を発します（`RESOURCE_GUARD_STRICT=true` で fail に変更可能）。

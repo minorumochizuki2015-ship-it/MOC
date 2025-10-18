@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Realtime Alerts Response",
+  "type": "object",
+  "properties": {
+    "alerts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "level": { "type": "string", "enum": ["info", "warning", "error", "critical"] },
+          "category": { "type": "string", "enum": ["system", "quality", "prediction", "automation"] },
+          "title": { "type": "string" },
+          "message": { "type": "string" },
+          "source": { "type": "string" },
+          "acknowledged": { "type": "boolean" },
+          "auto_resolved": { "type": "boolean" }
+        },
+        "required": [
+          "id",
+          "timestamp",
+          "level",
+          "category",
+          "title",
+          "message",
+          "source",
+          "acknowledged",
+          "auto_resolved"
+        ],
+        "additionalProperties": true
+      }
+    },
+    "total_count": { "type": "integer", "minimum": 0 },
+    "active_count": { "type": "integer", "minimum": 0 },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "required": ["alerts", "total_count", "active_count", "timestamp"],
+  "additionalProperties": false
+}

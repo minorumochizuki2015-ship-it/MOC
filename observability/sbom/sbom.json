@@ -1,0 +1,224 @@
+{
+  "bomFormat": "CycloneDX-poC",
+  "specVersion": "0.0",
+  "serialNumber": "urn:uuid:placeholder",
+  "version": 1,
+  "components": [
+    {
+      "type": "library",
+      "name": "fastapi",
+      "version": ">=0.104.0",
+      "purl": "pkg:pypi/fastapi"
+    },
+    {
+      "type": "library",
+      "name": "uvicorn[standard]",
+      "version": ">=0.24.0",
+      "purl": "pkg:pypi/uvicorn[standard]"
+    },
+    {
+      "type": "library",
+      "name": "pydantic",
+      "version": ">=2.5.0",
+      "purl": "pkg:pypi/pydantic"
+    },
+    {
+      "type": "library",
+      "name": "sqlalchemy",
+      "version": ">=2.0.0",
+      "purl": "pkg:pypi/sqlalchemy"
+    },
+    {
+      "type": "library",
+      "name": "httpx",
+      "version": ">=0.25.0",
+      "purl": "pkg:pypi/httpx"
+    },
+    {
+      "type": "library",
+      "name": "requests",
+      "version": ">=2.31.0",
+      "purl": "pkg:pypi/requests"
+    },
+    {
+      "type": "library",
+      "name": "python-jose[cryptography]",
+      "version": ">=3.3.0",
+      "purl": "pkg:pypi/python-jose[cryptography]"
+    },
+    {
+      "type": "library",
+      "name": "passlib[bcrypt]",
+      "version": ">=1.7.4",
+      "purl": "pkg:pypi/passlib[bcrypt]"
+    },
+    {
+      "type": "library",
+      "name": "python-multipart",
+      "version": ">=0.0.6",
+      "purl": "pkg:pypi/python-multipart"
+    },
+    {
+      "type": "library",
+      "name": "prometheus-client",
+      "version": ">=0.19.0",
+      "purl": "pkg:pypi/prometheus-client"
+    },
+    {
+      "type": "library",
+      "name": "structlog",
+      "version": ">=23.2.0",
+      "purl": "pkg:pypi/structlog"
+    },
+    {
+      "type": "library",
+      "name": "websockets",
+      "version": ">=12.0",
+      "purl": "pkg:pypi/websockets"
+    },
+    {
+      "type": "library",
+      "name": "sse-starlette",
+      "version": ">=3.0.0",
+      "purl": "pkg:pypi/sse-starlette"
+    },
+    {
+      "type": "library",
+      "name": "starlette",
+      "version": ">=0.48.0",
+      "purl": "pkg:pypi/starlette"
+    },
+    {
+      "type": "library",
+      "name": "celery",
+      "version": ">=5.3.0  # Optional, for complex async tasks",
+      "purl": "pkg:pypi/celery"
+    },
+    {
+      "type": "library",
+      "name": "redis",
+      "version": ">=5.0.0   # Optional, for Celery backend",
+      "purl": "pkg:pypi/redis"
+    },
+    {
+      "type": "library",
+      "name": "pytest",
+      "version": ">=7.4.0",
+      "purl": "pkg:pypi/pytest"
+    },
+    {
+      "type": "library",
+      "name": "pytest-asyncio",
+      "version": ">=0.21.0",
+      "purl": "pkg:pypi/pytest-asyncio"
+    },
+    {
+      "type": "library",
+      "name": "pytest-cov",
+      "version": ">=4.1.0",
+      "purl": "pkg:pypi/pytest-cov"
+    },
+    {
+      "type": "library",
+      "name": "httpx",
+      "version": ">=0.25.0  # For async test client",
+      "purl": "pkg:pypi/httpx"
+    },
+    {
+      "type": "library",
+      "name": "locust",
+      "version": ">=2.17.0  # Load testing",
+      "purl": "pkg:pypi/locust"
+    },
+    {
+      "type": "library",
+      "name": "jsonschema",
+      "version": ">=4.21.0  # Schema validation in tests",
+      "purl": "pkg:pypi/jsonschema"
+    },
+    {
+      "type": "library",
+      "name": "black",
+      "version": ">=23.11.0",
+      "purl": "pkg:pypi/black"
+    },
+    {
+      "type": "library",
+      "name": "isort",
+      "version": ">=5.12.0",
+      "purl": "pkg:pypi/isort"
+    },
+    {
+      "type": "library",
+      "name": "flake8",
+      "version": ">=6.1.0",
+      "purl": "pkg:pypi/flake8"
+    },
+    {
+      "type": "library",
+      "name": "mypy",
+      "version": ">=1.7.0",
+      "purl": "pkg:pypi/mypy"
+    },
+    {
+      "type": "library",
+      "name": "pre-commit",
+      "version": ">=3.5.0",
+      "purl": "pkg:pypi/pre-commit"
+    },
+    {
+      "type": "library",
+      "name": "python-dotenv",
+      "version": ">=1.0.0",
+      "purl": "pkg:pypi/python-dotenv"
+    },
+    {
+      "type": "library",
+      "name": "pyyaml",
+      "version": ">=6.0.1",
+      "purl": "pkg:pypi/pyyaml"
+    },
+    {
+      "type": "library",
+      "name": "click",
+      "version": ">=8.1.0  # CLI tools",
+      "purl": "pkg:pypi/click"
+    },
+    {
+      "type": "library",
+      "name": "rich",
+      "version": ">=13.7.0  # Pretty printing",
+      "purl": "pkg:pypi/rich"
+    },
+    {
+      "type": "library",
+      "name": "pathlib2",
+      "version": ">=2.3.7  # Enhanced pathlib (if needed)",
+      "purl": "pkg:pypi/pathlib2"
+    },
+    {
+      "type": "library",
+      "name": "numpy",
+      "version": ">=1.26.4",
+      "purl": "pkg:pypi/numpy"
+    },
+    {
+      "type": "library",
+      "name": "pandas",
+      "version": ">=2.1.0",
+      "purl": "pkg:pypi/pandas"
+    },
+    {
+      "type": "library",
+      "name": "PyYAML",
+      "version": ">=6.0",
+      "purl": "pkg:pypi/PyYAML"
+    },
+    {
+      "type": "library",
+      "name": "cryptography",
+      "version": ">=41.0.0",
+      "purl": "pkg:pypi/cryptography"
+    }
+  ]
+}

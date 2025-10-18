@@ -1,25 +1,11 @@
 [tool.black]
 line-length = 100
-target-version = ["py311"]
+target-version = ["py312"]
+include = "\\.pyi?$"
+extend-exclude = "(\\.venv|build|dist|artifacts|data)(/|\\\\)"
 
 [tool.isort]
 profile = "black"
 line_length = 100
-
-[tool.flake8]
-max-line-length = 100
-extend-ignore = "E203,W503,E501,E712,W291,W292,F401,F841,E401"
-
-[tool.mypy]
-python_version = "3.11"
-strict = true
-warn_unused_ignores = true
-warn_redundant_casts = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-check_untyped_defs = true
-no_implicit_optional = true
-show_error_codes = true
-
-[tool.pytest.ini_options]
-asyncio_mode = "auto"
+src_paths = ["src", "tests"]
+skip = [".venv", "build", "dist", "artifacts", "data"]

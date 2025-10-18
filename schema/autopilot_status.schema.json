@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Autopilot Status Placeholder",
+  "type": "object",
+  "properties": {
+    "status": { "type": "string" },
+    "message": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "required": ["status", "timestamp"],
+  "additionalProperties": true
+}

@@ -1,0 +1,17 @@
+version: 1
+servers:
+  Filesystem:
+    enabled: true
+    mode: read           # read-only per policy
+    roots:
+      # Windowsでも有効なフォワードスラッシュで明示（設定値はドライブレター禁止・'/' 始まり）
+      - "/observability"
+      - "/artifacts"
+    start:
+      type: "node"
+      # IDEがカスタムコマンドを要求する場合に使用（ルートは位置引数）
+      command: "npx @modelcontextprotocol/server-filesystem \"/observability\" \"/artifacts\""
+    notes:
+      - "Start this MCP server from your IDE: ツール → MCP → MCPサーバーを追加 → Filesystem"
+      - "If your IDE requires a command, use the 'start.command' above or point to your local filesystem MCP server executable (e.g., mcp-server-filesystem)"
+      - "No secrets will be emitted; outputs restricted to evidence/artifacts per policy"

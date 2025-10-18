@@ -1,135 +1,48 @@
-# 現在のマイルストーン - Phase 3 完了
+# CURRENT_MILESTONE — 2025-10-11 更新
 
-## マイルストーン概要
+## 現在のマイルストーン
+- M4: ライセンス/コンプライアンス適合（Phase 4 実行タスク群の支援・確認を含む）
 
-**フェーズ**: Phase 3 → Phase 4 移行  
-**期間**: 2025-10-06 ～ 2025-10-07  
-**ステータス**: ✅ **完了**  
-**完了日**: 2025-10-07 15:45:20  
+## 対象タスク（TASKS.md リンク）
+- 001 UI統合テスト — state: REVIEW（期限超過、レビュー継続）
+- 008 ML最適化・自動再訓練 — state: READY
+- 009 ワークフロー自動化実装 — state: REVIEW（受入基準満たし、承認判定待ち）
+- 010 承認プロセス最適化 — state: READY
+- 011 外部システム連携 — state: READY
+- 013 テスト環境統一・CI Quality Gate強化 — state: DONE（2025-10-11完了）
 
-## Phase 3 達成項目
+## 受入基準（Acceptance Criteria）
+1. 契約テスト（tests/contract/*）全合格
+2. 負荷試験（tests/load/*）既存閾値維持または改善
+3. セキュリティテスト（tests/test_security.py・tests/unit/test_security.py）全合格
+4. 監査提出物のパス表記は Windows 絶対パス（WORK_TRACKING.md のポリシー準拠）
+5. ドキュメント整備（docs/*、handoff/quick_start.md 更新）
 
-### 1. AI予測機能実装 ✅
-- **QualityPredictor**: 品質問題予測 (精度: 86.9%)
-- **ResourceDemandPredictor**: リソース需要予測 (R2: 60.1%)
-- **モデル訓練**: RandomForest + GradientBoosting
+### 受入基準達成サマリー（009）
+- テスト: 契約・セキュリティ・e2e・統合テスト 合格（quick_integration_test.py 4/4）
+- ダッシュボード: 5000/5001 の主要エンドポイントで HTTP 200（SSE/SocketIO 正常）
+- エビデンス: JUnit レポート、詳細監査ログ（Windows 絶対パス）
+- 推奨タイムアウト: 3s（quick_performance_test スモーク結果）
 
-### 2. 監視システム実装 ✅
-- **MonitoringSystem**: メトリクス収集 (6種類)
-- **AnomalyDetector**: 異常検知 (Z-score + IQR)
-- **NotificationService**: 通知機能
+## チェックリスト
+- ORCH/STATE/CHECKLISTS/phase4_execution_checklist.md を参照
 
-### 3. 自動化機能実装 ✅
-- **AutomatedApprovalSystem**: 自動承認システム
-- **承認ルール**: 6つのルールベース判定
-- **リスク評価**: 4段階リスクレベル
+## トラッキング/更新
+- 進捗は WORK_TRACKING.md に追記し、更新イベントを APPROVALS.md に記録（A013 詳細追記済み）
+- ダッシュボードの可視化は artifacts/phase4_dashboard/ で実施
+ - 監査証跡リンク（T-103）: C:\Users\User\Trae\ORCH-Next\ORCH\STATE\PORTS_20251013.md
 
-### 4. 統合テスト完了 ✅
-- **テスト項目**: 7/7項目成功 (100%)
-- **実行時間**: 42.59秒
-- **統合動作**: 全機能連携確認
+## 更新履歴
+- 2025-10-10: 初版作成（M4 現行、タスク009 着手）
+- 2025-10-11: 009 を REVIEW に更新、受入基準達成サマリー追記
+- 2025-10-13: T-103（port 8001）事前検査・スナップショット取得の準備手順を整備し、証跡出力パス（ORCH/STATE/PORTS_YYYYMMDD.md）を明記。MCP連携マイルストーン（M1）を MILESTONES.md に追加。
+- 2025-10-14: Audit Remediation（SQLite 接続 ResourceWarning 是正）を反映。TASKS.md／CHECKLISTS／WORK_RULES.md を更新。
+- 2025-10-15: DB接続監査の是正を適用。`lock_manager.extend_lock` のトランザクション境界修正、`database_optimizer.py` へ PRAGMA 追加、`security_manager.py` をレガシー明示。証跡: ORCH/STATE/CHECKLISTS/2025-10-15_db_connection_audit.md。
 
-## 成果物
-
-### ドキュメント
-- `docs/phase3_integration_report.md`: 統合テスト結果レポート
-- `docs/phase3_feature_summary.md`: 機能実装サマリー
-
-### テストデータ
-- `data/test_results/phase3_integration_test_20251007_154520.json`: 詳細テスト結果
-
-### 実装ファイル
-- `src/ai_prediction.py`: AI予測機能
-- `src/monitoring_system.py`: 監視システム
-- `src/automated_approval.py`: 自動化機能
-
-## 品質指標
-
-| 指標 | 目標 | 実績 | 評価 |
-|------|------|------|------|
-| AI予測精度 | ≥80% | 86.9% | ✅ 超過達成 |
-| テスト成功率 | 100% | 100% | ✅ 達成 |
-| 統合動作 | 正常 | 正常 | ✅ 達成 |
-| エラー発生 | 0件 | 0件 | ✅ 達成 |
-
-## 次のマイルストーン: Phase 4
-
-### 予定項目
-1. **リアルタイム監視ダッシュボード**
-   - WebUI統合
-   - リアルタイムメトリクス表示
-   - アラート管理
-
-2. **機械学習モデル最適化**
-   - 自動再訓練機能
-   - ハイパーパラメータ調整
-   - 精度向上 (目標: 90%+)
-
-3. **高度な自動化**
-   - ワークフロー自動化
-   - 承認プロセス最適化
-   - 外部システム連携
-
-### 開始予定
-- **開始日**: 2025-10-08
-- **完了予定**: 2025-10-15
-- **責任者**: WORK
-
-## 課題と改善点
-
-### Phase 3で発見された課題
-1. **リソース予測精度**: 60.1% (改善余地あり)
-2. **異常検知感度**: 調整が必要
-3. **承認ルール**: より細かい条件設定が必要
-
-### Phase 4での改善計画
-1. **モデル改善**: より多くの特徴量とデータ
-2. **アルゴリズム最適化**: 異常検知手法の改良
-3. **ルール拡張**: 動的ルール調整機能
-
----
-
-## Phase 4 実行計画（詳細）
-
-### サブタスク（承認済み・オートパイロット対象）
-- [READY] 009: 高度な自動化／ワークフロー自動化実装（Due: 2025-10-15）
-- [READY] 010: 高度な自動化／承認プロセス最適化（Due: 2025-10-15）
-- [READY] 011: 高度な自動化／外部システム連携（Due: 2025-10-15）
-
-### 実行モード
-- オートパイロット: 有効（サイレントモード）
-- 通知方針: 重要（high/critical）のみ・重複通知24hブロック・1h最大5件
-
-### トラッキング
-- 台帳: ORCH/STATE/TASKS.md（task_id=009/010/011）
-- 進捗可視化: WORK_TRACKING.md・ダッシュボード（phase4_dashboard）
-
-## 技術的負債
-
-### 現在の負債
-- テストカバレッジの向上 (現在: 80%台)
-- コード複雑度の削減
-- ドキュメント整備
-
-### 解決計画
-- Phase 4でのリファクタリング
-- 継続的な品質改善
-- 自動化による負債削減
-
-## リスク管理
-
-### 識別されたリスク
-1. **モデル精度低下**: 継続的な監視が必要
-2. **システム負荷**: リソース使用量の監視
-3. **データ品質**: 入力データの検証強化
-
-### 対策
-- 定期的なヘルスチェック
-- アラート機能の活用
-- 予防的メンテナンス
-
----
-
-**更新日**: 2025-10-07 15:45:20  
-**更新者**: WORK  
-**次回更新予定**: Phase 4 開始時
+### /preview 拡張 — マイルストーン追記（2025-10-15）
+- P0: <head> タイポ修正済み（テスト緑）
+- P0: ローカル最適化のパスガード導入＋悪性ターゲット 400 テスト追加
+- P1: SSE ヘッダ契約テスト追加（text/event-stream と no-cache を確認）
+- P1: srcset / meta refresh 同一オリジン E2E 追加（Playwright 行列）
+- P1: /preview レスポンス最終化（全応答に Cache-Control: no-store, X-Preview-Origin, 400応答に X-Preview-Target）を適用、監査合格。
+- P2: フィクスチャの 404 ノイズ除去（static/obj/doc.pdf の追加、または参照除去）

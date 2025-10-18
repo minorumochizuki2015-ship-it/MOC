@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-10-13 15:41:32",
+  "summary": {
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "test": "Navigate to Style Manager",
+      "status": "FAIL",
+      "message": "Message: \nStacktrace:\n\tGetHandleVerifier [0x0x7ff66d60e955+80021]\n\tGetHandleVerifier [0x0x7ff66d60e9b0+80112]\n\t(No symbol) [0x0x7ff66d39060f]\n\t(No symbol) [0x0x7ff66d3e8854]\n\t(No symbol) [0x0x7ff66d3e8b1c]\n\t(No symbol) [0x0x7ff66d43c927]\n\t(No symbol) [0x0x7ff66d41126f]\n\t(No symbol) [0x0x7ff66d43968a]\n\t(No symbol) [0x0x7ff66d411003]\n\t(No symbol) [0x0x7ff66d3d95d1]\n\t(No symbol) [0x0x7ff66d3da3f3]\n\tGetHandleVerifier [0x0x7ff66d8cdd0d+2960461]\n\tGetHandleVerifier [0x0x7ff66d8c7fca+2936586]\n\tGetHandleVerifier [0x0x7ff66d8e8a07+3070279]\n\tGetHandleVerifier [0x0x7ff66d62843e+185214]\n\tGetHandleVerifier [0x0x7ff66d62fe8f+216527]\n\tGetHandleVerifier [0x0x7ff66d617b94+117460]\n\tGetHandleVerifier [0x0x7ff66d617d4f+117903]\n\tGetHandleVerifier [0x0x7ff66d5fdc28+11112]\n\tBaseThreadInitThunk [0x0x7fff3ecce8d7+23]\n\tRtlUserThreadStart [0x0x7fff406a8d9c+44]\n"
+    }
+  ]
+}

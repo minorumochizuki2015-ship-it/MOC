@@ -1,0 +1,156 @@
+work_rules: .trae/rules/WORK_rules.yaml
+orchestrator: .trae/rules/MCP-Orchestrator.yaml
+design_ui: .trae/rules/Design-UI.yaml
+web_verify: .trae/rules/Web-Verify.yaml
+audit_rules: .trae/rules/AUDIT_rules.yaml
+approvals: .trae/rules/APPROVALS.yaml
+cmd: .trae/rules/CMD.yaml
+agent_spec_shared: .trae/rules/Agent Spec.yaml
+司令核（CMD）は .trae/rules/CMD.yaml に、エージェントレジストリ・ルーティング・キュー・ガードレールが定義されています。
+routing_rules例: 「plan/design/figma→Design-UI」「verify/source/news→Web-Verify」「apply/patch→WORK1」「audit/review→AUDIT」「ui-audit→UI-Audit」「default→MCP-Orchestrator」
+agents.registryに各エージェントのcapabilities/qos、fallback、ABテスト、キューとバックプレッシャー、リトライ、サーキットブレーカーなどが定義されています。
+実行時は、意図分類（intent_classifier）とrouting_rulesの組み合わせにより司令核がサブエージェントへ委譲します。
+2.
+カスタムプロンプトの適用状況
+スクショの「Agent Spec」画面に見えるとおり、各カスタムエージェント（Agent Spec、Design-UI、Web-Verify、MCP-Orchestrator、司令核、作業核、監査核）に固有のプロンプトが設定されています。
+project_rules.mdのspecsに「Agent Spec.yaml」があり、共通仕様（shared base）としてプロンプト・役割の標準化を行う前提になっています。これにより、各エージェントの個別プロンプトは共通原則・用語・成果物の期待値を継承しつつ、役割別に上書きされる構成です。
+Design-UIについてはスクショのとおり、Figma読み取り→最小UI計画→shadcn/uiへのマッピング→プレビュー（任意）→UI-Auditへの引き渡し、がプロンプト要件に含まれています。CMD.yaml側でも「figma|shadcn|component|design」をDesign-UIにルーティングする定義が一致しています。
+3.
+ルール設定の現状
+project_rules.mdは「Single source of truth」としてPLAN→TEST→PATCH→PROMOTION→RELEASEの全工程と、証跡・可視化の要件を明示しています。
+CMD.yamlの「plan_test_patch」「pipeline」セクションで各ゲートの実行要件、成果物、閾値、失敗時のロールバック方針が定義されています（TESTではblack/isort/mypy/pytest、diff-cover、detect-secrets/bandit、SBOM生成などが必須）。
+ガバナンス（approvals/codeowners/two-person rule、自動化されたSBOM/脆弱性/ライセンス検査、UI証跡の強制）もproject_rules.md/CMD.yaml双方で整備済みです。
+Windows向けのファイルシステムポリシー（絶対パス・ドライブレター必須、ルート検証、危険フラグ禁止など）がCMD.yamlで設定されています。
+4.
+作業進行管理方法
+キューとレーン（P0/P1/P2）により優先度と同時実行数が制御され、バックプレッシャーがかかるとP2をシェッドし、一時停止が走ります（CMD.yaml）。
+自動スケジュール（夜間UI Audit・毎時Web Verify）とイベントトリガー（push:main、PR open）が存在し、それぞれUI-Audit/AUDIT/Verifyへ自動委譲されます。
+ABルーティングの仕組み（例：UI-AuditのSSIMしきい値実験）で品質指標に影響を与えない条件下の実験を行い、成功メトリクスで比較・採択します。
+司令核（CMD）が全体を統括し、MCP-Orchestratorがツール/サブエージェントのファンアウト・収集を担当。Verify/Audit/UI-Auditはゲート証跡の作成と合否判定に集中します。
+5.
+コード作成・修正プロセス
+Git MCPサーバー（Game_project/MOC/MOC-pr/→追加予定のORCH-Next）がツール連携のハブとなり、変更箇所の検索・差分・ステージング・コミットが容易です。
+リポジトリにはcommitlint.config.js、.githooks/commit-msg が存在し、Conventional Commits準拠のコミットメッセージ検証が導入済みです。
+TESTゲートで整形・型・単体/統合テスト・セキュリティ・SBOMまで自動評価。PATCHは「Dry-Run→Apply」の二段階で、IDEMPOTENCY/ハッシュ厳密性、フルファイル置換禁止などの厳格な書き込みポリシーに従います。
+6.
+監査・レビューの実施方法
+Web-Verifyがソース帰属・外部情報精査を担い、UI-AuditがPlaywright/axe/ビジュアル差分/パフォーマンス（LCP/TTI/CLS）を実行します。
+AUDITはMLガバナンス/リポジトリポリシーの遵守チェックを行い、APPROVALSゲートで二者承認・自己承認禁止・Codeowners必須が適用されます。
+ダッシュボード（observability/...）にゲート結果・カバレッジ・脆弱性・SBOM・UIスクリーンショットを公開し、Policy BotがPRに合否グリッド等をポストする設計です。
+現状分析
+
+改善が必要な点
+
+ORCH-NextのmcpServers登録：必須。上記JSONを適用して常時ON運用に統一してください。
+パス表記の一貫性：CMD.yamlはWindowsバックラッシュ厳格運用を示していますが、mcpServersではフォワードスラッシュを使用中です。現状動作に問題なければ維持でも構いませんが、将来のツール間整合性のためWindowsポリシーに寄せる（C:\Users\...）か、CMD側ポリシーで許容範囲を明示するのが安全です。
+シークレット管理：Figma APIキーなどは環境変数で渡しています。Windows資格情報マネージャや専用の.env管理、CI側のシークレットストア連携を追加すると堅牢になります。
+エージェント共通仕様の明示：Agent Spec.yamlを強化し、共通の原則・成果物・エビデンス様式を定義→各エージェントで差分定義のみ記述にすると保守性が上がります。
+観測可能性の統合：UI/Audit/Verifyの証跡をすべて「タスクID」単位で紐づけ、ダッシュボードで時系列・比較が可能なメタ情報（owner、scope、risk、gate結果）を追加すると運用効率が高まります。
+優れている点
+
+PLAN→TEST→PATCH→PROMOTION→RELEASEのゲート設計が充実（失敗時の自動ロールバック、IDEMPOTENCYチェック、エビデンスの厳格化）。
+Windows環境制約への対応（絶対パス・ドライブレター必須、roots正規表現、危険引数禁止）。
+司令核（CMD）のルーティング・ABテスト・キュー制御・サーキットブレーカーなど、実運用を想定した制御ロジックが豊富。
+Git MCP、UI-Audit、Web-Verify、AUDITの役割分担が明確で、レビュー・監査まで含む総合オーケストレーションになっている。
+今後の発展が期待される領域
+
+クロスIDE間の状態共有：タスクID中心の「状態レジストリ」を導入し、X/GitHub/MCP/Claude Code/Codexの各IDEに同一タスクの進捗・証跡を同期。
+メモリとナレッジ管理：過去タスクのPLAN/TEST/FAIL要因を構造化（JSONL）格納し、次のPLANで「類似事例レコメンド」を自動提示。
+ガードレールの動的調整：ABテストの成功指標に応じてUI-Auditのしきい値・テスト網羅率を自動調整（ただし偽陽性増加のガードあり）。
+自動バックポート／ロールフォワード：ROLLBACK時に原因特定→自動修正案のPLAN生成→限定的ロールフォワード試験まで含む半自動フロー。
+最新のAIエージェント技術・記事との比較
+
+LangGraph/Autogen系のグラフ構成やSwarm的な並列・合流は、CMD.yamlのqueuesとroutingで近い概念が既に取り入れられています。強みは「ガバナンス・証跡・デリミタが厳格」である点。
+MCPは標準化されたツール接続の利点が大きく、Cursor/Claude Codeとの連携でも「同じGit/Filesystem/外部API」を一貫インターフェースで扱えるのが優位。Marketplace連携で導入容易性も高い。
+近年の記事では「安全性と可観測性の強化」「UI系の自動テスト連動」「SBOM/署名/供給網検査」の統合が重視されますが、本構成は既にSBOM・cosign・UI-Audit・Policy Botまで含み、エンタープライズ寄りの強固な設計です。
+改善余地は「学習するオーケストレーション」（履歴から計画品質を上げる）と「マルチIDEの状態同期UI」。これが整うと最新動向における「運用自律性」の水準をさらに引き上げられます。
+次のアクション
+
+まずは「Git-ORCH-Next」を手動設定（JSON）で追加→MCP一覧で緑トグルを確認してください。確認後、重複起動（SSEとの二重登録など）が無いかも併せて見ます。
+希望があれば、WindowsポリシーとmcpServersのパス表記を統一（バックスラッシュ）したパッチ案も用意します。
+Agent Spec.yamlの共通化強化、タスクIDベースの証跡メタ情報、ダッシュボード拡充などを段階的に提案できます。
+ORCH-Next追加が完了したら「表示された／緑になった」か教えてください。続けて重複チェックと、ワークフローの改善パッチの提案に進みます。
+
+ru mino
+コピー
+削除
+-Git-ORCH-Nextの追加は実施した
+※添付写真参照
+
+-claude Skillが資金発表された。
+これは現在の状況では取り入れられるのではないか？
+
+また、最新の技術や発表をさらに調査して、再度比較表にしこれからの作業の明確化をしてほしい。
+司令核（CMD）
+2/10 完了
+Add Git-ORCH-Next to global mcp.json so it appears in Trae MCP list and verify green toggle
+Reload MCP panel in Trae and ensure Git-ORCH-Next shows as active
+Research latest AI agent technologies (e.g., Claude Skill) and update comparative analysis table
+Clarify next steps and future tasks based on updated analysis
+Outline code authoring/patch flow and Git MCP usage
+Document current agent loading process across Trae (.trae/rules) and custom agents
+Assess custom prompt application status for each agent and note inheritance/overrides
+Summarize rules configuration and identify gaps or conflicts
+Describe work progress management with CMD orchestrating sub-agents
+Explain audit/review execution and CI checks
+検索“Claude Skill AI agent release”
+5 結果を出す
+結論:
+Claude の新機能「Skills」は Trae の PLAN–TEST–PATCH ワークフローに容易に組み込める。次に示す比較表と導入ステップで将来作業を明確化した。
+
+────────────────────────
+
+1.
+現状確認
+• Git-ORCH-Next は MCP パネルで緑表示 ✅（添付画像確認済み）。
+• これで 4 Git サーバーすべて常時接続完了。
+
+2.
+Claude Skills の概要と適合性
+• Skill は「フォルダ＋SKILL.md＋任意スクリプト」の組み合わせを Claude が必要時に動的ロードする仕組み2。
+• Progressive-disclosure でメタデータ→詳細手順→コードを段階読込し、コンテキスト圧迫を抑制4。
+• Trae では .trae/skills/<agent>/<skill_name>/ を標準配置し、
+– SKILL.md → PLAN フェーズで lint/EOL チェック
+– scripts/ → TEST フェーズでユニット実行
+– 呼び出しは CMD ルーティングで Design-UI.skill:figma2ui などを tools 扱いで委譲
+でシームレス統合できる。
+
+3.
+最新エージェント技術比較（2024-Q2 時点）
+
+技術/サービス	方式	コード実行	ファイルシステム	拡張単位	企業向け管理	Trae への統合難度
+Claude Skills	LLM+VM	✓	✓	Skill(Dir)	RBAC/Org設定1	低
+OpenAI Agent-Kit	LLM+Tools	✓	部分	JSON spec	Wkfl Builder	中
+LangGraph (LangChain)	Python graph	任意	任意	Node/Edge	OSS	低
+Microsoft AutoGen	Python libs	任意	任意	Agent class	OSS	中
+CrewAI	Python orchestrator	任意	任意	Role YAML	OSS	中
+HuggingFace Agents	LLM+HF tools	－	－	Tool fn	OSS	中
+Trae (現行)	PLAN–TEST–PATCH + MCP	✓	✓	Agent YAML + Code	実装済	—
+4.
+推奨作業ロードマップ
+A. Skills PoC
+1.
+.trae/skills/Design-UI/figma2ui/SKILL.md を作成
+2.
+TEST で pytest スイート追加
+3.
+CMD.yaml の routing に contains(figma) → Design-UI.skill:figma2ui を追加
+B. Agent Spec リファクタ
+• 各 Agent に skills: 配列を追記し自動ロード可否を明示
+C. 観測性連携
+• Skills 実行ログを observability/ui/skills/ にストリームし UI-Audit へ転送
+D. 比較表の定期更新
+• Web-Verify 定期ジョブ hourly-web-verify に “ai agent releases” を追加し差分検知
+5.
+次アクション
+高優先:
+① Skills PoC の PLAN ドキュメント作成
+② CMD.yaml への routing 追記パッチ
+③ Web-Verify ジョブ拡張
+中優先:
+④ Agent Spec 全体に skills セクション追加
+⑤ 観測ログ配線
+
+Todo リストを更新し次タスクに着手する
+あなた:
+再度回答を実施せよ

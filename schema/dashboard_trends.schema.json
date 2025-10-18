@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Quality Dashboard Trends",
+  "type": "object",
+  "properties": {
+    "dates": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "coverage_trend": {
+      "type": "array",
+      "items": { "type": "number" }
+    },
+    "complexity_trend": {
+      "type": "array",
+      "items": { "type": "number" }
+    },
+    "error_trend": {
+      "type": "array",
+      "items": { "type": "number" }
+    },
+    "performance_trend": {
+      "type": "array",
+      "items": { "type": "number" }
+    },
+    "issue_rate": {
+      "type": "array",
+      "items": { "type": "number", "minimum": 0, "maximum": 1 }
+    }
+  },
+  "required": [
+    "dates",
+    "coverage_trend",
+    "complexity_trend",
+    "error_trend",
+    "performance_trend",
+    "issue_rate"
+  ],
+  "additionalProperties": false
+}

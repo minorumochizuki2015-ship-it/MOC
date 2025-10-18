@@ -1,0 +1,6 @@
+{
+  "encryption_enabled": true,
+  "audit_logging": true,
+  "rate_limiting": true,
+  "ip_whitelist_enabled": false
+}

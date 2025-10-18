@@ -1,0 +1,11 @@
+{
+  "title": "patch.rollback",
+  "description": "Rollback a previously applied patch.",
+  "type": "object",
+  "properties": {
+    "apply_id": { "type": "string" },
+    "token": { "type": "string" }
+  },
+  "required": ["apply_id", "token"],
+  "additionalProperties": false
+}

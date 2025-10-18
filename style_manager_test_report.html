@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スタイル管理機能テストレポート</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .summary {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .summary-card h3 {
+            margin: 0 0 10px 0;
+            color: #495057;
+        }
+        .summary-card .number {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .pass { color: #28a745; }
+        .fail { color: #dc3545; }
+        .skip { color: #ffc107; }
+        .total { color: #007bff; }
+        .test-section {
+            padding: 30px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .test-section:last-child {
+            border-bottom: none;
+        }
+        .test-section h2 {
+            margin: 0 0 20px 0;
+            color: #495057;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        .test-result {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        .test-result.pass {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .test-result.fail {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .test-result.skip {
+            background: #fff3cd;
+            border-color: #ffc107;
+        }
+        .test-result h4 {
+            margin: 0 0 8px 0;
+            font-size: 1.1em;
+        }
+        .test-result p {
+            margin: 0;
+            color: #666;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        .timestamp {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        .status-icon {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 スタイル管理機能テストレポート</h1>
+            <p>統合機能テスト結果 - 2025年10月13日 15:45:18</p>
+        </div>
+        
+        <div class="summary">
+            <h2>📊 テスト結果サマリー</h2>
+            <div class="summary-grid">
+
+                <div class="summary-card">
+                    <h3>✅ 成功</h3>
+                    <div class="number pass">12</div>
+                </div>
+                <div class="summary-card">
+                    <h3>❌ 失敗</h3>
+                    <div class="number fail">6</div>
+                </div>
+                <div class="summary-card">
+                    <h3>⏭️ スキップ</h3>
+                    <div class="number skip">0</div>
+                </div>
+                <div class="summary-card">
+                    <h3>📊 合計</h3>
+                    <div class="number total">18</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>基本UI機能テスト</h2>
+
+            <p><strong>結果:</strong> 
+               ✅ 6 成功, 
+               ❌ 0 失敗, 
+               ⏭️ 0 スキップ
+            </p>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>Dashboard Access Test</h4>
+                <p>Dashboard accessible</p>
+            </div>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>Style Manager Page Test</h4>
+                <p>Style manager page accessible</p>
+            </div>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>API Endpoint Test: /api/styles</h4>
+                <p>API endpoint accessible</p>
+            </div>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>API Endpoint Test: /api/pages</h4>
+                <p>API endpoint accessible</p>
+            </div>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>API Endpoint Test: /api/prediction</h4>
+                <p>API endpoint accessible</p>
+            </div>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>API Endpoint Test: /api/trends</h4>
+                <p>API endpoint accessible</p>
+            </div>
+
+        <div class="test-section">
+            <h2>API機能テスト</h2>
+
+            <p><strong>結果:</strong> 
+               ✅ 3 成功, 
+               ❌ 2 失敗, 
+               ⏭️ 0 スキップ
+            </p>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>Get Styles API</h4>
+                <p>Successfully retrieved 8 style items</p>
+            </div>
+
+            <div class="test-result fail">
+                <h4><span class="status-icon">❌</span>Update Styles API</h4>
+                <p>HTTP 500: {"error":"\u30b9\u30bf\u30a4\u30eb\u66f4\u65b0\u306b\u5931\u6557\u3057\u307e\u3057\u305f"}
+</p>
+            </div>
+
+            <div class="test-result fail">
+                <h4><span class="status-icon">❌</span>Create Patch API</h4>
+                <p>HTTP 404: <!doctype html>
+<html lang=en>
+<title>404 Not Found</title>
+<h1>Not Found</h1>
+<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>
+</p>
+            </div>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>Pages API</h4>
+                <p>Successfully retrieved 3 pages</p>
+            </div>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>Invalid JSON Handling</h4>
+                <p>Properly handled invalid JSON with HTTP 500</p>
+            </div>
+
+        <div class="test-section">
+            <h2>要素選択機能テスト</h2>
+
+            <p><strong>結果:</strong> 
+               ✅ 0 成功, 
+               ❌ 1 失敗, 
+               ⏭️ 0 スキップ
+            </p>
+
+            <div class="test-result fail">
+                <h4><span class="status-icon">❌</span>Navigate to Style Manager</h4>
+                <p>Message: 
+Stacktrace:
+	GetHandleVerifier [0x0x7ff66d60e955+80021]
+	GetHandleVerifier [0x0x7ff66d60e9b0+80112]
+	(No symbol) [0x0x7ff66d39060f]
+	(No symbol) [0x0x7ff66d3e8854]
+	(No symbol) [0x0x7ff66d3e8b1c]
+	(No symbol) [0x0x7ff66d43c927]
+	(No symbol) [0x0x7ff66d41126f]
+	(No symbol) [0x0x7ff66d43968a]
+	(No symbol) [0x0x7ff66d411003]
+	(No symbol) [0x0x7ff66d3d95d1]
+	(No symbol) [0x0x7ff66d3da3f3]
+	GetHandleVerifier [0x0x7ff66d8cdd0d+2960461]
+	GetHandleVerifier [0x0x7ff66d8c7fca+2936586]
+	GetHandleVerifier [0x0x7ff66d8e8a07+3070279]
+	GetHandleVerifier [0x0x7ff66d62843e+185214]
+	GetHandleVerifier [0x0x7ff66d62fe8f+216527]
+	GetHandleVerifier [0x0x7ff66d617b94+117460]
+	GetHandleVerifier [0x0x7ff66d617d4f+117903]
+	GetHandleVerifier [0x0x7ff66d5fdc28+11112]
+	BaseThreadInitThunk [0x0x7fff3ecce8d7+23]
+	RtlUserThreadStart [0x0x7fff406a8d9c+44]
+</p>
+            </div>
+
+        <div class="test-section">
+            <h2>ビジュアル編集機能テスト</h2>
+
+            <p><strong>結果:</strong> 
+               ✅ 3 成功, 
+               ❌ 3 失敗, 
+               ⏭️ 0 スキップ
+            </p>
+
+            <div class="test-result fail">
+                <h4><span class="status-icon">❌</span>Style Manager Page Load</h4>
+                <p>Missing elements: ['styleManagerApp']</p>
+            </div>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>Color Tools Presence</h4>
+                <p>Found 1 color tool elements</p>
+            </div>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>Font Tools Presence</h4>
+                <p>Found 4 font tool elements</p>
+            </div>
+
+            <div class="test-result pass">
+                <h4><span class="status-icon">✅</span>Layout Tools Presence</h4>
+                <p>Found 6 layout tool elements</p>
+            </div>
+
+            <div class="test-result fail">
+                <h4><span class="status-icon">❌</span>Preview Functionality</h4>
+                <p>HTTP 404</p>
+            </div>
+
+            <div class="test-result fail">
+                <h4><span class="status-icon">❌</span>Style Persistence</h4>
+                <p>Failed to update style: HTTP 500</p>
+            </div>
+
+        </div>
+        
+        <div class="timestamp">
+            レポート生成日時: 2025年10月13日 15:45:18
+        </div>
+    </div>
+</body>
+</html>

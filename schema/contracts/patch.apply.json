@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "patch.apply",
+  "type": "object",
+  "properties": {
+    "diff_id": { "type": "string" },
+    "mode": { "type": "string", "enum": ["pr", "proxy", "browser"] }
+  },
+  "required": ["diff_id", "mode"],
+  "additionalProperties": false
+}

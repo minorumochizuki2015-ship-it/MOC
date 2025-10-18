@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="/static/css/orion.css" rel="stylesheet">
+    <script>
+        function buildTable(list) {
+            const tableEl = document.getElementById('approvalsTable');
+            const tbodyEl = document.getElementById('approvalsBody');
+            tableEl.innerHTML = '';
+            tbodyEl.innerHTML = '';
+            if (!Array.isArray(list) || list.length === 0 || typeof list[0] !== 'object') return;
+            const keys = Object.keys(list[0]);
+            const thead = tableEl.createTHead();
+            const hrow = thead.insertRow();
+            keys.forEach(k => { const th = document.createElement('th'); th.textContent = k; hrow.appendChild(th); });
+            list.forEach(item => {
+                const tr = document.createElement('tr');
+                keys.forEach(k => {
+                    const td = document.createElement('td');
+                    const val = item[k];
+                    td.textContent = (val === null || val === undefined) ? '' : (typeof val === 'object' ? JSON.stringify(val) : String(val));
+                    tr.appendChild(td);
+                });
+                tbodyEl.appendChild(tr);
+            });
+        }
+
+        async function loadApprovals() {
+            const countEl = document.getElementById('approvalsCount');
+            const rawEl = document.getElementById('approvalsRaw');
+            try {
+                const res = await fetch('/api/approvals');
+                const json = await res.json();
+                const list = Array.isArray(json?.approvals) ? json.approvals : [];
+                window.__approvalsData = list;
+                countEl.textContent = (typeof json.count === 'number') ? json.count : list.length;
+                buildTable(list);
+                rawEl.textContent = '';
+            } catch (e) {
+                rawEl.textContent = '読み込みに失敗しました: ' + e;
+            }
+        }
+
+        function applyFilter() {
+            const q = (document.getElementById('q')?.value || '').toLowerCase();
+            const list = (window.__approvalsData || []).filter(row => JSON.stringify(row).toLowerCase().includes(q));
+            buildTable(list);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadApprovals();
+            document.getElementById('q')?.addEventListener('input', applyFilter);
+        });
+    </script>
+</head>
+<body class="orion">
+    <div class="container">
+        <div class="header">
+            <h1>{{ title }}</h1>
+            <div class="muted">一覧は <code>/api/approvals</code> より取得</div>
+        </div>
+        <div class="nav">
+            <a href="/">ダッシュボード</a>
+            <a href="/tasks">タスク</a>
+            <a class="active" href="/approvals">承認</a>
+            <a href="/agents">エージェント</a>
+        </div>
+        <div class="row space-md">
+            <div class="card" style="flex:2;">
+                <div class="space-sm">
+                    <input id="q" class="input" placeholder="検索（全文）" />
+                    <button class="btn" onclick="loadApprovals()">再読み込み</button>
+                </div>
+                <p class="space-sm">総数: <strong id="approvalsCount">—</strong></p>
+                <table id="approvalsTable"><tbody id="approvalsBody"></tbody></table>
+            </div>
+            <div class="card" style="flex:1;">
+                <div class="muted">Raw</div>
+                <pre id="approvalsRaw" class="muted" style="min-height: 120px;"></pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

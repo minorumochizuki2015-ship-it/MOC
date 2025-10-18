@@ -33,7 +33,9 @@ def normalize_file(path: Path, filters: dict, category: str):
     if filters.get("pii_scrub"):
         text = scrub_pii(text)
     text = clamp_len(
-        text, filters.get("doc_text_char_min", 0), filters.get("doc_text_char_max", 10**9)
+        text,
+        filters.get("doc_text_char_min", 0),
+        filters.get("doc_text_char_max", 10**9),
     )
     if not text:
         return None

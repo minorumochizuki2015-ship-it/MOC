@@ -35,10 +35,22 @@ def main():
         (os.path.join(root, "templates"), os.path.join(backup_root, "templates")),
         (os.path.join(root, "src"), os.path.join(backup_root, "src")),
         (os.path.join(root, "config"), os.path.join(backup_root, "config")),
-        (os.path.join(root, "orch_dashboard.py"), os.path.join(backup_root, "orch_dashboard.py")),
-        (os.path.join(root, "pyproject.toml"), os.path.join(backup_root, "pyproject.toml")),
-        (os.path.join(root, "requirements.txt"), os.path.join(backup_root, "requirements.txt")),
-        (os.path.join(root, "NonStop_Audit.md"), os.path.join(backup_root, "NonStop_Audit.md")),
+        (
+            os.path.join(root, "orch_dashboard.py"),
+            os.path.join(backup_root, "orch_dashboard.py"),
+        ),
+        (
+            os.path.join(root, "pyproject.toml"),
+            os.path.join(backup_root, "pyproject.toml"),
+        ),
+        (
+            os.path.join(root, "requirements.txt"),
+            os.path.join(backup_root, "requirements.txt"),
+        ),
+        (
+            os.path.join(root, "NonStop_Audit.md"),
+            os.path.join(backup_root, "NonStop_Audit.md"),
+        ),
     ]
 
     for src, dst in targets:

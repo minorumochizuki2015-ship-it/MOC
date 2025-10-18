@@ -1,6 +1,6 @@
 {
   "success_rate": 1.0,
-  "avg_latency_ms": 276,
-  "p95_latency_ms": 299,
-  "timestamp": "2025-10-09T09:28:40.937877Z"
+  "avg_latency_ms": 460,
+  "p95_latency_ms": 532,
+  "timestamp": "2025-10-09T18:12:02.841828Z"
 }

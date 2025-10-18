@@ -1,0 +1,6 @@
+rules:
+  - name: "Submission templates"
+    steps:
+      - "Render CMD plan block with fields {id,title,due,acceptance,policies,approval_required}."
+      - "Render WORK submission with {summary,task,state,artifact,checks,diff,language_rationale} referencing constraints.language_routing."
+      - "Render AUDIT result with {summary,task,state,approvals,violations,actions}."

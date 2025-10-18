@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "site.select",
+  "type": "object",
+  "properties": {
+    "graph_id": { "type": "string" },
+    "by": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["point", "css", "text", "xpath"] },
+        "value": { "type": "string" }
+      },
+      "required": ["mode", "value"],
+      "additionalProperties": false
+    },
+    "scope": { "type": "string" }
+  },
+  "required": ["graph_id", "by"],
+  "additionalProperties": false
+}

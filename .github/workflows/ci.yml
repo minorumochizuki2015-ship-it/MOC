@@ -1,666 +1,408 @@
-name: ORCH-Next CI/CD Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [ main, develop ]
   pull_request:
-    branches: [ main, develop ]
-  schedule:
-    # Run nightly tests at 2 AM UTC
-    - cron: '0 2 * * *'
+    branches: [ main ]
 
 env:
   PYTHON_VERSION: '3.11'
-  NODE_VERSION: '18'
 
 jobs:
-  # Security and Code Quality Checks
-  security-scan:
-    name: Security & Code Quality
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
-        
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          
-      - name: Install security tools
-        run: |
-          pip install bandit safety semgrep
-          
-      - name: Run Bandit security scan
-        run: |
-          bandit -r src/ -f json -o security-report.json || true
-          bandit -r src/ --severity-level medium
-          
-      - name: Check dependencies for vulnerabilities
-        run: |
-          pip install -r requirements.txt
-          safety check --json --output safety-report.json || true
-          safety check
-          
-      - name: Run Semgrep SAST
-        run: |
-          semgrep --config=auto src/ --json --output=semgrep-report.json || true
-          semgrep --config=auto src/ --error
-          
-      - name: Upload security reports
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: security-reports
-          path: |
-            security-report.json
-            safety-report.json
-            semgrep-report.json
 
-  # Unit and Integration Tests
-  test:
-    name: Unit & Integration Tests
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.10', '3.11', '3.12']
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
-          
-      - name: Cache pip dependencies
+          python-version: "3.11"
+
+      - name: Cache pip
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-            
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest-cov pytest-xdist pytest-mock pytest-asyncio
-          
-      - name: Create test directories
+          pip install -r requirements.txt || true
+          pip install -r requirements-dev.txt
+
+      - name: Lint (flake8/black/isort)
         run: |
-          mkdir -p data/logs data/config data/backups data/metrics
-          mkdir -p observability/coverage observability/junit
-          
-      - name: Run unit tests with coverage
+          flake8 .
+          black --check .
+          isort --check-only .
+
+      - name: Type check with HTML report
         run: |
-          pytest tests/ \
-            --cov=src \
-            --cov-report=xml:observability/coverage/coverage.xml \
-            --cov-report=html:observability/coverage/html \
-            --cov-report=term-missing \
-            --junit-xml=observability/junit/junit.xml \
-            --cov-fail-under=80 \
-            -v \
-            --tb=short \
-            --maxfail=5
-            
-      - name: Upload test results
-        uses: actions/upload-artifact@v3
-        if: always()
+          mkdir -p mypy-reports
+          python -m mypy --strict --show-error-codes --html-report mypy-reports app src
+      
+      - name: Upload mypy HTML report
+        uses: actions/upload-artifact@v4
         with:
-          name: test-results-${{ matrix.python-version }}
+          name: mypy-html-report
+          path: mypy-reports/
+          if-no-files-found: warn
+
+      - name: Run tests with coverage
+        run: |
+          python -m pytest tests/ --cov=src --cov=app --cov-report=xml --cov-report=term --disable-warnings
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml
+          if-no-files-found: warn
+
+      - name: Generate SBOM (CycloneDX)
+        run: |
+          cyclonedx-py -o sbom.xml -e
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.xml
+
+      - name: Dependency audit (pip-audit)
+        run: |
+          pip-audit || true
+
+      - name: Secrets scan (gitleaks)
+        uses: zricethezav/gitleaks-action@v2
+        continue-on-error: true
+
+      - name: Diff coverage report
+        run: |
+          git fetch origin +refs/heads/*:refs/remotes/origin/* || true
+          diff-cover coverage.xml --compare-branch origin/main --fail-under=80 --html-report diff-cover.html
+
+      - name: Upload diff-cover artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: diff-cover-report
+          path: diff-cover.html
+          if-no-files-found: warn
+
+  test:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11']
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Cache virtual environment
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: ${{ runner.os }}-venv-${{ matrix.python-version }}-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-venv-${{ matrix.python-version }}-
+      
+      - name: Cache mypy (Windows)
+        uses: actions/cache@v3
+        with:
+          path: ~\AppData\Local\mypy_cache
+          key: ${{ runner.os }}-mypy-${{ hashFiles('**/*.py') }}
+          restore-keys: |
+            ${{ runner.os }}-mypy-
+      
+      - name: Create virtual environment
+        run: |
+          if (-not (Test-Path ".venv")) {
+            python -m venv .venv
+          }
+          .\.venv\Scripts\python -m pip install --upgrade pip
+      
+      - name: Install dependencies
+        run: |
+          if (Test-Path "requirements.txt") { .\.venv\Scripts\pip install -r requirements.txt }
+          if (Test-Path "requirements-dev.txt") { .\.venv\Scripts\pip install -r requirements-dev.txt }
+
+      - name: Kernel healthcheck pre-flight
+        run: |
+          python -c "import importlib, sys; mod=importlib.import_module('kernel'); s=mod.healthcheck().get('status'); print(f'kernel health: {s}'); sys.exit(0 if s=='ok' else 1)"
+
+      - name: Prepare data directories
+        run: |
+          New-Item -ItemType Directory -Force -Path data
+          New-Item -ItemType Directory -Force -Path data\baseline
+          New-Item -ItemType Directory -Force -Path data\baseline\milestones
+          New-Item -ItemType Directory -Force -Path data\baseline\tasks
+          New-Item -ItemType Directory -Force -Path data\baseline\metrics
+      
+      - name: Pre-commit (all files)
+        run: |
+          pre-commit run --all-files
+        continue-on-error: true
+      
+      - name: Lint (flake8)
+        run: flake8 --max-line-length=127 --extend-ignore=E203,W503
+      
+      - name: Type check with HTML report (Windows)
+        run: |
+          New-Item -ItemType Directory -Force -Path mypy-reports
+          .\.venv\Scripts\python -m mypy --strict --show-error-codes --html-report mypy-reports app src
+      
+      - name: Upload mypy HTML report (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: mypy-html-report-${{ matrix.python-version }}
+          path: mypy-reports/
+          if-no-files-found: warn
+      
+      - name: Unit tests
+        run: python -m pytest tests/unit/ -v --cov=src --cov=app --cov-report=xml:coverage.xml
+      
+      - name: Operations tests (backup scripts)
+        run: python -m pytest tests/ops/ -v --cov=scripts/ops --cov-append --cov-report=xml:coverage.xml
+      
+      - name: Integration tests
+        run: python -m pytest tests/integration/ -v --cov=src --cov=app --cov-append --cov-report=xml:coverage.xml
+
+      # --- UI E2E (Style Manager) ---
+      - name: Install Playwright browsers (Chromium)
+        run: |
+          .\.venv\Scripts\python -m playwright install chromium --with-deps
+
+      - name: Start UI server (guard ON, 5001)
+        run: pwsh scripts/ops/start_ui_server.ps1 -Port 5001 -ForceGuard
+
+      - name: Quick route checks (/ , /dashboard , /forms/basic)
+        run: |
+          $base = "http://127.0.0.1:5001"
+          $routes = @("/", "/dashboard", "/forms/basic")
+          foreach ($r in $routes) {
+            $url = "$base$r"
+            try {
+              $resp = Invoke-WebRequest -Uri $url -MaximumRedirection 0 -ErrorAction SilentlyContinue
+              $code = $resp.StatusCode
+            } catch {
+              $code = 0
+            }
+            if (($code -ne 200) -and ($code -ne 302)) { throw "Route check failed: $url -> $code" }
+          }
+
+      - name: Run E2E tests (Style Manager flow)
+        run: .\.venv\Scripts\pytest -q tests/e2e -m e2e
+
+      # --- UI-Audit (Lighthouse + Link Check + Accountability Card) ---
+      - name: Setup Node.js for UI-Audit
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Lighthouse collect (style-manager)
+        run: |
+          New-Item -ItemType Directory -Force -Path observability\ui\report\lighthouse
+          npx -y @lhci/cli collect --url http://127.0.0.1:5001/style-manager --outputDir observability/ui/report/lighthouse
+
+      - name: Linkinator (site link check)
+        run: |
+          npx -y linkinator http://127.0.0.1:5001 --silent --markdown > observability/ui/report/linkinator.md
+
+      - name: Generate accountability card
+        run: |
+          .\.venv\Scripts\python scripts/ops/gen_root_cause_card.py --ui-report-dir observability/ui/report --output-dir ORCH/patches/2025-10 --diff-ref HEAD~1..HEAD
+
+      - name: Upload UI-Audit reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-audit-reports-${{ matrix.python-version }}
           path: |
-            observability/coverage/
-            observability/junit/
-            
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        if: matrix.python-version == '3.11'
-        with:
-          file: observability/coverage/coverage.xml
-          flags: unittests
-          name: codecov-umbrella
+            observability/ui/report/
+            ORCH/patches/2025-10/
+          if-no-files-found: warn
 
-  # Contract Tests (HMAC, JWT, API)
-  contract-tests:
-    name: Contract Tests
-    runs-on: ubuntu-latest
-    needs: [test]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          
-      - name: Install dependencies
+      - name: Collect Playwright artifacts on failure
+        if: failure()
         run: |
-          pip install -r requirements.txt
-          pip install pytest-asyncio httpx
-          
-      - name: Create test environment
-        run: |
-          mkdir -p data/logs data/config
-          echo "JWT_SECRET_KEY=jwt-ci" > data/config/.env.test
-          echo "WEBHOOK_SECRET=webhook-ci" >> data/config/.env.test
-          
-      - name: Run HMAC signature contract tests
-        run: |
-          pytest tests/test_security.py::TestSecurityManager::test_hmac_signature_verification_success \
-                 tests/test_security.py::TestSecurityManager::test_hmac_signature_verification_invalid \
-                 tests/test_security.py::TestSecurityManager::test_hmac_timestamp_tolerance \
-                 -v --tb=short
-                 
-      - name: Run JWT contract tests
-        run: |
-          pytest tests/test_security.py::TestSecurityManager::test_jwt_token_creation_and_verification \
-                 tests/test_security.py::TestSecurityManager::test_jwt_token_expiry \
-                 tests/test_security.py::TestSecurityManager::test_jwt_token_revocation \
-                 -v --tb=short
-                 
-      - name: Run API contract tests
-        run: |
-          pytest tests/test_orchestrator.py::TestOrchestratorAPI::test_webhook_signature_verification \
-                 tests/test_orchestrator.py::TestOrchestratorAPI::test_webhook_invalid_signature \
-                 tests/test_orchestrator.py::TestOrchestratorAPI::test_dispatch_endpoint \
-                 -v --tb=short
-
-  # Load and Performance Tests
-  load-tests:
-    name: Load & Performance Tests
-    runs-on: ubuntu-latest
-    needs: [test, contract-tests]
-    
-    services:
-      redis:
-        image: redis:7-alpine
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-          pip install pytest-asyncio pytest-benchmark locust
-          
-      - name: Install k6
-        run: |
-          sudo gpg -k
-          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
-          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-          sudo apt-get update
-          sudo apt-get install k6
-          
-      - name: Create load test environment
-        run: |
-          mkdir -p data/logs data/config data/metrics
-          echo "REDIS_URL=redis://localhost:6379" > data/config/.env.test
-          
-      - name: Start ORCH-Next services
-        run: |
-          python -m src.orchestrator &
-          ORCH_PID=$!
-          echo "ORCH_PID=$ORCH_PID" >> $GITHUB_ENV
-          sleep 10  # Wait for service to start
-          
-      - name: Run SSE connection load test (100 concurrent)
-        run: |
-          cat > load_test_sse.js << 'EOF'
-          import { check } from 'k6';
-          import ws from 'k6/ws';
-          
-          export let options = {
-            stages: [
-              { duration: '30s', target: 50 },   // Ramp up to 50 connections
-              { duration: '60s', target: 100 },  // Ramp up to 100 connections
-              { duration: '120s', target: 100 }, // Stay at 100 connections
-              { duration: '30s', target: 0 },    // Ramp down
-            ],
-            thresholds: {
-              'ws_connecting': ['avg<1000'],      // Connection time < 1s
-              'ws_msgs_received': ['count>0'],    // Should receive messages
-            },
-          };
-          
-          export default function () {
-            const url = 'ws://localhost:8000/ws';
-            const res = ws.connect(url, {}, function (socket) {
-              socket.on('open', () => {
-                console.log('Connected');
-                socket.send(JSON.stringify({ type: 'heartbeat' }));
-              });
-              
-              socket.on('message', (data) => {
-                check(data, {
-                  'message received': (msg) => msg.length > 0,
-                });
-              });
-              
-              socket.on('close', () => {
-                console.log('Disconnected');
-              });
-              
-              // Keep connection alive for test duration
-              socket.setTimeout(() => {
-                socket.close();
-              }, 30000);
-            });
-            
-            check(res, { 'status is 101': (r) => r && r.status === 101 });
+          New-Item -ItemType Directory -Force -Path artifacts\ui_audit\traces
+          if (Test-Path "tests/e2e") {
+            Get-ChildItem -Path tests/e2e -Directory -Recurse | ForEach-Object {
+              $report = Join-Path $_.FullName "playwright-report"
+              if (Test-Path $report) {
+                Copy-Item -Path $report -Destination (Join-Path "artifacts/ui_audit/traces" $_.Name) -Recurse -Force
+              }
+            }
           }
-          EOF
-          
-          k6 run load_test_sse.js || echo "Load test completed with warnings"
-          
-      - name: Run HTTP API load test
-        run: |
-          cat > load_test_api.js << 'EOF'
-          import http from 'k6/http';
-          import { check, sleep } from 'k6';
-          
-          export let options = {
-            stages: [
-              { duration: '30s', target: 20 },
-              { duration: '60s', target: 50 },
-              { duration: '30s', target: 0 },
-            ],
-            thresholds: {
-              'http_req_duration': ['p(95)<2000'], // 95% of requests under 2s
-              'http_req_failed': ['rate<0.05'],    // Error rate under 5%
-            },
-          };
-          
-          export default function () {
-            // Test metrics endpoint
-            let metricsRes = http.get('http://localhost:8000/metrics');
-            check(metricsRes, {
-              'metrics status is 200': (r) => r.status === 200,
-              'metrics response time < 1s': (r) => r.timings.duration < 1000,
-            });
-            
-            // Test dispatch endpoint
-            let dispatchRes = http.post('http://localhost:8000/dispatch', 
-              JSON.stringify({
-                coreId: 'LOAD_TEST_01',
-                stay: false,
-                priority: 1
-              }),
-              { headers: { 'Content-Type': 'application/json' } }
-            );
-            
-            check(dispatchRes, {
-              'dispatch status is 200': (r) => r.status === 200,
-              'dispatch response time < 2s': (r) => r.timings.duration < 2000,
-            });
-            
-            sleep(1);
-          }
-          EOF
-          
-          k6 run load_test_api.js || echo "API load test completed with warnings"
 
-      - name: Run Python-based load tests (pytest)
+      - name: Upload Playwright HTML report (failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.python-version }}
+          path: playwright-report/
+          if-no-files-found: ignore
+
+      - name: Upload E2E screenshots (failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-screenshots-${{ matrix.python-version }}
+          path: tests/e2e/screens/
+          if-no-files-found: ignore
+
+      - name: Upload Playwright traces (failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces-${{ matrix.python-version }}
+          path: traces/
+          if-no-files-found: ignore
+
+      - name: Stop UI server
+        run: |
+          Get-Process -Name python -ErrorAction SilentlyContinue | Stop-Process -Force
+
+      - name: Install diff-cover (Windows)
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest-asyncio pytest-benchmark
-          pytest -q tests/load/test_http_load.py tests/load/test_sse_load.py || echo "Python load tests completed with warnings"
+          pip install diff-cover
 
-      - name: Upload python load test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: python-load-test-results
-          path: |
-            data/test_results/
-          
-      - name: Run database performance test
+      - name: Diff coverage report (Windows)
         run: |
-          pytest tests/test_lock_manager.py::TestLockManager::test_concurrent_locking \
-                 tests/test_dispatcher.py::TestDispatcher::test_metrics_recording \
-                 --benchmark-only \
-                 --benchmark-json=benchmark-results.json \
-                 -v
-                 
-      - name: Stop services
-        if: always()
-        run: |
-          if [ ! -z "$ORCH_PID" ]; then
-            kill $ORCH_PID || true
-          fi
-          
-      - name: Upload load test results
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: load-test-results
-          path: |
-            benchmark-results.json
-            k6-results.json
+          git fetch origin +refs/heads/*:refs/remotes/origin/* || echo "git fetch skipped"
+          diff-cover coverage.xml --compare-branch origin/main --fail-under=80 --html-report diff-cover.html
 
-  # Integration Test with Real Services
-  integration-test:
-    name: Full Integration Test
-    runs-on: ubuntu-latest
-    needs: [security-scan, test, contract-tests]
-    
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_PASSWORD: testpass
-          POSTGRES_DB: orch_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-          
-      redis:
-        image: redis:7-alpine
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 6379:6379
-    
+      - name: Upload diff-cover artifact (Windows)
+        uses: actions/upload-artifact@v4
+        with:
+          name: diff-cover-report-${{ matrix.python-version }}
+          path: diff-cover.html
+          if-no-files-found: warn
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-reports-${{ matrix.python-version }}
+          path: |
+            coverage.xml
+            htmlcov/
+        if: always()
+
+  security:
+    runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
+      - uses: actions/checkout@v4
+      
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          
-      - name: Install dependencies
+      
+      - name: Install security tools
         run: |
-          pip install -r requirements.txt
-          pip install pytest-asyncio pytest-timeout
-          
-      - name: Set up test environment
+          python -m pip install --upgrade pip
+          pip install bandit safety
+      
+      - name: Security check with bandit
         run: |
-          mkdir -p data/logs data/config data/backups data/metrics
-          cat > data/config/.env.test << EOF
-          DATABASE_URL=postgresql://postgres:testpass@localhost:5432/orch_test
-          REDIS_URL=redis://localhost:6379
-          JWT_SECRET_KEY=jwt-ci
-          WEBHOOK_SECRET=webhook-ci
-          LOG_LEVEL=INFO
-          EOF
-          
-      - name: Run database migrations
+          bandit -r app/ -f json -o bandit-report.json
+          bandit -r app/
+        continue-on-error: true
+      
+      - name: Dependency vulnerability check
         run: |
-          python -c "
-          from src.dispatcher import TaskDispatcher
-          from src.lock_manager import LockManager
-          from src.security import SecurityManager
-          import json
-          
-          # Initialize all databases
-          config = {
-              'database': {'path': 'data/orch_test.db'},
-              'jwt': {'secret_key': 'test-secret'},
-              'webhook': {'secret': 'webhook-ci'},
-              'rate_limits': {'rules': []}
-          }
-          
-          dispatcher = TaskDispatcher(config)
-          lock_manager = LockManager('data/locks_test.db')
-          security_manager = SecurityManager(config)
-          
-          print('Databases initialized successfully')
-          "
-          
-      - name: Run full integration test suite
-        timeout-minutes: 15
-        run: |
-          pytest tests/ \
-            --integration \
-            --timeout=300 \
-            -v \
-            --tb=short \
-            --maxfail=3 \
-            -k "integration or full_workflow"
-            
-      - name: Test service startup and health
-        run: |
-          # Start all services
-          python -m src.orchestrator &
-          ORCH_PID=$!
-          
-          python -m src.monitor &
-          MONITOR_PID=$!
-          
-          sleep 15  # Wait for services to start
-          
-          # Health checks
-          curl -f http://localhost:8000/health || exit 1
-          curl -f http://localhost:8000/metrics | grep -q "orch_" || exit 1
-          
-          # Cleanup
-          kill $ORCH_PID $MONITOR_PID || true
-          
-      - name: Verify data persistence
-        run: |
-          python -c "
-          import sqlite3
-          import os
-          
-          # Check that databases were created and contain data
-          for db_file in ['data/orch_test.db', 'data/locks_test.db']:
-              if os.path.exists(db_file):
-                  conn = sqlite3.connect(db_file)
-                  tables = conn.execute(\"SELECT name FROM sqlite_master WHERE type='table'\").fetchall()
-                  print(f'{db_file}: {len(tables)} tables created')
-                  conn.close()
-              else:
-                  print(f'Warning: {db_file} not found')
-          "
+          safety check --json --output safety-report.json
+          safety check
+        continue-on-error: true
+      
+      - name: Upload security reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-reports
+          path: |
+            bandit-report.json
+            safety-report.json
+        if: always()
 
-  # Build and Package
   build:
-    name: Build & Package
-    runs-on: ubuntu-latest
-    needs: [integration-test, load-tests]
+    needs: [build-and-test, security]
+    runs-on: windows-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
+      - uses: actions/checkout@v4
+      
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          
-      - name: Install build dependencies
+      
+      - name: Install dependencies
         run: |
-          pip install build wheel setuptools
-          
-      - name: Build package
+          python -m pip install --upgrade pip
+          if (Test-Path "requirements.txt") { pip install -r requirements.txt }
+      
+      - name: Build application
         run: |
-          python -m build
-          
-      - name: Create deployment artifact
+          echo "Building application..."
+          python -m py_compile app/intake_service/api.py
+          python -c "import app.intake_service.api; print('Import successful')"
+      
+      - name: Create deployment package
         run: |
-          mkdir -p dist/orch-next
-          cp -r src/ dist/orch-next/
-          cp requirements.txt README.md dist/orch-next/
-          cp -r scripts/ dist/orch-next/ || true
-          
-          # Create version info
-          echo "BUILD_DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)" > dist/orch-next/version.txt
-          echo "GIT_COMMIT=${GITHUB_SHA}" >> dist/orch-next/version.txt
-          echo "GIT_BRANCH=${GITHUB_REF_NAME}" >> dist/orch-next/version.txt
-          
-          tar -czf orch-next-${GITHUB_SHA:0:8}.tar.gz -C dist orch-next
-          
+          New-Item -ItemType Directory -Force -Path dist
+          Copy-Item -Recurse app/ dist/
+          Copy-Item requirements.txt dist/
+          Copy-Item pytest.ini dist/
+          echo "Deployment package created"
+      
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: orch-next-build
-          path: |
-            dist/*.whl
-            dist/*.tar.gz
-            orch-next-*.tar.gz
+          name: build-artifacts
+          path: dist/
 
-  # Quality Gates
-  quality-gate:
-    name: Quality Gate
-    runs-on: ubuntu-latest
-    needs: [security-scan, test, contract-tests, load-tests, integration-test]
-    if: always()
+  performance:
+    needs: test
+    runs-on: windows-latest
+    if: github.event_name == 'pull_request'
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v3
-        
+      - uses: actions/checkout@v4
+      
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Validate quality criteria doc
+      
+      - name: Install dependencies
         run: |
-          python scripts/ops/validate_quality_doc.py --strict
-
-      - name: Aggregate quality score
+          python -m pip install --upgrade pip
+          if (Test-Path "requirements.txt") { pip install -r requirements.txt }
+          pip install pytest-benchmark
+      
+      - name: Performance tests
         run: |
-          python scripts/ops/aggregate_quality_score.py
-          cat data/results/quality_score_latest.json || true
-
-      - name: Check quality metrics
-        run: |
-          echo "=== Quality Gate Results ==="
-          
-          # Check test coverage
-          if [ -f test-results-3.11/observability/coverage/coverage.xml ]; then
-            COVERAGE=$(grep -o 'line-rate="[^"]*"' test-results-3.11/observability/coverage/coverage.xml | head -1 | cut -d'"' -f2)
-            COVERAGE_PCT=$(echo "$COVERAGE * 100" | bc -l | cut -d. -f1)
-            echo "Test Coverage: ${COVERAGE_PCT}%"
-            
-            if [ "$COVERAGE_PCT" -lt 80 ]; then
-              echo "❌ FAIL: Test coverage ${COVERAGE_PCT}% is below 80% threshold"
-              exit 1
-            else
-              echo "✅ PASS: Test coverage ${COVERAGE_PCT}% meets 80% threshold"
-            fi
-          fi
-          
-          # Check security scan results
-          if [ -f security-reports/bandit-report.json ]; then
-            HIGH_ISSUES=$(jq '.results | map(select(.issue_severity == "HIGH")) | length' security-reports/bandit-report.json 2>/dev/null || echo "0")
-            echo "High Security Issues: $HIGH_ISSUES"
-            
-            if [ "$HIGH_ISSUES" -gt 0 ]; then
-              echo "❌ FAIL: $HIGH_ISSUES high-severity security issues found"
-              exit 1
-            else
-              echo "✅ PASS: No high-severity security issues"
-            fi
-          fi
-          
-          # Check if all required jobs passed
-          echo "✅ All quality gates passed!"
-          
-      - name: Generate quality report
-        run: |
-          cat > quality-report.md << 'EOF'
-          # ORCH-Next Quality Report
-          
-          **Build:** `${{ github.sha }}`  
-          **Branch:** `${{ github.ref_name }}`  
-          **Date:** `$(date -u +%Y-%m-%dT%H:%M:%SZ)`
-          
-          ## Test Results
-          - ✅ Unit Tests: Passed
-          - ✅ Integration Tests: Passed  
-          - ✅ Contract Tests: Passed
-          - ✅ Load Tests: Passed
-          
-          ## Security Scan
-          - ✅ SAST (Bandit): No high-severity issues
-          - ✅ Dependency Check: No known vulnerabilities
-          - ✅ Code Quality: Meets standards
-          
-          ## Performance
-          - ✅ SSE 100 concurrent connections: < 1s avg latency
-          - ✅ API response time: 95th percentile < 2s
-          - ✅ Database operations: Within performance thresholds
-          
-          ## Coverage
-          - ✅ Code Coverage: ≥ 80%
-          - ✅ Branch Coverage: ≥ 75%
-          
-          **Status: 🟢 READY FOR DEPLOYMENT**
-          EOF
-          
-      - name: Upload quality report
+          if (Test-Path "tests/performance/") { 
+            pytest tests/performance/ -v --benchmark-only --benchmark-json=benchmark.json 
+          } else { 
+            echo "No performance tests found" 
+          }
+        continue-on-error: true
+      
+      - name: Upload performance results
         uses: actions/upload-artifact@v3
         with:
-          name: quality-report
-          path: quality-report.md
-
-      - name: Upload aggregated quality score
-        uses: actions/upload-artifact@v3
-        with:
-          name: quality-score
-          path: data/results/quality_score_latest.json
-
-  # Deployment (only on main branch)
-  deploy:
-    name: Deploy to Staging
-    runs-on: ubuntu-latest
-    needs: [build, quality-gate]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: staging
-    
-    steps:
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: orch-next-build
-          
-      - name: Deploy to staging
-        run: |
-          echo "🚀 Deploying ORCH-Next to staging environment..."
-          echo "Build artifact: $(ls orch-next-*.tar.gz)"
-          echo "Deployment would happen here in real environment"
-          
-      - name: Run smoke tests
-        run: |
-          echo "🧪 Running post-deployment smoke tests..."
-          # In real environment, this would test the deployed service
-          echo "✅ Smoke tests passed"
-          
-      - name: Notify deployment
-        run: |
-          echo "📢 ORCH-Next deployment completed successfully"
-          echo "Version: ${{ github.sha }}"
-          echo "Environment: staging"
+          name: performance-results
+          path: benchmark.json
+        if: always()

@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "site.load",
+  "type": "object",
+  "properties": {
+    "url": { "type": "string", "format": "uri" }
+  },
+  "required": ["url"],
+  "additionalProperties": false
+}

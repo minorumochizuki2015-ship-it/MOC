@@ -8,12 +8,13 @@ If PyYAML is not available, a clear error is raised to guide installation.
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 logger = logging.getLogger("orch.workflow.dsl")
 
 try:
     import yaml  # type: ignore
+
     _YAML_AVAILABLE = True
 except Exception:  # pragma: no cover - import failure path
     yaml = None  # type: ignore

@@ -1,0 +1,9 @@
+{
+  "accuracy": 0.6,
+  "best_params": {
+    "n_estimators": 200
+  },
+  "train_samples": 160,
+  "test_samples": 40,
+  "cv_score": 0.85
+}

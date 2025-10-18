@@ -1,0 +1,149 @@
+{
+  "severity_thresholds": {
+    "cpu_usage": {
+      "medium": 70,
+      "high": 85,
+      "critical": 95
+    },
+    "memory_usage": {
+      "medium": 75,
+      "high": 90,
+      "critical": 98
+    },
+    "disk_usage": {
+      "medium": 80,
+      "high": 90,
+      "critical": 95
+    },
+    "error_rate": {
+      "medium": 0.05,
+      "high": 0.1,
+      "critical": 0.2
+    },
+    "response_time": {
+      "medium": 1.0,
+      "high": 3.0,
+      "critical": 5.0
+    },
+    "test_coverage": {
+      "medium": 0.7,
+      "high": 0.8,
+      "critical": 0.9
+    },
+    "code_complexity": {
+      "medium": 10,
+      "high": 15,
+      "critical": 20
+    }
+  },
+  "notification_channels": {
+    "email": {
+      "enabled": true,
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587,
+      "username": "alerts@orch-next.com",
+      "password": "CHANGEME",
+      "recipients": [
+        "admin@orch-next.com",
+        "devops@orch-next.com"
+      ]
+    },
+    "webhook": {
+      "enabled": true,
+      "url": "https://hooks.slack.com/services/CHANGEME",
+      "timeout": 10,
+      "retry_count": 3,
+      "retry_delay": 5
+    },
+    "dashboard": {
+      "enabled": true,
+      "endpoint": "http://localhost:5001/api/alerts",
+      "timeout": 5
+    },
+    "slack": {
+      "enabled": false,
+      "webhook_url": "https://hooks.slack.com/services/CHANGEME",
+      "channel": "#alerts",
+      "username": "ORCH-Next Monitor"
+    },
+    "teams": {
+      "enabled": false,
+      "webhook_url": "https://outlook.office.com/webhook/CHANGEME"
+    }
+  },
+  "alert_rules": {
+    "suppression_window": 300,
+    "escalation_delay": 900,
+    "max_alerts_per_hour": 50,
+    "cooldown_period": 60,
+    "auto_resolve_timeout": 3600,
+    "duplicate_threshold": 5
+  },
+  "business_hours": {
+    "start": "09:00",
+    "end": "18:00",
+    "timezone": "Asia/Tokyo",
+    "weekdays_only": true,
+    "holidays": [
+      "2024-01-01",
+      "2024-12-25"
+    ]
+  },
+  "escalation_rules": {
+    "critical": {
+      "immediate_notify": true,
+      "escalate_after_minutes": 5,
+      "escalate_to": ["manager@orch-next.com"]
+    },
+    "high": {
+      "immediate_notify": true,
+      "escalate_after_minutes": 15,
+      "escalate_to": ["lead@orch-next.com"]
+    },
+    "medium": {
+      "immediate_notify": false,
+      "escalate_after_minutes": 60,
+      "escalate_to": []
+    },
+    "low": {
+      "immediate_notify": false,
+      "escalate_after_minutes": 240,
+      "escalate_to": []
+    }
+  },
+  "alert_templates": {
+    "performance_cpu_high": {
+      "title": "CPU使用率が高い",
+      "description": "システムのCPU使用率が閾値を超えています",
+      "recommended_actions": [
+        "CPU使用率の高いプロセスを特定",
+        "不要なプロセスの停止",
+        "リソース最適化の検討"
+      ]
+    },
+    "performance_memory_high": {
+      "title": "メモリ使用率が高い",
+      "description": "システムのメモリ使用率が閾値を超えています",
+      "recommended_actions": [
+        "メモリリークの確認",
+        "ガベージコレクションの実行",
+        "メモリ使用量の最適化"
+      ]
+    },
+    "quality_coverage_low": {
+      "title": "テストカバレッジが低い",
+      "description": "コードのテストカバレッジが基準を下回っています",
+      "recommended_actions": [
+        "テストケースの追加",
+        "カバレッジレポートの確認",
+        "テスト戦略の見直し"
+      ]
+    }
+  },
+  "monitoring": {
+    "health_check_interval": 30,
+    "metrics_retention_days": 30,
+    "alert_history_retention_days": 90,
+    "performance_baseline_days": 7
+  }
+}

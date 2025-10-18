@@ -1,0 +1,3 @@
+[Nightly UI Audit] FAIL
+[preview(success)] Vary ヘッダがありません
+[preview(400)] Vary ヘッダが取得できませんでした

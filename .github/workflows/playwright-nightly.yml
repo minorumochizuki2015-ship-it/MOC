@@ -1,0 +1,57 @@
+name: Nightly UI/SSE Headers Audit
+
+on:
+  schedule:
+    - cron: "0 18 * * *" # 毎日 03:00 JST 相当（UTC 18:00）
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm ci || npm install
+          npx playwright install --with-deps
+
+      - name: Start ORCH-Next (Waitress)
+        shell: pwsh
+        run: |
+          $env:ORCH_PORT = "5001"
+          $env:ORCH_HOST = "127.0.0.1"
+          Start-Process -FilePath "python" -ArgumentList "scripts/ops/waitress_entry.py" -WorkingDirectory $PWD -PassThru -WindowStyle Hidden | Out-Host
+          # ポート待ち合わせ
+          $retries = 30
+          for ($i=0; $i -lt $retries; $i++) {
+            try {
+              $resp = Invoke-WebRequest -Uri "http://127.0.0.1:5001/" -UseBasicParsing -TimeoutSec 2
+              if ($resp.StatusCode -eq 200) { break }
+            } catch {}
+            Start-Sleep -Seconds 2
+          }
+
+      - name: Run Playwright tests (matrix browsers)
+        run: npx playwright test --reporter=html
+
+      - name: Upload Playwright HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+
+      - name: Upload header audit artifacts (diffs)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: header-audit-artifacts
+          path: observability/ui

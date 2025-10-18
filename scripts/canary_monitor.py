@@ -17,7 +17,7 @@ import requests
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_BASE_URL = "http://127.0.0.1:5000"
+DEFAULT_BASE_URL = "http://127.0.0.1:5001"
 DEFAULT_INTERVAL_SEC = 10
 DEFAULT_RUN_MINUTES = 30  # 30分継続
 
@@ -62,7 +62,7 @@ def resolve_settings(cfg: dict, args: argparse.Namespace) -> tuple[str, int, int
         base_url = args.base_url
     else:
         host = cfg.get("dashboard_config", {}).get("host", "127.0.0.1")
-        port = cfg.get("dashboard_config", {}).get("port", 5000)
+        port = cfg.get("dashboard_config", {}).get("port", 5001)
         base_url = f"http://{host}:{port}"
 
     # Interval
@@ -138,7 +138,12 @@ def check_endpoint(base_url: str, path: str) -> dict:
         }
     except Exception as e:
         latency = time.time() - start
-        return {"path": path, "error": str(e), "ok": False, "latency_ms": int(latency * 1000)}
+        return {
+            "path": path,
+            "error": str(e),
+            "ok": False,
+            "latency_ms": int(latency * 1000),
+        }
 
 
 def _evaluate_results(results: dict) -> dict:
@@ -266,12 +271,12 @@ def _run_sweep(cfg: dict, args: argparse.Namespace, base_url: str, endpoints: li
             cfg_path = Path(args.output_config)
             if not cfg_path.exists():
                 # initialize minimal config structure if missing
-                cfg_data = {
-                    "monitoring_interval": best_interval,
-                    "dashboard_config": cfg.get(
-                        "dashboard_config", {"host": "127.0.0.1", "port": 5000}
-                    ),
-                }
+            cfg_data = {
+                "monitoring_interval": best_interval,
+                "dashboard_config": cfg.get(
+                    "dashboard_config", {"host": "127.0.0.1", "port": 5001}
+                ),
+            }
             else:
                 cfg_data = json.loads(cfg_path.read_text(encoding="utf-8"))
                 cfg_data["monitoring_interval"] = best_interval
@@ -298,7 +303,7 @@ def _run_sweep(cfg: dict, args: argparse.Namespace, base_url: str, endpoints: li
 def main():
     parser = argparse.ArgumentParser(description="Canary monitor")
     parser.add_argument("--config", help="Path to monitoring config JSON", default=None)
-    parser.add_argument("--base-url", help="Override base URL (e.g., http://127.0.0.1:5000)")
+    parser.add_argument("--base-url", help="Override base URL (e.g., http://127.0.0.1:5001)")
     parser.add_argument("--interval-sec", type=int, help="Monitoring interval in seconds")
     parser.add_argument("--run-minutes", type=int, help="Total monitoring duration in minutes")
     parser.add_argument(
@@ -309,7 +314,8 @@ def main():
     parser.add_argument("--extra-endpoints", nargs="*", help="Append extra endpoints to monitor")
     # Sweep options
     parser.add_argument(
-        "--sweep", help="Comma-separated list of intervals to evaluate (e.g., 3,5,10,15)"
+        "--sweep",
+        help="Comma-separated list of intervals to evaluate (e.g., 3,5,10,15)",
     )
     parser.add_argument(
         "--duration", type=int, help="Per-interval duration in seconds for sweep mode"

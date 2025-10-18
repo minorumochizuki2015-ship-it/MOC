@@ -7,26 +7,34 @@ Usage:
   python scripts/ops/audit_endpoints.py [BASE_URL]
 
 Examples:
-  python scripts/ops/audit_endpoints.py            # defaults to http://127.0.0.1:5000
-  python scripts/ops/audit_endpoints.py http://localhost:5000
+  python scripts/ops/audit_endpoints.py            # defaults to http://127.0.0.1:5001
+  python scripts/ops/audit_endpoints.py http://localhost:5001
 
 Notes:
-  - The audit targets a single base URL (default port 5000) to avoid confusion from multiple instances.
+  - The audit targets a single base URL (default port 5001) to avoid confusion from multiple instances.
   - A brief summary line is appended to ORCH/REPORTS/NonStop_Audit.md for dashboard visibility.
 """
+
 from __future__ import annotations
 
 import json
 import sys
 import urllib.error
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 REPORT_MD = BASE_DIR / "ORCH" / "REPORTS" / "AGENTS_API_AUDIT.md"
 REPORT_JSON = BASE_DIR / "ORCH" / "REPORTS" / "agents_api_audit_summary.json"
 NONSTOP_MD = BASE_DIR / "ORCH" / "REPORTS" / "NonStop_Audit.md"
+HEARTBEAT_JSON = BASE_DIR / "ORCH" / "STATE" / "LOCKS" / "heartbeat.json"
+
+# Optional LF-safe writer for LOCKS files
+try:
+    from src.tools.eol_utils import write_json_lf  # type: ignore
+except Exception:
+    write_json_lf = None  # fallback below
 
 
 def fetch(url: str, method: str = "GET", data: dict | None = None, timeout: int = 8):
@@ -42,7 +50,10 @@ def fetch(url: str, method: str = "GET", data: dict | None = None, timeout: int 
         if data is not None:
             payload = json.dumps(data).encode("utf-8")
             req = urllib.request.Request(
-                url, data=payload, headers={"Content-Type": "application/json"}, method=method
+                url,
+                data=payload,
+                headers={"Content-Type": "application/json"},
+                method=method,
             )
         else:
             req = urllib.request.Request(url, method=method)
@@ -69,7 +80,10 @@ def write_report(md_path: Path, json_path: Path, results: list[dict]):
 
     # Summarize
     summary = {
-        "generated_at": datetime.now().isoformat(),
+        "generated_at": datetime.now(timezone.utc)
+        .replace(microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z"),
         "totals": {
             "count": len(results),
             "ok": sum(1 for r in results if r.get("ok")),
@@ -80,7 +94,7 @@ def write_report(md_path: Path, json_path: Path, results: list[dict]):
     json_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
 
     lines = []
-    lines.append(f"# AGENTS API Audit Report\n")
+    lines.append("# AGENTS API Audit Report\n")
     lines.append(f"Generated: {summary['generated_at']}\n")
     lines.append(
         f"Total checks: {summary['totals']['count']} | OK: {summary['totals']['ok']} | Errors: {summary['totals']['errors']}\n"
@@ -113,10 +127,31 @@ def write_report(md_path: Path, json_path: Path, results: list[dict]):
     except Exception:
         pass
 
+    # Update audit heartbeat (LOCKS/heartbeat.json)
+    try:
+        ts = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        obj = {}
+        if HEARTBEAT_JSON.exists():
+            try:
+                obj = json.loads(HEARTBEAT_JSON.read_text(encoding="utf-8")) or {}
+            except Exception:
+                obj = {}
+        obj["AUDIT"] = ts
+        # Preserve last work time if present; do not overwrite other keys
+        if write_json_lf:
+            write_json_lf(HEARTBEAT_JSON, obj, ensure_ascii=False, indent=2)
+        else:
+            HEARTBEAT_JSON.parent.mkdir(parents=True, exist_ok=True)
+            with open(HEARTBEAT_JSON, "w", encoding="utf-8", newline="\n") as f:
+                json.dump(obj, f, ensure_ascii=False, indent=2)
+    except Exception:
+        # Heartbeat update is non-critical; ignore errors
+        pass
+
 
 def main():
-    # Determine base URL (default to 127.0.0.1:5000)
-    base = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:5000"
+    # Determine base URL (default to 127.0.0.1:5001)
+    base = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:5001"
     if not base.startswith("http"):
         base = f"http://{base}"
 
@@ -140,7 +175,11 @@ def main():
         fetch(
             base + "/api/agents/heartbeat",
             method="POST",
-            data={"id": "AG-AUDIT", "status": "active", "metrics": {"cpu": 3, "mem": 11}},
+            data={
+                "id": "AG-AUDIT",
+                "status": "active",
+                "metrics": {"cpu": 3, "mem": 11},
+            },
         )
     )
     results.append(

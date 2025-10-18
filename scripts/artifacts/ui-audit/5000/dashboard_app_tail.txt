@@ -1,0 +1,83 @@
+2025-10-16 19:10:38,624 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:12:02,249 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:23:21,957 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:25:18,962 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:26:00,094 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:26:24,191 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:27:13,880 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:30:02,164 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:30:12,121 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:31:06,521 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:31:15,867 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:34:25,452 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:46:47,109 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:47:05,150 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:52:16,074 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:52:26,704 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:55:32,984 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 19:55:41,405 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:12:28,551 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:13:30,658 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:13:42,715 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:19:04,313 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:23:29,194 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:26:50,710 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:27:53,526 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:28:57,338 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:29:36,362 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:34:20,765 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 20:36:37,264 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 21:15:28,102 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 21:21:25,133 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 21:24:13,065 INFO src.dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 21:24:35,463 INFO src.dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 21:25:46,183 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-16 23:20:20,863 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-16 23:51:44,244 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 03:04:28,440 INFO src.dashboard - PREVIEW_OK target=http://127.0.0.1:5000/static/test_preview_ext.html origin=http://127.0.0.1:5000 style_base_url=None meta_refresh=True
+2025-10-17 03:04:40,424 INFO src.dashboard - PREVIEW_OK target=http://127.0.0.1:5000/static/test_preview_ext.html origin=http://127.0.0.1:5000 style_base_url=None meta_refresh=True
+2025-10-17 03:04:52,473 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 03:22:40,236 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 03:28:50,824 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 03:35:48,485 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 10:44:24,934 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 10:53:47,560 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 10:53:58,195 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 10:57:54,112 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 11:02:16,545 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 11:05:40,414 INFO src.dashboard - PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+2025-10-17 11:06:12,381 INFO src.dashboard - PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+2025-10-17 11:09:06,612 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 11:10:11,455 INFO src.dashboard - PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+2025-10-17 11:12:18,130 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 11:19:12,553 INFO src.dashboard - PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+2025-10-17 14:00:15,402 INFO src.dashboard - PREVIEW_OK target=http://127.0.0.1:5001/dashboard origin=http://127.0.0.1:5001 style_base_url=http://127.0.0.1:5001 meta_refresh=False
+2025-10-17 16:15:33,235 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 16:19:35,247 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 16:51:15,166 INFO src.dashboard - PREVIEW_OK target=http://127.0.0.1:5001/static/test_preview_ext.html origin=http://127.0.0.1:5001 style_base_url=None meta_refresh=True
+2025-10-17 16:52:12,809 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 16:52:42,218 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 16:54:25,180 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 17:36:53,610 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 17:38:10,131 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 17:43:05,013 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 17:48:12,515 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 17:56:32,808 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 17:58:41,177 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 18:09:12,829 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 18:12:13,348 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 18:19:35,530 WARNING src.dashboard - MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+2025-10-17 22:29:58,126 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 23:31:44,214 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 23:32:56,988 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 23:33:14,218 INFO dashboard - Logging initialized with RotatingFileHandler
+2025-10-17 23:34:53,241 INFO dashboard - PREVIEW_OK target=http://127.0.0.1:5000/static/test_preview_ext.html origin=http://127.0.0.1:5000 style_base_url=None meta_refresh=True
+2025-10-17 23:34:53,271 WARNING dashboard - STATIC_404 path=/static/assets/app.css resolved=C:\Users\User\Trae\ORCH-Next\static\assets\app.css
+2025-10-17 23:34:53,276 WARNING dashboard - STATIC_404 path=/static/assets/app.mjs resolved=C:\Users\User\Trae\ORCH-Next\static\assets\app.mjs
+2025-10-17 23:34:53,281 WARNING dashboard - STATIC_404 path=/static/a.css resolved=C:\Users\User\Trae\ORCH-Next\static\a.css
+2025-10-17 23:34:53,285 WARNING dashboard - STATIC_404 path=/static/assets/imp.css resolved=C:\Users\User\Trae\ORCH-Next\static\assets\imp.css
+2025-10-17 23:34:53,289 WARNING dashboard - STATIC_404 path=/static/a.js resolved=C:\Users\User\Trae\ORCH-Next\static\a.js
+2025-10-17 23:34:53,292 WARNING dashboard - STATIC_404 path=/static/assets/app.mjs resolved=C:\Users\User\Trae\ORCH-Next\static\assets\app.mjs
+2025-10-17 23:34:53,306 WARNING dashboard - STATIC_404 path=/static/frame/page.html resolved=C:\Users\User\Trae\ORCH-Next\static\frame\page.html
+2025-10-17 23:34:53,393 WARNING dashboard - STATIC_404 path=/static/media/sample.mp4 resolved=C:\Users\User\Trae\ORCH-Next\static\media\sample.mp4
+2025-10-17 23:34:53,816 INFO dashboard - PREVIEW_OK target=http://127.0.0.1:5000/static/test_preview_ext.html origin=http://127.0.0.1:5000 style_base_url=None meta_refresh=True

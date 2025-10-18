@@ -1,0 +1,74 @@
+{
+  "timestamp": "20251012_032028",
+  "test_name": "single_endpoint_performance",
+  "results": {
+    "http://127.0.0.1:5000/": {
+      "duration_seconds": 1.0946722000080626,
+      "total_requests": 50,
+      "error_count": 0,
+      "error_rate": 0.0,
+      "response_time": {
+        "min": 0.012170400004833937,
+        "max": 0.06556380000256468,
+        "mean": 0.021265104000631255,
+        "median": 0.013737899993429892,
+        "p95": 0.04490947000012966,
+        "p99": 0.07517490500657004
+      },
+      "throughput_rps": 45.67577398935657,
+      "cpu_usage": {
+        "mean": 34.38,
+        "max": 50.7
+      },
+      "memory_usage": {
+        "mean": 26.8,
+        "max": 26.8,
+        "peak_mb": 0.4153623580932617
+      }
+    },
+    "http://127.0.0.1:5000/api/status": {
+      "error": "エラー率が基準値を超過: 100.00% > 1.00%\nassert 1.0 < 0.01"
+    },
+    "http://127.0.0.1:5000/api/metrics": {
+      "error": "エラー率が基準値を超過: 100.00% > 1.00%\nassert 1.0 < 0.01"
+    },
+    "http://127.0.0.1:5000/api/system-health": {
+      "duration_seconds": 6.01268379999965,
+      "total_requests": 50,
+      "error_count": 0,
+      "error_rate": 0.0,
+      "response_time": {
+        "min": 0.11189070000546053,
+        "max": 0.1367651000036858,
+        "mean": 0.11956623199919704,
+        "median": 0.1141924499970628,
+        "p95": 0.13654168000575737,
+        "p99": 0.13686853899984272
+      },
+      "throughput_rps": 8.31575410634481,
+      "cpu_usage": {
+        "mean": 39.24,
+        "max": 49.0
+      },
+      "memory_usage": {
+        "mean": 26.939999999999998,
+        "max": 27.0,
+        "peak_mb": 0.034089088439941406
+      }
+    },
+    "http://127.0.0.1:5000/security": {
+      "error": "エラー率が基準値を超過: 100.00% > 1.00%\nassert 1.0 < 0.01"
+    },
+    "http://127.0.0.1:5000/api/security/status": {
+      "error": "エラー率が基準値を超過: 100.00% > 1.00%\nassert 1.0 < 0.01"
+    }
+  },
+  "thresholds": {
+    "response_time_p95": 0.5,
+    "response_time_p99": 1.0,
+    "error_rate_max": 0.01,
+    "cpu_usage_max": 80.0,
+    "memory_usage_max": 85.0,
+    "throughput_min": 100
+  }
+}

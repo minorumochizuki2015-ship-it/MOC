@@ -7,6 +7,7 @@ HTTP API負荷テスト
 
 import asyncio
 import json
+import os
 import random
 import statistics
 import time
@@ -15,6 +16,12 @@ from pathlib import Path
 
 import aiohttp
 import pytest
+
+# Skip load tests in CI or constrained environments
+pytestmark = pytest.mark.skipif(
+    os.getenv("SKIP_LOADTEST") == "1",
+    reason="Load tests skipped in CI via SKIP_LOADTEST=1",
+)
 
 
 def load_monitoring_config():
@@ -78,16 +85,29 @@ async def http_worker(
         else:
             if last_error is not None:
                 results.append(
-                    {"endpoint": ep, "ok": False, "error": last_error, "latency_ms": latency_ms}
+                    {
+                        "endpoint": ep,
+                        "ok": False,
+                        "error": last_error,
+                        "latency_ms": latency_ms,
+                    }
                 )
             else:
                 results.append(
-                    {"endpoint": ep, "ok": False, "status": status, "latency_ms": latency_ms}
+                    {
+                        "endpoint": ep,
+                        "ok": False,
+                        "status": status,
+                        "latency_ms": latency_ms,
+                    }
                 )
 
 
 async def precheck_endpoints(
-    session: aiohttp.ClientSession, base_url: str, endpoints: list[str], timeout_per_check: int = 3
+    session: aiohttp.ClientSession,
+    base_url: str,
+    endpoints: list[str],
+    timeout_per_check: int = 3,
 ):
     """対象エンドポイントを事前に健全性チェックし、到達可能なもののみを選別する。
     戻り値: (available_endpoints, excluded_details)
@@ -168,7 +188,11 @@ class TestHttpApiLoad:
 
         connector = aiohttp.TCPConnector(limit=concurrency)
         timeout = aiohttp.ClientTimeout(total=8, sock_connect=3, sock_read=5)
-        headers = {"Cache-Control": "no-cache", "Pragma": "no-cache", "Connection": "keep-alive"}
+        headers = {
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Connection": "keep-alive",
+        }
         async with aiohttp.ClientSession(
             connector=connector, timeout=timeout, headers=headers
         ) as session:
@@ -210,7 +234,10 @@ class TestHttpApiLoad:
         out_file = out_dir / f"http_load_{ts}.json"
         with out_file.open("w", encoding="utf-8") as f:
             json.dump(
-                {"summary": summary, "raw_count": len(results)}, f, ensure_ascii=False, indent=2
+                {"summary": summary, "raw_count": len(results)},
+                f,
+                ensure_ascii=False,
+                indent=2,
             )
 
         # 集計スクリプト向けに標準化スキーマも出力（トップレベルキー）
@@ -263,7 +290,11 @@ if __name__ == "__main__":
 
         connector = aiohttp.TCPConnector(limit=concurrency)
         timeout = aiohttp.ClientTimeout(total=8, sock_connect=3, sock_read=5)
-        headers = {"Cache-Control": "no-cache", "Pragma": "no-cache", "Connection": "keep-alive"}
+        headers = {
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Connection": "keep-alive",
+        }
         async with aiohttp.ClientSession(
             connector=connector, timeout=timeout, headers=headers
         ) as session:

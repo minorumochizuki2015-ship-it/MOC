@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <!-- ORION-inspired font -->
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Shared ORION theme (AIっぽい未来的トークン) -->
+    <link href="/static/css/orion.css" rel="stylesheet">
+    <!-- Dynamic style overrides -->
+    <link href="/static/css/dynamic_overrides.css" rel="stylesheet">
+    <!-- Chart.js for quality trends -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <style>
+        :root {
+            --bg: #0b0f1a;
+            --bg-2: #0a0e18;
+            --panel: rgba(13, 19, 30, 0.65);
+            --panel-strong: rgba(13, 19, 30, 0.85);
+            --text: #e6f1ff;
+            --muted: #8aa0b4;
+            --accent: #00d1ff;
+            --accent-2: #4de1ff;
+            --success: #25d366;
+            --border: rgba(255, 255, 255, 0.06);
+            --shadow: rgba(0, 0, 0, 0.35);
+        }
+
+        body {
+            font-family: 'Titillium Web', 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 24px;
+            color: var(--text);
+            background: radial-gradient(1000px circle at 20% 10%, rgba(0, 209, 255, 0.12), transparent 40%),
+                linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--panel);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 12px 36px var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            border-bottom: 2px solid rgba(0, 209, 255, 0.35);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            letter-spacing: 0.5px;
+            margin: 0 0 6px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(0, 209, 255, 0.14);
+            color: var(--text);
+            border-radius: 999px;
+            border: 1px solid rgba(0, 209, 255, 0.45);
+            box-shadow: 0 0 12px rgba(0, 209, 255, 0.28), inset 0 0 8px rgba(0, 209, 255, 0.12);
+        }
+
+        .nav {
+            margin: 10px 0 20px;
+            display: flex;
+            gap: 14px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            padding: 4px 0;
+            border-bottom: 2px solid transparent;
+            transition: all .2s ease;
+        }
+
+        .nav a:hover {
+            color: var(--accent);
+            text-shadow: 0 0 6px rgba(0, 209, 255, 0.6);
+            border-color: rgba(0, 209, 255, 0.5);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            position: relative;
+            background: var(--panel-strong);
+            padding: 16px 16px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 28px var(--shadow);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, rgba(0, 209, 255, 0.85), rgba(0, 209, 255, 0.2));
+            box-shadow: 0 0 12px rgba(0, 209, 255, 0.5);
+            border-radius: 12px 0 0 12px;
+        }
+
+        .card h3 {
+            margin: 0 0 8px;
+            letter-spacing: 0.4px;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* AIっぽい（未来的）強化: グローと軽いモーションを追加（控えめ） */
+        .header {
+            background: linear-gradient(180deg, rgba(0, 209, 255, 0.08) 0%, rgba(0, 209, 255, 0.02) 100%);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .nav a {
+            position: relative;
+        }
+
+        .nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -3px;
+            height: 2px;
+            width: 0;
+            background: linear-gradient(90deg, rgba(0, 209, 255, 0.0), rgba(0, 209, 255, 0.65), rgba(0, 209, 255, 0.0));
+            box-shadow: 0 0 8px rgba(0, 209, 255, 0.45);
+            transition: width .25s ease;
+        }
+
+        .nav a:hover::after {
+            width: 100%;
+        }
+
+        .card {
+            overflow: hidden;
+            /* for ::after glow */
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(0, 209, 255, 0.22);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 16px rgba(0, 209, 255, 0.10);
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(600px circle at 20% -10%, rgba(0, 209, 255, 0.12), transparent 40%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0));
+            mix-blend-mode: screen;
+        }
+
+        /* コンテナに微細なグリッドスキャン（超控えめ） */
+        .container::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            border-radius: 16px;
+            background-image: linear-gradient(0deg, rgba(0, 209, 255, 0.06) 1px, transparent 1px);
+            background-size: 100% 10px;
+            opacity: 0.04;
+            animation: scan 12s linear infinite;
+        }
+
+        @keyframes scan {
+            to {
+                background-position-y: -10px;
+            }
+        }
+    </style>
+</head>
+
+<body class="orion">
+    <div class="container">
+        <div class="header">
+            <h1>{{ title }}</h1>
+            <span class="status">{{ status }}</span>
+            <small style="float: right;">{{ timestamp }}</small>
+        </div>
+        <div class="nav">
+            <a href="/">ダッシュボード</a>
+            <a href="/tasks">タスク</a>
+            <a href="/approvals">承認</a>
+            <a href="/agents">エージェント</a>
+            <a href="/style-manager">🎨 スタイル管理</a>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <h3>システム状態</h3>
+                <p>ダッシュボード: 稼働中</p>
+                <p>監視システム: 稼働中</p>
+            </div>
+            <div class="card">
+                <h3>パフォーマンス</h3>
+                <p>応答時間: 最適化済み</p>
+                <p>キャッシュ: 有効</p>
+            </div>
+            <div class="card">
+                <h3>タスク概要</h3>
+                <p>総数: <strong id="tasksCount">—</strong></p>
+                <p class="muted">詳細は <a href="/tasks">タスクページ</a> を参照</p>
+            </div>
+            <div class="card">
+                <h3>承認概要</h3>
+                <p>総数: <strong id="approvalsCount">—</strong></p>
+                <p class="muted">詳細は <a href="/approvals">承認ページ</a> を参照</p>
+            </div>
+            <!-- 旧UI復元：App Scores / File Info / Exported Components（暫定プレースホルダー） -->
+            <div class="card">
+                <h3>App Scores</h3>
+                <p>Security: <strong id="scoreSecurity">N/A</strong></p>
+                <p>Performance: <strong id="scorePerformance">N/A</strong></p>
+                <p class="muted">詳細は <a href="#">（準備中）</a></p>
+            </div>
+            <div class="card">
+                <h3>File Info</h3>
+                <p>ファイル名: <strong id="fileName">N/A</strong></p>
+                <p>サイズ: <strong id="fileSize">N/A</strong></p>
+                <p class="muted">詳細は <a href="#">（準備中）</a></p>
+            </div>
+            <div class="card">
+                <h3>Exported Components</h3>
+                <p>Activities: <strong id="exportActivities">N/A</strong></p>
+                <p>Services: <strong id="exportServices">N/A</strong></p>
+                <p class="muted">詳細は <a href="#">（準備中）</a></p>
+            </div>
+            <!-- 品質ダッシュボード統合: トレンド・予測・メトリクス -->
+            <div class="card ai ai-motion">
+                <h3>品質トレンド (30日間)</h3>
+                <div class="chart-container">
+                    <canvas id="trendChart" height="220"></canvas>
+                </div>
+            </div>
+            <div class="card ai ai-motion">
+                <h3>AI予測結果</h3>
+                <div id="prediction-results" class="muted">Loading...</div>
+            </div>
+            <div class="card ai ai-motion">
+                <h3>最近のメトリクス</h3>
+                <div id="recent-metrics" class="muted">Loading...</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            let es = null;
+            const retryMs = 3000;
+            const urls = ['/sse/events'];
+            let activeUrl = null;
+            async function preflight(url, timeoutMs = 1200) {
+                const controller = new AbortController();
+                const tm = setTimeout(() => controller.abort(), timeoutMs);
+                try {
+                    const res = await fetch(url, { signal: controller.signal });
+                    return !!res.ok;
+                } catch (_) { return false; }
+                finally { clearTimeout(tm); }
+            }
+            async function connect() {
+                try {
+                    // SSE提供がある場合のみ接続を試行
+                    activeUrl = null;
+                    for (const u of urls) { if (await preflight(u)) { activeUrl = u; break; } }
+                    if (!activeUrl) { console.warn('SSE endpoint not available, skip connecting'); return; }
+                    try { es && es.close(); } catch (_) { }
+                    es = new EventSource(activeUrl);
+                    es.onopen = function () { console.log('SSE connected:', activeUrl); };
+                    es.onmessage = function (ev) {
+                        try {
+                            const data = JSON.parse(ev.data);
+                            // 必要に応じてUIへ反映（軽量テンプレートのためログのみ）
+                            console.debug('SSE event', data);
+                        } catch (e) { }
+                    };
+                    es.onerror = async function () {
+                        console.warn('SSE error - reconnecting in', retryMs, 'ms');
+                        try { es.close(); } catch (e) { }
+                        // 再試行前に再度プリフライト
+                        activeUrl = null;
+                        for (const u of urls) { if (await preflight(u)) { activeUrl = u; break; } }
+                        if (!activeUrl) { console.warn('SSE endpoint gone, stop reconnecting'); return; }
+                        setTimeout(connect, retryMs);
+                    };
+                } catch (e) {
+                    console.error('SSE init failed', e);
+                    setTimeout(connect, retryMs);
+                }
+            }
+            async function loadSummary() {
+                try {
+                    const tRes = await fetch('/api/tasks');
+                    if (tRes.ok) {
+                        const tJson = await tRes.json();
+                        const count = (tJson && typeof tJson.count === 'number') ? tJson.count : (Array.isArray(tJson?.tasks) ? tJson.tasks.length : '—');
+                        document.getElementById('tasksCount').textContent = count;
+                    }
+                } catch (e) { console.warn('tasks summary failed', e); }
+                try {
+                    const aRes = await fetch('/api/approvals');
+                    if (aRes.ok) {
+                        const aJson = await aRes.json();
+                        const count = (aJson && typeof aJson.count === 'number') ? aJson.count : (Array.isArray(aJson?.approvals) ? aJson.approvals.length : '—');
+                        document.getElementById('approvalsCount').textContent = count;
+                    }
+                } catch (e) { console.warn('approvals summary failed', e); }
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                connect();
+                loadSummary();
+            });
+        })();
+    </script>
+    <!-- 品質ダッシュボード取得＆描画ロジック -->
+    <script>
+        (function () {
+            let trendChartInstance = null;
+
+            // 安全フェッチ（フォールバック付き）
+            async function safeFetch(urls) {
+                for (const u of urls) {
+                    try {
+                        const res = await fetch(u);
+                        if (res.ok) return res.json();
+                    } catch (_) { }
+                }
+                return null;
+            }
+
+            // Chart.js ネオングロー・プラグイン（AI風の雰囲気）
+            const neonGlow = {
+                id: 'neonGlow',
+                beforeDatasetDraw(chart, args, opts) {
+                    const ctx = chart.ctx;
+                    ctx.save();
+                    ctx.shadowColor = (opts && opts.shadowColor) || 'rgba(56,189,248,0.55)';
+                    ctx.shadowBlur = (opts && opts.shadowBlur) || 12;
+                    ctx.shadowOffsetX = 0;
+                    ctx.shadowOffsetY = 0;
+                },
+                afterDatasetDraw(chart) { chart.ctx.restore(); }
+            };
+            // 一度だけ登録
+            try { Chart.register && Chart.register(neonGlow); } catch (_) { }
+
+            async function loadQuality() {
+                try {
+                    const pred = await safeFetch(['/api/prediction']);
+                    const trend = await safeFetch(['/api/trends']);
+                    // metrics はブループリント側に存在しない可能性があるため /api/system-health にフォールバック
+                    const metrics = await safeFetch(['/api/metrics', '/api/system-health']);
+
+                    renderPrediction(pred || {});
+                    renderTrends(trend || {});
+                    // system-health の場合は辞書なので表用に整形
+                    const normalized = Array.isArray(metrics) ? metrics : (metrics && metrics.system_health ? metrics.system_health : []);
+                    renderMetrics(normalized || []);
+                } catch (e) {
+                    console.warn('quality load failed', e);
+                }
+            }
+
+            function renderPrediction(data) {
+                const el = document.getElementById('prediction-results');
+                if (!el) return;
+                if (!data || data.error) {
+                    el.textContent = data && data.error ? `Error: ${data.error}` : '予測データなし';
+                    return;
+                }
+                const p = data.prediction || {};
+                const ok = Number(p.prediction) === 0;
+                const statusText = ok ? '正常' : '問題あり';
+                const conf = typeof p.confidence === 'number' ? (p.confidence * 100).toFixed(1) : '—';
+                const rec = p.recommendation || '—';
+                const cm = data.current_metrics || {};
+                const windowText = data.data_window ? (data.data_window === '24h' ? '24時間' : (data.data_window === '7d' ? '7日以内' : data.data_window)) : '—';
+                const fbText = data.used_fallback ? '（フォールバック適用）' : '';
+                el.innerHTML = `
+                    <div class="ai-motion" style="padding:12px;border-radius:12px;">
+                        <strong>予測結果:</strong> ${statusText}<br>
+                        <span class="muted">信頼度: ${conf}%</span><br>
+                        <span class="muted">推奨アクション: ${rec}</span>
+                        <br><span class="muted">データ期間: ${windowText} ${fbText}</span>
+                    </div>
+                    <div class="row space-md">
+                        <div class="card" style="min-width:220px">
+                            <div class="muted">テストカバレッジ</div>
+                            <div style="font-size:22px;font-weight:700;">${cm.test_coverage != null ? (cm.test_coverage * 100).toFixed(1) + '%' : '—'}</div>
+                        </div>
+                        <div class="card" style="min-width:220px">
+                            <div class="muted">コード複雑度</div>
+                            <div style="font-size:22px;font-weight:700;">${cm.code_complexity != null ? Number(cm.code_complexity).toFixed(2) : '—'}</div>
+                        </div>
+                        <div class="card" style="min-width:220px">
+                            <div class="muted">エラー率</div>
+                            <div style="font-size:22px;font-weight:700;">${cm.error_rate != null ? (cm.error_rate * 100).toFixed(2) + '%' : '—'}</div>
+                        </div>
+                        <div class="card" style="min-width:220px">
+                            <div class="muted">パフォーマンス</div>
+                            <div style="font-size:22px;font-weight:700;">${cm.performance_score != null ? (cm.performance_score * 100).toFixed(1) + '%' : '—'}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function renderTrends(data) {
+                const canvas = document.getElementById('trendChart');
+                if (!canvas) return;
+                
+                // 既存のChart instanceを完全に破棄
+                if (trendChartInstance) {
+                    try {
+                        trendChartInstance.destroy();
+                        trendChartInstance = null;
+                    } catch (e) {
+                        console.warn('Chart destroy failed:', e);
+                    }
+                }
+                
+                // Canvas要素をクリア（Chart.js内部状態をリセット）
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                const labels = Array.isArray(data?.dates) ? [...data.dates].reverse() : [];
+                const cov = Array.isArray(data?.coverage_trend) ? [...data.coverage_trend].reverse() : [];
+                const perf = Array.isArray(data?.performance_trend) ? [...data.performance_trend].reverse() : [];
+                const err = Array.isArray(data?.error_trend) ? [...data.error_trend].reverse() : [];
+                
+                // グラデーション生成（AI風）
+                const gradBlue = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradBlue.addColorStop(0, 'rgba(56,189,248,0.35)');
+                gradBlue.addColorStop(1, 'rgba(56,189,248,0.06)');
+                const gradPurple = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradPurple.addColorStop(0, 'rgba(168,85,247,0.30)');
+                gradPurple.addColorStop(1, 'rgba(168,85,247,0.06)');
+                const gradRed = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                gradRed.addColorStop(0, 'rgba(239,68,68,0.30)');
+                gradRed.addColorStop(1, 'rgba(239,68,68,0.06)');
+                
+                const cfg = {
+                    type: 'line',
+                    data: {
+                        labels,
+                        datasets: [
+                            { label: 'テストカバレッジ', data: cov, borderColor: '#38bdf8', backgroundColor: gradBlue, tension: 0.35, borderWidth: 2.2 },
+                            { label: 'パフォーマンス', data: perf, borderColor: '#a855f7', backgroundColor: gradPurple, tension: 0.35, borderWidth: 2.2 },
+                            { label: 'エラー率', data: err, borderColor: '#ef4444', backgroundColor: gradRed, tension: 0.35, borderWidth: 2.2 },
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { labels: { color: '#eaf2ff' } },
+                            neonGlow: { shadowColor: 'rgba(58,163,255,0.45)', shadowBlur: 10 }
+                        },
+                        scales: {
+                            x: { ticks: { color: '#cde6ff' }, grid: { color: 'rgba(58,163,255,0.12)' } },
+                            y: { beginAtZero: true, max: 1, ticks: { color: '#cde6ff' }, grid: { color: 'rgba(58,163,255,0.12)' } }
+                        }
+                    }
+                };
+                
+                try {
+                    trendChartInstance = new Chart(ctx, cfg);
+                } catch (e) {
+                    console.error('Chart creation failed:', e);
+                    // フォールバック表示
+                    ctx.fillStyle = '#eaf2ff';
+                    ctx.font = '14px Arial';
+                    ctx.fillText('チャート表示エラー', 20, canvas.height / 2);
+                }
+            }
+
+            function renderMetrics(list) {
+                const el = document.getElementById('recent-metrics');
+                if (!el) return;
+                const items = Array.isArray(list) ? list.slice(0, 10) : [];
+                if (items.length === 0) { el.textContent = 'メトリクスがありません'; return; }
+                const rows = items.map(m => `
+                    <tr>
+                        <td>${m.timestamp ? new Date(m.timestamp).toLocaleString() : '—'}</td>
+                        <td>${m.test_coverage != null ? (m.test_coverage * 100).toFixed(1) + '%' : '—'}</td>
+                        <td>${m.code_complexity != null ? Number(m.code_complexity).toFixed(2) : '—'}</td>
+                        <td>${m.error_rate != null ? (m.error_rate * 100).toFixed(2) + '%' : '—'}</td>
+                        <td>${m.performance_score != null ? (m.performance_score * 100).toFixed(1) + '%' : '—'}</td>
+                        <td>${m.quality_issue ? '<span class="badge bg-danger">Issue</span>' : '<span class="badge bg-success">OK</span>'}</td>
+                    </tr>
+                `).join('');
+                el.innerHTML = `
+                    <div class="chart-container">
+                        <table class="table" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>時刻</th><th>カバレッジ</th><th>複雑度</th><th>エラー率</th><th>パフォーマンス</th><th>状態</th>
+                                </tr>
+                            </thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                loadQuality();
+                setInterval(loadQuality, 30000);
+            });
+        })();
+    </script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -120,3 +120,18 @@ python -m pytest tests/ -v --cov=src
 
 **このガイドで即座に効果的な作業を開始できます！**  
 **不明点があれば `WORK_CONTEXT_SYSTEM.md` で詳細システム設計を確認してください。**
+# Quick Start
+## Phase 4 実行情報（2025-10-10 追記）
+
+現行フェーズは M4（ライセンス/コンプライアンス適合）です。進行タスクと受入基準は以下を参照してください。
+
+- 現行マイルストーン: `C:\\Users\\User\\Trae\\ORCH-Next\\ORCH\\STATE\\CURRENT_MILESTONE.md`
+- 実行チェックリスト: `C:\\Users\\User\\Trae\\ORCH-Next\\ORCH\\STATE\\CHECKLISTS\\phase4_execution_checklist.md`
+- タスク台帳: `C:\\Users\\User\\Trae\\ORCH-Next\\ORCH\\STATE\\TASKS.md`
+- マイルストーン計画: `C:\\Users\\User\\Trae\\ORCH-Next\\ORCH\\STATE\\MILESTONES.md`
+
+更新内容（要約）
+- タスク009（ワークフロー自動化）を DOING に更新、ロック `WORK@2025-10-10T09:00:00Z` を付与（TTL=30分）。
+- CURRENT_MILESTONE.md を作成し、受入基準とチェックリスト参照を明記。
+- MILESTONES.md に現行フェーズ（M4）を明示、CURRENT_MILESTONE.md 参照を追加。
+- CHECKLISTS に Phase4 実行チェックリストを新設。

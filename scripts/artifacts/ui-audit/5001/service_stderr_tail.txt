@@ -1,0 +1,100 @@
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\Trae\ORCH-Next\scripts\ops\waitress_entry.py", line 55, in <module>
+    main()
+  File "C:\Users\User\Trae\ORCH-Next\scripts\ops\waitress_entry.py", line 51, in main
+    serve(app, host=host, port=port, threads=8)
+  File "C:\Users\User\Trae\ORCH-Next\.venv\Lib\site-packages\waitress\__init__.py", line 13, in serve
+    server = _server(app, **kw)
+             ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Trae\ORCH-Next\.venv\Lib\site-packages\waitress\server.py", line 49, in create_server
+    adj = Adjustments(**kw)
+          ^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Trae\ORCH-Next\.venv\Lib\site-packages\waitress\adjustments.py", line 395, in __init__
+    raise ValueError("Invalid host/port specified.")
+ValueError: Invalid host/port specified.
+Traceback (most recent call last):
+  File "C:\Users\User\Trae\ORCH-Next\.venv\Lib\site-packages\waitress\adjustments.py", line 368, in __init__
+    for s in socket.getaddrinfo(
+             ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 976, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+socket.gaierror: [Errno 11001] getaddrinfo failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\Trae\ORCH-Next\scripts\ops\waitress_entry.py", line 55, in <module>
+    main()
+  File "C:\Users\User\Trae\ORCH-Next\scripts\ops\waitress_entry.py", line 51, in main
+    serve(app, host=host, port=port, threads=8)
+  File "C:\Users\User\Trae\ORCH-Next\.venv\Lib\site-packages\waitress\__init__.py", line 13, in serve
+    server = _server(app, **kw)
+             ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Trae\ORCH-Next\.venv\Lib\site-packages\waitress\server.py", line 49, in create_server
+    adj = Adjustments(**kw)
+          ^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Trae\ORCH-Next\.venv\Lib\site-packages\waitress\adjustments.py", line 395, in __init__
+    raise ValueError("Invalid host/port specified.")
+ValueError: Invalid host/port specified.
+Traceback (most recent call last):
+  File "C:\Users\User\Trae\ORCH-Next\scripts\ops\waitress_entry.py", line 32, in <module>
+    from src.dashboard import app, _setup_logging_for_app  # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Trae\ORCH-Next\src\dashboard.py", line 19, in <module>
+    from flask import Flask, Response, jsonify, render_template_string, request, Blueprint
+  File "C:\Users\User\Trae\ORCH-Next\.venv\Lib\site-packages\flask\__init__.py", line 6, in <module>
+    from .app import Flask as Flask
+  File "C:\Users\User\Trae\ORCH-Next\.venv\Lib\site-packages\flask\app.py", line 29, in <module>
+    from . import cli
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1087, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1186, in get_data
+KeyboardInterrupt
+[2025-10-17 03:22:40,236] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 03:28:50,824] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 03:35:48,485] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 11:05:40,414] INFO in dashboard: PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+INFO:src.dashboard:PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+[2025-10-17 11:06:12,381] INFO in dashboard: PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+INFO:src.dashboard:PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+[2025-10-17 11:10:11,455] INFO in dashboard: PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+INFO:src.dashboard:PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+[2025-10-17 11:19:12,553] INFO in dashboard: PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+INFO:src.dashboard:PREVIEW_OK target=http://localhost:5001/static/test_preview_ext.html origin=http://localhost:5001 style_base_url=None meta_refresh=True
+[2025-10-17 14:00:15,402] INFO in dashboard: PREVIEW_OK target=http://127.0.0.1:5001/dashboard origin=http://127.0.0.1:5001 style_base_url=http://127.0.0.1:5001 meta_refresh=False
+INFO:src.dashboard:PREVIEW_OK target=http://127.0.0.1:5001/dashboard origin=http://127.0.0.1:5001 style_base_url=http://127.0.0.1:5001 meta_refresh=False
+[2025-10-17 16:51:15,166] INFO in dashboard: PREVIEW_OK target=http://127.0.0.1:5001/static/test_preview_ext.html origin=http://127.0.0.1:5001 style_base_url=None meta_refresh=True
+INFO:src.dashboard:PREVIEW_OK target=http://127.0.0.1:5001/static/test_preview_ext.html origin=http://127.0.0.1:5001 style_base_url=None meta_refresh=True
+[2025-10-17 16:52:12,809] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 16:52:42,218] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 16:54:25,180] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 17:36:53,610] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 17:38:10,131] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 17:43:05,013] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 17:48:12,515] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 17:56:32,808] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 17:58:41,177] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 18:09:12,829] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 18:12:13,348] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+[2025-10-17 18:19:35,530] WARNING in dashboard: MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1
+WARNING:src.dashboard:MCP_UNAUTHORIZED path=/mcp/ping ip=127.0.0.1

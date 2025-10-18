@@ -1,0 +1,216 @@
+結論：機能要件を“機能マップ→詳細仕様→UI配置→API/イベント→拡張ポイント→保護策→受入基準”で具体化する。以下をそのまま仕様の「3. 機能要件」に差し替え。
+
+---
+
+# 3. 機能要件（詳細）
+
+## 3.1 機能マップ（何がどこにあるか）
+
+| ID  | 機能                      | UI配置                | サーバ/モジュール     | 主要API                              | 生成/副作用                             |
+| --- | ----------------------- | ------------------- | ------------- | ---------------------------------- | ---------------------------------- |
+| F01 | 対象ページ読込                 | 上部「ページ選択」＋中央 iframe | ui_routes     | `GET /api/pages`                   | iframe sandbox読込、同一オリジン検証          |
+| F02 | 要素選択（複数・番号ハイライト）        | 中央プレビュー上            | style_manager | —                                  | `selectedElements[]` 更新、Overlay描画  |
+| F03 | プロパティ編集パネル              | 右ペイン「選択情報」          | style_manager | —                                  | 一時スタイル適用、変更キュー作成                   |
+| F04 | トークン抽出（computed→tokens） | 右ペイン「Tokens」        | diff_engine   | `POST /api/styles/patch`           | `tokens.json/css` 生成               |
+| F05 | 最小CSS差分生成（特異性計算）        | 右ペイン「差分プレビュー」       | diff_engine   | 同上                                 | `patch.css`、影響範囲スコア                |
+| F06 | ライブ差分プレビュー注入            | 中央プレビュー             | style_manager | —                                  | `<style data-rom-patch>` 挿入        |
+| F07 | 回帰スクショ自動生成              | 下部「回帰テスト」           | regression    | `POST /api/regression`             | before/after/差分PNG                 |
+| F08 | リリース作成                  | 右上「リリース作成」          | releases      | `POST /api/releases`               | Patch固定化、承認待ち                      |
+| F09 | 承認/配布（CDN注入 or Git PR）  | リリース詳細画面            | releases      | `POST /api/releases/{id}/deploy`   | CDN：manifest更新 / Git：PR作成          |
+| F10 | ロールバック                  | リリース履歴              | releases      | `POST /api/releases/{id}/rollback` | 直前安定版へ復帰                           |
+| F11 | 監査ログ                    | 設定→監査               | storage       | `GET /api/audit`                   | だれが・いつ・何を                          |
+| F12 | 権限（編集/承認/配布）            | 全画面                 | auth          | /me                                | RBAC（Editor/Approver/Publisher）    |
+| F13 | 通知（メール/Slack）           | リリース操作時             | releases      | webhooks                           | 承認依頼・失敗・ロールバック通知                   |
+| F14 | オフライン閲覧                 | 画面全体                | storage       | —                                  | ページ一覧/履歴キャッシュのみ                    |
+| F15 | インポート/エクスポート            | 設定→エクスポート           | releases      | `GET /api/releases/{id}/bundle`    | zip（tokens.css, patch.css, report） |
+
+任意（v1.1）
+
+| ID  | 機能                 | UI配置 | 備考                           |
+| --- | ------------------ | ---- | ---------------------------- |
+| F16 | 多ページ一括適用（サイトマップ走査） | 回帰画面 | `sitemap.xml` 取り込み、マッチセレクタ適用 |
+| F17 | チーム共有ブラウザ拡張        | 拡張UI | 端末側適用＋組織同期（読取専用でも可）          |
+
+将来
+
+| ID  | 機能                       | 概要                              |
+| --- | ------------------------ | ------------------------------- |
+| F18 | Tailwind/Design System同期 | tokens↔Tailwind theme 相互変換、規約検証 |
+| F19 | テーママーケット                 | 署名付きテーマ配布、互換性検証                 |
+
+---
+
+## 3.2 機能詳細（どう動くか）
+
+### F01 対象ページ読込
+
+* 入力：プロジェクト/URL。前提：同一オリジン or CORS許可。
+* 挙動：`<iframe sandbox>` に読み込み、コンテンツ脚部へ計測用`rom-agent.js`を一時注入。
+* 失敗時：混在コンテンツ/CSPで注入不可→“読み取り専用モード”に落とし編集不可表示。
+
+### F02 要素選択
+
+* 複数選択可。クリックで`selectedElements`に追加。順序番号バッジ表示。
+* セレクタ解決：安定セレクタ優先（data-*、id、role、aria、構造+nth-child最小化）。
+* キーボード：↑↓で親子移動、Delで個別解除、Ctrl+Aで全選択解除ダイアログ。
+
+### F03 プロパティ編集
+
+* 編集対象：color/typography/spacing/border/shadow/displayのホワイトリスト。
+* 変更は「変更キュー」に積む。未適用は黄色ドットで表示。
+* “衝突検出”：同一セレクタ×プロパティの重複は最新を採用し履歴に記録。
+
+### F04 トークン抽出
+
+* 方式：computedStyle→正規化（px→rem, rgb→hex）→頻出値をクラスタリング→`--rom-<category>-<hash>`命名。
+* スコープ：global / page / component。衝突時は最小スコープを割当。
+
+### F05 最小CSS差分
+
+* 目標：既存スタイルの**最小上書き**。特異性は`0,1,0`～`0,2,0`で抑制。`!important`禁止。
+* アルゴリズム：Baseline計測→差分抽出→特異性調整→依存順序解決（layout→typography→decorations）。
+* 成果物：`tokens.css` `patch.css` `impact.json`（影響範囲＝一致要素数×継承深度）。
+
+### F06 ライブ差分プレビュー
+
+* `<style data-rom-patch>`をiframe内headへ追加。入替は原子的に行う。
+* 解除で元のDOMに復帰。パフォーマンス監視（style recalculation > 50msで警告）。
+
+### F07 回帰スクショ
+
+* Playwrightでbefore/after撮影。diffはSSIM+ピクセル差分の合成。しきい値0.1%。
+* マトリクス：解像度（1366×768, 1920×1080）×DPR（1,2）。
+* 結果：`/reports/<releaseId>/{before,after,diff}.png` とJSONサマリ。
+
+### F08 リリース作成
+
+* Draft Patchを固定化。メタ情報（作成者、対象URL、影響範囲、回帰結果ハッシュ）を保存。
+* 状態：`Draft→Proposed→Approved→Released→RolledBack`。
+
+### F09 配布
+
+* CDN注入：ドメイン毎の`patch-manifest.json`に追記。タグ：環境(dev/stg/prod)と%配布。
+* Git PR：静的サイト/リポジトリに`/styles/patch.css`とmanifestをコミットしPR作成。
+* 検証：ヘルスチェックOKで“Stable”。NGで自動`rollback()`。
+
+### F10 ロールバック
+
+* 直前安定版のmanifestを再適用。理由と関連メトリクスを監査に記録。
+
+### F11 監査ログ
+
+* 監査イベント：select/edit/patch_create/approve/deploy/rollback/notify。
+* 形式：構造化JSON。改ざん検出のためハッシュチェーン。
+
+### F12 権限
+
+* 役割：Viewer/Editor/Approver/Publisher。デフォルトはPrinciple of Least Privilege。
+* UI制御：非権限ボタンは表示はするが無効＋理由ツールチップ。
+
+### F13 通知
+
+* Slack：Incoming Webhook。テンプレに差分リンクと回帰スクショURL。
+* メール：承認依頼、失敗、ロールバック完了。オプトイン制御。
+
+### F14 オフライン
+
+* キャッシュ：ページ一覧、最新リリースの表示用データのみ。編集不可。
+* 競合：サーバ真実（Server Source of Truth）。編集操作はオンラインのみ許可。
+
+### F15 エクスポート
+
+* `bundle.zip`に`tokens.css` `patch.css` `impact.json` `report.html`を含める。
+
+### F16（v1.1）多ページ一括
+
+* 入力：sitemap.xml or URL列。適用ポリシー：完全一致/部分一致/正規表現。
+* セーフティ：テストサンプルN件で閾値超の差分が出たら中断。
+
+### F17（v1.1）ブラウザ拡張
+
+* 機能：`patch-manifest.json`を取得して端末側で適用。組織SSOで同期。
+* 管理：サーバ側で配布トラック制御。端末はread-only。
+
+---
+
+## 3.3 UI配置（どこに置くか）
+
+* 左サイドバー：ページ選択、履歴、フィルタ。
+* 上部バー：保存、差分プレビュー切替、回帰実行、リリース作成。
+* 中央：iframeプレビュー＋選択番号バッジ。
+* 右ペイン（タブ）：`Selection`｜`Properties`｜`Tokens`｜`Diff`｜`Impact`｜`Logs`。
+* 下部ドロワ：回帰ジョブログとサムネイル比較。
+
+---
+
+## 3.4 APIとイベント
+
+* REST
+
+  * `GET /api/pages` `GET/POST /api/styles` `POST /api/styles/patch`
+  * `POST /api/regression` `POST /api/releases` `POST /api/releases/{id}/deploy|rollback`
+  * `GET /api/releases/{id}/bundle` `GET /api/audit`
+* サーバイベント（WebSocket可）
+
+  * `regression_progress` `deploy_progress` `health_update`
+* レート制限
+
+  * 編集系 60/min/ユーザ、回帰 10/min/プロジェクト。
+
+---
+
+## 3.5 拡張ポイント（プラグイン）
+
+* Hooks（同期/非同期）
+
+  * `before_tokenize(elements)`
+  * `after_diff(patch, tokens)`
+  * `before_deploy(release)`
+  * `on_regression_result(report)`
+* Providerインターフェース
+
+  * `CDNProvider.deploy(manifest)`
+  * `VCSProvider.create_pr(diff)`
+  * `Notifier.send(event, payload)`
+
+---
+
+## 3.6 エッジケースと保護策
+
+* CSPで`<style>`挿入不可→Content-Security-Policy検出し外部CSSリンク方式に自動切替。
+* 動的クラス付与SPA→安定セレクタ生成に`data-rom`付与の提案モードを提示。
+* 大規模差分（影響要素>1000）→承認不可フラグ＋分割生成をガイド。
+* 無限レイアウトシフト検出→パッチ却下。
+
+---
+
+## 3.7 受け入れ基準（抜粋）
+
+* F02：3要素選択で番号とパネルが一致し、解除と再選択が状態遷移通りに動く。
+* F05：既存CSSを壊さずに色変更のみで`patch.css`が5行以内に収まるケースで合格。
+* F07：回帰で差分0.1%未満は自動合格、以上は承認必須。
+* F09：CDN配布で5分以内に`Stable`、失敗時は自動ロールバックし通知が届く。
+
+---
+
+## 3.8 フィーチャーフラグとロール
+
+* Flags：`enable_bulk_apply` `enable_browser_extension` `enable_ws_progress`。
+* ロール×操作行列：
+
+  * Viewer：閲覧のみ。Editor：F02–F06。Approver：F07–F08。Publisher：F09–F10。
+
+---
+
+## 3.9 メトリクス（作用の可視化）
+
+* 作業系：選択件数/セッション、差分行数、影響範囲中央値。
+* 品質系：回帰失敗率、ロールバック率、検出までの時間。
+* パフォーマンス：p95応答、スタイル再計算時間、CPU占有。
+
+---
+
+## 3.10 通知・決済（位置づけ）
+
+* 通知設定は「プロジェクト設定→通知」。Slack Webhookとメールの両方をテスト送信可。
+* 決済は管理コンソールのみ（SaaS課金）。アプリ本体には課金UIを置かない。

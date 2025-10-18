@@ -7,13 +7,11 @@ MOC依存関係分析スクリプト
 
 import ast
 import json
-import os
 import re
-import subprocess
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set
 
 
 @dataclass
@@ -314,16 +312,16 @@ def main():
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(report, f, indent=2, ensure_ascii=False)
 
-        print(f"\\n=== MOC依存関係分析完了 ===")
+        print("\\n=== MOC依存関係分析完了 ===")
         print(f"レポート保存先: {output_file}")
-        print(f"\\n概要:")
+        print("\\n概要:")
         print(f"  総依存関係数: {report['summary']['total_dependencies']}")
         print(f"  重要依存関係数: {report['summary']['critical_dependencies']}")
         print(f"  重要ファイル数: {report['summary']['critical_files']}")
         print(f"  競合数: {report['summary']['conflicts']}")
 
         if report["migration_recommendations"]:
-            print(f"\\n推奨事項:")
+            print("\\n推奨事項:")
             for rec in report["migration_recommendations"]:
                 print(f"  - {rec}")
 

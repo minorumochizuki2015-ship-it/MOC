@@ -1,0 +1,212 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:20251011-131551",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2025-10-11T13:15:51.654210",
+    "tools": [
+      {
+        "name": "build_release.ps1",
+        "version": "1.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "ORCH-Next",
+      "version": "1.0.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "fastapi",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "uvicorn[standard]",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "pydantic",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "sqlalchemy",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "httpx",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "requests",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "python-jose[cryptography]",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "passlib[bcrypt]",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "python-multipart",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "prometheus-client",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "structlog",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "websockets",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "sse-starlette",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "starlette",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "celery",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "redis",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "pytest",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "pytest-asyncio",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "pytest-cov",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "httpx",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "locust",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "jsonschema",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "black",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "isort",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "flake8",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "mypy",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "pre-commit",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "python-dotenv",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "pyyaml",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "click",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "rich",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "pathlib2",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "numpy",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "pandas",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "PyYAML",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "cryptography",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "Flask",
+      "version": "unknown"
+    },
+    {
+      "type": "library",
+      "name": "flask-socketio",
+      "version": "unknown"
+    }
+  ]
+}

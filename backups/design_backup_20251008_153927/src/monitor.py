@@ -113,7 +113,11 @@ class AIMonitor:
                 "error_rate": {"warning": 0.05, "critical": 0.10},
                 "task_queue_size": {"warning": 100, "critical": 500},
             },
-            "notifications": {"slack_webhook": None, "webhook_url": None, "email_enabled": False},
+            "notifications": {
+                "slack_webhook": None,
+                "webhook_url": None,
+                "email_enabled": False,
+            },
             "self_healing": {
                 "enabled": True,
                 "auto_restart": True,
@@ -595,8 +599,16 @@ class AIMonitor:
                     "text": alert.message,
                     "fields": [
                         {"title": "Metric", "value": alert.metric_name, "short": True},
-                        {"title": "Value", "value": f"{alert.current_value:.2f}", "short": True},
-                        {"title": "Threshold", "value": f"{alert.threshold:.2f}", "short": True},
+                        {
+                            "title": "Value",
+                            "value": f"{alert.current_value:.2f}",
+                            "short": True,
+                        },
+                        {
+                            "title": "Threshold",
+                            "value": f"{alert.threshold:.2f}",
+                            "short": True,
+                        },
                         {
                             "title": "Recovery",
                             "value": (
@@ -701,7 +713,8 @@ class AIMonitor:
         # Use unified connection helper to mitigate Windows file locks (WAL/busy_timeout)
         with self._connect() as conn:
             conn.execute(
-                "DELETE FROM health_metrics WHERE datetime(timestamp) < ?", (cutoff.isoformat(),)
+                "DELETE FROM health_metrics WHERE datetime(timestamp) < ?",
+                (cutoff.isoformat(),),
             )
             conn.execute(
                 "DELETE FROM alerts WHERE datetime(timestamp) < ? AND resolved = TRUE",

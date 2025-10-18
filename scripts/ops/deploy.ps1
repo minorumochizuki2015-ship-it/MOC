@@ -25,6 +25,9 @@ function Write-Log {
     Add-Content -Path $LogFile -Value $LogEntry
 }
 
+# ダッシュボードポート（環境変数 ORCH_PORT 優先、未設定時は 5001 を既定）
+$DashboardPort = if ($env:ORCH_PORT) { $env:ORCH_PORT } else { 5001 }
+
 function Test-Prerequisites {
     Write-Log "前提条件チェック開始"
     
@@ -156,9 +159,9 @@ function Start-Dashboard {
         # 起動確認（5秒待機）
         Start-Sleep -Seconds 5
         try {
-            $Response = Invoke-WebRequest -Uri "http://localhost:5000" -TimeoutSec 10
+            $Response = Invoke-WebRequest -Uri "http://localhost:$DashboardPort" -TimeoutSec 10
             if ($Response.StatusCode -eq 200) {
-                Write-Log "ダッシュボード起動確認完了 (http://localhost:5000)"
+                Write-Log "ダッシュボード起動確認完了 (http://localhost:$DashboardPort)"
             }
         } catch {
             Write-Log "ダッシュボード接続確認失敗: $($_.Exception.Message)" "WARN"
@@ -199,7 +202,7 @@ function Show-Status {
     
     # ポート確認
     try {
-        $Response = Invoke-WebRequest -Uri "http://localhost:5000" -TimeoutSec 5
+        $Response = Invoke-WebRequest -Uri "http://localhost:$DashboardPort" -TimeoutSec 5
         Write-Log "ダッシュボード: 正常 (HTTP $($Response.StatusCode))"
     } catch {
         Write-Log "ダッシュボード: 接続不可" "WARN"
@@ -247,7 +250,7 @@ try {
         Show-Status
         
         Write-Log "デプロイメント完了"
-        Write-Log "ダッシュボードURL: http://localhost:5000"
+        Write-Log "ダッシュボードURL: http://localhost:$DashboardPort"
         Write-Log "ログファイル: $LogFile"
         Write-Log "バックアップ: $BackupPath"
         

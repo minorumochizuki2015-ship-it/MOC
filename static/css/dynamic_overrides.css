@@ -1,0 +1,65 @@
+
+/* 動的スタイルオーバーライド - リアルタイム調整可能 */
+/* このファイルは自動生成されます */
+
+:root {
+  --dynamic-table-text: #ffffff;
+  --dynamic-table-bg: rgba(255,255,255,0.03);
+  --dynamic-table-header-text: #ffffff;
+  --dynamic-table-header-bg: rgba(255,255,255,0.08);
+  --dynamic-button-text: #ffffff;
+  --dynamic-nav-text: #d8e1ff;
+  --dynamic-accent: rgba(0, 234, 255, 1);
+  --dynamic-muted: #8aa0c8;
+}
+
+/* テーブル関連の動的スタイル */
+table th, table td {
+  color: var(--dynamic-table-text) !important;
+}
+
+table th {
+  background: var(--dynamic-table-header-bg) !important;
+  color: var(--dynamic-table-header-text) !important;
+}
+
+table td {
+  background: var(--dynamic-table-bg) !important;
+}
+
+/* ボタンの動的スタイル */
+.btn, button, td .btn, td button {
+  color: var(--dynamic-button-text) !important;
+}
+
+/* ナビゲーションの動的スタイル */
+.nav a {
+  color: var(--dynamic-nav-text) !important;
+}
+
+/* アクセントカラーの動的適用 */
+.nav a.active, .nav a:hover {
+  color: var(--dynamic-accent) !important;
+  border-color: var(--dynamic-accent) !important;
+}
+
+/* ミュートテキストの動的スタイル */
+.muted {
+  color: var(--dynamic-muted) !important;
+}
+
+/* 強制適用クラス */
+.force-white-text {
+  color: #ffffff !important;
+}
+
+.force-black-text {
+  color: #000000 !important;
+}
+
+.force-visible {
+  color: #ffffff !important;
+  background: rgba(0,0,0,0.8) !important;
+  padding: 2px 4px !important;
+  border-radius: 3px !important;
+}

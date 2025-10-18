@@ -25,6 +25,7 @@ def test_release_lock(dispatcher):
 def test_update_task_status(dispatcher):
     # First, insert a task directly into the database
     import sqlite3
+
     task = Task(
         "1",
         "Test Task",
@@ -34,7 +35,7 @@ def test_update_task_status(dispatcher):
         datetime.now(),
         datetime.now(),
     )
-    
+
     # Insert task into database
     with sqlite3.connect(dispatcher.db_path) as conn:
         conn.execute(
@@ -53,7 +54,6 @@ def test_update_task_status(dispatcher):
             ),
         )
         conn.commit()
-    
+
     # Now test update_task_status
     assert dispatcher.update_task_status("1", TaskStatus.DOING, "owner")
-

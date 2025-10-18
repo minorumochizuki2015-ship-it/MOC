@@ -1,0 +1,644 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スタイル管理システム - ORION Dashboard</title>
+    <link rel="stylesheet" href="/static/css/orion.css">
+    <link rel="stylesheet" href="/static/css/dynamic_overrides.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0a0f1a 0%, #1a2332 50%, #0f1419 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+            background: rgba(26, 35, 50, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            margin: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .sidebar {
+            width: 350px;
+            background: linear-gradient(180deg, #1a2332 0%, #0f1419 100%);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #2a3441;
+            border-radius: 12px 0 0 12px;
+            box-shadow: inset 0 0 20px rgba(0, 234, 255, 0.1);
+        }
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-radius: 0 12px 12px 0;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(90deg, #1a2332 0%, #2a3441 100%);
+            padding: 15px 20px;
+            border-bottom: 1px solid #2a3441;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .page-selection {
+            background: linear-gradient(90deg, #0f1419 0%, #1a2332 100%);
+            padding: 15px 20px;
+            border-bottom: 1px solid #2a3441;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .iframe-container {
+            flex: 1;
+            position: relative;
+            background: #ffffff;
+        }
+        #previewFrame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #selectionOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .element-highlight {
+            position: absolute;
+            border: 3px solid #00eaff;
+            background: rgba(0, 234, 255, 0.1);
+            pointer-events: none;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0, 234, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px rgba(0, 234, 255, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(0, 234, 255, 0.8); }
+            100% { box-shadow: 0 0 20px rgba(0, 234, 255, 0.5); }
+        }
+        .style-control {
+            margin: 12px 0;
+            padding: 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .style-control label {
+            display: block;
+            margin-bottom: 4px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .style-control input, .style-control select {
+            width: 100%;
+            padding: 8px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 6px;
+            color: #ffffff;
+            box-sizing: border-box;
+        }
+        .btn {
+            padding: 12px 18px;
+            border: 1px solid #00eaff;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(0,234,255,0.1) 0%, rgba(0,234,255,0.2) 100%);
+            color: #00eaff;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 234, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .btn:hover {
+            background: linear-gradient(135deg, rgba(0,234,255,0.2) 0%, rgba(0,234,255,0.3) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 234, 255, 0.3);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 234, 255, 0.2);
+        }
+        .edit-mode-buttons {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0;
+        }
+        .edit-mode-btn {
+            flex: 1;
+            padding: 8px 4px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: #8aa0c8;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .edit-mode-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
+        }
+        .edit-mode-btn.active {
+            background: rgba(0,234,255,0.2);
+            border-color: #00eaff;
+            color: #00eaff;
+        }
+        #selectionOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10000;
+        }
+        .element-highlight {
+            position: fixed;
+            border: 2px solid #00eaff;
+            background: rgba(0,234,255,0.1);
+            pointer-events: none;
+            z-index: 10001;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- サイドバー -->
+        <div class="sidebar">
+            <h2 style="margin: 0 0 20px 0; color: #00eaff;">🎨 スタイル管理システム</h2>
+            
+            <!-- ナビゲーション -->
+             <div style="margin-bottom: 20px;">
+                 <a href="/dashboard" style="color: #8aa0c8; text-decoration: none; margin-right: 15px; padding: 8px 16px; border-radius: 4px; transition: all 0.2s ease;">ダッシュボード</a>
+                 <a href="/tasks" style="color: #8aa0c8; text-decoration: none; margin-right: 15px; padding: 8px 16px; border-radius: 4px; transition: all 0.2s ease;">タスク</a>
+                 <a href="/style-manager" style="color: #00eaff; text-decoration: none; background: rgba(0,234,255,0.1); padding: 8px 16px; border-radius: 4px;">スタイル管理</a>
+             </div>
+
+            <!-- 接続設定（ベースURL） -->
+            <div style="margin-bottom: 20px;">
+                <h3 style="margin: 0 0 10px 0; color: #ffffff;">🔌 接続設定</h3>
+                <input id="baseUrlInput" placeholder="http://127.0.0.1:5001" style="width: 100%; padding: 8px; background: #2a3441; color: #ffffff; border: 1px solid #00eaff; border-radius: 6px;">
+                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <button id="saveBaseUrlBtn" class="btn" style="flex: 1; font-size: 11px;">💾 保存</button>
+                    <button id="pingBaseUrlBtn" class="btn" style="flex: 1; font-size: 11px;">📡 接続テスト</button>
+                </div>
+                <div id="baseUrlStatus" style="margin-top: 8px; font-size: 12px; color: #8aa0c8;">未設定（相対パスで接続）</div>
+            </div>
+
+            <!-- ページ選択 -->
+            <div style="margin-bottom: 20px;">
+                <h3 style="margin: 0 0 10px 0; color: #ffffff;">📄 ページ選択</h3>
+                <select id="pageSelect" style="width: 100%; padding: 8px; background: #2a3441; color: #ffffff; border: 1px solid #00eaff; border-radius: 6px; margin-bottom: 10px;">
+                    <option value="">ページを読み込み</option>
+                </select>
+                <button id="loadPageBtn" class="btn" style="width: 100%;">📖 ページを読み込み</button>
+            </div>
+
+            <!-- ライブ編集画面 -->
+            <div style="margin-bottom: 20px;">
+                <h3 style="margin: 0 0 10px 0; color: #ffffff;">🖥️ ライブ編集画面</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button id="compareBtn" class="btn" style="flex: 1; font-size: 11px;">📊 比較表示</button>
+                    <button id="resetViewBtn" class="btn" style="flex: 1; font-size: 11px;">🔄 ズームリセット</button>
+                </div>
+                <div id="editModeText" style="margin-top: 8px; padding: 8px; background: rgba(0,234,255,0.1); border-radius: 4px; font-size: 11px; color: #00eaff;">
+                    🎯 選択モード: 要素をクリックして選択してください
+                </div>
+            </div>
+
+            <!-- ビジュアル編集ツール -->
+            <div style="margin-bottom: 20px;">
+                <h3 style="margin: 0 0 10px 0; color: #ffffff;">🎨 ビジュアル編集ツール</h3>
+                <div class="edit-mode-buttons">
+                    <button id="selectModeBtn" class="edit-mode-btn active" onclick="setEditMode('select')">🎯 選択</button>
+                    <button id="colorModeBtn" class="edit-mode-btn" onclick="setEditMode('color')">🎨 色</button>
+                    <button id="textModeBtn" class="edit-mode-btn" onclick="setEditMode('text')">📝 文字</button>
+                    <button id="moveModeBtn" class="edit-mode-btn" onclick="setEditMode('move')">↔️ 移動</button>
+                </div>
+                <!-- 選択情報 -->
+                <div id="selectionInfo" style="display:none; font-size:12px; color:#8aa0c8; margin-top:8px;">
+                    選択: <span id="selTag"></span> <span id="selId"></span> <span id="selClass"></span>
+                </div>
+                <!-- 色編集ツール -->
+                <div id="colorTools" style="display:none; margin-top:10px;">
+                    <div class="style-control">
+                        <label>選択要素の文字色</label>
+                        <input type="color" id="selected_text_color" value="#ffffff">
+                    </div>
+                    <div class="style-control">
+                        <label>選択要素の背景色</label>
+                        <input type="color" id="selected_bg_color" value="#0a0f1a">
+                    </div>
+                    <button id="applySelectedColorsBtn" class="btn" style="width:100%;">🎨 適用</button>
+                </div>
+                <!-- 変更ログ -->
+                <div id="changeLog" style="margin-top:12px; font-size:12px; color:#8aa0c8;"></div>
+            </div>
+
+            <!-- 詳細設定 -->
+            <details style="margin-top: 16px;">
+                <summary style="cursor: pointer; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 8px; color: #ffffff;">⚙️ 詳細設定</summary>
+                
+                <div class="style-control">
+                    <label>テーブル文字色</label>
+                    <input type="color" id="table_text_color" value="#ffffff">
+                </div>
+                
+                <div class="style-control">
+                    <label>テーブル背景色</label>
+                    <input type="color" id="table_bg_color" value="#0a0f1a">
+                </div>
+                
+                <div class="style-control">
+                    <label>ボタン文字色</label>
+                    <input type="color" id="button_text_color" value="#ffffff">
+                </div>
+                
+                <div class="style-control">
+                    <label>ボタン背景色</label>
+        <input type="color" id="button_bg_color" value="#00eaff" data-sem-role="color-input" data-sem-intent="button_bg_color">
+                </div>
+            </details>
+
+            <!-- アクションボタン -->
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+        <button id="applyBtn" class="btn" style="flex: 1; background: rgba(0,234,255,0.2);" data-sem-role="apply-button" data-sem-intent="save-styles">✅ 適用</button>
+                <button id="resetBtn" class="btn" style="flex: 1; background: rgba(255,100,100,0.2); border-color: #ff6464; color: #ff6464;">🔄 リセット</button>
+            </div>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <div class="main-content">
+            <!-- ヘッダー -->
+            <div class="header">
+                <h1 style="margin: 0; color: #ffffff;">スタイル管理システム</h1>
+                <div style="color: #8aa0c8;">リアルタイム編集</div>
+            </div>
+
+            <!-- ページ選択エリア -->
+            <div class="page-selection">
+                <div style="color: #8aa0c8; font-size: 14px;">
+                    左側でページを選択し、読み込みボタンを押してください
+                </div>
+            </div>
+
+            <!-- iframe表示エリア -->
+            <div class="iframe-container" style="display: none;">
+                <iframe id="previewFrame" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- 選択オーバーレイ -->
+    <div id="selectionOverlay"></div>
+
+    <script>
+        let currentStyles = {};
+        let originalValues = {};
+        let currentEditMode = 'select';
+        let selectedElement = null;
+
+        // --- 接続設定ヘルパー ---
+        function getBaseUrl() {
+            return localStorage.getItem('STYLE_BASE_URL') || '';
+        }
+        function setBaseUrl(url) {
+            localStorage.setItem('STYLE_BASE_URL', (url || '').trim());
+            updateBaseUrlStatus();
+        }
+        function api(path) {
+            const base = getBaseUrl();
+            if (!base) return path;
+            return base.replace(/\/$/, '') + path;
+        }
+        function updateBaseUrlStatus() {
+            const base = getBaseUrl();
+            const el = document.getElementById('baseUrlStatus');
+            if (!el) return;
+            el.textContent = base ? `接続先: ${base}` : '未設定（相対パスで接続）';
+        }
+        async function pingBaseUrl() {
+            const base = getBaseUrl();
+            const el = document.getElementById('baseUrlStatus');
+            if (!base) { el.textContent = '未設定（相対パスで接続）'; return; }
+            try {
+                const res = await fetch(api('/api/pages'));
+                el.textContent = res.ok ? `到達性OK: ${base}` : `到達性NG(${res.status}): ${base}`;
+            } catch (e) {
+                el.textContent = `接続エラー: ${base}`;
+            }
+        }
+
+        // ページ読み込み時の初期化
+        window.onload = function() {
+            // ベースURL初期値
+            const input = document.getElementById('baseUrlInput');
+            if (input) { input.value = getBaseUrl(); }
+            updateBaseUrlStatus();
+            loadCurrentStyles();
+            loadAvailablePages();
+            setupEventListeners();
+        };
+
+        function loadCurrentStyles() {
+            fetch(api('/api/styles'))
+                .then(response => response.json())
+                .then(data => {
+                    currentStyles = data;
+                    originalValues = {...data};
+                    updateInputs(data);
+                    console.log('スタイルを読み込みました');
+                })
+                .catch(error => {
+                    console.error('スタイル読み込みエラー:', error);
+                });
+        }
+
+        function loadAvailablePages() {
+            fetch(api('/api/pages'))
+                .then(response => response.json())
+                .then(pages => {
+                    const select = document.getElementById('pageSelect');
+                    select.innerHTML = '<option value="">ページを選択...</option>';
+                    
+                    pages.forEach(page => {
+                        const option = document.createElement('option');
+                        option.value = page.url;
+                        option.textContent = `${page.name} - ${page.description}`;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('ページ一覧の読み込みエラー:', error);
+                });
+        }
+
+        function setupEventListeners() {
+            document.getElementById('loadPageBtn').addEventListener('click', loadSelectedPage);
+            document.getElementById('applyBtn').addEventListener('click', applyStyles);
+            document.getElementById('resetBtn').addEventListener('click', resetStyles);
+            const saveBtn = document.getElementById('saveBaseUrlBtn');
+            const pingBtn = document.getElementById('pingBaseUrlBtn');
+            const input = document.getElementById('baseUrlInput');
+            if (saveBtn && input) {
+                saveBtn.addEventListener('click', () => setBaseUrl(input.value));
+            }
+            if (pingBtn) {
+                pingBtn.addEventListener('click', pingBaseUrl);
+            }
+            bindSelectedStyleInputs();
+        }
+
+        function loadSelectedPage() {
+            const select = document.getElementById('pageSelect');
+            const selectedUrl = select.value;
+            
+            if (!selectedUrl) {
+                alert('ページを選択してください');
+                return;
+            }
+
+            const iframe = document.getElementById('previewFrame');
+            const container = document.querySelector('.iframe-container');
+            
+            const base = getBaseUrl();
+            const full = base ? base.replace(/\/$/, '') + selectedUrl : (window.location.origin + selectedUrl);
+            iframe.src = '/preview?target=' + encodeURIComponent(full);
+            container.style.display = 'block';
+            
+            iframe.onload = function() {
+                try {
+                    setupIframeInteraction();
+                    console.log('ページを読み込みました:', selectedUrl);
+                } catch (error) {
+                    console.error('iframe設定エラー:', error);
+                }
+            };
+        }
+
+        function setupIframeInteraction() {
+            const iframe = document.getElementById('previewFrame');
+            if (!iframe) return;
+            
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            if (!iframeDoc) return;
+            
+            const allElements = iframeDoc.querySelectorAll('*');
+            allElements.forEach(element => {
+                element.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    selectElement(element);
+                });
+                
+                element.addEventListener('mouseenter', function(e) {
+                    if (element.tagName !== 'HTML' && element.tagName !== 'BODY') {
+                        element.style.outline = '2px solid #00eaff';
+                        element.style.outlineOffset = '2px';
+                    }
+                });
+                
+                element.addEventListener('mouseleave', function(e) {
+                    element.style.outline = '';
+                    element.style.outlineOffset = '';
+                });
+            });
+        }
+
+        function selectElement(element) {
+            selectedElement = element;
+            console.log('要素を選択しました:', element.tagName, element.className);
+            
+            // 選択ハイライトを表示
+            showElementSelection(element);
+            // 選択情報更新
+            updateSelectionInfoPanel();
+            // 色ツール初期値反映
+            showColorTools(element);
+        }
+
+        function showElementSelection(element) {
+            const iframe = document.getElementById('previewFrame');
+            const overlay = document.getElementById('selectionOverlay');
+            
+            if (!iframe || !overlay) return;
+            
+            const rect = element.getBoundingClientRect();
+            const iframeRect = iframe.getBoundingClientRect();
+            
+            overlay.innerHTML = '';
+            
+            const highlight = document.createElement('div');
+            highlight.className = 'element-highlight';
+            highlight.style.left = (rect.left + iframeRect.left) + 'px';
+            highlight.style.top = (rect.top + iframeRect.top) + 'px';
+            highlight.style.width = rect.width + 'px';
+            highlight.style.height = rect.height + 'px';
+            
+            overlay.appendChild(highlight);
+        }
+
+        function setEditMode(mode) {
+            currentEditMode = mode;
+            
+            document.querySelectorAll('.edit-mode-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(mode + 'ModeBtn').classList.add('active');
+            
+            const modeTexts = {
+                'select': '🎯 選択モード: 要素をクリックして選択してください',
+                'color': '🎨 色編集モード: 要素を選択して色を変更してください',
+                'text': '📝 文字編集モード: テキスト要素を選択してフォントを調整してください',
+                'move': '↔️ 移動モード: 要素をドラッグして位置を変更してください'
+            };
+            document.getElementById('editModeText').textContent = modeTexts[mode];
+
+            // ツールの表示切替
+            const colorTools = document.getElementById('colorTools');
+            if (colorTools) colorTools.style.display = (mode === 'color') ? 'block' : 'none';
+        }
+
+        function updateInputs(styles) {
+            Object.keys(styles).forEach(key => {
+                const input = document.getElementById(key);
+                if (input) {
+                    input.value = styles[key];
+                }
+            });
+        }
+
+        function applyStyles() {
+            const inputs = document.querySelectorAll('.style-control input');
+            const styles = {};
+            
+            inputs.forEach(input => {
+                styles[input.id] = input.value;
+            });
+            
+            fetch(api('/api/styles'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ styles })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('スタイルを適用しました');
+                // ページをリロードして変更を反映
+                const iframe = document.getElementById('previewFrame');
+                if (iframe.src) {
+                    iframe.src = iframe.src;
+                }
+            })
+            .catch(error => {
+                console.error('スタイル適用エラー:', error);
+            });
+        }
+
+        function resetStyles() {
+            fetch(api('/api/styles/reset'), {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('スタイルをリセットしました');
+                loadCurrentStyles();
+                // ページをリロードして変更を反映
+                const iframe = document.getElementById('previewFrame');
+                if (iframe.src) {
+                    iframe.src = iframe.src;
+                }
+            })
+            .catch(error => {
+                console.error('スタイルリセットエラー:', error);
+            });
+        }
+
+        // --- 選択情報＆色編集 ---
+        let modifications = [];
+
+        function updateSelectionInfoPanel() {
+            const info = document.getElementById('selectionInfo');
+            const tag = document.getElementById('selTag');
+            const id = document.getElementById('selId');
+            const cls = document.getElementById('selClass');
+            if (!selectedElement || !info) return;
+            info.style.display = 'block';
+            tag.textContent = selectedElement.tagName.toLowerCase();
+            id.textContent = selectedElement.id ? ('#' + selectedElement.id) : '';
+            cls.textContent = selectedElement.className ? ('.' + selectedElement.className.replace(/\s+/g, '.')) : '';
+        }
+
+        function showColorTools(element) {
+            const colorTools = document.getElementById('colorTools');
+            if (!colorTools || !element) return;
+            const cs = (element.ownerDocument.defaultView || window).getComputedStyle(element);
+            const textInp = document.getElementById('selected_text_color');
+            const bgInp = document.getElementById('selected_bg_color');
+            if (textInp) textInp.value = rgbToHex(cs.color);
+            if (bgInp) bgInp.value = rgbToHex(cs.backgroundColor);
+        }
+
+        function bindSelectedStyleInputs() {
+            const btn = document.getElementById('applySelectedColorsBtn');
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    if (!selectedElement) { alert('要素を選択してください'); return; }
+                    const textColor = document.getElementById('selected_text_color').value;
+                    const bgColor = document.getElementById('selected_bg_color').value;
+                    selectedElement.style.color = textColor;
+                    selectedElement.style.backgroundColor = bgColor;
+                    logModification(selectedElement, { color: textColor, backgroundColor: bgColor });
+                });
+            }
+        }
+
+        function logModification(element, styles) {
+            const selector = buildSelector(element);
+            modifications.push({ selector, styles, time: new Date().toLocaleTimeString() });
+            const log = document.getElementById('changeLog');
+            if (log) {
+                log.innerHTML = modifications.slice(-10).map(m => `# ${m.time} ${m.selector} → ${JSON.stringify(m.styles)}`).join('<br>');
+            }
+            console.log('変更ログ:', selector, styles);
+        }
+
+        function buildSelector(el) {
+            if (!el) return '';
+            const tag = el.tagName.toLowerCase();
+            const id = el.id ? ('#' + el.id) : '';
+            const cls = el.className ? ('.' + el.className.trim().replace(/\s+/g, '.')) : '';
+            return tag + id + cls;
+        }
+
+        function rgbToHex(rgb) {
+            if (!rgb) return '#000000';
+            const m = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+            if (!m) return '#000000';
+            const r = parseInt(m[1]).toString(16).padStart(2, '0');
+            const g = parseInt(m[2]).toString(16).padStart(2, '0');
+            const b = parseInt(m[3]).toString(16).padStart(2, '0');
+            return `#${r}${g}${b}`;
+        }
+    </script>
+</body>
+</html>
+

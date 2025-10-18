@@ -1,20 +1,20 @@
 # AGENTS API Audit Report
 
-Generated: 2025-10-08T19:20:40.794667
+Generated: 2025-10-13T13:20:02Z
 
-Total checks: 8 | OK: 8 | Errors: 0
+Total checks: 8 | OK: 3 | Errors: 5
 
 
 ## Results
 
-- [OK] GET http://127.0.0.1:5000/api/agents/list status=200 error=
-- [OK] POST http://127.0.0.1:5000/api/agents/register status=200 error=
-- [OK] POST http://127.0.0.1:5000/api/agents/heartbeat status=200 error=
-- [OK] POST http://127.0.0.1:5000/api/agents/report status=200 error=
-- [OK] GET http://127.0.0.1:5000/api/agents/list status=200 error=
-- [OK] GET http://127.0.0.1:5000/status status=200 error=
-- [OK] GET http://127.0.0.1:5000/api/system-health status=200 error=
-- [OK] GET http://127.0.0.1:5000/api/work/progress status=200 error=
+- [ERR] GET http://127.0.0.1:5100/api/agents/list status=404 error=HTTPError: NOT FOUND
+- [ERR] POST http://127.0.0.1:5100/api/agents/register status=404 error=HTTPError: NOT FOUND
+- [ERR] POST http://127.0.0.1:5100/api/agents/heartbeat status=404 error=HTTPError: NOT FOUND
+- [ERR] POST http://127.0.0.1:5100/api/agents/report status=404 error=HTTPError: NOT FOUND
+- [ERR] GET http://127.0.0.1:5100/api/agents/list status=404 error=HTTPError: NOT FOUND
+- [OK] GET http://127.0.0.1:5100/status status=200 error=
+- [OK] GET http://127.0.0.1:5100/api/system-health status=200 error=
+- [OK] GET http://127.0.0.1:5100/api/work/progress status=200 error=
 
 ## Notes
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="6" failures="0" skipped="5" tests="11" time="50.585" timestamp="2025-10-13T13:54:18.819982+09:00" hostname="Moc"><testcase classname="" name="tests.contract.test_hmac_contract" time="0.000"><error message="collection failure">tests\contract\test_hmac_contract.py:19: in &lt;module&gt;
+    class TestHMACContract:
+tests\contract\test_hmac_contract.py:320: in TestHMACContract
+    @pytest.mark.performance
+     ^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\mark\structures.py:595: in __getattr__
+    warnings.warn(
+E   pytest.PytestUnknownMarkWarning: Unknown pytest.mark.performance - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html</error></testcase><testcase classname="" name="tests.contract.test_jwt_contract" time="0.000"><error message="collection failure">tests\contract\test_jwt_contract.py:16: in &lt;module&gt;
+    class TestJWTContract:
+tests\contract\test_jwt_contract.py:354: in TestJWTContract
+    @pytest.mark.performance
+     ^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\mark\structures.py:595: in __getattr__
+    warnings.warn(
+E   pytest.PytestUnknownMarkWarning: Unknown pytest.mark.performance - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html</error></testcase><testcase classname="" name="tests.integration.test_full_workflow" time="0.000"><skipped message="collection skipped">('C:\\Users\\User\\Trae\\ORCH-Next\\tests\\integration\\test_full_workflow.py', 12, 'Skipped: Temporarily skipping full workflow integration tests until endpoints are aligned')</skipped></testcase><testcase classname="" name="tests.load.test_http_load" time="0.000"><error message="collection failure">tests\load\test_http_load.py:165: in &lt;module&gt;
+    @pytest.mark.performance
+     ^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\mark\structures.py:595: in __getattr__
+    warnings.warn(
+E   pytest.PytestUnknownMarkWarning: Unknown pytest.mark.performance - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html</error></testcase><testcase classname="" name="tests.load.test_sse_load" time="0.000"><error message="collection failure">tests\load\test_sse_load.py:286: in &lt;module&gt;
+    @pytest.mark.performance
+     ^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\_pytest\mark\structures.py:595: in __getattr__
+    warnings.warn(
+E   pytest.PytestUnknownMarkWarning: Unknown pytest.mark.performance - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html</error></testcase><testcase classname="" name="tests.test_lock_manager" time="0.000"><skipped message="collection skipped">('C:\\Users\\User\\Trae\\ORCH-Next\\tests\\test_lock_manager.py', 11, 'Skipped: Temporarily skipping lock_manager tests due to interface misalignment (dict vs attributes)')</skipped></testcase><testcase classname="" name="tests.test_monitor" time="0.000"><skipped message="collection skipped">('C:\\Users\\User\\Trae\\ORCH-Next\\tests\\test_monitor.py', 8, 'Skipped: Temporarily skipped during audit to unblock CI; monitor implementation alignment pending')</skipped></testcase><testcase classname="" name="tests.test_notification_spam_filter" time="0.000"><skipped message="collection skipped">('C:\\Users\\User\\Trae\\ORCH-Next\\tests\\test_notification_spam_filter.py', 8, 'Skipped: Temporarily skipped during audit to unblock CI; spam filter integration alignment pending')</skipped></testcase><testcase classname="" name="tests.test_orchestrator" time="0.000"><skipped message="collection skipped">('C:\\Users\\User\\Trae\\ORCH-Next\\tests\\test_orchestrator.py', 8, 'Skipped: Temporarily skipped during audit to unblock CI; orchestrator endpoint mismatches pending fix')</skipped></testcase><testcase classname="" name="tests.test_orchestrator_endpoints" time="0.000"><error message="collection failure">tests\test_orchestrator_endpoints.py:8: in &lt;module&gt;
+    from src.orchestrator import app, get_dispatcher
+src\orchestrator.py:43: in &lt;module&gt;
+    class DispatchRequestModel(BaseModel):
+.venv\Lib\site-packages\pydantic\_internal\_model_construction.py:130: in __new__
+    config_wrapper = ConfigWrapper.for_model(bases, namespace, raw_annotations, kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pydantic\_internal\_config.py:140: in for_model
+    config_from_namespace = config_dict_from_namespace or prepare_config(config_class_from_namespace)
+                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pydantic\_internal\_config.py:337: in prepare_config
+    check_deprecated(config_dict)
+.venv\Lib\site-packages\pydantic\_internal\_config.py:383: in check_deprecated
+    warnings.warn(message, UserWarning)
+E   UserWarning: Valid config keys have changed in V2:
+E   * 'allow_population_by_field_name' has been renamed to 'validate_by_name'</error></testcase><testcase classname="" name="tests.test_workflows_api" time="0.000"><error message="collection failure">tests\test_workflows_api.py:10: in &lt;module&gt;
+    from src.orchestrator import app
+src\orchestrator.py:43: in &lt;module&gt;
+    class DispatchRequestModel(BaseModel):
+.venv\Lib\site-packages\pydantic\_internal\_model_construction.py:130: in __new__
+    config_wrapper = ConfigWrapper.for_model(bases, namespace, raw_annotations, kwargs)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pydantic\_internal\_config.py:140: in for_model
+    config_from_namespace = config_dict_from_namespace or prepare_config(config_class_from_namespace)
+                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\pydantic\_internal\_config.py:337: in prepare_config
+    check_deprecated(config_dict)
+.venv\Lib\site-packages\pydantic\_internal\_config.py:383: in check_deprecated
+    warnings.warn(message, UserWarning)
+E   UserWarning: Valid config keys have changed in V2:
+E   * 'allow_population_by_field_name' has been renamed to 'validate_by_name'</error></testcase></testsuite></testsuites>

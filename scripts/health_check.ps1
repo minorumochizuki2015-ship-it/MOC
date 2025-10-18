@@ -65,7 +65,7 @@ function Get-SystemMetrics {
         
         # ネットワーク接続
         try {
-            $DashboardResponse = Invoke-WebRequest -Uri "http://localhost:5000" -TimeoutSec 5 -UseBasicParsing
+            $DashboardResponse = Invoke-WebRequest -Uri "http://localhost:5001" -TimeoutSec 5 -UseBasicParsing
             $Metrics.dashboard_status = "OK"
             $Metrics.dashboard_response_code = $DashboardResponse.StatusCode
         } catch {

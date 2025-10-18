@@ -1,0 +1,11 @@
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: Content-Type, Authorization, X-Style-Base-Url
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: X-Preview-Origin, X-Preview-Target, X-Upstream-Status, X-Disable-ServiceWorker, X-Preview-Same-Origin, ETag
+Content-Length: 93
+Content-Type: application/json
+Date: Fri, 17 Oct 2025 14:51:02 GMT
+Server: waitress
+
+{"app_id":1747366919056,"routes_count":38,"status":"ok","time":"2025-10-17T23:51:02.660459"}

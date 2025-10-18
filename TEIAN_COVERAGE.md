@@ -1,0 +1,21 @@
+提案ID | 期待成果物/挙動 | 実装根拠(ファイル#行) | テスト根拠(ファイル#行) | 状態(済/未/部分) | 備考
+---|---|---|---|---|---
+SSE-Accel-NoBuffer | SSE応答で X-Accel-Buffering: no を常時付与し、Content-Type: text/event-stream を返す | src/blueprints/sse_routes.py#542, #613; src/realtime_dashboard.py#293, #348, #372, #414 | tests/test_sse_headers.py 全体; tests/unit/test_realtime_dashboard.py#156-157 | 済 | ブループリント登録済み（dashboard.py#34-40）。
+SSE-Cache-NoCache | SSE応答で Cache-Control: no-cache を付与 | src/blueprints/sse_routes.py#540, #611; src/realtime_dashboard.py#291, #345, #370, #412 | tests/test_sse_headers.py 全体 | 済 | 推奨ヘッダ（no-cache/keep-alive）。
+Preview-NoStore-Headers | /preview 成功時に Cache-Control: no-store と X-Preview-* を付与 | src/dashboard.py#140, #150, #176, #358, #378; src/realtime_dashboard.py#151, #434, #479, #615, #634 | tests/test_preview_headers.py#73-77, #92-96; tests/e2e/test_preview_e2e.py#46-49 | 済 | 同一オリジン化・ヘッダ露出を確認。
+CORS-Credentials-ExplicitOrigin | Originあり時は Allow-Origin を明示オリジンに、Vary: Origin を付与、Allow-Credentials: true | src/dashboard.py#55-61, #96-99; src/realtime_dashboard.py#182-190 | tests/test_preview_headers.py（ヘッダ露出と併検証） | 済 | 資格情報付きCORSで * は不可。Vary追加でキャッシュ整合。
+Expose-Headers-Unify | Access-Control-Expose-Headers に X-Preview-* を OPTIONSだけでなく本応答（200/400/502）にも常時付与 | src/dashboard.py#67-68, #105-106; src/realtime_dashboard.py#194-195 | tests/test_preview_headers.py#92-96; tests/e2e/test_preview_e2e.py#46-49 | 済 | 監査P0修正。X-Preview-Same-Origin を追加。
+Preview-SameOrigin-Flag | /preview 同一ホスト転送時に X-Preview-Same-Origin: true を付与 | src/dashboard.py#362; src/realtime_dashboard.py#171, #619 | tests/test_preview_headers.py#77; tests/e2e/test_preview_e2e.py#49 | 済 | ServiceWorker干渉抑止にも寄与。
+SSE-Blueprint-Registration | SSEブループリント（/events, /events/health, /events/stats）をアプリに登録 | src/dashboard.py#34-40; src/blueprints/sse_routes.py#377-424 | tests/test_sse_headers.py 全体; tests/unit/test_realtime_dashboard.py#152-157 | 済 | 初期化時に登録ログ出力あり。
+StyleManager-PreviewRewrite | /preview 経由で base/src/href の書換えにより同一オリジンで表示 | src/dashboard.py#123-192（/preview 処理全般） | tests/test_style_manager_route.py#26-32 | 済 | iframe 同一オリジン化（style_manager.py#1813）。
+Health-Endpoint-200 | /healthz が 200 を返却 | src/dashboard.py（ヘルス定義箇所）/既存; realtime_dashboard.py#148-152（/health） | 手動P0検査（iwr） | 済 | 実地検査で200確認。
+CORS-Preflight-MaxAge | OPTIONS プリフライト応答に Access-Control-Max-Age: 600 を付与 | src/utils/headers.py#apply_options_cors_headers | tests/api/test_cors_preflight_options.py#1-37（Max-Age 検証追加） | 済 | 監査是正（P0）。プリフライト削減による安定性向上。
+Server-Unify-Waitress | ダッシュボードの本番起動を Waitress に統一し、Server ヘッダが waitress になること | src/dashboard.py#2024 | 手動P0検査（curl -I /healthz の Server ヘッダ） | 済 | requirements.txt に waitress を追加。ORCH_USE_WERKZEUG=0 が既定。scripts/ops/install_orch_dashboard_service.ps1 によるサービス化手順を用意。
+
+継続監査（P1／常設） | 期待成果物/挙動 | 実装根拠(ファイル#行) | テスト根拠(ファイル#行) | 状態 | 備考
+---|---|---|---|---|---
+Expose-Regression-Nightly | 各ブラウザ行列で fetch(...).headers.get('X-Preview-*') と ETag が取得できること | src/utils/headers.py#EXPOSE_HEADERS | playwright/tests/e2e-headers.spec.ts | 済 | CIナイトリー常設（.github/workflows/playwright-nightly.yml）。
+Header-Logic-Commonize | dashboard.py/realtime_dashboard.py の after_request と /preview ヘッダ付与処理を共通ヘッパへ集約 | src/utils/headers.py#1-139, src/dashboard.py#39-59（_apply_common_headers, OPTIONS handler）, src/realtime_dashboard.py#141-160（_apply_common_headers） | tests/test_preview_headers.py, tests/test_style_manager_route.py::test_preview_proxy_rewrites | 済 | 重複削減・一貫性向上（Expose/CORS/Preview）。
+CORS-Expose-Consistency | OPTIONS（プリフライト）と通常レスポンスで Access-Control-Expose-Headers と CORS の一貫性を担保 | src/utils/headers.py#1-139, src/dashboard.py#39-59 | tests/test_cors_expose_headers.py | 済 | 監査P0フォローアップ。
+Preview-Missing-Target | /preview?target 未指定時も X-Preview-* が露出し、no-store が適用される | src/dashboard.py#100-188, src/utils/headers.py#1-139 | tests/test_preview_missing_target.py | 済 | 空ターゲット時の安定化。
+Nightly-E2E-Audit | ヘッダ監査をナイトリー行列へ常設 | .github/workflows/playwright-nightly.yml | playwright/tests/e2e-headers.spec.ts, playwright/tests/e2e-sse.spec.ts | 済 | 失敗時は Playwright レポートに記録（Artifacts に保存／observability/ui に差分JSONを保存）。

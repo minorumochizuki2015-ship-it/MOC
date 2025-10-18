@@ -4,10 +4,7 @@ Integration tests for ORCH-Next system
 Tests the interaction between different components
 """
 
-import asyncio
-import os
 import sys
-import time
 from pathlib import Path
 
 # Add src to path
@@ -52,7 +49,10 @@ def test_system_integration():
         # Test user creation and authentication
         print("  👤 Testing user management...")
         user = security_manager.create_user(
-            "integration_user", "test@integration.com", "secure_password123", UserRole.OPERATOR
+            "integration_user",
+            "test@integration.com",
+            "secure_password123",
+            UserRole.OPERATOR,
         )
         assert user is not None
         print("  ✅ User creation successful")
@@ -168,7 +168,7 @@ def test_error_handling():
     print("🛡️ Testing error handling...")
 
     try:
-        from lock_manager import LockManager, LockPriority, LockRequest
+        from lock_manager import LockManager
         from security import SecurityManager, UserRole
 
         # Test invalid operations

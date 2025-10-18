@@ -12,7 +12,6 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import jwt
 import pytest
 from fastapi import HTTPException
 from fastapi.security import HTTPAuthorizationCredentials
@@ -23,17 +22,16 @@ from src.security import (
     User,
     UserRole,
     get_current_user,
-    get_security_manager,
     require_role,
 )
 
 
 class TestSecurityManager:
-
     @pytest.fixture
     def temp_db_path(self):
         """Create temporary database path for testing (Windows lock-safe)"""
         import os
+
         fd, path = tempfile.mkstemp(suffix=".db")
         # Close the file descriptor immediately to avoid Windows file locking issues
         os.close(fd)
@@ -46,6 +44,7 @@ class TestSecurityManager:
             except PermissionError:
                 import sqlite3
                 import time
+
                 try:
                     # Ensure no WAL checkpoints are pending
                     conn = sqlite3.connect(path)
@@ -65,7 +64,11 @@ class TestSecurityManager:
         """Test security configuration"""
         return {
             "database": {"path": temp_db_path},
-            "jwt": {"secret_key": "test-jwt-secret-key", "algorithm": "HS256", "expiry_hours": 24},
+            "jwt": {
+                "secret_key": "test-jwt-secret-key",
+                "algorithm": "HS256",
+                "expiry_hours": 24,
+            },
             "webhook": {"secret": "test-webhook-secret", "time_tolerance": 120},
             "rate_limits": {
                 "rules": [
@@ -266,20 +269,20 @@ class TestSecurityManager:
         # Use current timestamp for embedded timestamp in payload
         current_timestamp = datetime.utcnow().isoformat() + "Z"
         payload_dict = {"test": "data", "timestamp": current_timestamp}
-        
+
         # Create canonical JSON payload (sorted keys, no spaces)
         canonical_payload = json.dumps(payload_dict, sort_keys=True, separators=(",", ":"))
-        payload_bytes = canonical_payload.encode('utf-8')
+        payload_bytes = canonical_payload.encode("utf-8")
 
         # Create valid signature using canonical payload
         signature = hmac.new(
-            security_manager.webhook_secret.encode("utf-8"), payload_bytes, hashlib.sha256
+            security_manager.webhook_secret.encode("utf-8"),
+            payload_bytes,
+            hashlib.sha256,
         ).hexdigest()
 
         # Verify signature (no external timestamp needed due to embedded timestamp)
-        is_valid = security_manager.verify_hmac_signature(
-            payload_bytes, f"sha256={signature}"
-        )
+        is_valid = security_manager.verify_hmac_signature(payload_bytes, f"sha256={signature}")
         assert is_valid is True
 
     def test_hmac_signature_verification_invalid(self, security_manager):
@@ -295,12 +298,12 @@ class TestSecurityManager:
         # Create canonical JSON payload
         payload_dict = {"test": "data"}
         canonical_payload = json.dumps(payload_dict, sort_keys=True, separators=(",", ":"))
-        payload_bytes = canonical_payload.encode('utf-8')
+        payload_bytes = canonical_payload.encode("utf-8")
 
         # Test with old timestamp (beyond tolerance) using contract-style format
         old_timestamp = (datetime.utcnow() - timedelta(seconds=300)).isoformat() + "Z"
         # Create signature for old timestamp using timestamp.payload format
-        old_message = f"{old_timestamp}.{canonical_payload}".encode('utf-8')
+        old_message = f"{old_timestamp}.{canonical_payload}".encode("utf-8")
         old_signature = hmac.new(
             security_manager.webhook_secret.encode("utf-8"), old_message, hashlib.sha256
         ).hexdigest()
@@ -312,9 +315,11 @@ class TestSecurityManager:
         # Test with recent timestamp (within tolerance) using contract-style format
         recent_timestamp = (datetime.utcnow() - timedelta(seconds=60)).isoformat() + "Z"
         # Create signature for recent timestamp using timestamp.payload format
-        recent_message = f"{recent_timestamp}.{canonical_payload}".encode('utf-8')
+        recent_message = f"{recent_timestamp}.{canonical_payload}".encode("utf-8")
         recent_signature = hmac.new(
-            security_manager.webhook_secret.encode("utf-8"), recent_message, hashlib.sha256
+            security_manager.webhook_secret.encode("utf-8"),
+            recent_message,
+            hashlib.sha256,
         ).hexdigest()
         is_valid = security_manager.verify_hmac_signature(
             payload_bytes, f"t={recent_timestamp},v1={recent_signature}"
@@ -486,7 +491,6 @@ class TestSecurityManager:
 
 
 class TestFastAPIIntegration:
-
     @pytest.fixture
     def mock_security_manager(self):
         """Mock security manager for FastAPI tests"""
@@ -567,7 +571,6 @@ class TestFastAPIIntegration:
 
 
 class TestRateLimitRule:
-
     def test_rate_limit_rule_creation(self):
         """Test RateLimitRule creation"""
         rule = RateLimitRule(
@@ -586,7 +589,6 @@ class TestRateLimitRule:
 
 
 class TestUserRole:
-
     def test_user_role_enum(self):
         """Test UserRole enum values"""
         assert UserRole.ADMIN.value == "admin"

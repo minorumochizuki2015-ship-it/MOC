@@ -6,10 +6,11 @@ Implements HMAC signature verification, JWT authentication, and rate limiting
 
 import hashlib
 import hmac
+import inspect
 import json
 import logging
 import sqlite3
-import time
+from contextlib import closing
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from enum import Enum
@@ -19,7 +20,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import bcrypt
 import jwt
-from fastapi import Depends, HTTPException, Request
+from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 logger = logging.getLogger(__name__)
@@ -105,11 +106,13 @@ class SecurityManager:
         """Initialize security database schema"""
         # For in-memory databases, use the persistent connection if available
         if str(self.db_path) == ":memory:" and hasattr(self, "_conn") and self._conn:
-            conn = self._conn
-            self._init_database_connection(conn)
+            # Use context management to ensure transactional consistency
+            with self._conn:
+                self._init_database_connection(self._conn)
         else:
-            with self._connect() as conn:
-                self._init_database_connection(conn)
+            with closing(self._connect()) as conn:
+                with conn:
+                    self._init_database_connection(conn)
 
     def _connect(self):
         """Create SQLite connection with WAL and sane timeouts (Windows lock mitigation)."""
@@ -229,7 +232,7 @@ class SecurityManager:
             "CREATE INDEX IF NOT EXISTS idx_security_events_ip_timestamp ON security_events(ip_address, timestamp)"
         )
 
-        conn.commit()
+        # Transaction committed by the surrounding connection context manager
 
     def _load_rate_limits(self, config: Dict[str, Any]) -> List[RateLimitRule]:
         """Load rate limiting rules from configuration"""
@@ -273,28 +276,42 @@ class SecurityManager:
         try:
             # Use persistent connection for in-memory databases
             if str(self.db_path) == ":memory:" and self._conn:
-                cursor = self._conn.cursor()
-                cursor.execute(
-                    """
-                    INSERT INTO users (user_id, username, email, password_hash, role, created_at)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                """,
-                    (user_id, username, email, password_hash, role.value, now.isoformat()),
-                )
-                self._conn.commit()
-            else:
-                with sqlite3.connect(self.db_path) as conn:
-                    cursor = conn.cursor()
-
+                # Manage transaction via connection context manager
+                with self._conn:
+                    cursor = self._conn.cursor()
                     cursor.execute(
                         """
                         INSERT INTO users (user_id, username, email, password_hash, role, created_at)
-                    VALUES (?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?)
                     """,
-                        (user_id, username, email, password_hash, role.value, now.isoformat()),
+                        (
+                            user_id,
+                            username,
+                            email,
+                            password_hash,
+                            role.value,
+                            now.isoformat(),
+                        ),
                     )
-
-                    conn.commit()
+            else:
+                # Use unified connection helper with WAL/busy_timeout settings
+                with closing(self._connect()) as conn:
+                    with conn:
+                        cursor = conn.cursor()
+                        cursor.execute(
+                            """
+                            INSERT INTO users (user_id, username, email, password_hash, role, created_at)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                        """,
+                            (
+                                user_id,
+                                username,
+                                email,
+                                password_hash,
+                                role.value,
+                                now.isoformat(),
+                            ),
+                        )
 
             self._log_security_event(
                 "user_created",
@@ -324,123 +341,309 @@ class SecurityManager:
     ) -> Optional[User]:
         """Authenticate user with username/password"""
         try:
-            # Use _connect() to apply WAL and busy timeouts, reducing Windows file lock errors
-            with self._connect() as conn:
-                cursor = conn.cursor()
+            # Choose proper connection depending on DB type (in-memory vs file-based)
+            if str(self.db_path) == ":memory:" and hasattr(self, "_conn") and self._conn:
+                conn_ctx = self._conn
+                use_closing = False
+            else:
+                conn_ctx = self._connect()
+                use_closing = True
 
-                # Check if user is locked
-                cursor.execute(
-                    """
-                    SELECT user_id, username, email, password_hash, role, is_active, 
-                           failed_login_attempts, locked_until
-                    FROM users 
-                    WHERE username = ?
-                """,
-                    (username,),
-                )
+            # Ensure proper connection closing and explicit transaction block
+            if use_closing:
+                with closing(conn_ctx) as conn:
+                    with conn:
+                        cursor = conn.cursor()
+                        # Fetch user record
+                        cursor.execute(
+                            """
+                            SELECT user_id, username, email, password_hash, role, is_active,
+                                   failed_login_attempts, locked_until, created_at, last_login
+                            FROM users
+                            WHERE username = ?
+                            """,
+                            (username,),
+                        )
+                        row = cursor.fetchone()
+                        if not row:
+                            self._log_security_event(
+                                "failed_auth",
+                                None,
+                                ip_address=ip_address,
+                                details={"reason": "user_not_found", "username": username},
+                            )
+                            return None
 
-                row = cursor.fetchone()
-                if not row:
-                    self._log_security_event(
-                        "failed_auth",
-                        None,
-                        ip_address=ip_address,
-                        details={"reason": "user_not_found", "username": username},
+                        (
+                            user_id,
+                            username,
+                            email,
+                            password_hash,
+                            role,
+                            is_active,
+                            failed_attempts,
+                            locked_until,
+                            created_at,
+                            last_login,
+                        ) = row
+
+                        # Check if account is locked
+                        if locked_until:
+                            lock_time = datetime.fromisoformat(locked_until)
+                            # タイムゾーン対応のUTC現在時刻で比較
+                            now_utc = datetime.now(timezone.utc)
+                            if now_utc < lock_time:
+                                self._log_security_event(
+                                    "failed_auth",
+                                    user_id,
+                                    ip_address=ip_address,
+                                    details={"reason": "account_locked"},
+                                )
+                                raise HTTPException(status_code=423, detail="Account is locked")
+
+                        # Check if account is active
+                        if not is_active:
+                            self._log_security_event(
+                                "failed_auth",
+                                user_id,
+                                ip_address=ip_address,
+                                details={"reason": "account_inactive"},
+                            )
+                            raise HTTPException(status_code=403, detail="Account is inactive")
+
+                        # Verify password
+                        if not bcrypt.checkpw(
+                            password.encode("utf-8"), password_hash.encode("utf-8")
+                        ):
+                            # Increment failed attempts
+                            new_failed_attempts = failed_attempts + 1
+
+                            # Lock account after 5 failed attempts
+                            if new_failed_attempts >= 5:
+                                # タイムゾーン対応UTCでロック期限を設定
+                                lock_until = datetime.now(timezone.utc) + timedelta(minutes=30)
+                                cursor.execute(
+                                    """
+                                    UPDATE users 
+                                    SET failed_login_attempts = ?, locked_until = ?
+                                    WHERE user_id = ?
+                                    """,
+                                    (new_failed_attempts, lock_until.isoformat(), user_id),
+                                )
+                            else:
+                                cursor.execute(
+                                    """
+                                    UPDATE users 
+                                    SET failed_login_attempts = ?
+                                    WHERE user_id = ?
+                                    """,
+                                    (new_failed_attempts, user_id),
+                                )
+
+                            # Transaction committed by connection context manager on exit
+                            self._log_security_event(
+                                "failed_auth",
+                                user_id,
+                                ip_address=ip_address,
+                                details={
+                                    "reason": "invalid_password",
+                                    "attempts": new_failed_attempts,
+                                },
+                            )
+                            return None
+
+                        # Successful authentication - reset failed attempts and update last login
+                        cursor.execute(
+                            """
+                            UPDATE users 
+                            SET failed_login_attempts = 0, locked_until = NULL, last_login = ?
+                            WHERE user_id = ?
+                            """,
+                            (datetime.now(timezone.utc).isoformat(), user_id),
+                        )
+
+                        # Transaction committed by connection context manager on exit
+                        self._log_security_event("login", user_id, ip_address=ip_address)
+
+                        # ロールの安全変換（未知値はVIEWERにフォールバック）
+                        try:
+                            user_role = UserRole(role)
+                        except Exception:
+                            user_role = UserRole.VIEWER
+
+                        # DBに保存された作成日時/最終ログインを優先
+                        try:
+                            created_dt = (
+                                datetime.fromisoformat(created_at)
+                                if created_at
+                                else datetime.now(timezone.utc)
+                            )
+                        except Exception:
+                            created_dt = datetime.now(timezone.utc)
+                        try:
+                            last_login_dt = (
+                                datetime.fromisoformat(last_login)
+                                if last_login
+                                else datetime.now(timezone.utc)
+                            )
+                        except Exception:
+                            last_login_dt = datetime.now(timezone.utc)
+
+                        return User(
+                            user_id=user_id,
+                            username=username,
+                            email=email,
+                            role=user_role,
+                            is_active=bool(is_active),
+                            created_at=created_dt,
+                            last_login=last_login_dt,
+                        )
+            else:
+                with conn_ctx:
+                    conn = conn_ctx
+                    cursor = conn.cursor()
+                    # Fetch user record
+                    cursor.execute(
+                        """
+                        SELECT user_id, username, email, password_hash, role, is_active,
+                               failed_login_attempts, locked_until, created_at, last_login
+                        FROM users
+                        WHERE username = ?
+                        """,
+                        (username,),
                     )
-                    return None
+                    row = cursor.fetchone()
+                    if not row:
+                        self._log_security_event(
+                            "failed_auth",
+                            None,
+                            ip_address=ip_address,
+                            details={"reason": "user_not_found", "username": username},
+                        )
+                        return None
 
-                (
-                    user_id,
-                    username,
-                    email,
-                    password_hash,
-                    role,
-                    is_active,
-                    failed_attempts,
-                    locked_until,
-                ) = row
+                    (
+                        user_id,
+                        username,
+                        email,
+                        password_hash,
+                        role,
+                        is_active,
+                        failed_attempts,
+                        locked_until,
+                        created_at,
+                        last_login,
+                    ) = row
 
-                # Check if account is locked
-                if locked_until:
-                    lock_time = datetime.fromisoformat(locked_until)
-                    if datetime.utcnow() < lock_time:
+                    # Check if account is locked
+                    if locked_until:
+                        lock_time = datetime.fromisoformat(locked_until)
+                        # タイムゾーン対応のUTC現在時刻で比較
+                        now_utc = datetime.now(timezone.utc)
+                        if now_utc < lock_time:
+                            self._log_security_event(
+                                "failed_auth",
+                                user_id,
+                                ip_address=ip_address,
+                                details={"reason": "account_locked"},
+                            )
+                            raise HTTPException(status_code=423, detail="Account is locked")
+
+                    # Check if account is active
+                    if not is_active:
                         self._log_security_event(
                             "failed_auth",
                             user_id,
                             ip_address=ip_address,
-                            details={"reason": "account_locked"},
+                            details={"reason": "account_inactive"},
                         )
-                        raise HTTPException(status_code=423, detail="Account is locked")
+                        raise HTTPException(status_code=403, detail="Account is inactive")
 
-                # Check if account is active
-                if not is_active:
-                    self._log_security_event(
-                        "failed_auth",
-                        user_id,
-                        ip_address=ip_address,
-                        details={"reason": "account_inactive"},
-                    )
-                    raise HTTPException(status_code=403, detail="Account is inactive")
+                    # Verify password
+                    if not bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8")):
+                        # Increment failed attempts
+                        new_failed_attempts = failed_attempts + 1
 
-                # Verify password
-                if not bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8")):
-                    # Increment failed attempts
-                    new_failed_attempts = failed_attempts + 1
+                        # Lock account after 5 failed attempts
+                        if new_failed_attempts >= 5:
+                            # タイムゾーン対応UTCでロック期限を設定
+                            lock_until = datetime.now(timezone.utc) + timedelta(minutes=30)
+                            cursor.execute(
+                                """
+                                UPDATE users 
+                                SET failed_login_attempts = ?, locked_until = ?
+                                WHERE user_id = ?
+                                """,
+                                (new_failed_attempts, lock_until.isoformat(), user_id),
+                            )
+                        else:
+                            cursor.execute(
+                                """
+                                UPDATE users 
+                                SET failed_login_attempts = ?
+                                WHERE user_id = ?
+                                """,
+                                (new_failed_attempts, user_id),
+                            )
 
-                    # Lock account after 5 failed attempts
-                    if new_failed_attempts >= 5:
-                        lock_until = datetime.utcnow() + timedelta(minutes=30)
-                        cursor.execute(
-                            """
-                            UPDATE users 
-                            SET failed_login_attempts = ?, locked_until = ?
-                            WHERE user_id = ?
+                        # Transaction committed by connection context manager on exit
+                        self._log_security_event(
+                            "failed_auth",
+                            user_id,
+                            ip_address=ip_address,
+                            details={
+                                "reason": "invalid_password",
+                                "attempts": new_failed_attempts,
+                            },
+                        )
+                        return None
+
+                    # Successful authentication - reset failed attempts and update last login
+                    cursor.execute(
+                        """
+                        UPDATE users 
+                        SET failed_login_attempts = 0, locked_until = NULL, last_login = ?
+                        WHERE user_id = ?
                         """,
-                            (new_failed_attempts, lock_until.isoformat(), user_id),
-                        )
-                    else:
-                        cursor.execute(
-                            """
-                            UPDATE users 
-                            SET failed_login_attempts = ?
-                            WHERE user_id = ?
-                        """,
-                            (new_failed_attempts, user_id),
-                        )
-
-                    conn.commit()
-
-                    self._log_security_event(
-                        "failed_auth",
-                        user_id,
-                        ip_address=ip_address,
-                        details={"reason": "invalid_password", "attempts": new_failed_attempts},
+                        (datetime.now(timezone.utc).isoformat(), user_id),
                     )
-                    return None
 
-                # Successful authentication - reset failed attempts and update last login
-                cursor.execute(
-                    """
-                    UPDATE users 
-                    SET failed_login_attempts = 0, locked_until = NULL, last_login = ?
-                    WHERE user_id = ?
-                """,
-                    (datetime.utcnow().isoformat(), user_id),
-                )
+                    # Transaction committed by connection context manager on exit
+                    self._log_security_event("login", user_id, ip_address=ip_address)
 
-                conn.commit()
+                    # ロールの安全変換（未知値はVIEWERにフォールバック）
+                    try:
+                        user_role = UserRole(role)
+                    except Exception:
+                        user_role = UserRole.VIEWER
 
-                self._log_security_event("login", user_id, ip_address=ip_address)
+                    # DBに保存された作成日時/最終ログインを優先
+                    try:
+                        created_dt = (
+                            datetime.fromisoformat(created_at)
+                            if created_at
+                            else datetime.now(timezone.utc)
+                        )
+                    except Exception:
+                        created_dt = datetime.now(timezone.utc)
+                    try:
+                        last_login_dt = (
+                            datetime.fromisoformat(last_login)
+                            if last_login
+                            else datetime.now(timezone.utc)
+                        )
+                    except Exception:
+                        last_login_dt = datetime.now(timezone.utc)
 
-                return User(
-                    user_id=user_id,
-                    username=username,
-                    email=email,
-                    role=UserRole(role),
-                    is_active=bool(is_active),
-                    created_at=datetime.utcnow(),  # Would need to fetch from DB
-                    last_login=datetime.utcnow(),
-                )
+                    return User(
+                        user_id=user_id,
+                        username=username,
+                        email=email,
+                        role=user_role,
+                        is_active=bool(is_active),
+                        created_at=created_dt,
+                        last_login=last_login_dt,
+                    )
 
         except HTTPException:
             # Propagate HTTP errors (e.g., account locked/inactive) so callers can handle them
@@ -452,33 +655,71 @@ class SecurityManager:
     def get_user_by_id(self, user_id: str) -> Optional[User]:
         """Get user by ID"""
         try:
-            with self._connect() as conn:
-                cursor = conn.cursor()
+            # Select the appropriate connection (persistent for in-memory DBs)
+            if str(self.db_path) == ":memory:" and hasattr(self, "_conn") and self._conn:
+                conn_ctx = self._conn
+                use_closing = False
+            else:
+                conn_ctx = self._connect()
+                use_closing = True
 
-                cursor.execute(
-                    """
-                    SELECT username, email, role, is_active, created_at, last_login
-                    FROM users 
-                    WHERE user_id = ?
-                """,
-                    (user_id,),
-                )
+            if use_closing:
+                # File-based DB: open/close per operation; commit via context manager
+                with closing(conn_ctx) as conn:
+                    with conn:
+                        cursor = conn.cursor()
+                        cursor.execute(
+                            """
+                            SELECT username, email, role, is_active, created_at, last_login
+                            FROM users 
+                            WHERE user_id = ?
+                            """,
+                            (user_id,),
+                        )
+                        row = cursor.fetchone()
+                        if row:
+                            username, email, role, is_active, created_at, last_login = row
 
-                row = cursor.fetchone()
-                if row:
-                    username, email, role, is_active, created_at, last_login = row
+                            return User(
+                                user_id=user_id,
+                                username=username,
+                                email=email,
+                                role=UserRole(role),
+                                is_active=bool(is_active),
+                                created_at=datetime.fromisoformat(created_at),
+                                last_login=(
+                                    datetime.fromisoformat(last_login) if last_login else None
+                                ),
+                            )
 
-                    return User(
-                        user_id=user_id,
-                        username=username,
-                        email=email,
-                        role=UserRole(role),
-                        is_active=bool(is_active),
-                        created_at=datetime.fromisoformat(created_at),
-                        last_login=datetime.fromisoformat(last_login) if last_login else None,
+                        return None
+            else:
+                # In-memory DB: use persistent connection to access existing data
+                with conn_ctx:
+                    cursor = conn_ctx.cursor()
+                    cursor.execute(
+                        """
+                        SELECT username, email, role, is_active, created_at, last_login
+                        FROM users 
+                        WHERE user_id = ?
+                        """,
+                        (user_id,),
                     )
+                    row = cursor.fetchone()
+                    if row:
+                        username, email, role, is_active, created_at, last_login = row
 
-                return None
+                        return User(
+                            user_id=user_id,
+                            username=username,
+                            email=email,
+                            role=UserRole(role),
+                            is_active=bool(is_active),
+                            created_at=datetime.fromisoformat(created_at),
+                            last_login=datetime.fromisoformat(last_login) if last_login else None,
+                        )
+
+                    return None
 
         except Exception as e:
             logger.error(f"Error getting user {user_id}: {e}")
@@ -543,28 +784,40 @@ class SecurityManager:
         try:
             # Use persistent connection for in-memory databases
             if str(self.db_path) == ":memory:" and self._conn:
-                cursor = self._conn.cursor()
-                cursor.execute(
-                    """
-                    INSERT INTO jwt_tokens (token_id, user_id, token_hash, issued_at, expires_at)
-                    VALUES (?, ?, ?, ?, ?)
-                """,
-                    (token_id, uid, token_hash, now.isoformat(), expires_at.isoformat()),
-                )
-                self._conn.commit()
-            else:
-                with self._connect() as conn:
-                    cursor = conn.cursor()
-
+                # Manage transaction via connection context manager
+                with self._conn:
+                    cursor = self._conn.cursor()
                     cursor.execute(
                         """
                         INSERT INTO jwt_tokens (token_id, user_id, token_hash, issued_at, expires_at)
                         VALUES (?, ?, ?, ?, ?)
                     """,
-                        (token_id, uid, token_hash, now.isoformat(), expires_at.isoformat()),
+                        (
+                            token_id,
+                            uid,
+                            token_hash,
+                            now.isoformat(),
+                            expires_at.isoformat(),
+                        ),
                     )
-
-                    conn.commit()
+            else:
+                # Use unified connection helper
+                with closing(self._connect()) as conn:
+                    with conn:
+                        cursor = conn.cursor()
+                        cursor.execute(
+                            """
+                            INSERT INTO jwt_tokens (token_id, user_id, token_hash, issued_at, expires_at)
+                            VALUES (?, ?, ?, ?, ?)
+                        """,
+                            (
+                                token_id,
+                                uid,
+                                token_hash,
+                                now.isoformat(),
+                                expires_at.isoformat(),
+                            ),
+                        )
 
         except Exception as e:
             logger.error(f"Error storing JWT token: {e}")
@@ -610,34 +863,42 @@ class SecurityManager:
                 # Use persistent connection for in-memory databases
                 try:
                     if str(self.db_path) == ":memory:" and self._conn:
-                        cursor = self._conn.cursor()
-                        cursor.execute(
-                            """
-                            SELECT is_revoked FROM jwt_tokens 
-                            WHERE token_id = ? AND token_hash = ? AND expires_at > ?
-                        """,
-                            (token_id, token_hash, datetime.now(timezone.utc).isoformat()),
-                        )
-                        row = cursor.fetchone()
-                        # If a matching record exists and is revoked, reject
-                        if row and bool(row[0]):
-                            return None
-                    else:
-                        with self._connect() as conn:
-                            cursor = conn.cursor()
-
+                        with self._conn:
+                            cursor = self._conn.cursor()
                             cursor.execute(
                                 """
                                 SELECT is_revoked FROM jwt_tokens 
                                 WHERE token_id = ? AND token_hash = ? AND expires_at > ?
-                            """,
-                                (token_id, token_hash, datetime.now(timezone.utc).isoformat()),
+                                """,
+                                (
+                                    token_id,
+                                    token_hash,
+                                    datetime.now(timezone.utc).isoformat(),
+                                ),
                             )
-
                             row = cursor.fetchone()
                             # If a matching record exists and is revoked, reject
                             if row and bool(row[0]):
                                 return None
+                    else:
+                        with closing(self._connect()) as conn:
+                            with conn:
+                                cursor = conn.cursor()
+                                cursor.execute(
+                                    """
+                                    SELECT is_revoked FROM jwt_tokens 
+                                    WHERE token_id = ? AND token_hash = ? AND expires_at > ?
+                                """,
+                                    (
+                                        token_id,
+                                        token_hash,
+                                        datetime.now(timezone.utc).isoformat(),
+                                    ),
+                                )
+                                row = cursor.fetchone()
+                                # If a matching record exists and is revoked, reject
+                                if row and bool(row[0]):
+                                    return None
                 except sqlite3.Error as oe:
                     # If token tables are not available (e.g., in lightweight/contract tests),
                     # skip DB-based checks and rely on JWT claims only
@@ -680,7 +941,11 @@ class SecurityManager:
                 if role_claim is None or str(role_claim).strip() == "":
                     return None
                 try:
-                    role_enum = role_claim if isinstance(role_claim, UserRole) else UserRole(str(role_claim))
+                    role_enum = (
+                        role_claim
+                        if isinstance(role_claim, UserRole)
+                        else UserRole(str(role_claim))
+                    )
                 except Exception:
                     return None
 
@@ -714,21 +979,9 @@ class SecurityManager:
 
             # Use persistent connection for in-memory databases
             if str(self.db_path) == ":memory:" and self._conn:
-                cursor = self._conn.cursor()
-                cursor.execute(
-                    """
-                    UPDATE jwt_tokens 
-                    SET is_revoked = TRUE, revoked_at = ?
-                    WHERE token_id = ?
-                """,
-                    (datetime.now(timezone.utc).isoformat(), token_id),
-                )
-                self._conn.commit()
-                return cursor.rowcount > 0
-            else:
-                with self._connect() as conn:
-                    cursor = conn.cursor()
-
+                # Manage transaction via connection context manager
+                with self._conn:
+                    cursor = self._conn.cursor()
                     cursor.execute(
                         """
                         UPDATE jwt_tokens 
@@ -737,9 +990,21 @@ class SecurityManager:
                     """,
                         (datetime.now(timezone.utc).isoformat(), token_id),
                     )
-
-                    conn.commit()
                     return cursor.rowcount > 0
+            else:
+                # Use unified connection helper
+                with closing(self._connect()) as conn:
+                    with conn:
+                        cursor = conn.cursor()
+                        cursor.execute(
+                            """
+                            UPDATE jwt_tokens 
+                            SET is_revoked = TRUE, revoked_at = ?
+                            WHERE token_id = ?
+                        """,
+                            (datetime.now(timezone.utc).isoformat(), token_id),
+                        )
+                        return cursor.rowcount > 0
 
         except Exception as e:
             logger.error(f"Error revoking token: {e}")
@@ -812,10 +1077,15 @@ class SecurityManager:
             # Prepare ASCII-escaped canonicalization for contract-style verification
             canonical_payload_str_ascii: Optional[str] = None
             try:
-                if canonical_payload_str is not None and canonical_payload_str.strip().startswith("{"):
+                if canonical_payload_str is not None and canonical_payload_str.strip().startswith(
+                    "{"
+                ):
                     obj_tmp = json.loads(canonical_payload_str)
                     canonical_payload_str_ascii = json.dumps(
-                        obj_tmp, sort_keys=True, separators=(",", ":"), ensure_ascii=True
+                        obj_tmp,
+                        sort_keys=True,
+                        separators=(",", ":"),
+                        ensure_ascii=True,
                     )
                 else:
                     canonical_payload_str_ascii = canonical_payload_str
@@ -884,12 +1154,17 @@ class SecurityManager:
                         self._log_security_event(
                             "hmac_fail",
                             None,
-                            details={"reason": "timestamp_out_of_range", "time_diff": time_diff},
+                            details={
+                                "reason": "timestamp_out_of_range",
+                                "time_diff": time_diff,
+                            },
                         )
                         return False
                 except Exception:
                     self._log_security_event(
-                        "hmac_fail", None, details={"reason": "invalid_timestamp_format"}
+                        "hmac_fail",
+                        None,
+                        details={"reason": "invalid_timestamp_format"},
                     )
                     return False
 
@@ -909,10 +1184,16 @@ class SecurityManager:
                 msg_payload = (
                     canonical_payload_str_ascii
                     if canonical_payload_str_ascii is not None
-                    else (canonical_payload_str if canonical_payload_str is not None else canonical_payload_bytes.decode("utf-8"))
+                    else (
+                        canonical_payload_str
+                        if canonical_payload_str is not None
+                        else canonical_payload_bytes.decode("utf-8")
+                    )
                 )
                 expected_signature_contract = hmac.new(
-                    secret_to_use, f"{timestamp}.{msg_payload}".encode("utf-8"), hashlib.sha256
+                    secret_to_use,
+                    f"{timestamp}.{msg_payload}".encode("utf-8"),
+                    hashlib.sha256,
                 ).hexdigest()
 
             # Remove 'sha256=' prefix if present
@@ -938,7 +1219,9 @@ class SecurityManager:
         except Exception as e:
             logger.error(f"HMAC verification error: {e}")
             self._log_security_event(
-                "hmac_fail", None, details={"reason": "verification_error", "error": str(e)}
+                "hmac_fail",
+                None,
+                details={"reason": "verification_error", "error": str(e)},
             )
             return False
 
@@ -961,54 +1244,119 @@ class SecurityManager:
         window_start = now - timedelta(seconds=rule.window_seconds)
 
         try:
-            with self._connect() as conn:
-                cursor = conn.cursor()
+            # Select the appropriate connection (persistent for in-memory DBs)
+            if str(self.db_path) == ":memory:" and hasattr(self, "_conn") and self._conn:
+                conn_ctx = self._conn
+                use_closing = False
+            else:
+                conn_ctx = self._connect()
+                use_closing = True
 
-                # Get current request count in window
-                cursor.execute(
-                    """
-                    SELECT SUM(request_count) 
-                    FROM rate_limit_records 
-                    WHERE identifier = ? AND endpoint = ? AND method = ? 
-                    AND window_end > ?
-                """,
-                    (identifier, endpoint, method, window_start.isoformat()),
-                )
+            if use_closing:
+                # File-based DB: open/close per operation; commit via context manager
+                with closing(conn_ctx) as conn:
+                    with conn:
+                        cursor = conn.cursor()
 
-                row = cursor.fetchone()
-                current_count = row[0] if row[0] else 0
+                        # Get current request count in window
+                        cursor.execute(
+                            """
+                            SELECT SUM(request_count) 
+                            FROM rate_limit_records 
+                            WHERE identifier = ? AND endpoint = ? AND method = ? 
+                            AND window_end > ?
+                            """,
+                            (identifier, endpoint, method, window_start.isoformat()),
+                        )
+                        row = cursor.fetchone()
+                        current_count = row[0] if (row and row[0]) else 0
 
-                # Check if limit exceeded
-                if current_count >= rule.max_requests:
-                    self._log_security_event(
-                        "rate_limit",
-                        None,
-                        details={
-                            "identifier": identifier,
-                            "endpoint": endpoint,
-                            "method": method,
-                            "current_count": current_count,
+                        # Check if limit exceeded
+                        if current_count >= rule.max_requests:
+                            self._log_security_event(
+                                "rate_limit",
+                                None,
+                                details={
+                                    "identifier": identifier,
+                                    "endpoint": endpoint,
+                                    "method": method,
+                                    "current_count": current_count,
+                                    "limit": rule.max_requests,
+                                },
+                            )
+
+                            return False, {
+                                "limit": rule.max_requests,
+                                "remaining": 0,
+                                "reset_time": (
+                                    now + timedelta(seconds=rule.window_seconds)
+                                ).isoformat(),
+                                "retry_after": rule.window_seconds,
+                            }
+
+                        # Record this request
+                        self._record_rate_limit_request(
+                            identifier, endpoint, method, now, rule.window_seconds
+                        )
+
+                        return True, {
                             "limit": rule.max_requests,
-                        },
+                            "remaining": rule.max_requests - current_count - 1,
+                            "reset_time": (
+                                now + timedelta(seconds=rule.window_seconds)
+                            ).isoformat(),
+                        }
+            else:
+                # In-memory DB: use persistent connection to access existing data
+                with conn_ctx:
+                    cursor = conn_ctx.cursor()
+
+                    # Get current request count in window
+                    cursor.execute(
+                        """
+                        SELECT SUM(request_count) 
+                        FROM rate_limit_records 
+                        WHERE identifier = ? AND endpoint = ? AND method = ? 
+                        AND window_end > ?
+                        """,
+                        (identifier, endpoint, method, window_start.isoformat()),
+                    )
+                    row = cursor.fetchone()
+                    current_count = row[0] if (row and row[0]) else 0
+
+                    # Check if limit exceeded
+                    if current_count >= rule.max_requests:
+                        self._log_security_event(
+                            "rate_limit",
+                            None,
+                            details={
+                                "identifier": identifier,
+                                "endpoint": endpoint,
+                                "method": method,
+                                "current_count": current_count,
+                                "limit": rule.max_requests,
+                            },
+                        )
+
+                        return False, {
+                            "limit": rule.max_requests,
+                            "remaining": 0,
+                            "reset_time": (
+                                now + timedelta(seconds=rule.window_seconds)
+                            ).isoformat(),
+                            "retry_after": rule.window_seconds,
+                        }
+
+                    # Record this request
+                    self._record_rate_limit_request(
+                        identifier, endpoint, method, now, rule.window_seconds
                     )
 
-                    return False, {
+                    return True, {
                         "limit": rule.max_requests,
-                        "remaining": 0,
+                        "remaining": rule.max_requests - current_count - 1,
                         "reset_time": (now + timedelta(seconds=rule.window_seconds)).isoformat(),
-                        "retry_after": rule.window_seconds,
                     }
-
-                # Record this request
-                self._record_rate_limit_request(
-                    identifier, endpoint, method, now, rule.window_seconds
-                )
-
-                return True, {
-                    "limit": rule.max_requests,
-                    "remaining": rule.max_requests - current_count - 1,
-                    "reset_time": (now + timedelta(seconds=rule.window_seconds)).isoformat(),
-                }
 
         except Exception as e:
             logger.error(f"Rate limit check error: {e}")
@@ -1040,7 +1388,12 @@ class SecurityManager:
         return None
 
     def _record_rate_limit_request(
-        self, identifier: str, endpoint: str, method: str, timestamp: datetime, window_seconds: int
+        self,
+        identifier: str,
+        endpoint: str,
+        method: str,
+        timestamp: datetime,
+        window_seconds: int,
     ):
         """Record a rate limit request"""
         import uuid
@@ -1049,39 +1402,93 @@ class SecurityManager:
         window_end = timestamp + timedelta(seconds=window_seconds)
 
         try:
-            with self._connect() as conn:
-                cursor = conn.cursor()
+            # Select the appropriate connection (persistent for in-memory DBs)
+            if str(self.db_path) == ":memory:" and hasattr(self, "_conn") and self._conn:
+                conn_ctx = self._conn
+                use_closing = False
+            else:
+                conn_ctx = self._connect()
+                use_closing = True
 
-                # Try to update existing record in current window
-                cursor.execute(
-                    """
-                    UPDATE rate_limit_records 
-                    SET request_count = request_count + 1
-                    WHERE identifier = ? AND endpoint = ? AND method = ? 
-                    AND window_start <= ? AND window_end > ?
-                """,
-                    (identifier, endpoint, method, timestamp.isoformat(), timestamp.isoformat()),
-                )
+            if use_closing:
+                # File-based DB: open/close per operation; commit via context manager
+                with closing(conn_ctx) as conn:
+                    with conn:
+                        cursor = conn.cursor()
 
-                if cursor.rowcount == 0:
-                    # Create new record
+                        # Try to update existing record in current window
+                        cursor.execute(
+                            """
+                            UPDATE rate_limit_records 
+                            SET request_count = request_count + 1
+                            WHERE identifier = ? AND endpoint = ? AND method = ? 
+                            AND window_start <= ? AND window_end > ?
+                            """,
+                            (
+                                identifier,
+                                endpoint,
+                                method,
+                                timestamp.isoformat(),
+                                timestamp.isoformat(),
+                            ),
+                        )
+
+                        if cursor.rowcount == 0:
+                            # Create new record
+                            cursor.execute(
+                                """
+                                INSERT INTO rate_limit_records 
+                                (record_id, identifier, endpoint, method, request_count, window_start, window_end)
+                                VALUES (?, ?, ?, ?, 1, ?, ?)
+                                """,
+                                (
+                                    record_id,
+                                    identifier,
+                                    endpoint,
+                                    method,
+                                    timestamp.isoformat(),
+                                    window_end.isoformat(),
+                                ),
+                            )
+            else:
+                # In-memory DB: use persistent connection to access existing data
+                with conn_ctx:
+                    cursor = conn_ctx.cursor()
+
+                    # Try to update existing record in current window
                     cursor.execute(
                         """
-                        INSERT INTO rate_limit_records 
-                        (record_id, identifier, endpoint, method, request_count, window_start, window_end)
-                        VALUES (?, ?, ?, ?, 1, ?, ?)
-                    """,
+                        UPDATE rate_limit_records 
+                        SET request_count = request_count + 1
+                        WHERE identifier = ? AND endpoint = ? AND method = ? 
+                        AND window_start <= ? AND window_end > ?
+                        """,
                         (
-                            record_id,
                             identifier,
                             endpoint,
                             method,
                             timestamp.isoformat(),
-                            window_end.isoformat(),
+                            timestamp.isoformat(),
                         ),
                     )
 
-                conn.commit()
+                    if cursor.rowcount == 0:
+                        # Create new record
+                        cursor.execute(
+                            """
+                            INSERT INTO rate_limit_records 
+                            (record_id, identifier, endpoint, method, request_count, window_start, window_end)
+                            VALUES (?, ?, ?, ?, 1, ?, ?)
+                            """,
+                            (
+                                record_id,
+                                identifier,
+                                endpoint,
+                                method,
+                                timestamp.isoformat(),
+                                window_end.isoformat(),
+                            ),
+                        )
 
         except Exception as e:
             logger.error(f"Error recording rate limit request: {e}")
@@ -1102,33 +1509,48 @@ class SecurityManager:
         event_id = str(uuid.uuid4())
 
         try:
-            # Use persistent connection for in-memory DB to ensure tables exist
+            # Insert event using context-managed connection (in-memory or file-based)
             if str(self.db_path) == ":memory:" and hasattr(self, "_conn") and self._conn:
-                conn = self._conn
-                cursor = conn.cursor()
+                with self._conn:
+                    cursor = self._conn.cursor()
+                    cursor.execute(
+                        """
+                        INSERT INTO security_events 
+                        (event_id, event_type, user_id, ip_address, user_agent, endpoint, details, timestamp)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                        (
+                            event_id,
+                            event_type,
+                            user_id,
+                            ip_address,
+                            user_agent,
+                            endpoint,
+                            json.dumps(details) if details else None,
+                            datetime.now(timezone.utc).isoformat(),
+                        ),
+                    )
             else:
-                conn = self._connect()
-                cursor = conn.cursor()
-
-                cursor.execute(
-                    """
-                    INSERT INTO security_events 
-                    (event_id, event_type, user_id, ip_address, user_agent, endpoint, details, timestamp)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                """,
-                    (
-                        event_id,
-                        event_type,
-                        user_id,
-                        ip_address,
-                        user_agent,
-                        endpoint,
-                        json.dumps(details) if details else None,
-                        datetime.now(timezone.utc).isoformat(),
-                    ),
-                )
-
-                conn.commit()
+                with closing(self._connect()) as conn:
+                    with conn:
+                        cursor = conn.cursor()
+                        cursor.execute(
+                            """
+                            INSERT INTO security_events 
+                            (event_id, event_type, user_id, ip_address, user_agent, endpoint, details, timestamp)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        """,
+                            (
+                                event_id,
+                                event_type,
+                                user_id,
+                                ip_address,
+                                user_agent,
+                                endpoint,
+                                json.dumps(details) if details else None,
+                                datetime.now(timezone.utc).isoformat(),
+                            ),
+                        )
 
         except Exception as e:
             logger.error(f"Error logging security event: {e}")
@@ -1137,60 +1559,88 @@ class SecurityManager:
     def _cleanup_expired_tokens(self):
         """Clean up expired JWT tokens"""
         try:
-            # Use persistent connection for in-memory DB to avoid missing-table issues
+            deleted_count = 0
             if str(self.db_path) == ":memory:" and hasattr(self, "_conn") and self._conn:
-                conn = self._conn
+                # Use persistent in-memory connection under context manager
+                with self._conn:
+                    cursor = self._conn.cursor()
+                    # Delete expired tokens
+                    try:
+                        cursor.execute(
+                            """
+                            DELETE FROM jwt_tokens 
+                            WHERE expires_at <= ?
+                            """,
+                            (datetime.now(timezone.utc).isoformat(),),
+                        )
+                        deleted_count = cursor.rowcount
+                    except sqlite3.OperationalError as op_err:
+                        logger.debug(f"Skip jwt_tokens cleanup: {op_err}")
+
+                    # Clean up old rate limit records
+                    try:
+                        cursor.execute(
+                            """
+                            DELETE FROM rate_limit_records 
+                            WHERE window_end <= ?
+                            """,
+                            ((datetime.now(timezone.utc) - timedelta(days=7)).isoformat(),),
+                        )
+                    except sqlite3.OperationalError as op_err:
+                        logger.debug(f"Skip rate_limit_records cleanup: {op_err}")
+
+                    # Clean up old security events (keep 30 days)
+                    try:
+                        cursor.execute(
+                            """
+                            DELETE FROM security_events 
+                            WHERE timestamp <= ?
+                            """,
+                            ((datetime.now(timezone.utc) - timedelta(days=30)).isoformat(),),
+                        )
+                    except sqlite3.OperationalError as op_err:
+                        logger.debug(f"Skip security_events cleanup: {op_err}")
             else:
-                conn = self._connect()
+                # File-based connection
+                with closing(self._connect()) as conn:
+                    with conn:
+                        cursor = conn.cursor()
+                        # Delete expired tokens
+                        try:
+                            cursor.execute(
+                                """
+                                DELETE FROM jwt_tokens 
+                                WHERE expires_at <= ?
+                                """,
+                                (datetime.now(timezone.utc).isoformat(),),
+                            )
+                            deleted_count = cursor.rowcount
+                        except sqlite3.OperationalError as op_err:
+                            logger.debug(f"Skip jwt_tokens cleanup: {op_err}")
 
-            cursor = conn.cursor()
+                        # Clean up old rate limit records
+                        try:
+                            cursor.execute(
+                                """
+                                DELETE FROM rate_limit_records 
+                                WHERE window_end <= ?
+                                """,
+                                ((datetime.now(timezone.utc) - timedelta(days=7)).isoformat(),),
+                            )
+                        except sqlite3.OperationalError as op_err:
+                            logger.debug(f"Skip rate_limit_records cleanup: {op_err}")
 
-            # Delete expired tokens
-            try:
-                cursor.execute(
-                    """
-                    DELETE FROM jwt_tokens 
-                    WHERE expires_at <= ?
-                """,
-                    (datetime.now(timezone.utc).isoformat(),),
-                )
-                deleted_count = cursor.rowcount
-            except sqlite3.OperationalError as op_err:
-                # Table might not exist in some test configurations; log and continue
-                logger.debug(f"Skip jwt_tokens cleanup: {op_err}")
-                deleted_count = 0
-
-            # Clean up old rate limit records
-            cleanup_time = datetime.now(timezone.utc) - timedelta(days=7)
-            try:
-                cursor.execute(
-                    """
-                    DELETE FROM rate_limit_records 
-                    WHERE window_end <= ?
-                """,
-                    (cleanup_time.isoformat(),),
-                )
-            except sqlite3.OperationalError as op_err:
-                logger.debug(f"Skip rate_limit_records cleanup: {op_err}")
-
-            # Clean up old security events (keep 30 days)
-            cleanup_time = datetime.now(timezone.utc) - timedelta(days=30)
-            try:
-                cursor.execute(
-                    """
-                    DELETE FROM security_events 
-                    WHERE timestamp <= ?
-                """,
-                    (cleanup_time.isoformat(),),
-                )
-            except sqlite3.OperationalError as op_err:
-                logger.debug(f"Skip security_events cleanup: {op_err}")
-
-            try:
-                conn.commit()
-            except Exception:
-                # For shared in-memory connections, commit may be managed elsewhere
-                pass
+                        # Clean up old security events (keep 30 days)
+                        try:
+                            cursor.execute(
+                                """
+                                DELETE FROM security_events 
+                                WHERE timestamp <= ?
+                                """,
+                                ((datetime.now(timezone.utc) - timedelta(days=30)).isoformat(),),
+                            )
+                        except sqlite3.OperationalError as op_err:
+                            logger.debug(f"Skip security_events cleanup: {op_err}")
 
             if deleted_count > 0:
                 logger.info(f"Cleaned up {deleted_count} expired tokens")
@@ -1201,43 +1651,83 @@ class SecurityManager:
     def get_security_statistics(self) -> Dict[str, Any]:
         """Get security statistics"""
         try:
-            with sqlite3.connect(self.db_path) as conn:
-                cursor = conn.cursor()
+            if str(self.db_path) == ":memory:" and hasattr(self, "_conn") and self._conn:
+                with self._conn:
+                    cursor = self._conn.cursor()
 
-                # Active users
-                cursor.execute("SELECT COUNT(*) FROM users WHERE is_active = TRUE")
-                active_users = cursor.fetchone()[0]
+                    # Active users
+                    cursor.execute("SELECT COUNT(*) FROM users WHERE is_active = TRUE")
+                    active_users = cursor.fetchone()[0]
 
-                # Active tokens
-                cursor.execute(
-                    """
-                    SELECT COUNT(*) FROM jwt_tokens 
-                    WHERE expires_at > ? AND is_revoked = FALSE
-                """,
-                    (datetime.now(timezone.utc).isoformat(),),
-                )
-                active_tokens = cursor.fetchone()[0]
+                    # Active tokens
+                    cursor.execute(
+                        """
+                        SELECT COUNT(*) FROM jwt_tokens 
+                        WHERE expires_at > ? AND is_revoked = FALSE
+                        """,
+                        (datetime.now(timezone.utc).isoformat(),),
+                    )
+                    active_tokens = cursor.fetchone()[0]
 
-                # Recent security events (last 24 hours)
-                day_ago = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
-                cursor.execute(
-                    """
-                    SELECT event_type, COUNT(*) 
-                    FROM security_events 
-                    WHERE timestamp > ? 
-                    GROUP BY event_type
-                """,
-                    (day_ago,),
-                )
+                    # Recent security events (last 24 hours)
+                    day_ago = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+                    cursor.execute(
+                        """
+                        SELECT event_type, COUNT(*) 
+                        FROM security_events 
+                        WHERE timestamp > ? 
+                        GROUP BY event_type
+                        """,
+                        (day_ago,),
+                    )
 
-                recent_events = dict(cursor.fetchall())
+                    recent_events = dict(cursor.fetchall())
 
-                return {
-                    "active_users": active_users,
-                    "active_tokens": active_tokens,
-                    "recent_events": recent_events,
-                    "timestamp": datetime.now(timezone.utc).isoformat(),
-                }
+                    return {
+                        "active_users": active_users,
+                        "active_tokens": active_tokens,
+                        "recent_events": recent_events,
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                    }
+            else:
+                with closing(self._connect()) as conn:
+                    with conn:
+                        cursor = conn.cursor()
+
+                        # Active users
+                        cursor.execute("SELECT COUNT(*) FROM users WHERE is_active = TRUE")
+                        active_users = cursor.fetchone()[0]
+
+                        # Active tokens
+                        cursor.execute(
+                            """
+                            SELECT COUNT(*) FROM jwt_tokens 
+                            WHERE expires_at > ? AND is_revoked = FALSE
+                            """,
+                            (datetime.now(timezone.utc).isoformat(),),
+                        )
+                        active_tokens = cursor.fetchone()[0]
+
+                        # Recent security events (last 24 hours)
+                        day_ago = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+                        cursor.execute(
+                            """
+                            SELECT event_type, COUNT(*) 
+                            FROM security_events 
+                            WHERE timestamp > ? 
+                            GROUP BY event_type
+                            """,
+                            (day_ago,),
+                        )
+
+                        recent_events = dict(cursor.fetchall())
+
+                        return {
+                            "active_users": active_users,
+                            "active_tokens": active_tokens,
+                            "recent_events": recent_events,
+                            "timestamp": datetime.now(timezone.utc).isoformat(),
+                        }
 
         except Exception as e:
             logger.error(f"Error getting security statistics: {e}")
@@ -1253,7 +1743,11 @@ def get_security_manager() -> SecurityManager:
     # This would be configured with actual settings
     config = {
         "database": {"path": "data/security.db"},
-        "jwt": {"secret_key": "your-jwt-secret-key", "algorithm": "HS256", "expiry_hours": 24},
+        "jwt": {
+            "secret_key": "your-jwt-secret-key",
+            "algorithm": "HS256",
+            "expiry_hours": 24,
+        },
         "webhook": {"secret": "your-webhook-secret", "time_tolerance": 120},
         "rate_limits": {"rules": []},
     }
@@ -1276,11 +1770,17 @@ def get_current_user(
 
 
 def require_role(required_role: UserRole):
-    """Decorator to require specific role"""
+    """Decorator to require specific role
+
+    Handles both sync and async FastAPI endpoint functions correctly by
+    awaiting the wrapped coroutine when necessary. This fixes the
+    "coroutine was never awaited" error observed when decorating async
+    endpoints.
+    """
 
     def decorator(func):
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        async def async_wrapper(*args, **kwargs):
             # Get current user from kwargs (injected by FastAPI)
             current_user = kwargs.get("current_user")
             if not current_user:
@@ -1297,11 +1797,54 @@ def require_role(required_role: UserRole):
             if role_hierarchy.get(current_user.role, 0) < role_hierarchy.get(required_role, 0):
                 raise HTTPException(status_code=403, detail="Insufficient permissions")
 
-            return func(*args, **kwargs)
+            result = func(*args, **kwargs)
+            # If the wrapped function returns a coroutine, await it
+            if inspect.isawaitable(result):
+                return await result
+            return result
 
-        return wrapper
+        @wraps(func)
+        def sync_wrapper(*args, **kwargs):
+            # This wrapper is provided for frameworks or callers that may
+            # treat decorated sync functions differently. It delegates to
+            # the async wrapper via running the event loop if necessary.
+            current_user = kwargs.get("current_user")
+            if not current_user:
+                raise HTTPException(status_code=401, detail="Authentication required")
+
+            role_hierarchy = {
+                UserRole.ADMIN: 4,
+                UserRole.OPERATOR: 3,
+                UserRole.VIEWER: 2,
+                UserRole.WORKER: 1,
+            }
+
+            if role_hierarchy.get(current_user.role, 0) < role_hierarchy.get(required_role, 0):
+                raise HTTPException(status_code=403, detail="Insufficient permissions")
+
+            result = func(*args, **kwargs)
+            return result
+
+        # Return wrapper matching original function's nature to satisfy
+        # both FastAPI async endpoints and synchronous unit tests.
+        if inspect.iscoroutinefunction(func):
+            return async_wrapper
+        return sync_wrapper
 
     return decorator
+
+    def close(self):
+        """Release resources: close persistent connection"""
+        try:
+            if hasattr(self, "_conn") and self._conn:
+                self._conn.close()
+                self._conn = None
+        except Exception:
+            pass
+
+    def __del__(self):
+        # Ensure resources are released on GC
+        self.close()
 
 
 if __name__ == "__main__":

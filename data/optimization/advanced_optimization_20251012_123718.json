@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-10-12T12:37:18.705227",
+  "optimizations": [
+    {
+      "type": "template_optimization",
+      "result": {
+        "template_created": "templates\\dashboard.html",
+        "optimization": "lightweight_template"
+      },
+      "success": true
+    },
+    {
+      "type": "route_optimization",
+      "success": true
+    },
+    {
+      "type": "middleware_optimization",
+      "success": true
+    }
+  ],
+  "success": true,
+  "errors": []
+}

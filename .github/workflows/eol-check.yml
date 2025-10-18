@@ -18,6 +18,10 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Pre-normalize LOCKS JSON (CRLF -> LF)
+        run: |
+          python scripts/ops/locks_eol_guard.py --once
+
       - name: Run EOL check (LF required)
         run: |
           python scripts/ops/check_eol.py

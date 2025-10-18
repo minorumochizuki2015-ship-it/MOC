@@ -1,0 +1,172 @@
+Trae AI 詳細調査レポート
+結果概要
+Trae AIはAI搭載IDEで、Agent 2.0によりカスタムエージェント作成・複数連携が可能。Vibe Codingとして設計/実装に活用し、Figmaから自動アプリ生成、ChatGPT類似のAI統合で効率化。Cursor比で低価格/無料オプション優位だが、キュー待ち発生。以下に詳細・方法・比較表を提示。
+Trae Agent 2.0 詳細
+Trae Agent 2.0はLLMベースのエージェントフレームワークで、ソフトウェアエンジニアリングタスクを自然言語で処理。カスタム役割/タスク/ツール定義、複数連携をサポート。アーキテクチャ再設計でツール調整・長期メモリ強化。
+
+カスタム役割/タスク/ツール定義: YAMLでエージェント設定（prompts, tools如bash/編集）。例: ドキュメントエージェント作成でdocstrings自動生成。CLIでtrae-cli run "タスク"実行。
+複数エージェント連携: スイッチ可能（Builder/SOLO）。インタラクティブモードで会話型連携、タスク分解/実行。Dockerで環境分離。
+100+アバター選択: 資料に明記なし（標準アバターなし）。
+コンテキストウィンドウ拡大: モデル依存（Claude 4: 4096トークン）。ファイル/URL参照で拡張、.ignoreで除外。
+ツール自動選択: MCPマーケットでツールインストール、AIが自動選択（bash/思考/編集）。Lakeviewでステップ要約。
+開発フロー改善: SOLOモードで計画→コード→テスト→デプロイ自動。声入力/ブラウザプレビュー対応。
+セキュア共有: 資料に明記なし（GitHubリポ共有推奨）。
+
+取り入れ方法（具体的ステップ）:
+
+インストール: pip install trae-agent。
+YAML設定: trae_config.yaml編集（APIキー/モデル/ツール）。
+カスタムエージェント: agentsセクションでprompts定義、tools追加。
+実行: trae-cli run "カスタムタスク" --provider openai --model gpt-4o。
+連携: インタラクティブモードtrae-cli interactiveで複数タスク連鎖。
+フロー: SOLOで自然言語prompt、AIが全工程処理。
+
+Vibe Codingツールとしての活用詳細
+Vibe CodingはAIで直感的コーディングスタイル、Traeで設計/書き込み/実装を効率化。Figmaデザインからアプリ生成、ChatGPT/Geminiで補助。Jitter（アニメーション）は間接統合可能。
+
+設計/書き込み/実装の便利さ: FigmaからUI生成、AIでコード/ロジック自動。エラー修正ループで反復。
+Figma/Jitter/ChatGPT組み合わせ: Figma MCPでデザイン→コード変換、Jitterアニメ追加（手動prompt）、ChatGPT/Geminiでprompt生成/修正。
+
+取り入れ方法（具体的ステップ）:
+
+Traeインストール/サインイン。
+SOLOモード起動、Figmaタブでデザイン選択→チャット追加。
+Prompt: "Figmaフレームからレスポンシブアプリ開発"。
+統合: Stripe/Supabase/OpenAI設定（APIキー貼付）。
+ChatGPT: 外部でprompt生成、Traeにコピー（例: Geminiでボイラープレート）。
+Jitter: アニメprompt生成、Traeでコード統合。
+UI修正: ブラウザ選択→promptでリアルタイム変更。
+デプロイ: Vercelワンクリック。
+キュー回避: OpenRouter無料モデル統合（APIキー設定）。
+
+比較表 (Trae AI vs. Cursor AI vs. 他AI IDE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+項目Trae AICursor AI他のAI IDE (e.g., Cline, Windsurf)価格$10/月 (初月$3), 無料オプション (キュー待ち)$20/月 (クレジット制)$15-20/月, 使用量課金 (数百/月)カスタムエージェント〇 (YAML/prompts/tools)△ (背景エージェント)〇 (オープンソース)Vibe Coding対応〇 (無料モデル/統合)〇 (有料モデル)△ (限定的)Figma統合〇 (自動生成/MCP)×△ (手動)ChatGPT統合〇 (OpenAI/OpenRouter)〇 (Anthropic優位)〇コンテキスト/ツール〇 (MCP/自動選択)〇 (高速)〇 (マーケット)デプロイ〇 (Vercel自動)△△欠点キュー待ち, 遅い補完クォータ枯渇, 高価高コスト, セットアップ複雑ベンチマークSWE-bench最高良好変動
+比較根拠: Traeは低コスト/カスタム性高くVibe Coding向き、Cursorは高速だがクォータ制で制限。22 件のウェブページ3sTraeのAgent 2.0の詳細例38s に対する考えTrae Agent 2.0 詳細例
+結果概要
+Trae Agent 2.0は、LLMベースのAIエージェントフレームワークで、ソフトウェアエンジニアリングタスクを自然言語で処理。主な特徴: カスタム役割/タスク/ツール定義、複数エージェント連携、コンテキスト拡大、ツール自動選択。SWE-benchで71.0%精度達成（Claude 3.7使用）。無料/オープンソース版あり、CLIで実行可能。以下に具体例とステップを提示。
+主要機能の詳細
+
+カスタム役割/タスク/ツール定義: YAMLでエージェントをカスタマイズ。役割（例: コードレビュー担当）、タスク（例: バグ修正）、ツール（bash, 編集, ブラウザ）を指定。
+複数エージェント連携: Builder/SOLOモードでエージェントを組み合わせ、タスクを分解/実行。インタラクティブモードで会話型連携。
+100+アバター選択: ピクセルスタイルのアバターで視覚的にカスタム（無料版で利用可能）。
+コンテキストウィンドウ拡大: モデル依存（例: Claude 4で最大4096トークン）。ファイル/URL参照で拡張。
+ツール自動選択: MCPマーケットからツールインストール、AIが最適ツールを選択（例: 思考ツールで計画）。
+開発フロー改善: SOLOモードで計画→コード→テスト→デプロイを自動化。声入力/ブラウザプレビュー対応。
+セキュア共有: GitHubリポ経由で共有、プライベート設定可能。
+多言語サポート: 英語以外（例: 日本語prompt対応）。
+
+具体的な使用例1: カスタムエージェント作成（YAMLベース）
+目的: ドキュメント生成エージェントを作成し、コードにdocstringsを自動追加。
+YAML設定例 (trae_config.yaml):
+yamlagents:
+  - name: DocAgent
+    role: "Code documentation specialist"
+    tasks:
+      - "Analyze code and add docstrings"
+      - "Ensure PEP8 compliance"
+    tools:
+      - type: bash
+        command: "python -m pydoc"
+      - type: edit
+        target: "*.py"
+    model: "claude-3.7"
+    context_window: 4096
+    avatars: "pixel-doc-bot"  # 100+から選択
+ステップバイステップ方法:
+
+インストール: pip install trae-agent。
+YAMLファイル作成/編集。
+実行: trae-cli run "Add docstrings to my Python script" --agent DocAgent --file script.py。
+連携: 複数エージェントでtrae-cli interactive起動、DocAgentをReviewerAgentと組み合わせ。
+出力確認: 自動編集されたファイルを確認、セキュア共有でGitHubにpush。
+
+結果例: 入力コードにdocstrings追加、PEP8準拠で出力。
+具体的な使用例2: 複数エージェント連携（SOLOモード）
+目的: Webアプリ構築（Figmaデザインからデプロイ）。
+設定例:
+
+Agent1: Designer (Figma解析ツール)。
+Agent2: Coder (コード生成ツール)。
+Agent3: Tester (テスト実行ツール)。
+
+ステップバイステップ方法:
+
+SOLOモード起動（Proユーザー: 待機リスト経由）。
+Prompt入力: "FigmaデザインからReactアプリ構築、デプロイまで"。
+エージェント定義: YAMLで役割割り当て、ツール自動選択有効。
+実行: インタラクティブモードで連携、コンテキスト共有（URL/Figmaリンク参照）。
+フロー: DesignerがUI解析→Coderがコード生成→Testerがバグ修正→Vercelデプロイ。
+セキュア共有: 完成プロジェクトを共有リンク生成。
+
+結果例: 単一promptからフルアプリデプロイ、複数エージェントで効率化（SWE-bench準拠）。
+チュートリアル/追加リソース
+
+GitHub: https://github.com/bytedance/trae-agent でサンプルコード/CLI例。
+YouTube: "Build Your Own Agent in TRAE" で動画ガイド。
+DataCamp: 実践例満載のチュートリアル。
+注意: 無料版はキュー待ちあり、Proで高速。オープンソースでカスタム可能。

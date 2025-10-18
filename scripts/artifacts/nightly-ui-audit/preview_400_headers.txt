@@ -1,0 +1,16 @@
+Key                           Value
+---                           -----
+Content-Length               101
+X-Preview-Same-Origin        true
+X-Preview-Origin             http://127.0.0.1:5001
+Access-Control-Expose-Headers X-Preview-Origin, X-Preview-Target, X-Upstream-Status, X-Disable-ServiceWorker, X-Preview-Same-Origin, ETag
+Cache-Control                no-store
+Access-Control-Allow-Origin  *
+X-Preview-Target             
+Content-Type                 text/html; charset=utf-8
+Access-Control-Allow-Methods GET, POST, PUT, DELETE, OPTIONS
+X-Disable-Serviceworker      true
+Access-Control-Allow-Headers Content-Type, Authorization, X-Style-Base-Url
+Date                         Fri, 17 Oct 2025 07:51:15 GMT
+Server                       waitress
+

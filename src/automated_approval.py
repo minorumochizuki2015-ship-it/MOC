@@ -12,13 +12,13 @@
 
 import datetime
 import hashlib
-import json
 import re
 import sqlite3
+from contextlib import closing
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 
 class RiskLevel(Enum):
@@ -70,45 +70,46 @@ class AutomatedApprovalSystem:
 
     def _init_database(self):
         """データベース初期化"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        # 物理クローズ保証 + トランザクション自動コミット/ロールバック
+        with closing(sqlite3.connect(self.db_path, timeout=5.0)) as conn:
+            # 初期PRAGMA（安定性強化）
+            conn.execute("PRAGMA journal_mode=WAL;")
+            conn.execute("PRAGMA busy_timeout=3000;")
+            conn.execute("PRAGMA foreign_keys=ON;")
 
-        # 承認履歴テーブル
-        cursor.execute(
-            """
-            CREATE TABLE IF NOT EXISTS approval_history (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                appr_id TEXT NOT NULL,
-                task_id TEXT NOT NULL,
-                operation TEXT NOT NULL,
-                requested_by TEXT NOT NULL,
-                decision TEXT NOT NULL,
-                risk_level TEXT NOT NULL,
-                applied_rules TEXT NOT NULL,
-                confidence REAL NOT NULL,
-                timestamp TEXT NOT NULL,
-                evidence_hash TEXT,
-                notes TEXT
-            )
-        """
-        )
+            # スキーマ作成（トランザクション管理付き）
+            with conn:
+                conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS approval_history (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        appr_id TEXT NOT NULL,
+                        task_id TEXT NOT NULL,
+                        operation TEXT NOT NULL,
+                        requested_by TEXT NOT NULL,
+                        decision TEXT NOT NULL,
+                        risk_level TEXT NOT NULL,
+                        applied_rules TEXT NOT NULL,
+                        confidence REAL NOT NULL,
+                        timestamp TEXT NOT NULL,
+                        evidence_hash TEXT,
+                        notes TEXT
+                    )
+                    """
+                )
 
-        # ルール適用履歴テーブル
-        cursor.execute(
-            """
-            CREATE TABLE IF NOT EXISTS rule_applications (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                appr_id TEXT NOT NULL,
-                rule_id TEXT NOT NULL,
-                matched BOOLEAN NOT NULL,
-                confidence REAL NOT NULL,
-                timestamp TEXT NOT NULL
-            )
-        """
-        )
-
-        conn.commit()
-        conn.close()
+                conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS rule_applications (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        appr_id TEXT NOT NULL,
+                        rule_id TEXT NOT NULL,
+                        matched BOOLEAN NOT NULL,
+                        confidence REAL NOT NULL,
+                        timestamp TEXT NOT NULL
+                    )
+                    """
+                )
 
     def _load_rules(self):
         """承認ルールの読み込み"""
@@ -359,54 +360,51 @@ class AutomatedApprovalSystem:
 
     def _log_rule_application(self, appr_id: str, rule_id: str, matched: bool, confidence: float):
         """ルール適用履歴の記録"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-
-        cursor.execute(
-            """
-            INSERT INTO rule_applications (appr_id, rule_id, matched, confidence, timestamp)
-            VALUES (?, ?, ?, ?, ?)
-        """,
-            (appr_id, rule_id, matched, confidence, datetime.datetime.utcnow().isoformat()),
-        )
-
-        conn.commit()
-        conn.close()
+        with closing(sqlite3.connect(self.db_path, timeout=5.0)) as conn:
+            with conn:
+                conn.execute(
+                    """
+                    INSERT INTO rule_applications (appr_id, rule_id, matched, confidence, timestamp)
+                    VALUES (?, ?, ?, ?, ?)
+                    """,
+                    (
+                        appr_id,
+                        rule_id,
+                        matched,
+                        confidence,
+                        datetime.datetime.utcnow().isoformat(),
+                    ),
+                )
 
     def process_approval(self, request: ApprovalRequest) -> Dict:
         """承認処理の実行"""
         decision, risk_level, confidence, matched_rules = self.analyze_request(request)
 
-        # 承認履歴の記録
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-
+        # 承認履歴の記録（確実にコミット・クローズ）
         evidence_analysis = self._analyze_evidence(request.evidence_path)
-
-        cursor.execute(
-            """
-            INSERT INTO approval_history 
-            (appr_id, task_id, operation, requested_by, decision, risk_level, 
-             applied_rules, confidence, timestamp, evidence_hash, notes)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """,
-            (
-                request.appr_id,
-                request.task_id,
-                request.operation,
-                request.requested_by,
-                decision.value,
-                risk_level.value,
-                ",".join(matched_rules),
-                confidence,
-                datetime.datetime.utcnow().isoformat(),
-                evidence_analysis.get("file_hash"),
-                f"Auto-processed by rule engine",
-            ),
-        )
-
-        conn.commit()
-        conn.close()
+        with closing(sqlite3.connect(self.db_path, timeout=5.0)) as conn:
+            with conn:
+                conn.execute(
+                    """
+                    INSERT INTO approval_history 
+                    (appr_id, task_id, operation, requested_by, decision, risk_level, 
+                     applied_rules, confidence, timestamp, evidence_hash, notes)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        request.appr_id,
+                        request.task_id,
+                        request.operation,
+                        request.requested_by,
+                        decision.value,
+                        risk_level.value,
+                        ",".join(matched_rules),
+                        confidence,
+                        datetime.datetime.utcnow().isoformat(),
+                        evidence_analysis.get("file_hash"),
+                        "Auto-processed by rule engine",
+                    ),
+                )
 
         return {
             "appr_id": request.appr_id,
@@ -419,7 +417,10 @@ class AutomatedApprovalSystem:
         }
 
     def _generate_reasoning(
-        self, decision: ApprovalDecision, risk_level: RiskLevel, matched_rules: List[str]
+        self,
+        decision: ApprovalDecision,
+        risk_level: RiskLevel,
+        matched_rules: List[str],
     ) -> str:
         """決定理由の生成"""
         rule_names = [rule.name for rule in self.rules if rule.rule_id in matched_rules]
@@ -433,40 +434,39 @@ class AutomatedApprovalSystem:
 
     def get_approval_stats(self) -> Dict:
         """承認統計の取得"""
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
+        with closing(sqlite3.connect(self.db_path, timeout=5.0)) as conn:
+            with conn:
+                cursor = conn.cursor()
 
-        # 決定別統計
-        cursor.execute(
-            """
-            SELECT decision, COUNT(*) as count
-            FROM approval_history
-            GROUP BY decision
-        """
-        )
-        decision_stats = dict(cursor.fetchall())
+                # 決定別統計
+                cursor.execute(
+                    """
+                    SELECT decision, COUNT(*) as count
+                    FROM approval_history
+                    GROUP BY decision
+                    """
+                )
+                decision_stats = dict(cursor.fetchall())
 
-        # リスクレベル別統計
-        cursor.execute(
-            """
-            SELECT risk_level, COUNT(*) as count
-            FROM approval_history
-            GROUP BY risk_level
-        """
-        )
-        risk_stats = dict(cursor.fetchall())
+                # リスクレベル別統計
+                cursor.execute(
+                    """
+                    SELECT risk_level, COUNT(*) as count
+                    FROM approval_history
+                    GROUP BY risk_level
+                    """
+                )
+                risk_stats = dict(cursor.fetchall())
 
-        # 最近の処理件数
-        cursor.execute(
-            """
-            SELECT COUNT(*) as count
-            FROM approval_history
-            WHERE timestamp > datetime('now', '-24 hours')
-        """
-        )
-        recent_count = cursor.fetchone()[0]
-
-        conn.close()
+                # 最近の処理件数
+                cursor.execute(
+                    """
+                    SELECT COUNT(*) as count
+                    FROM approval_history
+                    WHERE timestamp > datetime('now', '-24 hours')
+                    """
+                )
+                recent_count = cursor.fetchone()[0]
 
         return {
             "decision_stats": decision_stats,

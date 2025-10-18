@@ -1,0 +1,44 @@
+name: nightly-ui-audit
+on:
+  schedule:
+    - cron: '0 18 * * *'  # 毎日UTC18:00
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deps
+        run: python -m pip install -U pip waitress
+      - name: Start dev server (5010, loopback)
+        shell: pwsh
+        run: |
+          pwsh -File scripts/ops/start_ui_server.ps1 -BindHost 127.0.0.1 -Port 5010 &
+          for ($i=0; $i -lt 60; $i++) { if ((Test-NetConnection 127.0.0.1 -Port 5010).TcpTestSucceeded) { break } ; Start-Sleep 1 }
+      - name: Run audit
+        shell: pwsh
+        run: pwsh -File scripts/ops/run_nightly_ui_audit.ps1 -HostName '127.0.0.1' -Port 5010 -OutDir 'artifacts/nightly-ui-audit'
+      - name: Gate check (fail on missing headers or non-200/400)
+        shell: pwsh
+        run: |
+          $d = Join-Path $PWD 'artifacts/nightly-ui-audit'
+          $ok = $true
+          $h = Get-Content (Join-Path $d 'health.txt') -ErrorAction SilentlyContinue
+          if ($h -notmatch 'StatusCode:\s*200') { $ok=$false; Write-Error 'health.txt must indicate 200' }
+          $s1 = (Get-Content (Join-Path $d 'preview_success_headers.txt') -ErrorAction SilentlyContinue) -join "`n"
+          if ($s1 -notmatch 'ETag' -or $s1 -notmatch 'X-Preview-') { $ok=$false; Write-Error 'preview_success_headers.txt must contain ETag and X-Preview-*' }
+          $s2 = (Get-Content (Join-Path $d 'preview_400_headers.txt') -ErrorAction SilentlyContinue) -join "`n"
+          if ($s2 -notmatch 'Access-Control-Expose-Headers') { $ok=$false; Write-Error 'preview_400_headers.txt must include CORS expose headers' }
+          $s3 = Get-Content (Join-Path $d 'styles_etag.txt') -ErrorAction SilentlyContinue
+          if ($s3 -notmatch 'ETag:\s*\S+') { $ok=$false; Write-Error 'styles_etag.txt must contain ETag value' }
+          if (-not $ok) { exit 1 }
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-ui-audit
+          path: artifacts/nightly-ui-audit/

@@ -1,0 +1,90 @@
+{
+  "test_timestamp": "2025-10-12T12:52:57.633184",
+  "base_url": "http://127.0.0.1:5000",
+  "sequential_tests": [
+    {
+      "endpoint": "/",
+      "total_requests": 10,
+      "successful_requests": 10,
+      "errors": 0,
+      "avg_response_time_ms": 18.9,
+      "p95_response_time_ms": 60.15,
+      "min_response_time_ms": 7.07,
+      "max_response_time_ms": 60.15,
+      "error_rate": 0.0
+    },
+    {
+      "endpoint": "/api/status",
+      "total_requests": 10,
+      "successful_requests": 10,
+      "errors": 0,
+      "avg_response_time_ms": 112.06,
+      "p95_response_time_ms": 124.3,
+      "min_response_time_ms": 108.19,
+      "max_response_time_ms": 124.3,
+      "error_rate": 0.0
+    },
+    {
+      "endpoint": "/tasks",
+      "total_requests": 10,
+      "successful_requests": 10,
+      "errors": 0,
+      "avg_response_time_ms": 20.76,
+      "p95_response_time_ms": 36.93,
+      "min_response_time_ms": 8.57,
+      "max_response_time_ms": 36.93,
+      "error_rate": 0.0
+    },
+    {
+      "endpoint": "/approvals",
+      "total_requests": 10,
+      "successful_requests": 10,
+      "errors": 0,
+      "avg_response_time_ms": 12.3,
+      "p95_response_time_ms": 34.31,
+      "min_response_time_ms": 7.73,
+      "max_response_time_ms": 34.31,
+      "error_rate": 0.0
+    }
+  ],
+  "concurrent_tests": [
+    {
+      "endpoint": "/",
+      "concurrent_users": 5,
+      "total_requests": 25,
+      "successful_requests": 25,
+      "errors": 0,
+      "avg_response_time_ms": 27.14,
+      "p95_response_time_ms": 37.69,
+      "error_rate": 0.0
+    },
+    {
+      "endpoint": "/api/status",
+      "concurrent_users": 5,
+      "total_requests": 25,
+      "successful_requests": 25,
+      "errors": 0,
+      "avg_response_time_ms": 491.61,
+      "p95_response_time_ms": 537.42,
+      "error_rate": 0.0
+    }
+  ],
+  "summary": {
+    "overall_error_rate": 0.0,
+    "slowest_endpoint": {
+      "endpoint": "/api/status",
+      "avg_time_ms": 112.06,
+      "p95_time_ms": 124.3
+    },
+    "fastest_endpoint": {
+      "endpoint": "/approvals",
+      "avg_time_ms": 12.3,
+      "p95_time_ms": 34.31
+    },
+    "high_p95_endpoints": 0,
+    "performance_grade": "A",
+    "recommendations": [
+      "パフォーマンスは良好です"
+    ]
+  }
+}

@@ -7,12 +7,11 @@ FastAPI-based orchestration service with metrics and webhook support
 import asyncio
 import hashlib
 import hmac
-import json
 import logging
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 import uvicorn
 from fastapi import BackgroundTasks, Depends, FastAPI, HTTPException, Request
@@ -26,7 +25,10 @@ from .dispatcher import DispatchRequest, TaskDispatcher, TaskPriority, TaskStatu
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("data/logs/orchestrator.log"), logging.StreamHandler()],
+    handlers=[
+        logging.FileHandler("data/logs/orchestrator.log"),
+        logging.StreamHandler(),
+    ],
 )
 logger = logging.getLogger(__name__)
 
@@ -256,7 +258,9 @@ async def get_job_events(job_id: str):
 
 @app.put("/jobs/{job_id}")
 async def update_job(
-    job_id: str, update: TaskUpdateModel, dispatcher: TaskDispatcher = Depends(get_dispatcher)
+    job_id: str,
+    update: TaskUpdateModel,
+    dispatcher: TaskDispatcher = Depends(get_dispatcher),
 ):
     """Update job status and metadata"""
     try:

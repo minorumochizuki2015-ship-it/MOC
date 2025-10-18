@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "check_interval_sec": 15,
+  "idle_minutes_ac": 5,
+  "idle_minutes_dc": 2,
+  "cpu_threshold_percent": 15,
+  "dwell_sec": 60,
+  "on_ac_active_scheme": "SCHEME_BALANCED",
+  "on_idle_scheme": "SCHEME_MIN",
+  "gpu_threshold_percent": 10,
+  "disk_kBps_threshold": 256,
+  "net_kBps_threshold": 128,
+  "foreground_exempt_processes": [
+    "obs64.exe",
+    "resolve.exe",
+    "premiere.exe",
+    "afterfx.com",
+    "steam.exe"
+  ],
+  "fullscreen_exempt": true,
+  "dwell_up_sec": 90,
+  "dwell_down_sec": 45,
+  "min_session_sec": 120,
+  "log_rotation": { "enabled": true, "policy": "daily", "max_days": 14, "max_mb_per_file": 20 },
+  "sensor": { "samples": 3, "sample_interval_ms": 500, "warn_once": true },
+  "timeband_rules": [
+    {"start":"00:00","end":"07:00","idle_minutes_ac":3,"cpu_threshold_percent":12},
+    {"start":"19:00","end":"23:00","idle_minutes_ac":6,"cpu_threshold_percent":15}
+  ],
+  "learning": {"enabled": true, "window_days": 7, "max_adjust_minutes": 3},
+  "learning_bounds": {
+    "idle_minutes_ac": { "min": 1, "max": 30, "deadband_min": 2 },
+    "idle_minutes_dc": { "min": 1, "max": 20, "deadband_min": 2 },
+    "min_samples": 50,
+    "ignore_recent_minutes": 30
+  },
+  "write_atomic": { "enabled": true, "tmp_suffix": ".tmp", "bak_suffix": ".bak" },
+  "logs": { "base": "data/logs/current/" },
+  "one_click_lock_minutes": 60
+}

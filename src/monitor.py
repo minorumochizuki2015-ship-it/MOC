@@ -5,12 +5,14 @@ AI-driven monitoring and self-healing with Slack/Webhook notifications
 """
 
 import asyncio
+import atexit
 import builtins
 import json
 import logging
 import sqlite3
 import statistics
 import time
+from contextlib import closing
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
@@ -27,6 +29,7 @@ logging.basicConfig(
     handlers=[logging.FileHandler("data/logs/monitor.log"), logging.StreamHandler()],
 )
 logger = logging.getLogger(__name__)
+atexit.register(logging.shutdown)
 
 
 class AlertLevel(Enum):
@@ -113,7 +116,11 @@ class AIMonitor:
                 "error_rate": {"warning": 0.05, "critical": 0.10},
                 "task_queue_size": {"warning": 100, "critical": 500},
             },
-            "notifications": {"slack_webhook": None, "webhook_url": None, "email_enabled": False},
+            "notifications": {
+                "slack_webhook": None,
+                "webhook_url": None,
+                "email_enabled": False,
+            },
             "self_healing": {
                 "enabled": True,
                 "auto_restart": True,
@@ -143,9 +150,10 @@ class AIMonitor:
 
     def _init_database(self):
         """Initialize monitoring database tables"""
-        with self._connect() as conn:
-            conn.execute(
-                """
+        with closing(self._connect()) as conn:
+            with conn:
+                conn.execute(
+                    """
                 CREATE TABLE IF NOT EXISTS health_metrics (
                     id TEXT PRIMARY KEY,
                     name TEXT NOT NULL,
@@ -156,10 +164,10 @@ class AIMonitor:
                     timestamp TEXT NOT NULL
                 )
             """
-            )
+                )
 
-            conn.execute(
-                """
+                conn.execute(
+                    """
                 CREATE TABLE IF NOT EXISTS alerts (
                     id TEXT PRIMARY KEY,
                     level TEXT NOT NULL,
@@ -173,10 +181,10 @@ class AIMonitor:
                     resolved_at TEXT
                 )
             """
-            )
+                )
 
-            conn.execute(
-                """
+                conn.execute(
+                    """
                 CREATE TABLE IF NOT EXISTS recovery_log (
                     id TEXT PRIMARY KEY,
                     alert_id TEXT NOT NULL,
@@ -186,9 +194,9 @@ class AIMonitor:
                     timestamp TEXT NOT NULL
                 )
             """
-            )
+                )
 
-            conn.commit()
+            # Connection context will commit automatically
 
     async def collect_system_metrics(self) -> List[HealthMetric]:
         """Collect system health metrics"""
@@ -527,22 +535,23 @@ class AIMonitor:
     ):
         """Log recovery attempt to database"""
         # Use unified connection helper to mitigate Windows file locks (WAL/busy_timeout)
-        with self._connect() as conn:
-            conn.execute(
-                """
+        with closing(self._connect()) as conn:
+            with conn:
+                conn.execute(
+                    """
                 INSERT INTO recovery_log (id, alert_id, action, success, details, timestamp)
                 VALUES (?, ?, ?, ?, ?, ?)
             """,
-                (
-                    f"{alert_id}_{action.value}_{int(time.time())}",
-                    alert_id,
-                    action.value,
-                    success,
-                    details,
-                    datetime.utcnow().isoformat(),
-                ),
-            )
-            conn.commit()
+                    (
+                        f"{alert_id}_{action.value}_{int(time.time())}",
+                        alert_id,
+                        action.value,
+                        success,
+                        details,
+                        datetime.utcnow().isoformat(),
+                    ),
+                )
+            # Connection context will commit automatically
 
     async def send_notifications(self, alerts: List[Alert]):
         """Send notifications for alerts"""
@@ -595,8 +604,16 @@ class AIMonitor:
                     "text": alert.message,
                     "fields": [
                         {"title": "Metric", "value": alert.metric_name, "short": True},
-                        {"title": "Value", "value": f"{alert.current_value:.2f}", "short": True},
-                        {"title": "Threshold", "value": f"{alert.threshold:.2f}", "short": True},
+                        {
+                            "title": "Value",
+                            "value": f"{alert.current_value:.2f}",
+                            "short": True,
+                        },
+                        {
+                            "title": "Threshold",
+                            "value": f"{alert.threshold:.2f}",
+                            "short": True,
+                        },
                         {
                             "title": "Recovery",
                             "value": (
@@ -675,39 +692,42 @@ class AIMonitor:
     def _store_metrics(self, metrics: List[HealthMetric]):
         """Store metrics in database"""
         # Use unified connection helper to mitigate Windows file locks (WAL/busy_timeout)
-        with self._connect() as conn:
-            for metric in metrics:
-                conn.execute(
-                    """
+        with closing(self._connect()) as conn:
+            with conn:
+                for metric in metrics:
+                    conn.execute(
+                        """
                     INSERT INTO health_metrics 
                     (id, name, value, threshold_warning, threshold_critical, labels, timestamp)
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
-                    (
-                        f"{metric.name}_{int(metric.timestamp.timestamp())}",
-                        metric.name,
-                        metric.value,
-                        metric.threshold_warning,
-                        metric.threshold_critical,
-                        json.dumps(metric.labels or {}),
-                        metric.timestamp.isoformat(),
-                    ),
-                )
-            conn.commit()
+                        (
+                            f"{metric.name}_{int(metric.timestamp.timestamp())}",
+                            metric.name,
+                            metric.value,
+                            metric.threshold_warning,
+                            metric.threshold_critical,
+                            json.dumps(metric.labels or {}),
+                            metric.timestamp.isoformat(),
+                        ),
+                    )
+            # Connection context will commit automatically
 
     def _cleanup_old_data(self):
         """Clean up old metrics and alerts"""
         cutoff = datetime.utcnow() - timedelta(days=self.config["metrics_retention_days"])
         # Use unified connection helper to mitigate Windows file locks (WAL/busy_timeout)
-        with self._connect() as conn:
-            conn.execute(
-                "DELETE FROM health_metrics WHERE datetime(timestamp) < ?", (cutoff.isoformat(),)
-            )
-            conn.execute(
-                "DELETE FROM alerts WHERE datetime(timestamp) < ? AND resolved = TRUE",
-                (cutoff.isoformat(),),
-            )
-            conn.commit()
+        with closing(self._connect()) as conn:
+            with conn:
+                conn.execute(
+                    "DELETE FROM health_metrics WHERE datetime(timestamp) < ?",
+                    (cutoff.isoformat(),),
+                )
+                conn.execute(
+                    "DELETE FROM alerts WHERE datetime(timestamp) < ? AND resolved = TRUE",
+                    (cutoff.isoformat(),),
+                )
+            # Connection context will commit automatically
 
 
 # Backward-compatible alias for tests expecting `Monitor`

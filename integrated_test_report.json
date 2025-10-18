@@ -1,0 +1,142 @@
+{
+  "timestamp": "2025-10-13 15:45:18",
+  "overall_summary": {
+    "total_passed": 12,
+    "total_failed": 6,
+    "total_skipped": 0,
+    "total_tests": 18,
+    "success_rate": 66.67
+  },
+  "test_suites": {
+    "基本UI機能テスト": {
+      "timestamp": "2025-10-13 15:37:24",
+      "summary": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0
+      },
+      "results": [
+        {
+          "test": "Dashboard Access Test",
+          "status": "PASS",
+          "message": "Dashboard accessible"
+        },
+        {
+          "test": "Style Manager Page Test",
+          "status": "PASS",
+          "message": "Style manager page accessible"
+        },
+        {
+          "test": "API Endpoint Test: /api/styles",
+          "status": "PASS",
+          "message": "API endpoint accessible"
+        },
+        {
+          "test": "API Endpoint Test: /api/pages",
+          "status": "PASS",
+          "message": "API endpoint accessible"
+        },
+        {
+          "test": "API Endpoint Test: /api/prediction",
+          "status": "PASS",
+          "message": "API endpoint accessible"
+        },
+        {
+          "test": "API Endpoint Test: /api/trends",
+          "status": "PASS",
+          "message": "API endpoint accessible"
+        }
+      ]
+    },
+    "API機能テスト": {
+      "timestamp": "2025-10-13 15:38:53",
+      "summary": {
+        "passed": 3,
+        "failed": 2,
+        "skipped": 0
+      },
+      "results": [
+        {
+          "test": "Get Styles API",
+          "status": "PASS",
+          "message": "Successfully retrieved 8 style items"
+        },
+        {
+          "test": "Update Styles API",
+          "status": "FAIL",
+          "message": "HTTP 500: {\"error\":\"\\u30b9\\u30bf\\u30a4\\u30eb\\u66f4\\u65b0\\u306b\\u5931\\u6557\\u3057\\u307e\\u3057\\u305f\"}\n"
+        },
+        {
+          "test": "Create Patch API",
+          "status": "FAIL",
+          "message": "HTTP 404: <!doctype html>\n<html lang=en>\n<title>404 Not Found</title>\n<h1>Not Found</h1>\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>\n"
+        },
+        {
+          "test": "Pages API",
+          "status": "PASS",
+          "message": "Successfully retrieved 3 pages"
+        },
+        {
+          "test": "Invalid JSON Handling",
+          "status": "PASS",
+          "message": "Properly handled invalid JSON with HTTP 500"
+        }
+      ]
+    },
+    "要素選択機能テスト": {
+      "timestamp": "2025-10-13 15:41:32",
+      "summary": {
+        "passed": 0,
+        "failed": 1,
+        "skipped": 0
+      },
+      "results": [
+        {
+          "test": "Navigate to Style Manager",
+          "status": "FAIL",
+          "message": "Message: \nStacktrace:\n\tGetHandleVerifier [0x0x7ff66d60e955+80021]\n\tGetHandleVerifier [0x0x7ff66d60e9b0+80112]\n\t(No symbol) [0x0x7ff66d39060f]\n\t(No symbol) [0x0x7ff66d3e8854]\n\t(No symbol) [0x0x7ff66d3e8b1c]\n\t(No symbol) [0x0x7ff66d43c927]\n\t(No symbol) [0x0x7ff66d41126f]\n\t(No symbol) [0x0x7ff66d43968a]\n\t(No symbol) [0x0x7ff66d411003]\n\t(No symbol) [0x0x7ff66d3d95d1]\n\t(No symbol) [0x0x7ff66d3da3f3]\n\tGetHandleVerifier [0x0x7ff66d8cdd0d+2960461]\n\tGetHandleVerifier [0x0x7ff66d8c7fca+2936586]\n\tGetHandleVerifier [0x0x7ff66d8e8a07+3070279]\n\tGetHandleVerifier [0x0x7ff66d62843e+185214]\n\tGetHandleVerifier [0x0x7ff66d62fe8f+216527]\n\tGetHandleVerifier [0x0x7ff66d617b94+117460]\n\tGetHandleVerifier [0x0x7ff66d617d4f+117903]\n\tGetHandleVerifier [0x0x7ff66d5fdc28+11112]\n\tBaseThreadInitThunk [0x0x7fff3ecce8d7+23]\n\tRtlUserThreadStart [0x0x7fff406a8d9c+44]\n"
+        }
+      ]
+    },
+    "ビジュアル編集機能テスト": {
+      "timestamp": "2025-10-13 15:43:30",
+      "summary": {
+        "passed": 3,
+        "failed": 3,
+        "skipped": 0
+      },
+      "results": [
+        {
+          "test": "Style Manager Page Load",
+          "status": "FAIL",
+          "message": "Missing elements: ['styleManagerApp']"
+        },
+        {
+          "test": "Color Tools Presence",
+          "status": "PASS",
+          "message": "Found 1 color tool elements"
+        },
+        {
+          "test": "Font Tools Presence",
+          "status": "PASS",
+          "message": "Found 4 font tool elements"
+        },
+        {
+          "test": "Layout Tools Presence",
+          "status": "PASS",
+          "message": "Found 6 layout tool elements"
+        },
+        {
+          "test": "Preview Functionality",
+          "status": "FAIL",
+          "message": "HTTP 404"
+        },
+        {
+          "test": "Style Persistence",
+          "status": "FAIL",
+          "message": "Failed to update style: HTTP 500"
+        }
+      ]
+    }
+  }
+}

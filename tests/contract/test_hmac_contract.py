@@ -235,7 +235,10 @@ class TestHMACContract:
         # Act
         result = security_manager.verify_hmac_signature(
             payload=json.dumps(
-                unicode_payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+                unicode_payload,
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=False,
             ),
             signature=signature,
             secret=webhook_secret,
@@ -339,7 +342,6 @@ class TestHMACContract:
     def test_concurrent_hmac_verification(self, security_manager, webhook_secret, sample_payload):
         """Contract: HMAC verification should be thread-safe"""
         import concurrent.futures
-        import threading
 
         # Arrange
         timestamp = str(int(time.time()))

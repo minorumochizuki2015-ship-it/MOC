@@ -9,6 +9,62 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ORION shared theme -->
+    <link rel="stylesheet" href="/static/css/orion.css">
+    <!-- Futuristic (AI-like) accents: glow, gradient, subtle scan, hover lift -->
+    <style>
+        :root {
+            --orion-bg: #0a0f14;
+            --orion-card-bg: #0d141a;
+            --orion-accent: #00d1ff;
+            --orion-text: #e6f7ff;
+            --orion-border: rgba(0, 209, 255, 0.25);
+        }
+        body {
+            background: radial-gradient(1200px 600px at 20% 0%, rgba(0,209,255,0.08), transparent 60%),
+                        radial-gradient(900px 400px at 80% 100%, rgba(0,209,255,0.06), transparent 60%),
+                        var(--orion-bg);
+            color: var(--orion-text);
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+        .container.my-4 { position: relative; overflow: hidden; }
+        .container.my-4::before {
+            content: "";
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0,209,255,0.12), rgba(0,209,255,0.12) 1px,
+                transparent 1px, transparent 22px
+            );
+            opacity: 0.06;
+            pointer-events: none;
+            animation: scanLines 12s linear infinite;
+        }
+        @keyframes scanLines { from { background-position-y: 0; } to { background-position-y: -120px; } }
+
+        .card {
+            background: var(--orion-card-bg);
+            border: 1px solid var(--orion-border);
+            box-shadow: 0 0 12px rgba(0,209,255,0.08);
+            transition: transform 200ms ease, box-shadow 200ms ease;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 0 20px rgba(0,209,255,0.14); }
+        .card-header {
+            background: linear-gradient(90deg, rgba(0,209,255,0.12), rgba(0,209,255,0) 60%);
+            border-bottom: 1px solid rgba(0,209,255,0.2);
+        }
+
+        .badge.bg-secondary, .badge.bg-success, .badge.bg-info, .badge.bg-danger {
+            text-shadow: 0 0 6px rgba(0,209,255,0.6);
+        }
+        .btn-outline-primary { border-color: var(--orion-accent); color: var(--orion-accent); }
+        .btn-outline-primary:hover { background: rgba(0,209,255,0.15); box-shadow: 0 0 12px rgba(0,209,255,0.30); }
+        .btn-primary { background-color: var(--orion-accent); border-color: var(--orion-accent); box-shadow: 0 0 8px rgba(0,209,255,0.36); }
+        .btn-primary:hover { filter: brightness(1.08); box-shadow: 0 0 14px rgba(0,209,255,0.50); }
+
+        pre.bg-dark { background: #0b1116 !important; border: 1px solid rgba(0,209,255,0.18); }
+        small.text-muted { color: #9ec6d6 !important; }
+    </style>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Gantt Chart Library -->
@@ -245,11 +301,27 @@
             }
         }
 
+        async function initAutopilot() {
+            const wrap = document.getElementById('autopilot-live');
+            try {
+                // 事前チェック（タイムアウト1.5s）
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 1500);
+                const res = await fetch('/api/autopilot/status', { signal: controller.signal });
+                clearTimeout(timeout);
+                if (!res.ok) throw new Error(`status http ${res.status}`);
+                // 利用可能なら通常更新（3秒間隔、控えめ）
+                await loadAutopilotStatus();
+                await loadAutopilotLog();
+                setInterval(() => { loadAutopilotStatus(); loadAutopilotLog(); }, 3000);
+            } catch (_) {
+                // 利用不可ならUIノイズを避けるため非表示
+                if (wrap) wrap.style.display = 'none';
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            loadAutopilotStatus();
-            loadAutopilotLog();
-            // 2秒間隔でライブ更新
-            setInterval(() => { loadAutopilotStatus(); loadAutopilotLog(); }, 2000);
+            initAutopilot();
         });
     </script>
 
@@ -288,9 +360,18 @@
             }
 
             // プルタブ機能：高さが一定以上の .card-body を折りたたみ可能化
+            // ただし、グラフ・ガント・ワークフローなどのビジュアル領域は常時表示（折りたたみ対象外）
             const bodies = Array.from(document.querySelectorAll('.card-body'));
             bodies.forEach((el) => {
                 const rect = el.getBoundingClientRect();
+                const containsVisual = el.querySelector('canvas, .chart-container, #gantt-chart, .workflow-canvas');
+                if (containsVisual) {
+                    // ビジュアル領域は折りたたみ無効化
+                    el.classList.remove('pull-panel', 'collapsed');
+                    const tab = el.parentElement?.querySelector('.pull-tab');
+                    if (tab) tab.remove();
+                    return;
+                }
                 if (rect.height > 280) {
                     el.classList.add('pull-panel', 'collapsed');
                     const tab = document.createElement('div');
@@ -323,30 +404,157 @@
             const sseStatus = document.getElementById('sse-status');
             const liveCpu = document.getElementById('live-cpu');
             const liveMem = document.getElementById('live-mem');
-            try {
-                const es = new EventSource('/events');
-                es.onopen = () => {
-                    if (sseStatus) sseStatus.className = 'badge bg-success', sseStatus.textContent = 'SSE: 接続';
+
+            async function preflight(url, timeoutMs = 1200) {
+                const controller = new AbortController();
+                const tm = setTimeout(() => controller.abort(), timeoutMs);
+                try {
+                    const res = await fetch(url, { signal: controller.signal });
+                    return !!res.ok;
+                } catch (_) {
+                    return false;
+                } finally {
+                    clearTimeout(tm);
+                }
+            }
+
+            function startHealthPolling(url = '/api/system-health') {
+                // 軽量ヘルスAPIが提供されている場合のみポーリング（未提供時は停止してノイズ抑止）
+                let poller = null;
+                let failureCount = 0;
+
+                const stop = () => {
+                    if (poller) {
+                        clearInterval(poller);
+                        poller = null;
+                    }
+                    // 利用不可時はウィジェットを控えめ表示/非表示
+                    const widget = document.getElementById('live-health-widget');
+                    if (widget) widget.style.opacity = '0.6';
+                    if (sseStatus) sseStatus.className = 'badge bg-secondary', sseStatus.textContent = 'SSE: 無効(ヘルスポーリング停止)';
                 };
-                es.onerror = () => {
-                    if (sseStatus) sseStatus.className = 'badge bg-danger', sseStatus.textContent = 'SSE: 切断';
-                };
-                es.onmessage = (ev) => {
+
+                const poll = async () => {
                     try {
-                        const data = JSON.parse(ev.data);
+                        const controller = new AbortController();
+                        const tm = setTimeout(() => controller.abort(), 1200);
+                        const res = await fetch(url, { signal: controller.signal });
+                        clearTimeout(tm);
+                        if (!res.ok) {
+                            failureCount++;
+                            if (failureCount >= 3) stop();
+                            return;
+                        }
+                        const data = await res.json().catch(() => ({}));
+                        failureCount = 0; // 成功したのでリセット
                         if (typeof data.cpu_percent !== 'undefined') {
                             liveCpu && (liveCpu.textContent = String(data.cpu_percent));
                         }
                         if (typeof data.mem_used_mb !== 'undefined') {
                             liveMem && (liveMem.textContent = String(data.mem_used_mb));
                         }
-                    } catch (e) {
-                        console.warn('SSE parse error', e);
+                    } catch (_) {
+                        // 連続失敗時は停止してログノイズを抑止
+                        failureCount++;
+                        if (failureCount >= 3) stop();
                     }
                 };
-            } catch (e) {
-                console.warn('EventSource init failed', e);
-                if (sseStatus) sseStatus.className = 'badge bg-warning', sseStatus.textContent = 'SSE: 未接続';
+
+                // 事前確認: 未提供なら開始しない
+                (async () => {
+                    if (!(await preflight(url))) { stop(); return; }
+                    // 初回実行と定期ポーリング開始
+                    await poll();
+                    poller = setInterval(poll, 3000);
+                    if (sseStatus) sseStatus.className = 'badge bg-secondary', sseStatus.textContent = 'SSE: 無効(ポーリング)';
+                })();
+            }
+
+            (async () => {
+                try {
+                    let es = null;
+                    const urls = ['/sse/events'];
+                    let activeUrl = null;
+                    for (const u of urls) {
+                        if (await preflight(u)) { activeUrl = u; break; }
+                    }
+                    if (!activeUrl) {
+                        // SSEが未提供の場合はノイズを抑えるためEventSourceを作らず、ポーリングへ切替
+                        if (await preflight('/api/system-health')) {
+                            startHealthPolling();
+                        } else {
+                            // 何も取得できない場合はウィジェットを非表示
+                            const widget = document.getElementById('live-health-widget');
+                            widget && (widget.style.display = 'none');
+                        }
+                        return;
+                    }
+
+                    es = new EventSource(activeUrl);
+                    es.onopen = () => {
+                        if (sseStatus) sseStatus.className = 'badge bg-success', sseStatus.textContent = 'SSE: 接続';
+                    };
+                    es.onerror = async () => {
+                        if (sseStatus) sseStatus.className = 'badge bg-danger', sseStatus.textContent = 'SSE: 切断';
+                        // フォールバック: 軽量ヘルスのポーリング
+                        if (await preflight('/api/system-health')) {
+                            startHealthPolling('/api/system-health');
+                        }
+                    };
+                    es.onmessage = (ev) => {
+                        try {
+                            const data = JSON.parse(ev.data);
+                            if (typeof data.cpu_percent !== 'undefined') {
+                                liveCpu && (liveCpu.textContent = String(data.cpu_percent));
+                            }
+                            if (typeof data.mem_used_mb !== 'undefined') {
+                                liveMem && (liveMem.textContent = String(data.mem_used_mb));
+                            }
+                        } catch (e) {
+                            console.warn('SSE parse error', e);
+                        }
+                    };
+                } catch (e) {
+                    console.warn('EventSource init failed', e);
+                    if (sseStatus) sseStatus.className = 'badge bg-warning', sseStatus.textContent = 'SSE: 未接続';
+                }
+            })();
+
+            // ルートに応じた初期表示制御
+            const initialSection = "{{ initial_section|default('') }}";
+            if (initialSection) {
+                const showOnly = (id) => {
+                    const sections = document.querySelectorAll('section');
+                    sections.forEach(sec => {
+                        // 常設のヘッダーやダッシュボード以外を非表示にし、指定セクションのみを表示
+                        if (sec.id === id) {
+                            sec.style.display = '';
+                        } else if (sec.id) {
+                            sec.style.display = 'none';
+                        }
+                    });
+                };
+
+                if (['ml','ps1','results'].includes(initialSection)) {
+                    // ML/DB統合セクションを表示
+                    showOnly('ml-db-section');
+                    // 目的の見出しへスクロール
+                    const targetId = initialSection === 'ml' ? 'ml-db-heading'
+                                   : initialSection === 'ps1' ? 'ps1-optimize-heading'
+                                   : 'results-db-heading';
+                    const target = document.getElementById(targetId);
+                    target && target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (initialSection === 'ml') {
+                        try { refreshMLStatus(); } catch (e) {}
+                    }
+                } else if (initialSection === 'tasks_new') {
+                    // 新規タスク作成モーダルを自動表示
+                    const modalEl = document.getElementById('createTaskModal');
+                    if (modalEl && window.bootstrap) {
+                        const modal = new bootstrap.Modal(modalEl);
+                        modal.show();
+                    }
+                }
             }
         });
     </script>
@@ -1034,7 +1242,10 @@
                 <a class="nav-link" href="/tasks">タスク管理</a>
                 <a class="nav-link" href="/approvals">承認管理</a>
                 <a class="nav-link" href="/agents">エージェント</a>
-                <a class="nav-link" href="#" onclick="showMLSection()">ML/DB統合</a>
+                <a class="nav-link" href="/ml">ML/DB統合</a>
+                <a class="nav-link" href="/ps1">PS1最適化</a>
+                <a class="nav-link" href="/results">結果DB</a>
+                <a class="nav-link" href="/tasks/new">新規タスク</a>
             </div>
         </div>
     </nav>
@@ -1234,7 +1445,7 @@
                             </div>
                         </div>
                         
-                        <div id="workflow-canvas" class="workflow-container">
+                        <div id="workflow-canvas" class="workflow-container ai-motion">
                             <!-- 動的に生成されるワークフロー図 -->
                             <svg id="workflow-svg" width="100%" height="400" viewBox="0 0 1000 400">
                                 <!-- 背景グリッド -->
@@ -1531,7 +1742,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div id="gantt-chart" class="gantt-container" role="img" aria-label="タスクのガントチャート表示"></div>
+                            <div id="gantt-chart" class="gantt-container ai-motion" role="img" aria-label="タスクのガントチャート表示"></div>
                         </div>
                     </div>
                 </div>
@@ -1551,7 +1762,7 @@
                             </h3>
                         </div>
                         <div class="card-body">
-                            <div class="chart-container">
+                            <div class="chart-container ai-motion no-collapse">
                                 <canvas id="taskStatusChart" role="img" aria-label="タスクステータス別の分布を示す円グラフ"></canvas>
                             </div>
                         </div>
@@ -1566,7 +1777,7 @@
                             </h3>
                         </div>
                         <div class="card-body">
-                            <div class="chart-container">
+                            <div class="chart-container ai-motion no-collapse">
                                 <canvas id="approvalStatusChart" role="img" aria-label="承認状況を示す棒グラフ"></canvas>
                             </div>
                         </div>
@@ -1808,7 +2019,7 @@
                 <div class="col-md-6 mb-3">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="h5 mb-0">
+                            <h3 class="h5 mb-0" id="ps1-optimize-heading">
                                 <i class="fas fa-cogs me-2" aria-hidden="true"></i>
                                 PS1パラメーター最適化
                             </h3>
@@ -1838,7 +2049,7 @@
                 <div class="col-12 mb-3">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="h5 mb-0">
+                            <h3 class="h5 mb-0" id="results-db-heading">
                                 <i class="fas fa-database me-2" aria-hidden="true"></i>
                                 作業結果データベース
                             </h3>
@@ -2591,7 +2802,7 @@ const socket = (typeof io === "function") ? io({autoConnect: true}) : { on: ()=>
                 <tr>
                     <td>${task.id}</td>
                     <td>${task.title}</td>
-                    <td><span class="badge task-status-badge status-${task.status.toLowerCase()}">
+                    <td><span class="badge task-status-badge status-${String(task.status || '').toLowerCase()}">
                             <i class="fas ${getStatusIcon(task.status)} me-1"></i>
                             ${task.status}
                         </span></td>
@@ -3397,20 +3608,53 @@ const socket = (typeof io === "function") ? io({autoConnect: true}) : { on: ()=>
         }
 
         // マイルストーン自動更新（MD変更の即時反映）
+        let MILE_TASKS_AVAILABLE = null;
+        let MILE_MILESTONES_AVAILABLE = null;
+
+        async function initMilestones() {
+            // 利用可能なAPIを事前確認してから更新を開始
+            MILE_TASKS_AVAILABLE = await preflight('/api/tasks');
+            MILE_MILESTONES_AVAILABLE = await preflight('/api/milestones');
+
+            if (!MILE_TASKS_AVAILABLE && !MILE_MILESTONES_AVAILABLE) {
+                // 何も取得できない環境ではUIを非表示にしてノイズを抑制
+                const cont = document.getElementById('milestone-progress');
+                if (cont) cont.style.display = 'none';
+                return;
+            }
+
+            await refreshMilestones();
+            setInterval(refreshMilestones, 5000);
+        }
+
         async function refreshMilestones() {
             try {
-                const tasksResponse = await fetch('/api/tasks');
-                const tasksData = await tasksResponse.json();
-                const milestonesResponse = await fetch('/api/milestones');
-                const milestonesData = await milestonesResponse.json();
+                let tasksData = { tasks: [] };
+                let milestonesData = { milestones: [] };
+
+                if (MILE_TASKS_AVAILABLE) {
+                    try {
+                        const tasksResponse = await fetch('/api/tasks');
+                        if (tasksResponse.ok) {
+                            tasksData = await tasksResponse.json().catch(() => ({ tasks: [] }));
+                        }
+                    } catch (_) { /* silent */ }
+                }
+
+                if (MILE_MILESTONES_AVAILABLE) {
+                    try {
+                        const milestonesResponse = await fetch('/api/milestones');
+                        if (milestonesResponse.ok) {
+                            milestonesData = await milestonesResponse.json().catch(() => ({ milestones: [] }));
+                        }
+                    } catch (_) { /* silent */ }
+                }
+
                 displayMilestoneProgressFromMilestones(milestonesData.milestones || [], tasksData.tasks || []);
             } catch (e) {
                 console.warn('Milestones refresh failed:', e);
             }
         }
-
-        // 3秒間隔でマイルストーンを再読込しUIへ反映
-        setInterval(refreshMilestones, 3000);
         
         // タスク優先度取得
         function getTaskPriority(task) {
@@ -3559,7 +3803,7 @@ const socket = (typeof io === "function") ? io({autoConnect: true}) : { on: ()=>
         // ワークフローノード作成
         function createWorkflowNode(container, task, x, y) {
             const node = document.createElement('div');
-            node.className = `workflow-node status-${task.status.toLowerCase()}`;
+            node.className = `workflow-node status-${String(task.status || '').toLowerCase()}`;
             node.style.left = x + 'px';
             node.style.top = y + 'px';
             
@@ -3991,18 +4235,59 @@ const socket = (typeof io === "function") ? io({autoConnect: true}) : { on: ()=>
     </div>
 
     <script>
+        // 動的に利用可能なヘルスエンドポイントを選択
+        let ORCH_STATUS_URL = null;
+
+        async function initOrchStatus() {
+            // まず軽量APIを優先、次に /status を試す
+            const okHealth = await (async () => {
+                try {
+                    const c = new AbortController();
+                    const t = setTimeout(() => c.abort(), 1200);
+                    const r = await fetch('/api/system-health', { signal: c.signal });
+                    clearTimeout(t);
+                    return r.ok;
+                } catch (_) { return false; }
+            })();
+            if (okHealth) { ORCH_STATUS_URL = '/api/system-health'; }
+            else {
+                const okStatus = await (async () => {
+                    try {
+                        const c = new AbortController();
+                        const t = setTimeout(() => c.abort(), 1200);
+                        const r = await fetch('/status', { signal: c.signal });
+                        clearTimeout(t);
+                        return r.ok;
+                    } catch (_) { return false; }
+                })();
+                ORCH_STATUS_URL = okStatus ? '/status' : null;
+            }
+
+            if (!ORCH_STATUS_URL) {
+                // 利用可能なエンドポイントがない場合はバッジを控えめ表示にして終了
+                const badge = document.getElementById('orch-dispatcher-state');
+                if (badge) {
+                    badge.textContent = 'Dispatcher: 未取得';
+                    badge.className = 'badge bg-secondary';
+                }
+                return; // setInterval は設定しない
+            }
+
+            // 初回更新と定期更新
+            await refreshOrchStatus();
+            setInterval(refreshOrchStatus, 10000);
+        }
+
         async function refreshOrchStatus() {
             try {
-                let data;
-                let res = await fetch('/status');
-                if (!res.ok) {
-                    // フォールバック: 軽量ヘルスチェック
-                    res = await fetch('/api/system-health');
-                    if (!res.ok) throw new Error(`/status ${res.status} & /api/system-health ${res.status}`);
-                }
-                data = await res.json().catch(() => ({}));
+                if (!ORCH_STATUS_URL) return;
+                const res = await fetch(ORCH_STATUS_URL);
+                const data = await res.json().catch(() => ({}));
                 const badge = document.getElementById('orch-dispatcher-state');
-                const running = !!data?.dispatcher?.running;
+                // /api/system-health の場合は簡易表示、/status の場合は詳細表示
+                const running = ORCH_STATUS_URL === '/status'
+                    ? !!data?.dispatcher?.running
+                    : !!data?.healthy;
                 badge.textContent = `Dispatcher: ${running ? '稼働中' : '停止'}`;
                 badge.className = `badge ${running ? 'bg-success' : 'bg-secondary'}`;
 
@@ -4078,8 +4363,7 @@ const socket = (typeof io === "function") ? io({autoConnect: true}) : { on: ()=>
             const btnStop = document.getElementById('btn-dispatch-stop');
             if (btnStart) btnStart.addEventListener('click', dispatchStart);
             if (btnStop) btnStop.addEventListener('click', dispatchStop);
-            refreshOrchStatus();
-            setInterval(refreshOrchStatus, 10000);
+            initOrchStatus();
         });
     </script>
 

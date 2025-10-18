@@ -1,0 +1,135 @@
+{
+  "timestamp": "2025-10-14T23:42:32.917002+00:00",
+  "summary": {
+    "total_queries": 4,
+    "slow_queries": 0,
+    "query_types": [
+      "SELECT"
+    ]
+  },
+  "performance_metrics": {
+    "SELECT": {
+      "count": 4,
+      "avg_time": 0.001739203929901123,
+      "max_time": 0.0029990673065185547,
+      "min_time": 0.0009629726409912109
+    }
+  },
+  "slow_queries": [],
+  "optimization_opportunities": [
+    {
+      "suggestion": "大量データの場合はLIMIT句の使用を検討してください",
+      "frequency": 4
+    },
+    {
+      "suggestion": "SELECT * の代わりに必要なカラムのみを指定してください",
+      "frequency": 2
+    },
+    {
+      "suggestion": "カラム 'email' にインデックスを検討してください",
+      "frequency": 1
+    },
+    {
+      "suggestion": "カラム 'status' にインデックスを検討してください",
+      "frequency": 1
+    },
+    {
+      "suggestion": "ORDER BY カラム 'created_at DESC' にインデックスを検討してください",
+      "frequency": 1
+    },
+    {
+      "suggestion": "カラム 'user_id' にインデックスを検討してください",
+      "frequency": 1
+    },
+    {
+      "suggestion": "サブクエリをJOINに書き換えることで性能向上の可能性があります",
+      "frequency": 1
+    }
+  ],
+  "schema_analysis": {
+    "tables": {
+      "users": {
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "not_null": false,
+            "default": null,
+            "primary_key": true
+          },
+          {
+            "name": "name",
+            "type": "TEXT",
+            "not_null": true,
+            "default": null,
+            "primary_key": false
+          },
+          {
+            "name": "email",
+            "type": "TEXT",
+            "not_null": false,
+            "default": null,
+            "primary_key": false
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "not_null": false,
+            "default": "CURRENT_TIMESTAMP",
+            "primary_key": false
+          }
+        ],
+        "row_count": 100
+      },
+      "orders": {
+        "columns": [
+          {
+            "name": "id",
+            "type": "INTEGER",
+            "not_null": false,
+            "default": null,
+            "primary_key": true
+          },
+          {
+            "name": "user_id",
+            "type": "INTEGER",
+            "not_null": false,
+            "default": null,
+            "primary_key": false
+          },
+          {
+            "name": "amount",
+            "type": "REAL",
+            "not_null": false,
+            "default": null,
+            "primary_key": false
+          },
+          {
+            "name": "status",
+            "type": "TEXT",
+            "not_null": false,
+            "default": null,
+            "primary_key": false
+          },
+          {
+            "name": "created_at",
+            "type": "TIMESTAMP",
+            "not_null": false,
+            "default": "CURRENT_TIMESTAMP",
+            "primary_key": false
+          }
+        ],
+        "row_count": 100
+      }
+    },
+    "indexes": {},
+    "statistics": {
+      "total_tables": 2,
+      "total_indexes": 0,
+      "total_rows": 200
+    },
+    "recommendations": [
+      "インデックス数が少ない可能性があります。クエリパフォーマンスを確認してください"
+    ]
+  }
+}

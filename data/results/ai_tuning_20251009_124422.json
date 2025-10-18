@@ -1,0 +1,11 @@
+{
+  "accuracy": 0.9394812680115274,
+  "best_params": {
+    "max_depth": 12,
+    "min_samples_split": 3,
+    "n_estimators": 250
+  },
+  "train_samples": 6940,
+  "test_samples": 1735,
+  "cv_score": 0.9353025936599423
+}

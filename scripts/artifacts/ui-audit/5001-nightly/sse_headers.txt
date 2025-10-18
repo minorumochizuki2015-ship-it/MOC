@@ -1,0 +1,14 @@
+HTTP/1.1 200 OK
+Access-Control-Allow-Headers: Content-Type, Authorization, X-Style-Base-Url
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: X-Preview-Origin, X-Preview-Target, X-Upstream-Status, X-Disable-ServiceWorker, X-Preview-Same-Origin, ETag
+Cache-Control: no-cache
+Content-Length: 111
+Content-Type: text/event-stream; charset=utf-8
+Date: Fri, 17 Oct 2025 15:01:47 GMT
+Server: waitress
+X-Accel-Buffering: no
+
+data: {"event": "health", "status": "ok", "timestamp": "2025-10-18T00:01:47.568833", "active_connections": 0}
+

@@ -3,19 +3,15 @@ Phase 4 リアルタイム監視ダッシュボード
 完全自律システム向けの知能化ダッシュボード実装
 """
 
-import asyncio
-import json
 import logging
-import sqlite3
 import threading
 import time
 from collections import deque
 from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List
 
-import numpy as np
 from flask import Flask, jsonify, render_template_string, request
 from flask_socketio import SocketIO, emit, join_room, leave_room
 
@@ -468,7 +464,10 @@ class RealtimeDashboard:
                 content = flags_file.read_text(encoding="utf-8")
                 if "FREEZE=on" in content:
                     issues.append(
-                        {"type": "automation_frozen", "message": "自動化システムが凍結状態です"}
+                        {
+                            "type": "automation_frozen",
+                            "message": "自動化システムが凍結状態です",
+                        }
                     )
 
             return {"issues": issues, "timestamp": datetime.now().isoformat()}

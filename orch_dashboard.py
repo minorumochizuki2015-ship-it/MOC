@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import atexit
 import json
 import logging
 import os
@@ -10,9 +11,10 @@ import subprocess
 import sys
 import threading
 import time
+import traceback
 import uuid
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -21,7 +23,7 @@ import psutil
 from flask import (
     Flask,
     Response,
-    flash,
+    g,
     jsonify,
     redirect,
     render_template,
@@ -30,8 +32,13 @@ from flask import (
     stream_with_context,
     url_for,
 )
+from flask_caching import Cache
+from flask_compress import Compress
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+
+# Ensure log handlers are cleanly closed on process exit to avoid ResourceWarning
+atexit.register(logging.shutdown)
 
 # Phase 3コンポーネントのインポート
 try:
@@ -45,6 +52,15 @@ except ImportError:
 
 # 知識データベースと機械学習エンジンのインポート
 sys.path.append(str(Path(__file__).parent.parent.parent / "src"))
+
+# 自動再訓練スケジューラーのインポート
+try:
+    from src.auto_retrain_scheduler import AutoRetrainScheduler
+
+    AUTO_RETRAIN_AVAILABLE = True
+except ImportError:
+    AUTO_RETRAIN_AVAILABLE = False
+    logging.warning("Auto retrain scheduler not available")
 try:
     from db.knowledge_store import (
         CrossThinkingResult,
@@ -78,12 +94,72 @@ except ImportError:
     logging.warning("ML engine not available")
 
 
-@dataclass
+# 遅延インポート用の関数
+def lazy_import_ml():
+    """ML関連ライブラリの遅延インポート"""
+    global np, pd
+    try:
+        import numpy as np
+        import pandas as pd
+    except ImportError:
+        np = None
+        pd = None
+
+
+def lazy_import_plotting():
+    """プロット関連ライブラリの遅延インポート"""
+    global plt, sns
+    try:
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+    except ImportError:
+        plt = None
+        sns = None
+
+
+# グローバル変数の初期化
+np = None
+pd = None
+plt = None
+sns = None
+
+import time
+
+# キャッシュ設定
+from functools import lru_cache
+
+# シンプルなメモリキャッシュ
+_cache = {}
+_cache_ttl = {}
+
+
+def simple_cache(ttl=60):
+    """シンプルなキャッシュデコレーター"""
+
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            key = f"{func.__name__}_{hash(str(args) + str(kwargs))}"
+            now = time.time()
+
+            if key in _cache and key in _cache_ttl:
+                if now < _cache_ttl[key]:
+                    return _cache[key]
+
+            result = func(*args, **kwargs)
+            _cache[key] = result
+            _cache_ttl[key] = now + ttl
+            return result
+
+        return wrapper
+
+    return decorator
+
+
 class OrchDashboardConfig:
     """ORCH ダッシュボード設定"""
 
     host: str = "127.0.0.1"
-    port: int = 5000
+    port: int = 5001
     debug: bool = True
     log_level: str = "INFO"
     orch_root: str = "C:\\Users\\User\\Trae\\MOC\\ORCH"
@@ -96,6 +172,10 @@ class OrchDashboard:
 
     def __init__(self, config: Optional[OrchDashboardConfig] = None):
         """初期化"""
+        print(f"DEBUG: OrchDashboard.__init__ called with config={config}")
+        print(f"DEBUG: Current file path: {__file__}")
+        print(f"DEBUG: Current working directory: {os.getcwd()}")
+
         self.config = config or OrchDashboardConfig()
         # 環境変数でホスト/ポートの上書きを許可（並行プレビュー/検証用）
         try:
@@ -117,7 +197,9 @@ class OrchDashboard:
         # Flask app setup with template directory
         template_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates")
         self.app = Flask(
-            __name__, template_folder=template_dir, static_folder=self.config.static_folder
+            __name__,
+            template_folder=template_dir,
+            static_folder=self.config.static_folder,
         )
 
         # CORS設定
@@ -141,6 +223,11 @@ class OrchDashboard:
 
         # ログ設定
         self.logger = self._setup_logging()  # type: ignore
+        # 稼働実体の可視化（起動ファイルパスをログ出力）
+        try:
+            self.logger.info(f"Launch file: {os.path.abspath(__file__)}")
+        except Exception:
+            pass
 
         # API設定/シークレットの読み込み（存在する場合のみ）
         self.api_config = self._load_api_config()
@@ -193,6 +280,35 @@ class OrchDashboard:
             except Exception as e:
                 self.logger.error(f"Failed to initialize ML engine: {e}")
 
+        # 自動再訓練スケジューラー初期化
+        self.auto_retrain_scheduler = None
+        if AUTO_RETRAIN_AVAILABLE:
+            try:
+                self.auto_retrain_scheduler = AutoRetrainScheduler()
+                self.logger.info("Auto retrain scheduler initialized")
+            except Exception as e:
+                self.logger.error(f"Failed to initialize auto retrain scheduler: {e}")
+
+        # 監視システム初期化
+        self.monitoring_system = None
+        try:
+            from src.monitoring_system import MonitoringSystem
+
+            self.monitoring_system = MonitoringSystem()
+            self.logger.info("Monitoring system initialized")
+        except Exception as e:
+            self.logger.error(f"Failed to initialize monitoring system: {e}")
+
+        # セキュリティマネージャー初期化
+        self.security_manager = None
+        try:
+            from src.security_manager import SecurityManager
+
+            self.security_manager = SecurityManager()
+            self.logger.info("Security manager initialized")
+        except Exception as e:
+            self.logger.error(f"Failed to initialize security manager: {e}")
+
         # base_dir設定（MOCルートディレクトリ）
         self.base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # 監査レポート/指示ファイルの既定パス
@@ -205,7 +321,25 @@ class OrchDashboard:
             self.logger.warning(f"初期ファイルの準備に失敗: {e}")
 
         # ルート設定
-        self._setup_routes()
+        try:
+            self.logger.info("DEBUG: About to call _setup_routes()")
+            self._setup_routes()
+            self.logger.info("DEBUG: _setup_routes() completed successfully")
+        except Exception as e:
+            startup_logger = logging.getLogger("orch_startup")
+            startup_logger.error(f"ルート設定中に例外が発生: {e}")
+            startup_logger.error(f"例外詳細: {traceback.format_exc()}")
+            self.logger.error(f"ERROR: _setup_routes() failed: {e}")
+            self.logger.error(f"Traceback: {traceback.format_exc()}")
+            # フェイルファスト: ルート設定失敗は致命的
+            print(f"FATAL: ルート設定に失敗しました: {e}")
+            sys.exit(1)
+
+        # デバッグ: ルートマップを確認
+        self.logger.info("=== Flask Route Map ===")
+        for rule in self.app.url_map.iter_rules():
+            self.logger.info(f"Route: {rule.rule} -> {rule.endpoint}")
+        self.logger.info("=== End Route Map ===")
 
         # SocketIOイベント設定
         self._setup_socketio_events()
@@ -218,40 +352,75 @@ class OrchDashboard:
         self.monitoring_thread = None
         self.monitoring_active = False
 
+        startup_logger = logging.getLogger("orch_startup")
+        startup_logger.info("ルート設定: 正常完了")
         self.logger.info("ORCHダッシュボードが初期化されました")
 
     def _setup_logging(self):
-        """ログ設定（構造化+ローテーション）"""
-        logger = logging.getLogger("orch_dashboard")
-        logger.setLevel(getattr(logging, self.config.log_level))
+        """ログ設定（構造化+ローテーション+初期化フェーズ可視化）"""
+        # 起動時専用ロガーの設定
+        startup_logger = logging.getLogger("orch_startup")
+        startup_logger.setLevel(logging.INFO)
 
-        # コンソールハンドラ
+        # メインロガーの設定
+        logger = logging.getLogger("orch_dashboard")
+        logger.setLevel(logging.DEBUG)
+
+        # 詳細フォーマッター（初期化フェーズ識別用）
+        detailed_formatter = logging.Formatter(
+            "%(asctime)s [%(name)s] %(levelname)s [PID:%(process)d] %(message)s"
+        )
+
+        # コンソールハンドラ（両方のロガー用）
         if not any(isinstance(h, logging.StreamHandler) for h in logger.handlers):
             ch = logging.StreamHandler()
-            ch.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+            ch.setLevel(logging.DEBUG)
+            ch.setFormatter(detailed_formatter)
             logger.addHandler(ch)
+            startup_logger.addHandler(ch)
 
-        # ファイルローテーションハンドラ
+        # ファイルローテーションハンドラ（監査P0: 出力先を data/logs/current/dashboard_app.log に統一）
         try:
-            month_dir = Path("ORCH/LOGS") / datetime.now().strftime("%Y-%m")
-            month_dir.mkdir(parents=True, exist_ok=True)
-            fh = RotatingFileHandler(
-                (month_dir / "orch_dashboard.log").as_posix(),
-                maxBytes=2_000_000,
+            logs_dir = Path("data") / "logs" / "current"
+            logs_dir.mkdir(parents=True, exist_ok=True)
+
+            # メインログ（5MB × 5世代）: 監査仕様に合わせる
+            log_file = logs_dir / "dashboard_app.log"
+            main_fh = RotatingFileHandler(
+                str(log_file),
+                maxBytes=5 * 1024 * 1024,
                 backupCount=5,
                 encoding="utf-8",
             )
-            fh.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
-            logger.addHandler(fh)
-        except Exception:
-            pass
+            main_fh.setFormatter(detailed_formatter)
+            logger.addHandler(main_fh)
+            # 起動ロガーも同一ファイルに書き出す（分散を避ける）
+            startup_logger.addHandler(main_fh)
+
+            # 初期化開始ログ
+            startup_logger.info("=== ORCH Dashboard 初期化開始 ===")
+            startup_logger.info(f"Python: {sys.version}")
+            startup_logger.info(f"Platform: {platform.platform()}")
+            startup_logger.info(f"CWD: {os.getcwd()}")
+            startup_logger.info(f"Script: {os.path.abspath(__file__)}")
+            startup_logger.info(f"PID: {os.getpid()}")
+
+        except Exception as e:
+            # フェイルファスト: ログ設定失敗は致命的
+            print(f"FATAL: ログ設定に失敗しました: {e}")
+            sys.exit(1)
 
         return logger
 
     def _load_api_config(self) -> Dict[str, Any]:
         """API設定の読み込み（存在しない場合はデフォルト）"""
         default = {
-            "auth": {"required": False, "type": "jwt", "issuer": "orch-next", "audience": "agents"},
+            "auth": {
+                "required": False,
+                "type": "jwt",
+                "issuer": "orch-next",
+                "audience": "agents",
+            },
             "security": {"rate_limit_per_min": 120},
             "logging": {"request": True},
         }
@@ -324,54 +493,64 @@ class OrchDashboard:
         except Exception as e:
             return False, f"auth_exception:{e}"
 
-    def _validate_agent_data(self, data: Dict[str, Any], required_fields: List[str] = None) -> tuple[bool, str]:
+    def _validate_agent_data(
+        self, data: Dict[str, Any], required_fields: List[str] = None
+    ) -> tuple[bool, str]:
         """Validate agent data with comprehensive checks"""
         if not isinstance(data, dict):
             return False, "Invalid JSON payload"
-        
+
         required_fields = required_fields or []
         for field in required_fields:
             if field not in data or not data[field]:
                 return False, f"Required field '{field}' is missing or empty"
-        
+
         # Validate agent ID format
         if "id" in data:
             agent_id = data["id"]
             if not isinstance(agent_id, str) or len(agent_id) < 1 or len(agent_id) > 64:
                 return False, "Agent ID must be a string between 1-64 characters"
-            if not re.match(r'^[A-Za-z0-9_-]+$', agent_id):
-                return False, "Agent ID can only contain alphanumeric characters, hyphens, and underscores"
-        
+            if not re.match(r"^[A-Za-z0-9_-]+$", agent_id):
+                return (
+                    False,
+                    "Agent ID can only contain alphanumeric characters, hyphens, and underscores",
+                )
+
         # Validate status
         if "status" in data:
             valid_statuses = ["registered", "active", "inactive", "offline", "error"]
             if data["status"] not in valid_statuses:
                 return False, f"Status must be one of: {', '.join(valid_statuses)}"
-        
+
         # Validate role
         if "role" in data:
             valid_roles = ["CMD", "WORK", "AUDIT", "SYSTEM"]
             if data["role"] not in valid_roles:
                 return False, f"Role must be one of: {', '.join(valid_roles)}"
-        
+
         # Validate capabilities
         if "capabilities" in data:
             if not isinstance(data["capabilities"], list):
                 return False, "Capabilities must be an array"
             for cap in data["capabilities"]:
                 if not isinstance(cap, str) or len(cap) > 100:
-                    return False, "Each capability must be a string with max 100 characters"
-        
+                    return (
+                        False,
+                        "Each capability must be a string with max 100 characters",
+                    )
+
         return True, ""
 
-    def _create_api_response(self, success: bool, data: Any = None, error: str = None, status_code: int = 200) -> tuple[Dict, int]:
+    def _create_api_response(
+        self, success: bool, data: Any = None, error: str = None, status_code: int = 200
+    ) -> tuple[Dict, int]:
         """Create standardized API response"""
         response = {
             "success": success,
             "timestamp": datetime.now().isoformat(),
-            "request_id": request.environ.get("X-Request-ID", "unknown")
+            "request_id": request.environ.get("X-Request-ID", "unknown"),
         }
-        
+
         if success:
             if data is not None:
                 response["data"] = data
@@ -379,7 +558,7 @@ class OrchDashboard:
             response["error"] = error or "Unknown error"
             if status_code == 200:
                 status_code = 400
-        
+
         return response, status_code
 
     def _before_request(self):
@@ -395,7 +574,13 @@ class OrchDashboard:
                 self._rate_state[key] = self._rate_state.get(key, 0) + 1
                 if self._rate_state[key] > limit:
                     return (
-                        jsonify({"success": False, "error": "rate_limit_exceeded", "limit": limit}),
+                        jsonify(
+                            {
+                                "success": False,
+                                "error": "rate_limit_exceeded",
+                                "limit": limit,
+                            }
+                        ),
                         429,
                     )
         except Exception as e:
@@ -428,12 +613,46 @@ class OrchDashboard:
         return response
 
     def _setup_routes(self):
-        """Setup Flask routes"""
+        """Setup Flask routes with early exception detection"""
+        startup_logger = logging.getLogger("orch_startup")
+        startup_logger.info("=== ルート設定開始 ===")
+
+        self.logger.info("=== _setup_routes() START ===")
+        self.logger.info("DEBUG: _setup_routes() method called successfully")
+        startup_logger.info("ルート設定: 初期化チェック完了")
+
+        # ===== SSE ROUTES REGISTRATION (MOVED TO TOP FOR PRIORITY) =====
+        self.logger.info("DEBUG: PRIORITY - Registering SSE routes at the beginning")
+        self.logger.info(f"DEBUG: Current Flask app object: {self.app}")
+        self.logger.info(f"DEBUG: sse_events method exists: {hasattr(self, 'sse_events')}")
+        self.logger.info(f"DEBUG: sse_health method exists: {hasattr(self, 'sse_health')}")
+
+        try:
+            self.logger.info("DEBUG: Attempting to register /events route...")
+            self.app.add_url_rule("/events", "sse_events", self.sse_events, methods=["GET"])
+            self.logger.info("SUCCESS: /events route registered successfully")
+        except Exception as e:
+            self.logger.error(f"ERROR: Failed to register /events route: {e}")
+            import traceback
+
+            self.logger.error(f"Traceback: {traceback.format_exc()}")
+
+        try:
+            self.logger.info("DEBUG: Attempting to register /events/health route...")
+            self.app.add_url_rule("/events/health", "sse_health", self.sse_health, methods=["GET"])
+            self.logger.info("SUCCESS: /events/health route registered successfully")
+        except Exception as e:
+            self.logger.error(f"ERROR: Failed to register /events/health route: {e}")
+            import traceback
+
+            self.logger.error(f"Traceback: {traceback.format_exc()}")
+
+        self.logger.info("DEBUG: SSE routes registration completed")
+        # ===== END SSE ROUTES REGISTRATION =====
+
         # Local imports for helper operations
         import json
         import os
-
-        from flask import render_template
 
         # リクエストフック登録（構造化ログ/レート/認証）
         self.app.before_request(self._before_request)
@@ -463,6 +682,11 @@ class OrchDashboard:
             """Main dashboard page"""
             return render_template("orch_dashboard.html", title="ORCH統合管理システム")
 
+        # /dashboard へのアクセス互換性のためのエイリアス（推奨案A）
+        @self.app.route("/dashboard")
+        def dashboard_alias():
+            return redirect(url_for("dashboard"))
+
         @self.app.route("/tasks")
         def tasks_page():
             """Tasks management page"""
@@ -472,6 +696,43 @@ class OrchDashboard:
         def approvals_page():
             """Approvals management page"""
             return render_template("orch_dashboard.html", title="承認管理")
+
+        # --- Route-based tab navigation ---
+        @self.app.route("/ml")
+        def ml_page():
+            """ML/DB統合セクションを初期表示"""
+            return render_template(
+                "orch_dashboard.html",
+                title="ML/DB統合",
+                initial_section="ml",
+            )
+
+        @self.app.route("/ps1")
+        def ps1_page():
+            """PS1パラメーター最適化セクションを初期表示"""
+            return render_template(
+                "orch_dashboard.html",
+                title="PS1パラメータ最適化",
+                initial_section="ps1",
+            )
+
+        @self.app.route("/results")
+        def results_page():
+            """作業結果データベースセクションを初期表示"""
+            return render_template(
+                "orch_dashboard.html",
+                title="作業結果データベース",
+                initial_section="results",
+            )
+
+        @self.app.route("/tasks/new")
+        def tasks_new_page():
+            """新規タスク作成モーダルを初期表示"""
+            return render_template(
+                "orch_dashboard.html",
+                title="新規タスク作成",
+                initial_section="tasks_new",
+            )
 
         @self.app.route("/realtime")
         def realtime_page():
@@ -487,7 +748,9 @@ class OrchDashboard:
             try:
                 base_dir = Path(__file__).parent
                 guard_log = base_dir / "data" / "logs" / "current" / "locks_eol_guard.log"
-                heartbeat_file = base_dir / "data" / "logs" / "current" / "locks_eol_guard.heartbeat"
+                heartbeat_file = (
+                    base_dir / "data" / "logs" / "current" / "locks_eol_guard.heartbeat"
+                )
                 audit_md = base_dir / "ORCH" / "REPORTS" / "NonStop_Audit.md"
 
                 now = time.time()
@@ -514,9 +777,45 @@ class OrchDashboard:
                 except Exception:
                     pass
 
-                audit_exists = audit_md.exists()
-                audit_mtime = audit_md.stat().st_mtime if audit_exists else None
-                audit_recent = bool(audit_exists and (now - (audit_mtime or 0) < 120))
+                # 監査ハートビートの検出（LOCKS/heartbeat.json の AUDIT フィールド）
+                audit_hb = base_dir / "ORCH" / "STATE" / "LOCKS" / "heartbeat.json"
+                audit_last_update_iso = None
+                audit_recent = False
+                try:
+                    if audit_hb.exists():
+                        with open(audit_hb, "r", encoding="utf-8") as f:
+                            hb_obj = json.load(f)
+                        audit_ts = hb_obj.get("AUDIT")
+                        # 後方互換: AUDIT が無い場合は WORK を参照
+                        if not audit_ts:
+                            audit_ts = hb_obj.get("WORK")
+                        if isinstance(audit_ts, str) and audit_ts:
+                            # ISO 8601末尾Z対応
+                            ts_str = audit_ts
+                            audit_last_update_iso = ts_str
+                            try:
+                                if ts_str.endswith("Z"):
+                                    # Pythonのfromisoformat用に+00:00に変換
+                                    ts_dt = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                                else:
+                                    ts_dt = datetime.fromisoformat(ts_str)
+                                # 直近3分以内なら監査中
+                                audit_recent = (
+                                    datetime.now(ts_dt.tzinfo) - ts_dt
+                                ).total_seconds() < 180
+                            except Exception:
+                                # 解析失敗時はファイルのmtimeで代替（15分許容）
+                                audit_recent = (now - audit_hb.stat().st_mtime) < 900
+                    else:
+                        # 既存のNonStop_Audit.mdの更新時刻をフォールバックとして利用（2分許容）
+                        audit_exists = audit_md.exists()
+                        audit_mtime = audit_md.stat().st_mtime if audit_exists else None
+                        audit_recent = bool(audit_exists and (now - (audit_mtime or 0) < 120))
+                        audit_last_update_iso = (
+                            datetime.fromtimestamp(audit_mtime).isoformat() if audit_mtime else None
+                        )
+                except Exception:
+                    pass
 
                 data = {
                     "guard": {
@@ -530,8 +829,10 @@ class OrchDashboard:
                     },
                     "audit": {
                         "active_recently": audit_recent,
-                        "path": str(audit_md),
-                        "last_update_iso": datetime.fromtimestamp(audit_mtime).isoformat() if audit_mtime else None,
+                        "path": str(audit_hb if audit_hb.exists() else audit_md),
+                        "heartbeat_path": str(audit_hb),
+                        "last_update_iso": audit_last_update_iso,
+                        "source": "heartbeat" if audit_hb.exists() else "md_mtime",
                     },
                     "timestamp": datetime.now().isoformat(),
                 }
@@ -594,7 +895,11 @@ class OrchDashboard:
                     )
                 routes_sorted = sorted(routes, key=lambda r: r["rule"])
                 return jsonify(
-                    {"success": True, "count": len(routes_sorted), "routes": routes_sorted}
+                    {
+                        "success": True,
+                        "count": len(routes_sorted),
+                        "routes": routes_sorted,
+                    }
                 )
             except Exception as e:
                 return jsonify({"success": False, "error": str(e)}), 500
@@ -608,19 +913,30 @@ class OrchDashboard:
                 return jsonify({"success": False, "error": str(e)}), 500
 
         # Minimal /status endpoint (audit-critical)
-        @self.app.route("/status")
-        def status():
+        @self.app.route("/api/status")
+        def api_status():
+            """システムステータスAPI"""
             try:
-                info = {
-                    "status": "active",
-                    "time": datetime.now().isoformat(),
-                    "metrics": {
-                        "cpu": psutil.cpu_percent(interval=0.1),
-                        "mem": psutil.virtual_memory().percent,
+                status = {
+                    "status": "ok",
+                    "timestamp": datetime.now().isoformat(),
+                    "services": {
+                        "dashboard": "running",
+                        "monitoring": "active" if self.monitoring_system else "inactive",
+                        "security": "active" if self.security_manager else "inactive",
+                        "ml_engine": "active" if self.ml_engine else "inactive",
                     },
-                    "phase": "init",
+                    "system": {
+                        "cpu_percent": psutil.cpu_percent(interval=0.1),
+                        "memory_percent": psutil.virtual_memory().percent,
+                        "disk_percent": (
+                            psutil.disk_usage("/").percent
+                            if os.name != "nt"
+                            else psutil.disk_usage("C:").percent
+                        ),
+                    },
                 }
-                return jsonify(info), 200
+                return jsonify(status), 200
             except Exception as e:
                 return jsonify({"status": "error", "message": str(e)}), 500
 
@@ -848,7 +1164,9 @@ class OrchDashboard:
 
                 # Task metrics
                 task_completion = Gauge(
-                    "orch_task_completion_rate", "Task completion rate", registry=registry
+                    "orch_task_completion_rate",
+                    "Task completion rate",
+                    registry=registry,
                 )
                 task_completion.set(self._get_quality_metrics().get("task_completion_rate", 0))
 
@@ -862,7 +1180,9 @@ class OrchDashboard:
 
                 # AI-driven anomaly detection (simple example)
                 anomaly_count = Counter(
-                    "orch_anomalies_detected", "Number of detected anomalies", registry=registry
+                    "orch_anomalies_detected",
+                    "Number of detected anomalies",
+                    registry=registry,
                 )
                 alerts = self._get_quality_alerts()
                 anomaly_count.inc(len(alerts))
@@ -882,7 +1202,10 @@ class OrchDashboard:
                 except Exception:
                     status_counts = {}
                 agent_status = Gauge(
-                    "orch_agents_status", "Agents per status", ["status"], registry=registry
+                    "orch_agents_status",
+                    "Agents per status",
+                    ["status"],
+                    registry=registry,
                 )
                 for st, cnt in status_counts.items():
                     agent_status.labels(status=st).set(cnt)
@@ -948,7 +1271,11 @@ class OrchDashboard:
                     audit_pass_count.set(0)
                     audit_last_epoch.set(0)
 
-                return generate_latest(registry), 200, {"Content-Type": "text/plain; version=0.0.4"}
+                return (
+                    generate_latest(registry),
+                    200,
+                    {"Content-Type": "text/plain; version=0.0.4"},
+                )
             except Exception as e:
                 self.logger.error(f"Error generating metrics: {e}")
                 return str(e), 500
@@ -1015,7 +1342,8 @@ class OrchDashboard:
             self.instructions_path.parent.mkdir(parents=True, exist_ok=True)
             if not self.audit_md_path.exists():
                 self.audit_md_path.write_text(
-                    "# NonStop Audit\n\n初期化: 監査ログはここに追記されます。\n", encoding="utf-8"
+                    "# NonStop Audit\n\n初期化: 監査ログはここに追記されます。\n",
+                    encoding="utf-8",
                 )
             if not self.instructions_path.exists():
                 self.instructions_path.write_text("[]", encoding="utf-8")
@@ -1110,27 +1438,33 @@ class OrchDashboard:
         def api_agents_register():
             try:
                 data = request.get_json(silent=True) or {}
-                
+
                 # Enhanced validation
                 is_valid, error_msg = self._validate_agent_data(data, required_fields=["id"])
                 if not is_valid:
-                    response, status_code = self._create_api_response(False, error=error_msg, status_code=400)
+                    response, status_code = self._create_api_response(
+                        False, error=error_msg, status_code=400
+                    )
                     return jsonify(response), status_code
-                
+
                 agents = self._load_agents()
                 agent_id = data["id"]
-                
+
                 # Check for duplicate
                 existing = next((a for a in agents if a.get("id") == agent_id), None)
                 if existing:
                     # Update existing agent
-                    existing.update({
-                        "role": data.get("role", existing.get("role", "WORK")),
-                        "worktree": data.get("worktree", existing.get("worktree", "")),
-                        "capabilities": data.get("capabilities", existing.get("capabilities", [])),
-                        "status": data.get("status", "registered"),
-                        "updated_at": datetime.now().isoformat(),
-                    })
+                    existing.update(
+                        {
+                            "role": data.get("role", existing.get("role", "WORK")),
+                            "worktree": data.get("worktree", existing.get("worktree", "")),
+                            "capabilities": data.get(
+                                "capabilities", existing.get("capabilities", [])
+                            ),
+                            "status": data.get("status", "registered"),
+                            "updated_at": datetime.now().isoformat(),
+                        }
+                    )
                     agent_data = existing
                 else:
                     # Create new agent
@@ -1143,34 +1477,38 @@ class OrchDashboard:
                         "created_at": datetime.now().isoformat(),
                         "updated_at": datetime.now().isoformat(),
                         "heartbeat": None,
-                        "reports": []
+                        "reports": [],
                     }
                     agents.append(agent_data)
-                
+
                 self._save_agents(agents)
                 response, status_code = self._create_api_response(True, {"agent": agent_data})
                 return jsonify(response), status_code
-                
+
             except Exception as e:
                 self.logger.error(f"/api/agents/register error: {e}")
-                response, status_code = self._create_api_response(False, error=str(e), status_code=500)
+                response, status_code = self._create_api_response(
+                    False, error=str(e), status_code=500
+                )
                 return jsonify(response), status_code
 
         @self.app.route("/api/agents/update", methods=["POST"])
         def api_agents_update():
             try:
                 data = request.get_json(silent=True) or {}
-                
+
                 # Enhanced validation
                 is_valid, error_msg = self._validate_agent_data(data, required_fields=["id"])
                 if not is_valid:
-                    response, status_code = self._create_api_response(False, error=error_msg, status_code=400)
+                    response, status_code = self._create_api_response(
+                        False, error=error_msg, status_code=400
+                    )
                     return jsonify(response), status_code
-                
+
                 agent_id = data["id"]
                 agents = self._load_agents()
                 updated = None
-                
+
                 for a in agents:
                     if a.get("id") == agent_id:
                         # Only update allowed fields
@@ -1181,18 +1519,22 @@ class OrchDashboard:
                         a["updated_at"] = datetime.now().isoformat()
                         updated = a
                         break
-                
+
                 if updated is None:
-                    response, status_code = self._create_api_response(False, error=f"Agent {agent_id} not found", status_code=404)
+                    response, status_code = self._create_api_response(
+                        False, error=f"Agent {agent_id} not found", status_code=404
+                    )
                     return jsonify(response), status_code
-                
+
                 self._save_agents(agents)
                 response, status_code = self._create_api_response(True, {"agent": updated})
                 return jsonify(response), status_code
-                
+
             except Exception as e:
                 self.logger.error(f"/api/agents/update error: {e}")
-                response, status_code = self._create_api_response(False, error=str(e), status_code=500)
+                response, status_code = self._create_api_response(
+                    False, error=str(e), status_code=500
+                )
                 return jsonify(response), status_code
 
         @self.app.route("/api/agents/remove", methods=["POST"])
@@ -1216,17 +1558,19 @@ class OrchDashboard:
         def api_agents_heartbeat():
             try:
                 data = request.get_json(silent=True) or {}
-                
+
                 # Enhanced validation
                 is_valid, error_msg = self._validate_agent_data(data, required_fields=["id"])
                 if not is_valid:
-                    response, status_code = self._create_api_response(False, error=error_msg, status_code=400)
+                    response, status_code = self._create_api_response(
+                        False, error=error_msg, status_code=400
+                    )
                     return jsonify(response), status_code
-                
+
                 agent_id = data["id"]
                 agents = self._load_agents()
                 hb = None
-                
+
                 for a in agents:
                     if a.get("id") == agent_id:
                         # Validate heartbeat data
@@ -1235,59 +1579,65 @@ class OrchDashboard:
                             "status": data.get("status", a.get("status", "active")),
                             "metrics": data.get("metrics", {}),
                         }
-                        
+
                         # Validate status value
                         valid_statuses = ["active", "idle", "busy", "error", "offline"]
                         if heartbeat_data["status"] not in valid_statuses:
                             response, status_code = self._create_api_response(
-                                False, 
-                                error=f"Invalid status. Must be one of: {', '.join(valid_statuses)}", 
-                                status_code=400
+                                False,
+                                error=f"Invalid status. Must be one of: {', '.join(valid_statuses)}",
+                                status_code=400,
                             )
                             return jsonify(response), status_code
-                        
+
                         a["heartbeat"] = heartbeat_data
                         a["status"] = heartbeat_data["status"]
                         a["updated_at"] = datetime.now().isoformat()
                         hb = heartbeat_data
                         break
-                
+
                 if hb is None:
-                    response, status_code = self._create_api_response(False, error=f"Agent {agent_id} not found", status_code=404)
+                    response, status_code = self._create_api_response(
+                        False, error=f"Agent {agent_id} not found", status_code=404
+                    )
                     return jsonify(response), status_code
-                
+
                 self._save_agents(agents)
                 response, status_code = self._create_api_response(True, {"heartbeat": hb})
                 return jsonify(response), status_code
-                
+
             except Exception as e:
                 self.logger.error(f"/api/agents/heartbeat error: {e}")
-                response, status_code = self._create_api_response(False, error=str(e), status_code=500)
+                response, status_code = self._create_api_response(
+                    False, error=str(e), status_code=500
+                )
                 return jsonify(response), status_code
 
         @self.app.route("/api/agents/report", methods=["POST"])
         def api_agents_report():
             try:
                 data = request.get_json(silent=True) or {}
-                
+
                 # Enhanced validation
                 is_valid, error_msg = self._validate_agent_data(data, required_fields=["id"])
                 if not is_valid:
-                    response, status_code = self._create_api_response(False, error=error_msg, status_code=400)
+                    response, status_code = self._create_api_response(
+                        False, error=error_msg, status_code=400
+                    )
                     return jsonify(response), status_code
-                
+
                 agent_id = data["id"]
-                
+
                 # Validate report data
                 summary = data.get("summary", "")
                 if len(summary) > 1000:  # Limit summary length
                     response, status_code = self._create_api_response(
-                        False, 
-                        error="Summary too long (max 1000 characters)", 
-                        status_code=400
+                        False,
+                        error="Summary too long (max 1000 characters)",
+                        status_code=400,
                     )
                     return jsonify(response), status_code
-                
+
                 # 永続化
                 agents = self._load_agents()
                 found = None
@@ -1308,13 +1658,15 @@ class OrchDashboard:
                         a["updated_at"] = datetime.now().isoformat()
                         found = entry
                         break
-                
+
                 if found is None:
-                    response, status_code = self._create_api_response(False, error=f"Agent {agent_id} not found", status_code=404)
+                    response, status_code = self._create_api_response(
+                        False, error=f"Agent {agent_id} not found", status_code=404
+                    )
                     return jsonify(response), status_code
-                
+
                 self._save_agents(agents)
-                
+
                 # 監査ログへ反映（末尾追記）
                 try:
                     line = f"- [{datetime.now().isoformat()}] Agent {agent_id} report: {found.get('summary','')}\n"
@@ -1327,13 +1679,15 @@ class OrchDashboard:
                     self.audit_md_path.write_text(content, encoding="utf-8")
                 except Exception:
                     pass
-                
+
                 response, status_code = self._create_api_response(True, {"report": found})
                 return jsonify(response), status_code
-                
+
             except Exception as e:
                 self.logger.error(f"/api/agents/report error: {e}")
-                response, status_code = self._create_api_response(False, error=str(e), status_code=500)
+                response, status_code = self._create_api_response(
+                    False, error=str(e), status_code=500
+                )
                 return jsonify(response), status_code
 
         @self.app.route("/api/rules/violations")
@@ -1646,7 +2000,12 @@ class OrchDashboard:
                     return jsonify({"success": True, "pid": pid, "command": cmd})
                 else:
                     return (
-                        jsonify({"success": False, "message": "Dispatcher起動に失敗しました"}),
+                        jsonify(
+                            {
+                                "success": False,
+                                "message": "Dispatcher起動に失敗しました",
+                            }
+                        ),
                         500,
                     )
             except Exception as e:
@@ -1704,7 +2063,10 @@ class OrchDashboard:
                     pass
 
                 summary = {
-                    "dispatcher": {"running": len(dispatchers) > 0, "processes": dispatchers},
+                    "dispatcher": {
+                        "running": len(dispatchers) > 0,
+                        "processes": dispatchers,
+                    },
                     "locks": locks,
                     "tasks": tasks,
                     "milestones": milestones,
@@ -1719,49 +2081,95 @@ class OrchDashboard:
                 return jsonify({"error": str(e)}), 500
 
         # Server-Sent Events endpoint
-        @self.app.route("/events")
-        def sse_events():
-            """Server-Sent Events stream of periodic metrics/heartbeats"""
+        self.logger.info("DEBUG: About to register /events route")
+        self.logger.info(f"DEBUG: Flask app object: {self.app}")
+        self.logger.info(
+            f"DEBUG: Current route count before /events: {len(self.app.url_map._rules)}"
+        )
 
-            def event_stream():
-                while True:
-                    try:
-                        mem = psutil.virtual_memory()
-                        disk = psutil.disk_io_counters()
-                        net = psutil.net_io_counters()
-                        payload = {
-                            "event": "heartbeat",
-                            "timestamp": datetime.utcnow().isoformat() + "Z",
-                            "cpu_percent": psutil.cpu_percent(interval=None),
-                            "mem_used_mb": int(mem.used / (1024 * 1024)),
-                            "mem_total_mb": int(mem.total / (1024 * 1024)),
-                            "disk_read_mb": (
-                                int((disk.read_bytes or 0) / (1024 * 1024)) if disk else None
-                            ),
-                            "disk_write_mb": (
-                                int((disk.write_bytes or 0) / (1024 * 1024)) if disk else None
-                            ),
-                            "net_sent_mb": (
-                                int((net.bytes_sent or 0) / (1024 * 1024)) if net else None
-                            ),
-                            "net_recv_mb": (
-                                int((net.bytes_recv or 0) / (1024 * 1024)) if net else None
-                            ),
-                        }
-                        yield f"data: {json.dumps(payload)}\n\n"
-                        time.sleep(3)
-                    except GeneratorExit:
-                        break
-                    except Exception as e:
-                        self.logger.error(f"SSE stream error: {e}")
-                        time.sleep(3)
+        # Register the route explicitly
+        try:
+            self.app.add_url_rule("/events", "sse_events", self.sse_events, methods=["GET"])
+            self.logger.info("DEBUG: /events route registered successfully")
+            self.logger.info(
+                f"DEBUG: Current route count after /events: {len(self.app.url_map._rules)}"
+            )
+        except Exception as e:
+            self.logger.error(f"ERROR: Failed to register /events route: {e}")
+            import traceback
 
-            headers = {
-                "Content-Type": "text/event-stream",
-                "Cache-Control": "no-cache",
-                "Connection": "keep-alive",
-            }
-            return Response(stream_with_context(event_stream()), headers=headers)
+            self.logger.error(f"Traceback: {traceback.format_exc()}")
+
+    def sse_events(self):
+        """Server-Sent Events stream of periodic metrics/heartbeats"""
+
+        def event_stream():
+            while True:
+                try:
+                    mem = psutil.virtual_memory()
+                    disk = psutil.disk_io_counters()
+                    net = psutil.net_io_counters()
+                    payload = {
+                        "event": "heartbeat",
+                        "timestamp": datetime.utcnow().isoformat() + "Z",
+                        "cpu_percent": psutil.cpu_percent(interval=None),
+                        "mem_used_mb": int(mem.used / (1024 * 1024)),
+                        "mem_total_mb": int(mem.total / (1024 * 1024)),
+                        "disk_read_mb": (
+                            int((disk.read_bytes or 0) / (1024 * 1024)) if disk else None
+                        ),
+                        "disk_write_mb": (
+                            int((disk.write_bytes or 0) / (1024 * 1024)) if disk else None
+                        ),
+                        "net_sent_mb": (
+                            int((net.bytes_sent or 0) / (1024 * 1024)) if net else None
+                        ),
+                        "net_recv_mb": (
+                            int((net.bytes_recv or 0) / (1024 * 1024)) if net else None
+                        ),
+                    }
+                    yield f"data: {json.dumps(payload)}\n\n"
+                    time.sleep(3)
+                except GeneratorExit:
+                    break
+                except Exception as e:
+                    self.logger.error(f"SSE stream error: {e}")
+                    time.sleep(3)
+
+        headers = {
+            "Content-Type": "text/event-stream",
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        }
+        return Response(stream_with_context(event_stream()), headers=headers)
+
+    def sse_health(self):
+        """Lightweight health-check SSE stream returning periodic heartbeats"""
+
+        def health_stream():
+            while True:
+                try:
+                    payload = {
+                        "event": "health",
+                        "timestamp": datetime.utcnow().isoformat() + "Z",
+                        "status": "ok",
+                    }
+                    yield f"data: {json.dumps(payload)}\n\n"
+                    time.sleep(5)
+                except GeneratorExit:
+                    break
+                except Exception as e:
+                    self.logger.error(f"SSE health stream error: {e}")
+                    time.sleep(3)
+
+        headers = {
+            "Content-Type": "text/event-stream",
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        }
+        return Response(stream_with_context(health_stream()), headers=headers)
 
         # Phase 3 Console Launcher
         @self.app.route("/console")
@@ -1892,7 +2300,12 @@ class OrchDashboard:
                     )
                 else:
                     return (
-                        jsonify({"success": False, "message": "パラメーターが見つかりません"}),
+                        jsonify(
+                            {
+                                "success": False,
+                                "message": "パラメーターが見つかりません",
+                            }
+                        ),
                         404,
                     )
             except Exception as e:
@@ -1942,7 +2355,12 @@ class OrchDashboard:
                 data = request.get_json()
 
                 # 必須フィールドの検証
-                required_fields = ["task_id", "operation_type", "success", "execution_time_ms"]
+                required_fields = [
+                    "task_id",
+                    "operation_type",
+                    "success",
+                    "execution_time_ms",
+                ]
                 for field in required_fields:
                     if field not in data:
                         return jsonify({"error": f"必須フィールドが不足: {field}"}), 400
@@ -2011,6 +2429,254 @@ class OrchDashboard:
             except Exception as e:
                 self.logger.error(f"モデル訓練エラー: {e}")
                 return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/api/ml/retrain/status", methods=["GET"])
+        def api_retrain_status():
+            """自動再訓練スケジューラーの状態取得"""
+            if not self.auto_retrain_scheduler:
+                return jsonify({"error": "自動再訓練機能が利用できません"}), 503
+
+            try:
+                status = self.auto_retrain_scheduler.get_status()
+                return jsonify(status)
+            except Exception as e:
+                self.logger.error(f"再訓練状態取得エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/api/ml/retrain/start", methods=["POST"])
+        def api_retrain_start():
+            """自動再訓練スケジューラー開始"""
+            if not self.auto_retrain_scheduler:
+                return jsonify({"error": "自動再訓練機能が利用できません"}), 503
+
+            try:
+                import asyncio
+
+                asyncio.create_task(self.auto_retrain_scheduler.start())
+                return jsonify(
+                    {"success": True, "message": "自動再訓練スケジューラーを開始しました"}
+                )
+            except Exception as e:
+                self.logger.error(f"再訓練開始エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/api/ml/retrain/stop", methods=["POST"])
+        def api_retrain_stop():
+            """自動再訓練スケジューラー停止"""
+            if not self.auto_retrain_scheduler:
+                return jsonify({"error": "自動再訓練機能が利用できません"}), 503
+
+            try:
+                import asyncio
+
+                asyncio.create_task(self.auto_retrain_scheduler.stop())
+                return jsonify(
+                    {"success": True, "message": "自動再訓練スケジューラーを停止しました"}
+                )
+            except Exception as e:
+                self.logger.error(f"再訓練停止エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/api/ml/retrain/manual", methods=["POST"])
+        def api_retrain_manual():
+            """手動再訓練実行"""
+            if not self.auto_retrain_scheduler:
+                return jsonify({"error": "自動再訓練機能が利用できません"}), 503
+
+            try:
+                import asyncio
+
+                async def run_manual_retrain():
+                    results = await self.auto_retrain_scheduler.retrain_models()
+                    self.auto_retrain_scheduler.save_retrain_log(results)
+                    return results
+
+                # 非同期実行
+                asyncio.create_task(run_manual_retrain())
+                return jsonify({"success": True, "message": "手動再訓練を開始しました"})
+            except Exception as e:
+                self.logger.error(f"手動再訓練エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        # 監視システム統合API
+        @self.app.route("/api/monitoring/performance", methods=["GET"])
+        def api_monitoring_performance():
+            """パフォーマンス監視データ取得"""
+            try:
+                if hasattr(self, "monitoring_system") and self.monitoring_system:
+                    performance_data = self.monitoring_system.get_performance_summary()
+                    return jsonify(
+                        {
+                            "success": True,
+                            "data": performance_data,
+                            "timestamp": datetime.now().isoformat(),
+                        }
+                    )
+                else:
+                    return jsonify({"error": "監視システムが利用できません"}), 503
+            except Exception as e:
+                self.logger.error(f"パフォーマンス監視データ取得エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/api/monitoring/alerts", methods=["GET"])
+        def api_monitoring_alerts():
+            """アラート統計データ取得"""
+            try:
+                if hasattr(self, "monitoring_system") and self.monitoring_system:
+                    alert_stats = self.monitoring_system.get_alert_statistics()
+                    return jsonify(
+                        {
+                            "success": True,
+                            "data": alert_stats,
+                            "timestamp": datetime.now().isoformat(),
+                        }
+                    )
+                else:
+                    return jsonify({"error": "監視システムが利用できません"}), 503
+            except Exception as e:
+                self.logger.error(f"アラート統計データ取得エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/api/monitoring/status", methods=["GET"])
+        def api_monitoring_status():
+            """監視システム全体ステータス取得"""
+            try:
+                if hasattr(self, "monitoring_system") and self.monitoring_system:
+                    status = self.monitoring_system.get_system_status()
+                    return jsonify(
+                        {"success": True, "data": status, "timestamp": datetime.now().isoformat()}
+                    )
+                else:
+                    return jsonify({"error": "監視システムが利用できません"}), 503
+            except Exception as e:
+                self.logger.error(f"監視システムステータス取得エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/api/monitoring/metrics/history", methods=["GET"])
+        def api_monitoring_metrics_history():
+            """メトリクス履歴データ取得"""
+            try:
+                hours = request.args.get("hours", 24, type=int)
+                metric_type = request.args.get("type", "all")
+
+                if hasattr(self, "monitoring_system") and self.monitoring_system:
+                    history_data = self.monitoring_system.get_metrics_history(
+                        hours=hours, metric_type=metric_type
+                    )
+                    return jsonify(
+                        {
+                            "success": True,
+                            "data": history_data,
+                            "parameters": {"hours": hours, "type": metric_type},
+                            "timestamp": datetime.now().isoformat(),
+                        }
+                    )
+                else:
+                    return jsonify({"error": "監視システムが利用できません"}), 503
+            except Exception as e:
+                self.logger.error(f"メトリクス履歴データ取得エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/monitoring", methods=["GET"])
+        def monitoring_dashboard():
+            """監視ダッシュボードページ"""
+            try:
+                return render_template("monitoring_dashboard.html")
+            except Exception as e:
+                self.logger.error(f"監視ダッシュボード表示エラー: {e}")
+                return f"監視ダッシュボードの表示に失敗しました: {str(e)}", 500
+
+        # セキュリティ管理ルート
+        @self.app.route("/security", methods=["GET"])
+        def security_dashboard():
+            """セキュリティダッシュボードページ"""
+            try:
+                return render_template("security_dashboard.html")
+            except Exception as e:
+                self.logger.error(f"セキュリティダッシュボード表示エラー: {e}")
+                return f"セキュリティダッシュボードの表示に失敗しました: {str(e)}", 500
+
+        @self.app.route("/api/security/status", methods=["GET"])
+        def api_security_status():
+            """セキュリティステータス取得"""
+            try:
+                if self.security_manager:
+                    status = self.security_manager.get_security_status()
+                    return jsonify(status)
+                else:
+                    return jsonify({"error": "セキュリティマネージャーが利用できません"}), 503
+            except Exception as e:
+                self.logger.error(f"セキュリティステータス取得エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/api/security/login", methods=["POST"])
+        def api_security_login():
+            """ユーザーログイン"""
+            try:
+                if not self.security_manager:
+                    return jsonify({"error": "セキュリティマネージャーが利用できません"}), 503
+
+                data = request.get_json()
+                username = data.get("username")
+                password = data.get("password")
+
+                if not username or not password:
+                    return jsonify({"error": "ユーザー名とパスワードが必要です"}), 400
+
+                # 認証実行
+                token = self.security_manager.authenticate_user(username, password)
+                if token:
+                    return jsonify({"success": True, "token": token})
+                else:
+                    return jsonify({"error": "認証に失敗しました"}), 401
+
+            except Exception as e:
+                self.logger.error(f"ログインエラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/api/security/register", methods=["POST"])
+        def api_security_register():
+            """ユーザー登録"""
+            try:
+                if not self.security_manager:
+                    return jsonify({"error": "セキュリティマネージャーが利用できません"}), 503
+
+                data = request.get_json()
+                username = data.get("username")
+                password = data.get("password")
+                role = data.get("role", "user")
+
+                if not username or not password:
+                    return jsonify({"error": "ユーザー名とパスワードが必要です"}), 400
+
+                # ユーザー登録
+                success = self.security_manager.register_user(username, password, role)
+                if success:
+                    return jsonify({"success": True, "message": "ユーザーが正常に登録されました"})
+                else:
+                    return jsonify({"error": "ユーザー登録に失敗しました"}), 400
+
+            except Exception as e:
+                self.logger.error(f"ユーザー登録エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        @self.app.route("/api/security/audit", methods=["GET"])
+        def api_security_audit():
+            """セキュリティ監査ログ取得"""
+            try:
+                if not self.security_manager:
+                    return jsonify({"error": "セキュリティマネージャーが利用できません"}), 503
+
+                logs = self.security_manager.get_audit_logs()
+                return jsonify({"logs": logs})
+
+            except Exception as e:
+                self.logger.error(f"監査ログ取得エラー: {e}")
+                return jsonify({"error": str(e)}), 500
+
+        self.logger.info("=== _setup_routes() COMPLETED ===")
+        self.logger.info(f"Total routes registered: {len(list(self.app.url_map.iter_rules()))}")
+        self.logger.info("DEBUG: _setup_routes() method completed successfully")
 
     def _find_dispatcher_processes(self) -> List[Dict[str, Any]]:
         """Find running Task-Dispatcher.ps1 processes and extract parameters if possible"""
@@ -2590,7 +3256,6 @@ class OrchDashboard:
     def _get_git_graph_data(self):
         """Git グラフデータを取得"""
         try:
-            import json
             import subprocess
             from datetime import datetime
 
@@ -2688,7 +3353,10 @@ class OrchDashboard:
 
             # ブランチ一覧を取得
             result = subprocess.run(
-                ["git", "branch", "-a"], capture_output=True, text=True, cwd=self.base_dir
+                ["git", "branch", "-a"],
+                capture_output=True,
+                text=True,
+                cwd=self.base_dir,
             )
 
             branches = []
@@ -2931,7 +3599,11 @@ class OrchDashboard:
                                 status = "modified"
 
                             files.append(
-                                {"name": filename, "status": status, "changes": 1}  # 簡略化
+                                {
+                                    "name": filename,
+                                    "status": status,
+                                    "changes": 1,
+                                }  # 簡略化
                             )
 
             return files
@@ -3249,6 +3921,26 @@ class OrchDashboard:
                 "error": str(e),
             }
 
+    def _ensure_ml_components(self):
+        """ML コンポーネントの遅延初期化"""
+        if not hasattr(self, "_ml_initialized"):
+            lazy_import_ml()
+            if np is not None:
+                self.setup_ml_components()
+            self._ml_initialized = True
+
+    def _ensure_monitoring(self):
+        """監視システムの遅延初期化"""
+        if not hasattr(self, "_monitoring_initialized"):
+            self.initialize_monitoring()
+            self._monitoring_initialized = True
+
+    def _ensure_historical_data(self):
+        """履歴データの遅延ロード"""
+        if not hasattr(self, "_historical_data_loaded"):
+            self.load_historical_data()
+            self._historical_data_loaded = True
+
     def run(self):
         """ダッシュボード開始"""
         try:
@@ -3267,10 +3959,17 @@ class OrchDashboard:
 
             # SocketIOサーバー開始（WebSocket対応）
             try:
-                self.socketio.run(self.app, host=self.config.host, port=self.config.port, debug=False)
+                self.socketio.run(
+                    self.app, host=self.config.host, port=self.config.port, debug=False
+                )
             except Exception:
                 # 互換フォールバック
-                self.app.run(host=self.config.host, port=self.config.port, debug=False, threaded=True)
+                self.app.run(
+                    host=self.config.host,
+                    port=self.config.port,
+                    debug=False,
+                    threaded=True,
+                )
 
         except Exception as e:
             self.logger.error(f"ダッシュボード開始エラー: {e}")

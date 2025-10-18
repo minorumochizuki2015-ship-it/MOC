@@ -8,6 +8,7 @@ Exclusions:
 - common binary files by extension
 - coverage/html outputs
 """
+
 import os
 import sys
 

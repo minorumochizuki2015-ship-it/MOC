@@ -1,0 +1,23 @@
+name: nightly-ui-audit
+delegate: CMD
+cmd:
+  run: "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/ci/run_nightly_ui_audit.ps1"
+  env:
+    NIGHTLY_UI_AUDIT_HOST: "127.0.0.1"
+    NIGHTLY_UI_AUDIT_PORT: "5010"
+    NIGHTLY_UI_AUDIT_OUTDIR: "artifacts/nightly-ui-audit"
+gate:
+  required_files:
+    - "artifacts/nightly-ui-audit/health.txt"
+    - "artifacts/nightly-ui-audit/preview_success_headers.txt"
+    - "artifacts/nightly-ui-audit/preview_400_headers.txt"
+    - "artifacts/nightly-ui-audit/styles_etag.txt"
+  contains:
+    - file: "artifacts/nightly-ui-audit/health.txt"
+      must_include: ["StatusCode: 200"]
+    - file: "artifacts/nightly-ui-audit/preview_success_headers.txt"
+      must_include: ["ETag", "X-Preview-"]
+    - file: "artifacts/nightly-ui-audit/preview_400_headers.txt"
+      must_include: ["Access-Control-Expose-Headers"]
+    - file: "artifacts/nightly-ui-audit/styles_etag.txt"
+      must_include: ["ETag:"]

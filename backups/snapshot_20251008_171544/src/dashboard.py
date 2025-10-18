@@ -3,9 +3,8 @@
 AI予測結果とメトリクスの可視化
 """
 
-import json
 import sqlite3
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 

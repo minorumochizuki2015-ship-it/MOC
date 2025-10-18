@@ -1,0 +1,18 @@
+[
+  {
+    "timestamp": "2025-10-09T03:21:00Z",
+    "test_coverage": 0.82,
+    "code_complexity": 2.7,
+    "error_rate": 0.03,
+    "performance_score": 0.86,
+    "quality_issue": 0
+  },
+  {
+    "timestamp": "2025-10-09T03:20:00Z",
+    "test_coverage": 0.81,
+    "code_complexity": 2.8,
+    "error_rate": 0.04,
+    "performance_score": 0.85,
+    "quality_issue": 0
+  }
+]

@@ -3,16 +3,15 @@ AI予測機能モジュール
 品質問題の予測とテストデータ生成を行う
 """
 
-import json
 import sqlite3
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, Tuple
 
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report, mean_squared_error, r2_score
+from sklearn.metrics import accuracy_score, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.preprocessing import StandardScaler
 
@@ -24,7 +23,11 @@ class QualityPredictor:
         self.db_path = Path(db_path)
         # 精度向上のためのハイパーパラメータ調整
         self.model = RandomForestClassifier(
-            n_estimators=200, max_depth=10, min_samples_split=5, min_samples_leaf=2, random_state=42
+            n_estimators=200,
+            max_depth=10,
+            min_samples_split=5,
+            min_samples_leaf=2,
+            random_state=42,
         )
         self.scaler = StandardScaler()
         self.is_trained = False
@@ -228,7 +231,11 @@ class QualityPredictor:
         }
 
         grid_search = GridSearchCV(
-            RandomForestClassifier(random_state=42), param_grid, cv=5, scoring="accuracy", n_jobs=-1
+            RandomForestClassifier(random_state=42),
+            param_grid,
+            cv=5,
+            scoring="accuracy",
+            n_jobs=-1,
         )
 
         grid_search.fit(X_train_scaled, y_train)
@@ -296,7 +303,12 @@ class QualityPredictor:
         if not self.is_trained:
             raise ValueError("Model not trained yet")
 
-        feature_names = ["test_coverage", "code_complexity", "error_rate", "performance_score"]
+        feature_names = [
+            "test_coverage",
+            "code_complexity",
+            "error_rate",
+            "performance_score",
+        ]
         importance = self.model.feature_importances_
 
         return dict(zip(feature_names, importance))
@@ -467,12 +479,12 @@ def main():
     quality_prediction = quality_predictor.predict_quality_issue(sample_quality_metrics)
     resource_prediction = resource_predictor.predict_resource_demand(sample_resource_metrics)
 
-    print(f"\n=== Quality Prediction ===")
+    print("\n=== Quality Prediction ===")
     print(f"Prediction: {'Issue' if quality_prediction['prediction'] else 'Normal'}")
     print(f"Confidence: {quality_prediction['confidence']:.3f}")
     print(f"Recommendation: {quality_prediction['recommendation']}")
 
-    print(f"\n=== Resource Demand Prediction ===")
+    print("\n=== Resource Demand Prediction ===")
     print(f"Predicted Load: {resource_prediction['predicted_load']:.3f}")
     print(f"Load Level: {resource_prediction['load_level']}")
     print(f"Confidence: {resource_prediction['confidence']:.3f}")

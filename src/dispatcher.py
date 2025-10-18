@@ -5,37 +5,64 @@ Replaces PowerShell Task-Dispatcher.ps1 with Python-first approach
 """
 
 import asyncio
+import atexit
 import json
 import logging
+import os
 import sqlite3
 import time
 import uuid
-from dataclasses import asdict, dataclass
+from contextlib import closing
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 from fastapi import FastAPI, Response
 from prometheus_client import Counter, Gauge, generate_latest
 
 app = FastAPI()
 
-import asyncio
+try:
+    from sse_starlette import EventSourceResponse  # type: ignore
+except ModuleNotFoundError:
+    # Fallback stub when sse_starlette is not installed (e.g., CI or unit tests)
+    from fastapi import Response as _FastAPIResponse  # type: ignore
 
-from fastapi.responses import StreamingResponse
+    EventSourceResponse = _FastAPIResponse  # type: ignore
 
 
 async def sse_events():
-    """Generate SSE events for task updates"""
-    while True:
-        yield f"event: task_update\ndata: {json.dumps({'message': 'Task status changed', 'timestamp': datetime.now().isoformat()})}\n\n"
-        await asyncio.sleep(5)  # Heartbeat every 5 seconds
+    """Generate SSE events for task updates
+
+    Note: increments active SSE connections gauge on subscribe and decrements
+    on disconnect to help track stability and success rate.
+    """
+    # Increment active connections when a client subscribes
+    try:
+        sse_connections_active.inc()
+        while True:
+            payload = {
+                "message": "Task status changed",
+                "timestamp": datetime.now().isoformat(),
+            }
+            yield f"event: task_update\ndata: {json.dumps(payload)}\n\n"
+            await asyncio.sleep(5)  # Heartbeat every 5 seconds
+    finally:
+        # Ensure we decrement even if the client disconnects or errors occur
+        sse_connections_active.dec()
 
 
 @app.get("/events")
 async def events():
-    """SSE endpoint for real-time updates"""
+    """SSE endpoint for real-time updates (legacy path)"""
+    return EventSourceResponse(sse_events())
+
+
+@app.get("/sse/events")
+async def sse_events_path():
+    """SSE endpoint for real-time updates (documented path)"""
     return EventSourceResponse(sse_events())
 
 
@@ -50,13 +77,11 @@ async def webhook(request: Request):
     return {"status": "received"}
 
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("data/logs/dispatcher.log"), logging.StreamHandler()],
-)
-logger = logging.getLogger(__name__)
+from app.shared.logging_config import get_logger, is_pytest_running
+
+# Configure logging via shared logging_config
+logger = get_logger(__name__, in_pytest=is_pytest_running())
+atexit.register(logging.shutdown)
 
 
 class TaskStatus(Enum):
@@ -113,28 +138,38 @@ class TaskDispatcher:
 
     def _init_database(self):
         """Initialize SQLite database with required tables"""
-        with sqlite3.connect(self.db_path) as conn:
-            conn.execute(
-                """
-                CREATE TABLE IF NOT EXISTS tasks (
-                    id TEXT PRIMARY KEY,
-                    title TEXT NOT NULL,
-                    status TEXT NOT NULL,
-                    priority INTEGER NOT NULL,
-                    owner TEXT NOT NULL,
-                    created_at TEXT NOT NULL,
-                    updated_at TEXT NOT NULL,
-                    due_date TEXT,
-                    lock_owner TEXT,
-                    lock_expires_at TEXT,
-                    artifact TEXT,
-                    notes TEXT
+        with closing(sqlite3.connect(self.db_path, timeout=30, check_same_thread=False)) as conn:
+            with conn:
+                # Improve SQLite concurrency and stability on Windows
+                # Busy timeout to mitigate transient file locks
+                try:
+                    conn.execute("PRAGMA busy_timeout=5000;")
+                except Exception:
+                    pass
+                conn.execute("PRAGMA journal_mode=WAL;")
+                conn.execute("PRAGMA synchronous=NORMAL;")
+                conn.execute("PRAGMA foreign_keys=ON;")
+                conn.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS tasks (
+                        id TEXT PRIMARY KEY,
+                        title TEXT NOT NULL,
+                        status TEXT NOT NULL,
+                        priority INTEGER NOT NULL,
+                        owner TEXT NOT NULL,
+                        created_at TEXT NOT NULL,
+                        updated_at TEXT NOT NULL,
+                        due_date TEXT,
+                        lock_owner TEXT,
+                        lock_expires_at TEXT,
+                        artifact TEXT,
+                        notes TEXT
                 )
-            """
-            )
-
-            conn.execute(
                 """
+                )
+
+                conn.execute(
+                    """
                 CREATE TABLE IF NOT EXISTS locks (
                     lock_id TEXT PRIMARY KEY,
                     resource TEXT NOT NULL,
@@ -144,6 +179,32 @@ class TaskDispatcher:
                     expires_at TEXT NOT NULL,
                     metadata TEXT
                 )
+            """
+                )
+
+            # Events persistence for job lifecycle and auditing
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS events (
+                    event_id TEXT PRIMARY KEY,
+                    task_id TEXT NOT NULL,
+                    event_type TEXT NOT NULL,
+                    timestamp TEXT NOT NULL,
+                    data TEXT,
+                    FOREIGN KEY (task_id) REFERENCES tasks (id)
+                )
+            """
+            )
+
+            conn.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_events_task_id ON events(task_id);
+            """
+            )
+
+            conn.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_events_timestamp ON events(timestamp);
             """
             )
 
@@ -159,8 +220,62 @@ class TaskDispatcher:
             """
             )
 
-            conn.commit()
+            # Minimal users table to satisfy persistence tests
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS users (
+                    id TEXT PRIMARY KEY,
+                    name TEXT,
+                    email TEXT,
+                    created_at TEXT DEFAULT (datetime('now'))
+                )
+            """
+            )
+
+            # Security events table required by integration tests
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS security_events (
+                    event_id TEXT PRIMARY KEY,
+                    event_type TEXT NOT NULL,
+                    user_id TEXT,
+                    ip_address TEXT,
+                    user_agent TEXT,
+                    endpoint TEXT,
+                    details TEXT,
+                    timestamp TEXT NOT NULL
+                )
+            """
+            )
+
+            # Indexes for security_events to support queries under load
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_security_events_type_timestamp ON security_events(event_type, timestamp)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_security_events_user_timestamp ON security_events(user_id, timestamp)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_security_events_ip_timestamp ON security_events(ip_address, timestamp)"
+            )
+
             logger.info("Database initialized successfully")
+
+    def _log_event(
+        self, task_id: str, event_type: str, data: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """Record an event in the events table for auditing and job history"""
+        event_id = str(uuid.uuid4())
+        now = datetime.utcnow().isoformat()
+        with closing(sqlite3.connect(self.db_path, timeout=30, check_same_thread=False)) as conn:
+            with conn:
+                conn.execute(
+                    """
+                    INSERT INTO events (event_id, task_id, event_type, timestamp, data)
+                    VALUES (?, ?, ?, ?, ?)
+                """,
+                    (event_id, task_id, event_type, now, json.dumps(data or {})),
+                )
 
     def acquire_lock(
         self, resource: str, owner: str, priority: TaskPriority, ttl: int = 1800
@@ -169,109 +284,110 @@ class TaskDispatcher:
         now = datetime.utcnow()
         expires_at = now + timedelta(seconds=ttl)
 
-        with sqlite3.connect(self.db_path) as conn:
-            # Clean expired locks first
-            conn.execute("DELETE FROM locks WHERE datetime(expires_at) <= datetime('now')")
+        with closing(sqlite3.connect(self.db_path, timeout=30, check_same_thread=False)) as conn:
+            with conn:
+                # Clean expired locks first
+                conn.execute("DELETE FROM locks WHERE datetime(expires_at) <= datetime('now')")
 
-            # Check existing active lock for the resource
-            cursor = conn.execute(
-                """
-                SELECT lock_id, owner, priority FROM locks 
-                WHERE resource = ? AND datetime(expires_at) > datetime('now')
-                """,
-                (resource,),
-            )
-            existing = cursor.fetchone()
-
-            if existing is None:
-                # Create new lock entry
-                lock_id = str(uuid.uuid4())
-                conn.execute(
+                # Check existing active lock for the resource
+                cursor = conn.execute(
                     """
-                    INSERT INTO locks (lock_id, resource, owner, priority, acquired_at, expires_at, metadata)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
-                """,
-                    (
-                        lock_id,
-                        resource,
-                        owner,
-                        priority.value,
-                        now.isoformat(),
-                        expires_at.isoformat(),
-                        json.dumps({}),
-                    ),
+                    SELECT lock_id, owner, priority FROM locks 
+                    WHERE resource = ? AND datetime(expires_at) > datetime('now')
+                    """,
+                    (resource,),
                 )
-                conn.commit()
-                logger.info(f"Lock acquired: {resource} by {owner}")
-                lock_acquisitions_total.labels(resource=resource).inc()
-                return True
-            else:
-                # Existing lock present; evaluate priority for takeover
-                existing_lock_id, existing_owner, existing_priority = existing
-                if priority.value > existing_priority:
+                existing = cursor.fetchone()
+
+                if existing is None:
+                    # Create new lock entry
+                    lock_id = str(uuid.uuid4())
                     conn.execute(
                         """
-                        UPDATE locks SET owner = ?, priority = ?, acquired_at = ?, expires_at = ?
-                        WHERE lock_id = ?
+                        INSERT INTO locks (lock_id, resource, owner, priority, acquired_at, expires_at, metadata)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
                     """,
                         (
+                            lock_id,
+                            resource,
                             owner,
                             priority.value,
                             now.isoformat(),
                             expires_at.isoformat(),
-                            existing_lock_id,
+                            json.dumps({}),
                         ),
                     )
-                    conn.commit()
-                    logger.info(
-                        f"Lock taken over: {resource} by {owner} (priority {priority.value})"
-                    )
+                    logger.info(f"Lock acquired: {resource} by {owner}")
                     lock_acquisitions_total.labels(resource=resource).inc()
                     return True
                 else:
-                    logger.warning(
-                        f"Lock acquisition failed: {resource} held by {existing_owner}"
-                    )
-                    return False
+                    # Existing lock present; evaluate priority for takeover
+                    existing_lock_id, existing_owner, existing_priority = existing
+                    if priority.value > existing_priority:
+                        conn.execute(
+                            """
+                            UPDATE locks SET owner = ?, priority = ?, acquired_at = ?, expires_at = ?
+                            WHERE lock_id = ?
+                        """,
+                            (
+                                owner,
+                                priority.value,
+                                now.isoformat(),
+                                expires_at.isoformat(),
+                                existing_lock_id,
+                            ),
+                        )
+                        # Connection context will commit automatically
+                        logger.info(
+                            f"Lock taken over: {resource} by {owner} (priority {priority.value})"
+                        )
+                        lock_acquisitions_total.labels(resource=resource).inc()
+                        return True
+                    else:
+                        logger.warning(
+                            f"Lock acquisition failed: {resource} held by {existing_owner}"
+                        )
+                        return False
 
     def release_lock(self, resource: str, owner: str) -> bool:
         """Release a lock"""
-        with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.execute(
-                "DELETE FROM locks WHERE resource = ? AND owner = ?", (resource, owner)
-            )
-            conn.commit()
-            if cursor.rowcount > 0:
-                logger.info(f"Lock released: {resource} by {owner}")
-                return True
-            else:
-                logger.warning(f"Lock release failed: {resource} not held by {owner}")
-                return False
+        with closing(sqlite3.connect(self.db_path, timeout=30, check_same_thread=False)) as conn:
+            with conn:
+                cursor = conn.execute(
+                    "DELETE FROM locks WHERE resource = ? AND owner = ?", (resource, owner)
+                )
+                if cursor.rowcount > 0:
+                    logger.info(f"Lock released: {resource} by {owner}")
+                    return True
+                else:
+                    logger.warning(f"Lock release failed: {resource} not held by {owner}")
+                    return False
 
     def get_next_task(
         self, owner: str, priority_filter: Optional[TaskPriority] = None
     ) -> Optional[Task]:
         """Get next available task with priority ordering"""
-        with sqlite3.connect(self.db_path) as conn:
-            query = """
-                SELECT * FROM tasks 
-                WHERE status = 'ready' 
-                AND (lock_expires_at IS NULL OR datetime(lock_expires_at) < datetime('now'))
-            """
-            params = []
+        with closing(sqlite3.connect(self.db_path, timeout=30, check_same_thread=False)) as conn:
+            with conn:
+                query = """
+                    SELECT * FROM tasks 
+                    WHERE status = 'ready' 
+                    AND (lock_expires_at IS NULL OR datetime(lock_expires_at) < datetime('now'))
+                """
+                params = []
 
-            if priority_filter:
-                query += " AND priority >= ?"
-                params.append(priority_filter.value)
+                if priority_filter:
+                    query += " AND priority >= ?"
+                    params.append(priority_filter.value)
 
-            query += " ORDER BY priority DESC, created_at ASC LIMIT 1"
+                query += " ORDER BY priority DESC, created_at ASC LIMIT 1"
 
-            cursor = conn.execute(query, params)
-            row = cursor.fetchone()
+                cursor = conn.execute(query, params)
+                row = cursor.fetchone()
 
-            if row:
-                return self._row_to_task(row)
-            return None
+                if row:
+                    return self._row_to_task(row)
+                return None
 
     def update_task_status(
         self,
@@ -286,43 +402,60 @@ class TaskDispatcher:
         """Update task status and metadata"""
         now = datetime.utcnow()
 
-        with sqlite3.connect(self.db_path) as conn:
-            params = [
-                status.value,
-                now.isoformat(),
-                lock_owner,
-                lock_expires_at.isoformat() if lock_expires_at else None,
-                artifact,
-                notes,
-                task_id,
-                owner,
-            ]
+        with closing(sqlite3.connect(self.db_path, timeout=30, check_same_thread=False)) as conn:
+            with conn:
+                params = [
+                    status.value,
+                    now.isoformat(),
+                    lock_owner,
+                    lock_expires_at.isoformat() if lock_expires_at else None,
+                    artifact,
+                    notes,
+                    task_id,
+                    owner,
+                ]
 
-            cursor = conn.execute(
-                """
-                UPDATE tasks SET 
-                    status = ?, 
-                    updated_at = ?,
-                    lock_owner = ?,
-                    lock_expires_at = ?,
-                    artifact = ?,
-                    notes = ?
-                WHERE id = ? AND owner = ?
-            """,
-                params,
-            )
-
-            conn.commit()
-
-            if cursor.rowcount > 0:
-                logger.info(f"Task {task_id} updated to {status.value} by {owner}")
-                self._record_metric(
-                    "task_status_changes", 1, {"task_id": task_id, "status": status.value}
+                cursor = conn.execute(
+                    """
+                    UPDATE tasks SET 
+                        status = ?, 
+                        updated_at = ?,
+                        lock_owner = ?,
+                        lock_expires_at = ?,
+                        artifact = ?,
+                        notes = ?
+                    WHERE id = ? AND owner = ?
+                """,
+                    params,
                 )
-                return True
-            else:
-                logger.warning(f"Task update failed: {task_id} not found or not owned by {owner}")
-                return False
+
+                if cursor.rowcount > 0:
+                    logger.info(f"Task {task_id} updated to {status.value} by {owner}")
+                    self._record_metric(
+                        "task_status_changes",
+                        1,
+                        {"task_id": task_id, "status": status.value},
+                    )
+                    # Record status change as an event for persistence tests and auditing
+                    self._log_event(
+                        task_id,
+                        f"status_{status.value}",
+                        {
+                            "owner": owner,
+                            "lock_owner": lock_owner,
+                            "lock_expires_at": (
+                                lock_expires_at.isoformat() if lock_expires_at else None
+                            ),
+                            "artifact": artifact,
+                            "notes": notes,
+                        },
+                    )
+                    return True
+                else:
+                    logger.warning(
+                        f"Task update failed: {task_id} not found or not owned by {owner}"
+                    )
+                    return False
 
     def dispatch_task(self, request: DispatchRequest = None, **kwargs) -> Dict[str, Any]:
         """Main dispatch logic - replaces PowerShell dispatcher
@@ -391,6 +524,17 @@ class TaskDispatcher:
                 result["task_id"] = task.id
                 result["message"] = f"Task {task.id} dispatched to {request.core_id}"
 
+                # Persist dispatch event
+                self._log_event(
+                    task.id,
+                    "dispatched",
+                    {
+                        "core_id": request.core_id,
+                        "priority": request.priority.name,
+                        "timeout": request.timeout,
+                    },
+                )
+
                 # Record metrics
                 duration = time.time() - start_time
                 self._record_metric(
@@ -435,44 +579,58 @@ class TaskDispatcher:
         metric_id = str(uuid.uuid4())
         now = datetime.utcnow()
 
-        with sqlite3.connect(self.db_path) as conn:
-            conn.execute(
-                """
-                INSERT INTO metrics (id, metric_name, value, labels, timestamp)
-                VALUES (?, ?, ?, ?, ?)
-            """,
-                (metric_id, name, value, json.dumps(labels or {}), now.isoformat()),
-            )
-            conn.commit()
+        with closing(sqlite3.connect(self.db_path, timeout=30, check_same_thread=False)) as conn:
+            with conn:
+                conn.execute(
+                    """
+                    INSERT INTO metrics (id, metric_name, value, labels, timestamp)
+                    VALUES (?, ?, ?, ?, ?)
+                """,
+                    (metric_id, name, value, json.dumps(labels or {}), now.isoformat()),
+                )
 
     def cleanup_expired_locks(self):
         """Clean up expired locks and tasks"""
-        with sqlite3.connect(self.db_path) as conn:
-            # Clean expired locks
-            cursor = conn.execute(
-                "DELETE FROM locks WHERE datetime(expires_at) <= datetime('now')"
-            )
-            expired_locks = cursor.rowcount
+        with closing(sqlite3.connect(self.db_path, timeout=30, check_same_thread=False)) as conn:
+            with conn:
+                # Clean expired locks
+                cursor = conn.execute(
+                    "DELETE FROM locks WHERE datetime(expires_at) <= datetime('now')"
+                )
+                expired_locks = cursor.rowcount
 
-            # Reset tasks with expired locks
-            cursor = conn.execute(
+                # Reset tasks with expired locks
+                cursor = conn.execute(
+                    """
+                    UPDATE tasks SET 
+                        status = 'ready',
+                        lock_owner = NULL,
+                        lock_expires_at = NULL,
+                        updated_at = datetime('now')
+                    WHERE status = 'doing' 
+                    AND lock_expires_at IS NOT NULL 
+                    AND datetime(lock_expires_at) < datetime('now')
                 """
-                UPDATE tasks SET 
-                    status = 'ready',
-                    lock_owner = NULL,
-                    lock_expires_at = NULL,
-                    updated_at = datetime('now')
-                WHERE status = 'doing' 
-                AND lock_expires_at IS NOT NULL 
-                AND datetime(lock_expires_at) < datetime('now')
-            """
-            )
-            reset_tasks = cursor.rowcount
+                )
+                reset_tasks = cursor.rowcount
 
-            conn.commit()
+                if expired_locks > 0 or reset_tasks > 0:
+                    logger.info(
+                        f"Cleanup: {expired_locks} expired locks, {reset_tasks} reset tasks"
+                    )
 
-            if expired_locks > 0 or reset_tasks > 0:
-                logger.info(f"Cleanup: {expired_locks} expired locks, {reset_tasks} reset tasks")
+    def close(self):
+        """Release resources and cleanup"""
+        try:
+            # TaskDispatcher doesn't maintain persistent connections,
+            # but we can perform final cleanup if needed
+            self.cleanup_expired_locks()
+        except Exception:
+            pass
+
+    def __del__(self):
+        # Ensure resources are released on GC
+        self.close()
 
 
 # Prometheus metrics

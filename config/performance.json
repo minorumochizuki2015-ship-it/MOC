@@ -1,0 +1,48 @@
+{
+  "monitoring_interval": 30,
+  "thresholds": {
+    "cpu_usage_max": 80.0,
+    "memory_usage_max": 85.0,
+    "disk_usage_max": 90.0,
+    "response_time_max": 2.0,
+    "network_latency_max": 100.0
+  },
+  "endpoints_to_monitor": [
+    "http://127.0.0.1:5001/health",
+    "http://127.0.0.1:5001/api/status",
+    "http://127.0.0.1:5001/api/ml/retrain/status"
+  ],
+  "alert_cooldown": 300,
+  "data_retention_hours": 24,
+  "alert_channels": {
+    "email": {
+      "enabled": false,
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587,
+      "from": "alerts@orch-next.local",
+      "to": ["admin@orch-next.local"],
+      "use_tls": true
+    },
+    "webhook": {
+      "enabled": false,
+      "url": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+      "timeout": 10
+    },
+    "dashboard": {
+      "enabled": true
+    }
+  },
+  "performance_analysis": {
+    "trend_window_minutes": 60,
+    "anomaly_detection": {
+      "enabled": true,
+      "z_score_threshold": 2.5,
+      "min_samples": 10
+    },
+    "baseline_calculation": {
+      "enabled": true,
+      "window_hours": 24,
+      "update_interval_minutes": 60
+    }
+  }
+}

@@ -11,7 +11,7 @@ import statistics
 import sys
 import time
 from datetime import datetime
-from typing import Dict, List, Tuple
+from typing import Dict
 
 # プロジェクトのsrcディレクトリをパスに追加
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
@@ -50,7 +50,7 @@ def run_single_test(timeout_seconds: int, worker_count: int = 5) -> Dict:
 
             execution_times.append(worker_time)
 
-        except Exception as e:
+        except Exception:
             worker_end = time.time()
             worker_time = worker_end - worker_start
             results.append({"worker_id": worker_id, "status": "error", "time": worker_time})
@@ -99,7 +99,7 @@ def main():
     timeout_values = [3, 5, 8, 10, 15, 20, 25, 30]
     iterations = 5  # 各値で5回実行
 
-    print(f"🚀 テスト開始")
+    print("🚀 テスト開始")
     print(f"   タイムアウト値: {timeout_values}")
     print(f"   各値での実行回数: {iterations}")
     print(f"   総テスト回数: {len(timeout_values) * iterations}")
@@ -153,14 +153,14 @@ def main():
         print("📈 クイックパフォーマンステスト結果")
         print("=" * 60)
 
-        print(f"\n🏆 推奨タイムアウト値:")
+        print("\n🏆 推奨タイムアウト値:")
         print(
             f"  最高効率: {best_efficiency[0]}秒 (効率スコア: {best_efficiency[1]['avg_efficiency_score']:.2f})"
         )
         print(f"  最速実行: {fastest[0]}秒 (平均時間: {fastest[1]['avg_total_time']:.2f}秒)")
         print(f"  最安定: {most_stable[0]}秒 (標準偏差: {most_stable[1]['stdev_time']:.3f})")
 
-        print(f"\n📊 詳細統計:")
+        print("\n📊 詳細統計:")
         print(
             f"{'タイムアウト':<8} {'平均時間':<10} {'効率スコア':<10} {'成功率':<8} {'安定性':<8}"
         )
@@ -179,7 +179,7 @@ def main():
             )
 
         # 推奨値の決定
-        print(f"\n🎯 総合推奨:")
+        print("\n🎯 総合推奨:")
 
         # 効率と安定性のバランスを考慮
         balanced_scores = {}
@@ -196,7 +196,7 @@ def main():
         best_balanced = max(balanced_scores.items(), key=lambda x: x[1])
 
         print(f"  バランス最適: {best_balanced[0]}秒 (バランススコア: {best_balanced[1]:.2f})")
-        print(f"  → 効率性と安定性を総合的に考慮した推奨値")
+        print("  → 効率性と安定性を総合的に考慮した推奨値")
 
         # 結果保存
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -210,9 +210,18 @@ def main():
                     "timeout": best_efficiency[0],
                     "score": best_efficiency[1]["avg_efficiency_score"],
                 },
-                "fastest": {"timeout": fastest[0], "time": fastest[1]["avg_total_time"]},
-                "most_stable": {"timeout": most_stable[0], "stdev": most_stable[1]["stdev_time"]},
-                "best_balanced": {"timeout": best_balanced[0], "score": best_balanced[1]},
+                "fastest": {
+                    "timeout": fastest[0],
+                    "time": fastest[1]["avg_total_time"],
+                },
+                "most_stable": {
+                    "timeout": most_stable[0],
+                    "stdev": most_stable[1]["stdev_time"],
+                },
+                "best_balanced": {
+                    "timeout": best_balanced[0],
+                    "score": best_balanced[1],
+                },
             },
         }
 
@@ -220,7 +229,7 @@ def main():
             json.dump(output, f, indent=2, ensure_ascii=False)
 
         print(f"\n📁 結果を保存しました: {filename}")
-        print(f"\n✅ テスト完了!")
+        print("\n✅ テスト完了!")
 
     except KeyboardInterrupt:
         print("\n⚠️  テストが中断されました")

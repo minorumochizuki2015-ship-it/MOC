@@ -1,0 +1,87 @@
+{
+  "timestamp": "2025-10-11T04:00:52.337196",
+  "test_results": {
+    "3": {
+      "avg_total_time": 3.015117359161377,
+      "avg_efficiency_score": 6.633246647534277,
+      "avg_success_rate": 20.0,
+      "min_time": 3.0133774280548096,
+      "max_time": 3.0206384658813477,
+      "stdev_time": 0.0031204197646852484
+    },
+    "5": {
+      "avg_total_time": 5.016661643981934,
+      "avg_efficiency_score": 3.9867151905316343,
+      "avg_success_rate": 20.0,
+      "min_time": 5.015105724334717,
+      "max_time": 5.01877498626709,
+      "stdev_time": 0.0013635191577198325
+    },
+    "8": {
+      "avg_total_time": 8.023047304153442,
+      "avg_efficiency_score": 2.4928184736670547,
+      "avg_success_rate": 20.0,
+      "min_time": 8.02167272567749,
+      "max_time": 8.02522897720337,
+      "stdev_time": 0.0014670177218625623
+    },
+    "10": {
+      "avg_total_time": 10.028725147247314,
+      "avg_efficiency_score": 1.99427147076872,
+      "avg_success_rate": 20.0,
+      "min_time": 10.0269136428833,
+      "max_time": 10.031352758407593,
+      "stdev_time": 0.0016807099208754536
+    },
+    "15": {
+      "avg_total_time": 15.036661195755006,
+      "avg_efficiency_score": 1.3300825290024474,
+      "avg_success_rate": 20.0,
+      "min_time": 15.033426284790039,
+      "max_time": 15.038852453231812,
+      "stdev_time": 0.002227055781396246
+    },
+    "20": {
+      "avg_total_time": 20.04712309837341,
+      "avg_efficiency_score": 0.9976493903334493,
+      "avg_success_rate": 20.0,
+      "min_time": 20.04455828666687,
+      "max_time": 20.04865527153015,
+      "stdev_time": 0.0018552108497747817
+    },
+    "25": {
+      "avg_total_time": 25.05901427268982,
+      "avg_efficiency_score": 0.7981159999129759,
+      "avg_success_rate": 20.0,
+      "min_time": 25.057438135147095,
+      "max_time": 25.064411640167236,
+      "stdev_time": 0.0030247709948218703
+    },
+    "30": {
+      "avg_total_time": 30.064665126800538,
+      "avg_efficiency_score": 0.6652327571030097,
+      "avg_success_rate": 20.0,
+      "min_time": 30.062283039093018,
+      "max_time": 30.067840576171875,
+      "stdev_time": 0.0020402325467916943
+    }
+  },
+  "recommendations": {
+    "best_efficiency": {
+      "timeout": 3,
+      "score": 6.633246647534277
+    },
+    "fastest": {
+      "timeout": 3,
+      "time": 3.015117359161377
+    },
+    "most_stable": {
+      "timeout": 5,
+      "stdev": 0.0013635191577198325
+    },
+    "best_balanced": {
+      "timeout": 3,
+      "score": 43.93855099605918
+    }
+  }
+}

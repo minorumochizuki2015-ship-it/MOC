@@ -10,20 +10,16 @@ import logging
 import sqlite3
 import time
 import uuid
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 from fastapi import FastAPI, Response
 from prometheus_client import Counter, Gauge, generate_latest
 
 app = FastAPI()
-
-import asyncio
-
-from fastapi.responses import StreamingResponse
 
 
 async def sse_events():
@@ -296,7 +292,9 @@ class TaskDispatcher:
             if cursor.rowcount > 0:
                 logger.info(f"Task {task_id} updated to {status.value} by {owner}")
                 self._record_metric(
-                    "task_status_changes", 1, {"task_id": task_id, "status": status.value}
+                    "task_status_changes",
+                    1,
+                    {"task_id": task_id, "status": status.value},
                 )
                 return True
             else:

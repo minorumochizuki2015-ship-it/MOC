@@ -1,5 +1,21 @@
 # ORCH-Next Release Notes
 
+## Version 1.1.0 - Kernel Minimal API & CI Pre-flight (2025-10-11)
+
+### 変更概要
+- src/core/kernel に最小 Kernel API を実装（`generate`/`generate_chat`/`read_paths`/`healthcheck`/`_model_id`）。
+- ルートの `kernel.py` を薄い再エクスポート shim に更新。
+- ユニットテスト `tests/unit/test_kernel.py` を追加（正常系/異常系/healthcheck）。
+- CI（Windows ジョブ）に Kernel healthcheck プリフライトを追加し、早期に不整合を検知。
+- CI（Windows ジョブ）に差分カバレッジゲート（diff-cover --fail-under=80）を導入。
+
+### 互換性
+- 破壊的変更なし。既存の `teae` クライアント仕様（/chat/completions, /completions）に整合。
+
+### 推奨事項
+- ロギング方針の統一（pytest 時の FileIO 抑制）と mypy 警告削減を継続実施。
+- ドキュメント（README/operations）の参照を推奨。
+
 ## Version 1.0.0 - Emergency Release (2025-10-08)
 
 ### 🚀 新機能
@@ -58,7 +74,7 @@
 - Python 3.8+
 - メモリ: 2GB以上
 - ディスク: 100MB以上
-- ネットワーク: HTTP/5000ポート
+- ネットワーク: HTTP/5001ポート
 
 ### 🔧 設定
 
@@ -105,7 +121,7 @@
 ### 📞 サポート
 
 #### アクセス方法
-- ダッシュボード: http://localhost:5000
+- ダッシュボード: http://127.0.0.1:5001
 - ログファイル: data/logs/current/
 - 設定ファイル: config/monitoring.json
 

@@ -10,6 +10,7 @@ ORCH-Next Status Updater
 - 承認ゲートとの連携
 """
 
+import atexit
 import json
 import logging
 import os
@@ -19,7 +20,7 @@ from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional
 
 
 # ログ設定（ディレクトリ作成後に設定）
@@ -31,8 +32,13 @@ def setup_logging(workspace_root: Path):
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        handlers=[logging.FileHandler(log_dir / "status_updater.log"), logging.StreamHandler()],
+        handlers=[
+            logging.FileHandler(log_dir / "status_updater.log"),
+            logging.StreamHandler(),
+        ],
     )
+    # プロセス終了時にロギングを安全にシャットダウン（ハンドラのクローズを保証）
+    atexit.register(logging.shutdown)
     return logging.getLogger(__name__)
 
 
@@ -328,6 +334,15 @@ def main():
     except Exception as e:
         updater.logger.error(f"Unexpected error: {e}")
         sys.exit(1)
+    finally:
+        # 明示的に FileHandler をクローズしてリソースリークを防止
+        try:
+            root_logger = logging.getLogger()
+            for h in list(root_logger.handlers):
+                if isinstance(h, logging.FileHandler):
+                    h.close()
+        except Exception:
+            pass
 
 
 if __name__ == "__main__":

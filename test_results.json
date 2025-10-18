@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-10-13 15:37:24",
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "test": "Dashboard Access Test",
+      "status": "PASS",
+      "message": "Dashboard accessible"
+    },
+    {
+      "test": "Style Manager Page Test",
+      "status": "PASS",
+      "message": "Style manager page accessible"
+    },
+    {
+      "test": "API Endpoint Test: /api/styles",
+      "status": "PASS",
+      "message": "API endpoint accessible"
+    },
+    {
+      "test": "API Endpoint Test: /api/pages",
+      "status": "PASS",
+      "message": "API endpoint accessible"
+    },
+    {
+      "test": "API Endpoint Test: /api/prediction",
+      "status": "PASS",
+      "message": "API endpoint accessible"
+    },
+    {
+      "test": "API Endpoint Test: /api/trends",
+      "status": "PASS",
+      "message": "API endpoint accessible"
+    }
+  ]
+}

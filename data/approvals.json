@@ -1,12 +1,32 @@
 [
   {
-    "appr_id": "ap-1",
+    "appr_id": "branch-test-001",
     "status": "approved",
-    "approver": null,
+    "approver": "operator_user",
     "approver_role": null,
     "requested_by": null,
     "ts_req": null,
-    "ts_dec": "2025-10-08T21:37:32.225063+00:00",
+    "ts_dec": "2025-10-10T02:54:14.911361+00:00",
+    "evidence": null
+  },
+  {
+    "appr_id": "branch-test-002",
+    "status": "rejected",
+    "approver": "operator_user",
+    "approver_role": null,
+    "requested_by": null,
+    "ts_req": null,
+    "ts_dec": "2025-10-10T02:54:14.929244+00:00",
+    "evidence": null
+  },
+  {
+    "appr_id": "duplicate-test-001",
+    "status": "approved",
+    "approver": "test_user",
+    "approver_role": null,
+    "requested_by": null,
+    "ts_req": null,
+    "ts_dec": "2025-10-10T02:54:15.589736+00:00",
     "evidence": null
   }
 ]

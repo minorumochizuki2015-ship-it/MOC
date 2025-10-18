@@ -1,0 +1,19 @@
+{
+  "current_metrics": {
+    "test_coverage": 0.82,
+    "code_complexity": 2.7,
+    "error_rate": 0.03,
+    "performance_score": 0.86
+  },
+  "prediction": {
+    "prediction": 0,
+    "confidence": 0.91,
+    "recommendation": "Keep monitoring; no immediate action required"
+  },
+  "feature_importance": {
+    "error_rate": 0.43,
+    "performance_score": 0.31,
+    "test_coverage": 0.15,
+    "code_complexity": 0.11
+  }
+}

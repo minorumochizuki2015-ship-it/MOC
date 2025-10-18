@@ -12,13 +12,12 @@
 
 import datetime
 import hashlib
-import json
 import re
 import sqlite3
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 
 class RiskLevel(Enum):
@@ -367,7 +366,13 @@ class AutomatedApprovalSystem:
             INSERT INTO rule_applications (appr_id, rule_id, matched, confidence, timestamp)
             VALUES (?, ?, ?, ?, ?)
         """,
-            (appr_id, rule_id, matched, confidence, datetime.datetime.utcnow().isoformat()),
+            (
+                appr_id,
+                rule_id,
+                matched,
+                confidence,
+                datetime.datetime.utcnow().isoformat(),
+            ),
         )
 
         conn.commit()
@@ -401,7 +406,7 @@ class AutomatedApprovalSystem:
                 confidence,
                 datetime.datetime.utcnow().isoformat(),
                 evidence_analysis.get("file_hash"),
-                f"Auto-processed by rule engine",
+                "Auto-processed by rule engine",
             ),
         )
 
@@ -419,7 +424,10 @@ class AutomatedApprovalSystem:
         }
 
     def _generate_reasoning(
-        self, decision: ApprovalDecision, risk_level: RiskLevel, matched_rules: List[str]
+        self,
+        decision: ApprovalDecision,
+        risk_level: RiskLevel,
+        matched_rules: List[str],
     ) -> str:
         """決定理由の生成"""
         rule_names = [rule.name for rule in self.rules if rule.rule_id in matched_rules]

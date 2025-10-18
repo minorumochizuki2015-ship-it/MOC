@@ -23,9 +23,15 @@ CONFIG = {
                 "-q",
             ],
         },
-        {"name": "contract_jwt", "pytest_args": ["tests/contract/test_jwt_contract.py", "-q"]},
+        {
+            "name": "contract_jwt",
+            "pytest_args": ["tests/contract/test_jwt_contract.py", "-q"],
+        },
         {"name": "unit_security", "pytest_args": ["tests/test_security.py", "-q"]},
-        {"name": "unit_orchestrator", "pytest_args": ["tests/test_orchestrator.py", "-q"]},
+        {
+            "name": "unit_orchestrator",
+            "pytest_args": ["tests/test_orchestrator.py", "-q"],
+        },
     ]
 }
 

@@ -1,0 +1,96 @@
+definitions:
+  terms:
+    - name: "Coverage by component"
+      meaning: "Separate thresholds for unit, integration, and end-to-end tests."
+    - name: "language routing"
+      meaning: "Deterministic rules to choose Go or Python by workload class."
+    - name: "golden oracle"
+      meaning: "Python reference that fixes expected outputs for parity tests."
+    - name: "schema-first API"
+      meaning: "Single contract (JSON Schema or protobuf) that both Go/Python must obey."
+
+procedures:
+  - name: "Language routing gate"
+    steps:
+      - "Require PR description to include one-line language choice rationale."
+      - "If workload matches constraints.language_routing.go_if → choose Go."
+      - "If workload matches constraints.language_routing.python_if → choose Python."
+      - "If undecidable → implement Python baseline to produce golden outputs; then propose Go replacement if SLO unmet."
+
+  - name: "Schema-first contract gate"
+    steps:
+      - "Define request/response in /schema as JSON Schema or protobuf (SemVer)."
+      - "Generate stubs for /pyapp and /goapp; forbid ad-hoc payloads."
+      - "Normalize errors: {trace_id, code, message}; map Go error+context to HTTP 4xx/5xx; map Python exceptions likewise."
+
+  - name: "Golden parity test gate"
+    steps:
+      - "Produce golden outputs under tests/golden/ using Python oracle."
+      - "Run Go parity tests; require diff == 0 against golden."
+      - "Run Go fuzz (go test -fuzz=.); fail on crashes or contract violations."
+      - "Run Python property tests with hypothesis for invariants."
+
+  - name: "Performance SLO gate"
+    steps:
+      - "Benchmark under /bench; compute p95 latency and error rate."
+      - "Require p95 ≤ constraints.performance.p95_sec and err_rate ≤ constraints.performance.err_rate_max."
+      - "If Python at entry/gateway fails SLO → auto-propose Go migration."
+
+constraints:
+  directory_structure:
+    required:
+      - "store/"
+      - "scripts/hooks/"
+      - "backups/"
+      - "requirements.txt"
+      - "requirements-dev.txt"
+      - "pyproject.toml"
+      - ".vscode/settings.json"
+      - "schema/"
+      - "pyapp/"
+      - "goapp/"
+      - "tests/golden/"
+      - "bench/"
+  observability:
+    metrics: ["performance", "error_rate", "response_time", "resource_usage"]
+    on_events: ["gate_failed", "auto_rollback", "freeze_on", "release_published"]
+  language_routing:
+    go_if:
+      - "Concurrent I/O bound services (HTTP/gRPC/DB/queue) with many idle waits"
+      - "Resident daemons, watchers, or single-binary CLIs"
+      - "Entry/gateway with strict p95 latency SLO"
+    python_if:
+      - "AI/numercial workloads (NumPy/PyTorch/numba)"
+      - "Static analysis, code transforms, AST, data munging"
+      - "Rapid prototyping or reuse of existing Python assets"
+    defaults:
+      undecidable: "Implement Python oracle → freeze golden → consider Go replacement if SLO unmet"
+  interface:
+    schema: "JSON-Schema or protobuf"
+    transport: ["gRPC", "HTTP+JSON"]
+    errors:
+      go: "Return error values; honor context deadlines/cancel"
+      py: "Normalize exceptions to HTTP 4xx/5xx with trace_id"
+    versioning: "SemVer; breaking changes only in vNext"
+  performance:
+    p95_sec: 0.2
+    err_rate_max: 0.005
+  paths:
+    logs_dir: "data/logs/current/"
+  policy_parameters:
+    auto_decide:
+      # Minimum coverage ratio required by auto-decide gate (referenced in user_rules.md)
+      coverage_min: 0.90
+  vscode:
+    settings_required:
+      - "python.defaultInterpreterPath"
+      - "files.eol"
+      - "editor.insertSpaces"
+
+acceptance_criteria:
+  must:
+    - ".vscode/settings.json includes constraints.vscode.settings_required values (fail gate if mismatch)."
+    - "PRs include one-line language choice rationale referencing constraints.language_routing."
+    - "All new APIs have schema-first contracts under /schema."
+    - "Golden parity tests pass (diff == 0) for Go vs Python oracle."
+    - "p95 latency and error rate meet constraints.performance under /bench."

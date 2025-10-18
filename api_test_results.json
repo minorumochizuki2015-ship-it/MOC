@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-10-13 15:38:53",
+  "summary": {
+    "passed": 3,
+    "failed": 2,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "test": "Get Styles API",
+      "status": "PASS",
+      "message": "Successfully retrieved 8 style items"
+    },
+    {
+      "test": "Update Styles API",
+      "status": "FAIL",
+      "message": "HTTP 500: {\"error\":\"\\u30b9\\u30bf\\u30a4\\u30eb\\u66f4\\u65b0\\u306b\\u5931\\u6557\\u3057\\u307e\\u3057\\u305f\"}\n"
+    },
+    {
+      "test": "Create Patch API",
+      "status": "FAIL",
+      "message": "HTTP 404: <!doctype html>\n<html lang=en>\n<title>404 Not Found</title>\n<h1>Not Found</h1>\n<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>\n"
+    },
+    {
+      "test": "Pages API",
+      "status": "PASS",
+      "message": "Successfully retrieved 3 pages"
+    },
+    {
+      "test": "Invalid JSON Handling",
+      "status": "PASS",
+      "message": "Properly handled invalid JSON with HTTP 500"
+    }
+  ]
+}

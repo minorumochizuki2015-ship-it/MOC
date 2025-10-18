@@ -22,7 +22,8 @@ structlog>=23.2.0
 
 # WebSocket & SSE
 websockets>=12.0
-sse-starlette>=1.8.0
+sse-starlette>=3.0.0
+starlette>=0.48.0
 
 # Task Queue & Background Jobs
 celery>=5.3.0  # Optional, for complex async tasks
@@ -34,6 +35,7 @@ pytest-asyncio>=0.21.0
 pytest-cov>=4.1.0
 httpx>=0.25.0  # For async test client
 locust>=2.17.0  # Load testing
+jsonschema>=4.21.0  # Schema validation in tests
 
 # Development Tools
 black>=23.11.0
@@ -51,6 +53,10 @@ click>=8.1.0  # CLI tools
 rich>=13.7.0  # Pretty printing
 pathlib2>=2.3.7  # Enhanced pathlib (if needed)
 
+# Numerical & DataFrames for AI predictors
+numpy>=1.26.4
+pandas>=2.1.0  # tests require pandas
+
 # Optional: AI/ML Integration (for future Hive-Mind features)
 # openai>=1.3.0
 # anthropic>=0.7.0
@@ -63,3 +69,11 @@ pathlib2>=2.3.7  # Enhanced pathlib (if needed)
 # pika>=1.3.0  # RabbitMQ
 # kafka-python>=2.0.2  # Apache Kafka
 PyYAML>=6.0
+cryptography>=41.0.0
+
+# Web Frameworks
+Flask>=2.3.0
+flask-socketio>=5.3.0
+
+# WSGI server
+waitress>=2.1.2

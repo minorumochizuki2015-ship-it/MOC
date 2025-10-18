@@ -216,7 +216,10 @@ class LockManager:
                     request.resource,
                     request.owner,
                     "failed",
-                    metadata={"reason": "timeout", "wait_time": time.time() - start_time},
+                    metadata={
+                        "reason": "timeout",
+                        "wait_time": time.time() - start_time,
+                    },
                 )
                 return None
 
@@ -405,7 +408,15 @@ class LockManager:
 
                 locks = []
                 for row in cursor.fetchall():
-                    lock_id, resource, owner, priority, acquired_at, expires_at, metadata = row
+                    (
+                        lock_id,
+                        resource,
+                        owner,
+                        priority,
+                        acquired_at,
+                        expires_at,
+                        metadata,
+                    ) = row
 
                     locks.append(
                         LockInfo(
@@ -1090,7 +1101,10 @@ if __name__ == "__main__":
 
     # Test basic locking
     request = LockRequest(
-        resource="test_resource", owner="test_owner", priority=LockPriority.HIGH, ttl_seconds=60
+        resource="test_resource",
+        owner="test_owner",
+        priority=LockPriority.HIGH,
+        ttl_seconds=60,
     )
 
     lock = manager.acquire_lock(request)

@@ -6,6 +6,7 @@ Skips common binary and generated/cache directories.
 Usage:
   python scripts/ops/normalize_eol.py
 """
+
 import os
 
 BINARY_EXTS = {

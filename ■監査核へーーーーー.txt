@@ -1,0 +1,108 @@
+■監査核へーーーーー
+
+監査核へ司令核からの以下提示を監査ルール確認後、ADUITとして厳格な実地精密検査実施し、その後適切かつ最善な指示をCMDに提示せよ
+
+ーーーーーーーーー-
+了解。方針に従い、CMDとして ops監査ベース運用へ移行済みの構成を確実に実施・確認するため、以下を進めます。
+
+合格の確定事項
+
+運用境界
+本番常駐: 5001=127.0.0.1（NSSM）
+監査用 CI: 5010（自己起動）
+.trae は ops監査ベース（CMDデリゲートで実行）
+実装状況
+.trae/rules/nightly-ui-audit.yaml 追加済み（CMD→scripts/ci/run_nightly_ui_audit.ps1、envで 127.0.0.1:5010 / artifacts/nightly-ui-audit）
+CI側（.github/workflows/nightly-ui-audit.yml）は 127.0.0.1:5010 で dev server 起動→scripts/ops/run_nightly_ui_audit.ps1 実行→アーティファクト出力
+ローカル5001 常駐の ops監査は PASS（Vary: Origin、Expose、ETag、SSEヘッダ全て合格）
+実行指示（CMD→実行エージェント）
+
+1.
+GitHub Actions 手動実行
+実施: リポジトリの Actions → nightly-ui-audit → Run workflow（既定ブランチ）
+実行後:
+Run URL を控える（証跡1点目）
+成果物「artifacts/nightly-ui-audit」をダウンロード（証跡2〜4点目のファイル同梱）
+2.
+証跡4点の提出（監査完了用）
+以下4点を提出してください（CIランの成果物から取得）
+Run URL
+health.txt（「StatusCode: 200」を含む）
+preview_success_headers.txt と preview_400_headers.txt（両方に以下が現れていること）
+ETag と X-Preview-*（例: X-Preview-Origin、X-Preview-Target、X-Preview-Same-Origin など）
+Access-Control-Expose-Headers（ETag と X-Preview-* を含む）
+Vary: Origin（重複なし）
+styles_etag.txt（「ETag: 」行を含む）
+参考（期待値の例：ローカル5001の監査結果）
+
+health.txt
+StatusCode: 200
+preview_success_headers.txt（抜粋）
+Vary: Origin
+Access-Control-Expose-Headers: ... , ETag
+X-Preview-Origin / X-Preview-Target / X-Preview-Same-Origin あり
+preview_400_headers.txt（抜粋）
+Vary: Origin
+Access-Control-Expose-Headers: X-Preview-..., ETag
+styles_etag.txt（例）
+ETag: "63ed71de02fe40ec5951ca0f1483..."
+3.
+5010 ファイアウォール（必要時のみ）
+5010を外部に開ける必要がある場合のみ有効化し、作業後に必ず無効化してください
+有効化: python scripts/ops/fw_5010_rule.py --action enable
+無効化: python scripts/ops/fw_5010_rule.py --action disable
+5001は127.0.0.1固定。外部到達は同時に片方のみ。
+補足・確認ポイント
+
+c:\Users\User\Trae\ORCH-Next\scripts\ci\run_nightly_ui_audit.ps1 の初期値 [int] $Port = 5001 は「デフォルト値」です。今回追加した .trae の夜間監査ルールでは env（NIGHTLY_UI_AUDIT_PORT=5010）で上書きされるため、CIは5010で監査されます。
+失敗時の是正ガイド
+preview ヘッダ系の不足（ExposeにETag/X-Preview-*が無い、Vary: Originが無い/重複）→ dashboard の after_request もしくは headersユーティリティ（src/utils/headers.py 等）の適用・継承の確認と修正
+styles の ETag 空→ /api/styles のリソース生成側で ETAG 計算/付与の確認
+SSE（/events/health）→ Content-Type:text/event-stream、Cache-Control:no-cache、X-Accel-Buffering:no、ExposeにETag を満たすか確認
+この方針で続行します。Actions の夜間監査を手動実行後、Run URL と artifacts/nightly-ui-audit の4ファイルを提出してください。失敗時は即座にアーティファクトを確認し、必要に応じて是正案（ヘッダ付与や after_request 修正）を提示・適用します。 
+あなた:
+■監査核へーーーーー
+
+監査核へ司令核からの以下提示を監査ルール確認後、ADUITとして厳格な実地精密検査実施し、その後適切かつ最善な指示をCMDに提示せよ
+
+ーーーーーーーーー-
+了解しました。要件どおり「5001常駐／CIは127.0.0.1:5010／.traeはops監査ベース」で確定です。CMDとして次の3点を確実に実施してください。
+
+1. 1.
+   GitHub Actions 手動実行（必須）
+- 操作: GitHub → Actions → nightly-ui-audit → Run workflow（既定ブランチ）
+- 取得すべき証跡（4点）
+  - Run URL
+  - health.txt（“StatusCode: 200”行を含む）
+  - preview_success_headers.txt と preview_400_headers.txt（以下を含む）
+    - Vary: Origin（重複なし）
+    - Access-Control-Expose-Headers に ETag と X-Preview-*（X-Preview-Origin / X-Preview-Target / X-Preview-Same-Origin など）
+  - styles_etag.txt（“ETag:” 行）
+- 失敗時の是正レバー
+  - ETag/Expose/Vary 欠落 → src/utils/headers.py と after_request の適用確認→修正
+  - SSE 欠落 → /events/health のヘッダ（Content-Type:text/event-stream、Cache-Control:no-cache、X-Accel-Buffering:no）を付与確認
+1. 2.
+   5010 外部疎通（必要時のみ）
+- 有効化: python scripts/ops/fw_5010_rule.py --action enable
+- 作業後に必ず無効化: python scripts/ops/fw_5010_rule.py --action disable
+- ポリシー: 5001=127.0.0.1 常時。外部到達は同時に片方のみ。
+1. 3.
+   ローカル健全性の最小再検（参考）
+- 5001 CORS/Expose（確認済み例）
+  - コマンド: curl -i -X OPTIONS http://127.0.0.1:5001/preview -H "Origin: http://127.0.0.1:5001 "
+  - 結果例（要点）: Access-Control-Max-Age: 600 / Vary: Origin / Access-Control-Expose-Headers に ETag と X-Preview-*
+- MCP ping
+  - 未認証 401（確認済み）: curl -i http://127.0.0.1:5001/mcp/ping
+  - 認証 200（トークン必要）: curl -i -H "Authorization: Bearer <PROD_TOKEN>" http://127.0.0.1:5001/mcp/ping
+- SSE
+  - コマンド: curl -i --max-time 2 http://127.0.0.1:5001/events/health
+  - 結果例（要点）: Content-Type: text/event-stream / Cache-Control: no-cache / X-Accel-Buffering: no / Expose に ETag
+補足
+
+- .trae/rules/nightly-ui-audit.yaml は追加済みです（delegate: CMD → scripts/ci/run_nightly_ui_audit.ps1 実行、envで HOST=127.0.0.1／PORT=5010／OUTDIR=artifacts/nightly-ui-audit）。
+- scripts/ci/run_nightly_ui_audit.ps1 の初期値 [int] $Port = 5001 は「デフォルト」であり、.traeルールの env により 5010 に上書きされます（CIは5010で監査実行）。
+- CIワークフロー（.github/workflows/nightly-ui-audit.yml）は 127.0.0.1:5010 でサーバ起動→ops監査スクリプト実行→アーティファクト出力の流れになっています。
+次のアクション（提出）
+
+- Actions を手動実行後、Run URL と以下4ファイル（health.txt、preview_success_headers.txt、preview_400_headers.txt、styles_etag.txt）の内容を提示してください。
+- いただいた証跡を確認の上、監査完了として記録します。 

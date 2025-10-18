@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Autopilot Logs Placeholder",
+  "type": "object",
+  "properties": {
+    "logs": {
+      "type": "array",
+      "items": { "type": "object", "additionalProperties": true }
+    },
+    "note": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "required": ["logs", "timestamp"],
+  "additionalProperties": false
+}

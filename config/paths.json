@@ -1,0 +1,6 @@
+{
+  "baseline_dir": "data/baseline",
+  "milestones_dir": "data/baseline/milestones",
+  "tasks_dir": "data/baseline/tasks",
+  "metrics_dir": "data/baseline/metrics"
+}

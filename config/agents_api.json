@@ -7,7 +7,7 @@
   },
   "security": {
     "rate_limit_per_minute": 120,
-    "cors_origins": ["http://127.0.0.1:5000"],
+    "cors_origins": ["http://127.0.0.1:5001"],
     "csrf_protection": true
   },
   "registry": {

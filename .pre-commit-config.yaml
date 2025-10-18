@@ -1,0 +1,42 @@
+repos:
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+        args: ["--config", "pyproject.toml"]
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: ["--fix"]
+      - id: ruff-format
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        args: ["--settings-path", "pyproject.toml"]
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+        additional_dependencies: ["flake8-bugbear", "flake8-comprehensions"]
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        args: ["--config-file", "mypy.ini"]
+        additional_dependencies: ["types-PyYAML"]
+  - repo: local
+    hooks:
+      - id: eol-check
+        name: EOL check (scripts/ops/check_eol.py)
+        entry: python scripts/ops/check_eol.py
+        language: system
+        pass_filenames: false
+        stages: [commit, push]
+      - id: secret-scan
+        name: Secret scan (scripts/ops/scan_secrets.py)
+        entry: python scripts/ops/scan_secrets.py
+        language: system
+        pass_filenames: false
+        stages: [commit, push]

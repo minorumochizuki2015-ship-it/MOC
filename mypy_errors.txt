@@ -1,0 +1,635 @@
+src\automated_approval.py: note: In class "ApprovalRequest":
+src\automated_approval.py:58: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\automated_approval.py: note: In member "__init__" of class "AutomatedApprovalSystem":
+src\automated_approval.py:67: error: Call to untyped function "_init_database" in typed context  [no-untyped-call]
+src\automated_approval.py:68: error: Call to untyped function "_load_rules" in typed context  [no-untyped-call]
+src\automated_approval.py: note: In member "_init_database" of class "AutomatedApprovalSystem":
+src\automated_approval.py:70: error: Function is missing a return type annotation  [no-untyped-def]
+src\automated_approval.py:70: note: Use "-> None" if function does not return a value
+src\automated_approval.py: note: In member "_load_rules" of class "AutomatedApprovalSystem":
+src\automated_approval.py:112: error: Function is missing a return type annotation  [no-untyped-def]
+src\automated_approval.py:112: note: Use "-> None" if function does not return a value
+src\automated_approval.py: note: In member "_analyze_evidence" of class "AutomatedApprovalSystem":
+src\automated_approval.py:200: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\automated_approval.py:220: error: Incompatible types in assignment (expression has type "str", target has type "int | bool | None")  [assignment]
+src\automated_approval.py: note: In member "_evaluate_rule" of class "AutomatedApprovalSystem":
+src\automated_approval.py:241: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\automated_approval.py: note: In member "_safe_eval_condition" of class "AutomatedApprovalSystem":
+src\automated_approval.py:265: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\automated_approval.py: note: In member "_make_decision" of class "AutomatedApprovalSystem":
+src\automated_approval.py:338: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\automated_approval.py: note: In member "_log_rule_application" of class "AutomatedApprovalSystem":
+src\automated_approval.py:359: error: Function is missing a return type annotation  [no-untyped-def]
+src\automated_approval.py: note: In member "process_approval" of class "AutomatedApprovalSystem":
+src\automated_approval.py:381: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\automated_approval.py: note: In member "get_approval_stats" of class "AutomatedApprovalSystem":
+src\automated_approval.py:442: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\automated_approval.py: note: In function "main":
+src\automated_approval.py:487: error: Function is missing a return type annotation  [no-untyped-def]
+src\automated_approval.py:487: note: Use "-> None" if function does not return a value
+src\automated_approval.py: note: At top level:
+src\automated_approval.py:550: error: Call to untyped function "main" in typed context  [no-untyped-call]
+src\core\kernel.py:27: note: In module imported here:
+app\shared\logging_config.py: note: In function "log_performance":
+app\shared\logging_config.py:237: error: Function is missing a return type annotation  [no-untyped-def]
+app\shared\logging_config.py:240: error: Function is missing a type annotation  [no-untyped-def]
+app\shared\logging_config.py:242: error: Function is missing a type annotation  [no-untyped-def]
+app\shared\logging_config.py: note: In function "log_operation":
+app\shared\logging_config.py:287: error: Function is missing a return type annotation  [no-untyped-def]
+app\shared\logging_config.py: note: In function "create_request_logger":
+app\shared\logging_config.py:346: error: Missing type parameters for generic type "LoggerAdapter"  [type-arg]
+src\workflow_dsl.py:20: error: Unused "type: ignore" comment  [unused-ignore]
+src\notification_spam_filter.py: note: In member "__init__" of class "NotificationSpamFilter":
+src\notification_spam_filter.py:21: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\notification_spam_filter.py:23: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\notification_spam_filter.py: note: In member "_default_config" of class "NotificationSpamFilter":
+src\notification_spam_filter.py:41: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\notification_spam_filter.py: note: In member "get_statistics" of class "NotificationSpamFilter":
+src\notification_spam_filter.py:171: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\lock_manager.py: note: In class "LockRequest":
+src\lock_manager.py:35: error: Incompatible types in assignment (expression has type "None", variable has type "dict[str, Any]")  [assignment]
+src\lock_manager.py: note: In member "__post_init__" of class "LockRequest":
+src\lock_manager.py:37: error: Function is missing a return type annotation  [no-untyped-def]
+src\lock_manager.py:37: note: Use "-> None" if function does not return a value
+src\lock_manager.py: note: In member "__init__" of class "LockManager":
+src\lock_manager.py:96: error: Call to untyped function "_init_database_connection" in typed context  [no-untyped-call]
+src\lock_manager.py:98: error: Incompatible types in assignment (expression has type "None", variable has type "Connection")  [assignment]
+src\lock_manager.py:99: error: Call to untyped function "init_database" in typed context  [no-untyped-call]
+src\lock_manager.py:103: error: Call to untyped function "_start_cleanup_thread" in typed context  [no-untyped-call]
+src\lock_manager.py: note: In member "_init_database_connection" of class "LockManager":
+src\lock_manager.py:105: error: Function is missing a type annotation  [no-untyped-def]
+src\lock_manager.py: note: In member "init_database" of class "LockManager":
+src\lock_manager.py:188: error: Function is missing a return type annotation  [no-untyped-def]
+src\lock_manager.py:188: note: Use "-> None" if function does not return a value
+src\lock_manager.py:199: error: Call to untyped function "_init_database_connection" in typed context  [no-untyped-call]
+src\lock_manager.py: note: In member "_get_db_connection" of class "LockManager":
+src\lock_manager.py:201: error: Function is missing a return type annotation  [no-untyped-def]
+src\lock_manager.py:215: error: Call to untyped function "_init_database_connection" in typed context  [no-untyped-call]
+src\lock_manager.py: note: In member "acquire_lock" of class "LockManager":
+src\lock_manager.py:218: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+src\lock_manager.py:343: error: Item "None" of "LockRequest | None" has no attribute "resource"  [union-attr]
+src\lock_manager.py:345: error: Item "None" of "LockRequest | None" has no attribute "owner"  [union-attr]
+src\lock_manager.py:345: error: Item "None" of "LockRequest | None" has no attribute "resource"  [union-attr]
+src\lock_manager.py:348: error: Item "None" of "LockRequest | None" has no attribute "owner"  [union-attr]
+src\lock_manager.py:350: error: Item "None" of "LockRequest | None" has no attribute "owner"  [union-attr]
+src\lock_manager.py:351: error: Item "None" of "LockRequest | None" has no attribute "ttl_seconds"  [union-attr]
+src\lock_manager.py:352: error: Incompatible return value type (got "bool | LockInfo", expected "LockInfo | None")  [return-value]
+src\lock_manager.py:357: error: Item "None" of "LockRequest | None" has no attribute "resource"  [union-attr]
+src\lock_manager.py:359: error: Incompatible return value type (got "bool", expected "LockInfo | None")  [return-value]
+src\lock_manager.py:364: error: Item "None" of "LockRequest | None" has no attribute "owner"  [union-attr]
+src\lock_manager.py:366: error: Argument 1 to "_create_lock" of "LockManager" has incompatible type "LockRequest | None"; expected "LockRequest"  [arg-type]
+src\lock_manager.py:367: error: Incompatible return value type (got "bool | LockInfo", expected "LockInfo | None")  [return-value]
+src\lock_manager.py:370: error: Item "None" of "LockRequest | None" has no attribute "owner"  [union-attr]
+src\lock_manager.py:370: error: Item "None" of "LockRequest | None" has no attribute "resource"  [union-attr]
+src\lock_manager.py:371: error: Argument 1 to "_add_to_queue" of "LockManager" has incompatible type "LockRequest | None"; expected "LockRequest"  [arg-type]
+src\lock_manager.py:372: error: Item "None" of "LockRequest | None" has no attribute "owner"  [union-attr]
+src\lock_manager.py:383: error: Incompatible return value type (got "bool | LockInfo", expected "LockInfo | None")  [return-value]
+src\lock_manager.py:391: error: Item "None" of "LockRequest | None" has no attribute "resource"  [union-attr]
+src\lock_manager.py:392: error: Item "None" of "LockRequest | None" has no attribute "owner"  [union-attr]
+src\lock_manager.py:399: error: Incompatible return value type (got "bool | None", expected "LockInfo | None")  [return-value]
+src\lock_manager.py:403: error: Item "None" of "LockRequest | None" has no attribute "resource"  [union-attr]
+src\lock_manager.py:404: error: Incompatible return value type (got "bool | None", expected "LockInfo | None")  [return-value]
+src\lock_manager.py: note: In member "extend_lock" of class "LockManager":
+src\lock_manager.py:498: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+src\lock_manager.py: note: In member "_get_connection" of class "LockManager":
+src\lock_manager.py:846: error: Function is missing a return type annotation  [no-untyped-def]
+src\lock_manager.py: note: In member "_execute_with_connection" of class "LockManager":
+src\lock_manager.py:853: error: Function is missing a type annotation  [no-untyped-def]
+src\lock_manager.py:865: error: Incompatible types in assignment (expression has type "int", variable has type "list[Any]")  [assignment]
+src\lock_manager.py: note: In member "_get_active_lock" of class "LockManager":
+src\lock_manager.py:901: error: Call to untyped function "_get_db_connection" in typed context  [no-untyped-call]
+src\lock_manager.py: note: In member "_create_lock" of class "LockManager":
+src\lock_manager.py:969: error: Call to untyped function "_init_database_connection" in typed context  [no-untyped-call]
+src\lock_manager.py: note: In member "_can_acquire_from_queue" of class "LockManager":
+src\lock_manager.py:1089: error: Missing return statement  [return]
+src\lock_manager.py: note: In member "_acquire_from_queue" of class "LockManager":
+src\lock_manager.py:1168: error: Missing return statement  [return]
+src\lock_manager.py: note: In member "_remove_from_queue" of class "LockManager":
+src\lock_manager.py:1241: error: Function is missing a return type annotation  [no-untyped-def]
+src\lock_manager.py: note: In member "_record_history" of class "LockManager":
+src\lock_manager.py:1257: error: Function is missing a return type annotation  [no-untyped-def]
+src\lock_manager.py: note: In member "_start_cleanup_thread" of class "LockManager":
+src\lock_manager.py:1312: error: Function is missing a return type annotation  [no-untyped-def]
+src\lock_manager.py:1312: note: Use "-> None" if function does not return a value
+src\lock_manager.py:1318: error: Incompatible types in assignment (expression has type "Event", variable has type "None")  [assignment]
+src\lock_manager.py: note: In function "_start_cleanup_thread":
+src\lock_manager.py:1320: error: Function is missing a return type annotation  [no-untyped-def]
+src\lock_manager.py:1320: note: Use "-> None" if function does not return a value
+src\lock_manager.py:1321: error: "None" has no attribute "is_set"  [attr-defined]
+src\lock_manager.py:1325: error: "None" has no attribute "wait"  [attr-defined]
+src\lock_manager.py:1328: error: "None" has no attribute "wait"  [attr-defined]
+src\lock_manager.py: note: In member "_start_cleanup_thread" of class "LockManager":
+src\lock_manager.py:1330: error: Incompatible types in assignment (expression has type "Thread", variable has type "None")  [assignment]
+src\lock_manager.py:1333: error: "None" has no attribute "start"  [attr-defined]
+src\lock_manager.py: note: In member "stop_cleanup_thread" of class "LockManager":
+src\lock_manager.py:1336: error: Function is missing a return type annotation  [no-untyped-def]
+src\lock_manager.py:1336: note: Use "-> None" if function does not return a value
+src\lock_manager.py: note: In member "close" of class "LockManager":
+src\lock_manager.py:1347: error: Function is missing a return type annotation  [no-untyped-def]
+src\lock_manager.py:1347: note: Use "-> None" if function does not return a value
+src\lock_manager.py:1350: error: Call to untyped function "stop_cleanup_thread" in typed context  [no-untyped-call]
+src\lock_manager.py:1361: error: Incompatible types in assignment (expression has type "None", variable has type "Connection")  [assignment]
+src\lock_manager.py: note: In member "__del__" of class "LockManager":
+src\lock_manager.py:1374: error: Function is missing a type annotation  [no-untyped-def]
+src\lock_manager.py:1376: error: Call to untyped function "close" in typed context  [no-untyped-call]
+src\tools\enable_silent_autopilot.py: note: In function "enable_silent_autopilot":
+src\tools\enable_silent_autopilot.py:11: error: Function is missing a return type annotation  [no-untyped-def]
+src\tools\enable_silent_autopilot.py:11: note: Use "-> None" if function does not return a value
+src\tools\enable_silent_autopilot.py: note: At top level:
+src\tools\enable_silent_autopilot.py:77: error: Call to untyped function "enable_silent_autopilot" in typed context  [no-untyped-call]
+src\core\kernel.py: note: In function "read_paths":
+src\core\kernel.py:61: error: Returning Any from function declared to return "dict[str, str]"  [no-any-return]
+src\hive_mind.py: note: In member "__init__" of class "HiveMind":
+src\hive_mind.py:25: error: Function is missing a return type annotation  [no-untyped-def]
+src\hive_mind.py:25: note: Use "-> None" if function does not return a value
+src\hive_mind.py:27: error: Incompatible types in assignment (expression has type "None", variable has type "str")  [assignment]
+src\hive_mind.py: note: In member "register_agent" of class "HiveMind":
+src\hive_mind.py:34: error: Function is missing a return type annotation  [no-untyped-def]
+src\hive_mind.py: note: In member "self_heal" of class "HiveMind":
+src\hive_mind.py:41: error: Function is missing a return type annotation  [no-untyped-def]
+src\hive_mind.py:41: note: Use "-> None" if function does not return a value
+src\hive_mind.py: note: In member "optimize_metrics" of class "HiveMind":
+src\hive_mind.py:56: error: Function is missing a return type annotation  [no-untyped-def]
+src\hive_mind.py: note: In member "swarm_dispatch" of class "HiveMind":
+src\hive_mind.py:67: error: Function is missing a return type annotation  [no-untyped-def]
+src\hive_mind.py: note: At top level:
+src\hive_mind.py:87: error: Call to untyped function "HiveMind" in typed context  [no-untyped-call]
+src\hive_mind.py:91: error: Call to untyped function "self_heal" in typed context  [no-untyped-call]
+src\ai_prediction.py:14: error: Library stubs not installed for "pandas"  [import-untyped]
+src\ai_prediction.py:14: note: Hint: "python3 -m pip install pandas-stubs"
+src\ai_prediction.py:14: note: (or run "mypy --install-types" to install all missing stub packages)
+src\ai_prediction.py:15: error: Skipping analyzing "joblib": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+src\ai_prediction.py:16: error: Skipping analyzing "sklearn.ensemble": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+src\ai_prediction.py:16: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+src\ai_prediction.py:17: error: Skipping analyzing "sklearn.metrics": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+src\ai_prediction.py:18: error: Skipping analyzing "sklearn.model_selection": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+src\ai_prediction.py:19: error: Skipping analyzing "sklearn.preprocessing": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+src\ai_prediction.py: note: In member "__init__" of class "QualityPredictor":
+src\ai_prediction.py:44: error: Call to untyped function "_init_database" in typed context  [no-untyped-call]
+src\ai_prediction.py: note: In member "_load_best_params" of class "QualityPredictor":
+src\ai_prediction.py:55: error: Returning Any from function declared to return "dict[str, int] | None"  [no-any-return]
+src\ai_prediction.py: note: In member "_init_database" of class "QualityPredictor":
+src\ai_prediction.py:60: error: Function is missing a return type annotation  [no-untyped-def]
+src\ai_prediction.py:60: note: Use "-> None" if function does not return a value
+src\ai_prediction.py: note: In member "train_model" of class "QualityPredictor":
+src\ai_prediction.py:354: error: Incompatible return value type (got "dict[str, object]", expected "dict[str, float]")  [return-value]
+src\ai_prediction.py: note: In member "predict_quality_issue" of class "QualityPredictor":
+src\ai_prediction.py:356: error: Function "builtins.any" is not valid as a type  [valid-type]
+src\ai_prediction.py:356: note: Perhaps you meant "typing.Any" instead of "any"?
+src\ai_prediction.py: note: In member "predict_resource_demand" of class "ResourceDemandPredictor":
+src\ai_prediction.py:501: error: Function "builtins.any" is not valid as a type  [valid-type]
+src\ai_prediction.py:501: note: Perhaps you meant "typing.Any" instead of "any"?
+src\ai_prediction.py: note: In function "main":
+src\ai_prediction.py:565: error: Function is missing a return type annotation  [no-untyped-def]
+src\ai_prediction.py:565: note: Use "-> None" if function does not return a value
+src\ai_prediction.py: note: At top level:
+src\ai_prediction.py:619: error: Call to untyped function "main" in typed context  [no-untyped-call]
+src\monitoring_system.py: note: In member "__init__" of class "AnomalyDetector":
+src\monitoring_system.py:30: error: Need type annotation for "metric_history"  [var-annotated]
+src\monitoring_system.py:36: error: Need type annotation for "baseline_stats" (hint: "baseline_stats: dict[<type>, <type>] = ...")  [var-annotated]
+src\monitoring_system.py: note: In member "update_history" of class "AnomalyDetector":
+src\monitoring_system.py:38: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "detect_anomalies" of class "AnomalyDetector":
+src\monitoring_system.py:58: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py:60: error: Need type annotation for "anomalies" (hint: "anomalies: list[<type>] = ...")  [var-annotated]
+src\monitoring_system.py: note: In member "__init__" of class "AlertManager":
+src\monitoring_system.py:125: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py:127: error: Need type annotation for "alert_history"  [var-annotated]
+src\monitoring_system.py:128: error: Need type annotation for "suppression_rules" (hint: "suppression_rules: dict[<type>, <type>] = ...")  [var-annotated]
+src\monitoring_system.py: note: In member "should_suppress_alert" of class "AlertManager":
+src\monitoring_system.py:131: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "escalate_alert" of class "AlertManager":
+src\monitoring_system.py:143: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "process_alert" of class "AlertManager":
+src\monitoring_system.py:158: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "__init__" of class "NotificationService":
+src\monitoring_system.py:178: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "send_email_alert" of class "NotificationService":
+src\monitoring_system.py:188: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "send_webhook_alert" of class "NotificationService":
+src\monitoring_system.py:234: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: At top level:
+src\monitoring_system.py:248: error: Library stubs not installed for "requests"  [import-untyped]
+src\monitoring_system.py:248: note: Hint: "python3 -m pip install types-requests"
+src\monitoring_system.py: note: In member "__init__" of class "MonitoringSystem":
+src\monitoring_system.py:301: error: Argument 2 to "insert" of "list" has incompatible type "FileHandler"; expected "StreamHandler[TextIO]"  [arg-type]
+src\monitoring_system.py: note: In member "__del__" of class "MonitoringSystem":
+src\monitoring_system.py:351: error: Function is missing a type annotation  [no-untyped-def]
+src\monitoring_system.py: note: In member "_load_config" of class "MonitoringSystem":
+src\monitoring_system.py:357: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py:413: error: Returning Any from function declared to return "dict[Any, Any]"  [no-any-return]
+src\monitoring_system.py: note: In member "collect_current_metrics" of class "MonitoringSystem":
+src\monitoring_system.py:424: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "analyze_metrics" of class "MonitoringSystem":
+src\monitoring_system.py:446: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "send_alerts" of class "MonitoringSystem":
+src\monitoring_system.py:542: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "_notify_dashboard" of class "MonitoringSystem":
+src\monitoring_system.py:641: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "_register_evidence" of class "MonitoringSystem":
+src\monitoring_system.py:647: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "_get_file_rotation_config" of class "MonitoringSystem":
+src\monitoring_system.py:677: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py:681: error: Incompatible types in assignment (expression has type "dict[str, int]", variable has type "None")  [assignment]
+src\monitoring_system.py:686: error: Incompatible return value type (got "None", expected "dict[Any, Any]")  [return-value]
+src\monitoring_system.py: note: In member "store_metrics" of class "MonitoringSystem":
+src\monitoring_system.py:748: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In member "start" of class "MonitoringSystem":
+src\monitoring_system.py:851: error: Incompatible types in assignment (expression has type "Thread", variable has type "None")  [assignment]
+src\monitoring_system.py:852: error: "None" has no attribute "start"  [attr-defined]
+src\monitoring_system.py: note: In member "get_status" of class "MonitoringSystem":
+src\monitoring_system.py:883: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitoring_system.py: note: In function "main":
+src\monitoring_system.py:918: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitoring_system.py:918: note: Use "-> None" if function does not return a value
+src\monitoring_system.py: note: At top level:
+src\monitoring_system.py:937: error: Call to untyped function "main" in typed context  [no-untyped-call]
+src\dashboard.py:12: error: Library stubs not installed for "pandas"  [import-untyped]
+src\dashboard.py: note: In member "get_recent_metrics" of class "QualityDashboard":
+src\dashboard.py:39: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\dashboard.py:54: error: Returning Any from function declared to return "list[dict[Any, Any]]"  [no-any-return]
+src\dashboard.py: note: In member "get_prediction_summary" of class "QualityDashboard":
+src\dashboard.py:59: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\dashboard.py: note: In member "get_trend_data" of class "QualityDashboard":
+src\dashboard.py:91: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\dashboard.py: note: In function "dashboard":
+src\dashboard.py:147: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "vite_client_placeholder":
+src\dashboard.py:367: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "status":
+src\dashboard.py:375: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "api_system_health":
+src\dashboard.py:383: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "api_work_progress":
+src\dashboard.py:401: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "api_prediction":
+src\dashboard.py:417: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "api_trends":
+src\dashboard.py:424: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "api_trends_schema":
+src\dashboard.py:431: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "api_metrics":
+src\dashboard.py:452: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "api_autopilot_status":
+src\dashboard.py:460: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "api_autopilot_logs":
+src\dashboard.py:475: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "health":
+src\dashboard.py:487: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py: note: In function "main":
+src\dashboard.py:518: error: Function is missing a return type annotation  [no-untyped-def]
+src\dashboard.py:518: note: Use "-> None" if function does not return a value
+src\dashboard.py: note: At top level:
+src\dashboard.py:535: error: Call to untyped function "main" in typed context  [no-untyped-call]
+src\realtime_dashboard.py:19: error: Library stubs not installed for "flask_socketio"  [import-untyped]
+src\realtime_dashboard.py:19: note: Hint: "python3 -m pip install types-Flask-SocketIO"
+src\realtime_dashboard.py: note: In member "__init__" of class "RealtimeDashboard":
+src\realtime_dashboard.py:90: error: Need type annotation for "active_connections" (hint: "active_connections: set[<type>] = ...")  [var-annotated]
+src\realtime_dashboard.py:91: error: Need type annotation for "metrics_buffer"  [var-annotated]
+src\realtime_dashboard.py:92: error: Need type annotation for "alerts_buffer"  [var-annotated]
+src\realtime_dashboard.py:96: error: Call to untyped function "_setup_routes" in typed context  [no-untyped-call]
+src\realtime_dashboard.py:97: error: Call to untyped function "_setup_socketio_events" in typed context  [no-untyped-call]
+src\realtime_dashboard.py: note: In member "_train_predictor_background" of class "RealtimeDashboard":
+src\realtime_dashboard.py:99: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:99: note: Use "-> None" if function does not return a value
+src\realtime_dashboard.py: note: In member "_setup_routes" of class "RealtimeDashboard":
+src\realtime_dashboard.py:128: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py: note: In function "_setup_routes":
+src\realtime_dashboard.py:132: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:137: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:149: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:162: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:176: error: Function is missing a type annotation  [no-untyped-def]
+src\realtime_dashboard.py:186: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:199: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:202: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:253: error: Call to untyped function "event_stream" in typed context  [no-untyped-call]
+src\realtime_dashboard.py:257: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py: note: In member "_setup_socketio_events" of class "RealtimeDashboard":
+src\realtime_dashboard.py:260: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:260: note: Use "-> None" if function does not return a value
+src\realtime_dashboard.py: note: In function "_setup_socketio_events":
+src\realtime_dashboard.py:264: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:264: note: Use "-> None" if function does not return a value
+src\realtime_dashboard.py:266: error: "Request" has no attribute "sid"  [attr-defined]
+src\realtime_dashboard.py:268: error: "Request" has no attribute "sid"  [attr-defined]
+src\realtime_dashboard.py:284: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:284: note: Use "-> None" if function does not return a value
+src\realtime_dashboard.py:286: error: "Request" has no attribute "sid"  [attr-defined]
+src\realtime_dashboard.py:288: error: "Request" has no attribute "sid"  [attr-defined]
+src\realtime_dashboard.py:291: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:291: note: Use "-> None" if function does not return a value
+src\realtime_dashboard.py:298: error: Function is missing a type annotation  [no-untyped-def]
+src\realtime_dashboard.py:301: error: "Request" has no attribute "sid"  [attr-defined]
+src\realtime_dashboard.py: note: In member "start_monitoring" of class "RealtimeDashboard":
+src\realtime_dashboard.py:304: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:304: note: Use "-> None" if function does not return a value
+src\realtime_dashboard.py:315: error: Incompatible types in assignment (expression has type "Thread", variable has type "None")  [assignment]
+src\realtime_dashboard.py:316: error: "None" has no attribute "start"  [attr-defined]
+src\realtime_dashboard.py: note: In member "stop_monitoring" of class "RealtimeDashboard":
+src\realtime_dashboard.py:319: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:319: note: Use "-> None" if function does not return a value
+src\realtime_dashboard.py: note: In member "_monitoring_loop" of class "RealtimeDashboard":
+src\realtime_dashboard.py:326: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:326: note: Use "-> None" if function does not return a value
+src\realtime_dashboard.py: note: At top level:
+src\realtime_dashboard.py:379: error: Library stubs not installed for "psutil"  [import-untyped]
+src\realtime_dashboard.py: note: In member "_detect_anomalies" of class "RealtimeDashboard":
+src\realtime_dashboard.py:415: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\realtime_dashboard.py: note: In member "_create_alert_from_anomaly" of class "RealtimeDashboard":
+src\realtime_dashboard.py:465: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\realtime_dashboard.py: note: In member "_broadcast_metrics" of class "RealtimeDashboard":
+src\realtime_dashboard.py:486: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py: note: In member "_broadcast_alert" of class "RealtimeDashboard":
+src\realtime_dashboard.py:496: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py: note: In member "_broadcast_alert_update" of class "RealtimeDashboard":
+src\realtime_dashboard.py:506: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py: note: In member "_run_ai_prediction" of class "RealtimeDashboard":
+src\realtime_dashboard.py:568: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\realtime_dashboard.py: note: In member "_check_automation_status" of class "RealtimeDashboard":
+src\realtime_dashboard.py:593: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\realtime_dashboard.py: note: In member "_create_prediction_alert" of class "RealtimeDashboard":
+src\realtime_dashboard.py:615: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\realtime_dashboard.py: note: In member "_create_automation_alert" of class "RealtimeDashboard":
+src\realtime_dashboard.py:630: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\realtime_dashboard.py: note: In member "run" of class "RealtimeDashboard":
+src\realtime_dashboard.py:1033: error: Function is missing a type annotation  [no-untyped-def]
+src\realtime_dashboard.py:1035: error: Call to untyped function "start_monitoring" in typed context  [no-untyped-call]
+src\realtime_dashboard.py:1040: error: Call to untyped function "stop_monitoring" in typed context  [no-untyped-call]
+src\realtime_dashboard.py: note: In function "main":
+src\realtime_dashboard.py:1043: error: Function is missing a return type annotation  [no-untyped-def]
+src\realtime_dashboard.py:1043: note: Use "-> None" if function does not return a value
+src\realtime_dashboard.py:1058: error: Call to untyped function "run" in typed context  [no-untyped-call]
+src\realtime_dashboard.py: note: At top level:
+src\realtime_dashboard.py:1062: error: Call to untyped function "main" in typed context  [no-untyped-call]
+app\shared\__init__.py:6: note: In module imported here:
+app\shared\error_handling.py: note: In function "mask_sensitive_data":
+app\shared\error_handling.py:140: error: Missing type parameters for generic type "set"  [type-arg]
+app\shared\error_handling.py:140: error: Incompatible default for argument "sensitive_keys" (default has type "None", argument has type "set[Any]")  [assignment]
+app\shared\error_handling.py:140: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+app\shared\error_handling.py:140: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+app\shared\error_handling.py:153: error: Incompatible types in assignment (expression has type "dict[str, Any]", target has type "str")  [assignment]
+app\shared\error_handling.py:155: error: Incompatible types in assignment (expression has type "list[dict[str, Any] | Any]", target has type "str")  [assignment]
+app\shared\error_handling.py: note: In member "validation_error" of class "ErrorHandler":
+app\shared\error_handling.py:168: error: Function is missing a return type annotation  [no-untyped-def]
+app\shared\error_handling.py: note: In member "not_found" of class "ErrorHandler":
+app\shared\error_handling.py:180: error: Function is missing a return type annotation  [no-untyped-def]
+app\shared\error_handling.py: note: In member "internal_error" of class "ErrorHandler":
+app\shared\error_handling.py:192: error: Function is missing a return type annotation  [no-untyped-def]
+app\shared\error_handling.py: note: In member "timeout_error" of class "ErrorHandler":
+app\shared\error_handling.py:204: error: Function is missing a return type annotation  [no-untyped-def]
+app\shared\error_handling.py: note: In member "service_unavailable" of class "ErrorHandler":
+app\shared\error_handling.py:216: error: Function is missing a return type annotation  [no-untyped-def]
+app\shared\error_handling.py: note: In function "retry_on_exception":
+app\shared\error_handling.py:232: error: Function is missing a return type annotation  [no-untyped-def]
+app\shared\error_handling.py:239: error: Function is missing a return type annotation  [no-untyped-def]
+app\shared\error_handling.py:239: error: Missing type parameters for generic type "Callable"  [type-arg]
+app\shared\error_handling.py:241: error: Function is missing a type annotation  [no-untyped-def]
+app\shared\error_handling.py:260: error: Exception must be derived from BaseException  [misc]
+app\shared\error_handling.py:263: error: Function is missing a type annotation  [no-untyped-def]
+app\shared\error_handling.py:280: error: Exception must be derived from BaseException  [misc]
+src\security.py: note: In member "__init__" of class "SecurityManager":
+src\security.py:70: error: Call to untyped function "_init_database_connection" in typed context  [no-untyped-call]
+src\security.py:72: error: Incompatible types in assignment (expression has type "None", variable has type "Connection")  [assignment]
+src\security.py:74: error: Call to untyped function "init_database" in typed context  [no-untyped-call]
+src\security.py:100: error: Call to untyped function "init_database" in typed context  [no-untyped-call]
+src\security.py:102: error: Call to untyped function "_cleanup_expired_tokens" in typed context  [no-untyped-call]
+src\security.py: note: In member "init_database" of class "SecurityManager":
+src\security.py:104: error: Function is missing a return type annotation  [no-untyped-def]
+src\security.py:104: note: Use "-> None" if function does not return a value
+src\security.py:109: error: Call to untyped function "_init_database_connection" in typed context  [no-untyped-call]
+src\security.py:111: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\security.py:112: error: Call to untyped function "_init_database_connection" in typed context  [no-untyped-call]
+src\security.py: note: In member "_connect" of class "SecurityManager":
+src\security.py:114: error: Function is missing a return type annotation  [no-untyped-def]
+src\security.py: note: In member "_init_database_connection" of class "SecurityManager":
+src\security.py:137: error: Function is missing a type annotation  [no-untyped-def]
+src\security.py: note: In member "authenticate_user" of class "SecurityManager":
+src\security.py:337: error: Incompatible default for argument "ip_address" (default has type "None", argument has type "str")  [assignment]
+src\security.py:337: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\security.py:337: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\security.py:342: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\security.py:360: error: Argument 2 to "_log_security_event" of "SecurityManager" has incompatible type "None"; expected "str"  [arg-type]
+src\security.py: note: In member "get_user_by_id" of class "SecurityManager":
+src\security.py:501: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\security.py: note: In member "create_jwt_token" of class "SecurityManager":
+src\security.py:572: error: Incompatible types in assignment (expression has type "str | None", variable has type "str")  [assignment]
+src\security.py:608: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\security.py: note: In member "verify_jwt_token" of class "SecurityManager":
+src\security.py:688: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\security.py: note: In member "revoke_jwt_token" of class "SecurityManager":
+src\security.py:799: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\security.py:812: error: Returning Any from function declared to return "bool"  [no-any-return]
+src\security.py: note: In member "verify_hmac_signature" of class "SecurityManager":
+src\security.py:863: error: Incompatible types in assignment (expression has type "bytes | bytearray", variable has type "bytes")  [assignment]
+src\security.py:961: error: Argument 2 to "_log_security_event" of "SecurityManager" has incompatible type "None"; expected "str"  [arg-type]
+src\security.py:971: error: Argument 2 to "_log_security_event" of "SecurityManager" has incompatible type "None"; expected "str"  [arg-type]
+src\security.py:1019: error: Argument 2 to "_log_security_event" of "SecurityManager" has incompatible type "None"; expected "str"  [arg-type]
+src\security.py:1028: error: Argument 2 to "_log_security_event" of "SecurityManager" has incompatible type "None"; expected "str"  [arg-type]
+src\security.py: note: In member "check_rate_limit" of class "SecurityManager":
+src\security.py:1052: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\security.py:1073: error: Argument 2 to "_log_security_event" of "SecurityManager" has incompatible type "None"; expected "str"  [arg-type]
+src\security.py: note: In member "_record_rate_limit_request" of class "SecurityManager":
+src\security.py:1130: error: Function is missing a return type annotation  [no-untyped-def]
+src\security.py:1145: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\security.py: note: In member "_log_security_event" of class "SecurityManager":
+src\security.py:1189: error: Function is missing a return type annotation  [no-untyped-def]
+src\security.py:1192: error: Incompatible default for argument "user_id" (default has type "None", argument has type "str")  [assignment]
+src\security.py:1192: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\security.py:1192: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\security.py:1193: error: Incompatible default for argument "ip_address" (default has type "None", argument has type "str")  [assignment]
+src\security.py:1193: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\security.py:1193: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\security.py:1194: error: Incompatible default for argument "user_agent" (default has type "None", argument has type "str")  [assignment]
+src\security.py:1194: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\security.py:1194: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\security.py:1195: error: Incompatible default for argument "endpoint" (default has type "None", argument has type "str")  [assignment]
+src\security.py:1195: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\security.py:1195: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\security.py:1196: error: Incompatible default for argument "details" (default has type "None", argument has type "dict[str, Any]")  [assignment]
+src\security.py:1196: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\security.py:1196: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\security.py:1209: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\security.py: note: In member "_cleanup_expired_tokens" of class "SecurityManager":
+src\security.py:1236: error: Function is missing a return type annotation  [no-untyped-def]
+src\security.py:1236: note: Use "-> None" if function does not return a value
+src\security.py:1243: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\security.py: note: In function "require_role":
+src\security.py:1381: error: Function is missing a return type annotation  [no-untyped-def]
+src\security.py:1390: error: Function is missing a type annotation  [no-untyped-def]
+src\security.py:1392: error: Function is missing a type annotation  [no-untyped-def]
+src\security.py:1416: error: Function is missing a type annotation  [no-untyped-def]
+src\monitor.py:22: error: Library stubs not installed for "psutil"  [import-untyped]
+src\monitor.py:22: note: Hint: "python3 -m pip install types-psutil"
+src\monitor.py: note: In class "HealthMetric":
+src\monitor.py:56: error: Incompatible types in assignment (expression has type "None", variable has type "dict[str, str]")  [assignment]
+src\monitor.py: note: In member "__init__" of class "AIMonitor":
+src\monitor.py:86: error: Need type annotation for "metrics_history" (hint: "metrics_history: dict[<type>, <type>] = ...")  [var-annotated]
+src\monitor.py:87: error: Need type annotation for "active_alerts" (hint: "active_alerts: dict[<type>, <type>] = ...")  [var-annotated]
+src\monitor.py:88: error: Need type annotation for "recovery_attempts" (hint: "recovery_attempts: dict[<type>, <type>] = ...")  [var-annotated]
+src\monitor.py:89: error: Call to untyped function "_init_database" in typed context  [no-untyped-call]
+src\monitor.py: note: In member "_connect" of class "AIMonitor":
+src\monitor.py:91: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py: note: In member "_load_config" of class "AIMonitor":
+src\monitor.py:139: error: Returning Any from function declared to return "dict[str, Any]"  [no-any-return]
+src\monitor.py: note: In member "_init_database" of class "AIMonitor":
+src\monitor.py:150: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py:150: note: Use "-> None" if function does not return a value
+src\monitor.py:152: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\monitor.py: note: In member "_collect_app_metrics" of class "AIMonitor":
+src\monitor.py:284: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py:285: error: Missing type parameters for generic type "Dict"  [type-arg]
+src\monitor.py: note: In member "_log_recovery_attempt" of class "AIMonitor":
+src\monitor.py:531: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py:536: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\monitor.py: note: In member "send_notifications" of class "AIMonitor":
+src\monitor.py:553: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py: note: In member "_is_in_cooldown" of class "AIMonitor":
+src\monitor.py:580: error: Returning Any from function declared to return "bool"  [no-any-return]
+src\monitor.py: note: In member "_send_slack_notification" of class "AIMonitor":
+src\monitor.py:583: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py: note: In member "_send_webhook_notification" of class "AIMonitor":
+src\monitor.py:630: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py: note: In member "run_monitoring_loop" of class "AIMonitor":
+src\monitor.py:653: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py:653: note: Use "-> None" if function does not return a value
+src\monitor.py:680: error: Call to untyped function "_cleanup_old_data" in typed context  [no-untyped-call]
+src\monitor.py: note: In member "_store_metrics" of class "AIMonitor":
+src\monitor.py:689: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py:692: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\monitor.py: note: In member "_cleanup_old_data" of class "AIMonitor":
+src\monitor.py:712: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py:712: note: Use "-> None" if function does not return a value
+src\monitor.py:716: error: Call to untyped function "_connect" in typed context  [no-untyped-call]
+src\monitor.py: note: At top level:
+src\monitor.py:747: error: Module has no attribute "MonitorService"  [attr-defined]
+src\monitor.py: note: In function "main":
+src\monitor.py:750: error: Function is missing a return type annotation  [no-untyped-def]
+src\monitor.py:750: note: Use "-> None" if function does not return a value
+src\monitor.py:753: error: Call to untyped function "run_monitoring_loop" in typed context  [no-untyped-call]
+src\monitor.py: note: At top level:
+src\monitor.py:757: error: Call to untyped function "main" in typed context  [no-untyped-call]
+src\workflows_api.py:27: error: Library stubs not installed for "yaml"  [import-untyped]
+src\workflows_api.py:27: note: Hint: "python3 -m pip install types-PyYAML"
+src\workflows_api.py: note: In member "__init__" of class "WorkflowMetrics":
+src\workflows_api.py:72: error: Function is missing a return type annotation  [no-untyped-def]
+src\workflows_api.py:72: note: Use "-> None" if function does not return a value
+src\workflows_api.py: note: In member "record_execution_start" of class "WorkflowMetrics":
+src\workflows_api.py:82: error: Function is missing a return type annotation  [no-untyped-def]
+src\workflows_api.py:82: note: Use "-> None" if function does not return a value
+src\workflows_api.py: note: In member "record_execution_success" of class "WorkflowMetrics":
+src\workflows_api.py:86: error: Function is missing a return type annotation  [no-untyped-def]
+src\workflows_api.py: note: In member "record_execution_failure" of class "WorkflowMetrics":
+src\workflows_api.py:90: error: Function is missing a return type annotation  [no-untyped-def]
+src\workflows_api.py: note: In member "record_approval_request" of class "WorkflowMetrics":
+src\workflows_api.py:94: error: Function is missing a return type annotation  [no-untyped-def]
+src\workflows_api.py:94: note: Use "-> None" if function does not return a value
+src\workflows_api.py: note: In member "record_approval_decision" of class "WorkflowMetrics":
+src\workflows_api.py:97: error: Function is missing a return type annotation  [no-untyped-def]
+src\workflows_api.py: note: At top level:
+src\workflows_api.py:148: error: Call to untyped function "WorkflowMetrics" in typed context  [no-untyped-call]
+src\workflows_api.py: note: In function "_load_workflow_catalog":
+src\workflows_api.py:155: error: Need type annotation for "catalog" (hint: "catalog: list[<type>] = ...")  [var-annotated]
+src\workflows_api.py: note: At top level:
+src\workflows_api.py:197: error: Untyped decorator makes function "list_workflows" untyped  [misc]
+src\workflows_api.py:206: error: Untyped decorator makes function "get_workflow_catalog" untyped  [misc]
+src\workflows_api.py: note: In function "get_workflow_metrics":
+src\workflows_api.py:215: error: Function is missing a return type annotation  [no-untyped-def]
+src\workflows_api.py: note: At top level:
+src\workflows_api.py:224: error: Untyped decorator makes function "run_workflow" untyped  [misc]
+src\workflows_api.py: note: In function "run_workflow":
+src\workflows_api.py:237: error: Call to untyped function "record_execution_start" in typed context  [no-untyped-call]
+src\workflows_api.py: note: At top level:
+src\workflows_api.py:288: error: Untyped decorator makes function "list_approvals" untyped  [misc]
+src\workflows_api.py:298: error: Untyped decorator makes function "get_workflow_details" untyped  [misc]
+src\workflows_api.py:315: error: Untyped decorator makes function "record_approval" untyped  [misc]
+src\workflows_api.py: note: In function "record_approval":
+src\workflows_api.py:329: error: Call to untyped function "record_approval_request" in typed context  [no-untyped-call]
+src\dispatcher.py: note: In function "sse_events":
+src\dispatcher.py:29: error: Function is missing a return type annotation  [no-untyped-def]
+src\dispatcher.py: note: In function "events":
+src\dispatcher.py:51: error: Function is missing a return type annotation  [no-untyped-def]
+src\dispatcher.py:53: error: Call to untyped function "sse_events" in typed context  [no-untyped-call]
+src\dispatcher.py: note: In function "sse_events_path":
+src\dispatcher.py:57: error: Function is missing a return type annotation  [no-untyped-def]
+src\dispatcher.py:59: error: Call to untyped function "sse_events" in typed context  [no-untyped-call]
+src\dispatcher.py: note: In function "webhook":
+src\dispatcher.py:66: error: Function is missing a return type annotation  [no-untyped-def]
+src\dispatcher.py: note: In member "__init__" of class "TaskDispatcher":
+src\dispatcher.py:130: error: Call to untyped function "_init_database" in typed context  [no-untyped-call]
+src\dispatcher.py: note: In member "_init_database" of class "TaskDispatcher":
+src\dispatcher.py:132: error: Function is missing a return type annotation  [no-untyped-def]
+src\dispatcher.py:132: note: Use "-> None" if function does not return a value
+src\dispatcher.py: note: In member "dispatch_task" of class "TaskDispatcher":
+src\dispatcher.py:447: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+src\dispatcher.py:447: error: Incompatible default for argument "request" (default has type "None", argument has type "DispatchRequest")  [assignment]
+src\dispatcher.py:447: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\dispatcher.py:447: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\dispatcher.py: note: In member "_row_to_task" of class "TaskDispatcher":
+src\dispatcher.py:547: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+src\dispatcher.py: note: In member "_record_metric" of class "TaskDispatcher":
+src\dispatcher.py:564: error: Function is missing a return type annotation  [no-untyped-def]
+src\dispatcher.py:564: error: Incompatible default for argument "labels" (default has type "None", argument has type "dict[str, str]")  [assignment]
+src\dispatcher.py:564: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\dispatcher.py:564: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\dispatcher.py: note: In member "cleanup_expired_locks" of class "TaskDispatcher":
+src\dispatcher.py:579: error: Function is missing a return type annotation  [no-untyped-def]
+src\dispatcher.py:579: note: Use "-> None" if function does not return a value
+src\dispatcher.py: note: In member "close" of class "TaskDispatcher":
+src\dispatcher.py:606: error: Function is missing a return type annotation  [no-untyped-def]
+src\dispatcher.py:606: note: Use "-> None" if function does not return a value
+src\dispatcher.py:611: error: Call to untyped function "cleanup_expired_locks" in typed context  [no-untyped-call]
+src\dispatcher.py: note: In member "__del__" of class "TaskDispatcher":
+src\dispatcher.py:615: error: Function is missing a type annotation  [no-untyped-def]
+src\dispatcher.py:617: error: Call to untyped function "close" in typed context  [no-untyped-call]
+src\dispatcher.py: note: In function "metrics_endpoint":
+src\dispatcher.py:630: error: Function is missing a return type annotation  [no-untyped-def]
+src\dispatcher.py: note: In function "main":
+src\dispatcher.py:635: error: Function is missing a return type annotation  [no-untyped-def]
+src\dispatcher.py:635: note: Use "-> None" if function does not return a value
+src\dispatcher.py:653: error: Call to untyped function "cleanup_expired_locks" in typed context  [no-untyped-call]
+src\dispatcher.py: note: At top level:
+src\dispatcher.py:675: error: Call to untyped function "main" in typed context  [no-untyped-call]
+src\orchestrator.py: note: In function "lifespan":
+src\orchestrator.py:94: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py:106: error: Call to untyped function "cleanup_task" in typed context  [no-untyped-call]
+src\orchestrator.py: note: In function "_load_cors_settings":
+src\orchestrator.py:125: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py: note: At top level:
+src\orchestrator.py:150: error: Call to untyped function "_load_cors_settings" in typed context  [no-untyped-call]
+src\orchestrator.py: note: In function "record_http_metric":
+src\orchestrator.py:237: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py: note: In function "metrics_middleware":
+src\orchestrator.py:244: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py:244: error: Function is missing a type annotation for one or more arguments  [no-untyped-def]
+src\orchestrator.py: note: In function "webhook_handler":
+src\orchestrator.py:264: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py: note: In function "health_check":
+src\orchestrator.py:300: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py: note: In function "get_metrics":
+src\orchestrator.py:310: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py:338: error: Incompatible types in assignment (expression has type "float", variable has type "int")  [assignment]
+src\orchestrator.py:356: error: Need type annotation for "agents" (hint: "agents: list[<type>] = ...")  [var-annotated]
+src\orchestrator.py:380: error: Incompatible types in assignment (expression has type "dict[Never, Never]", variable has type "Counter[Any | str]")  [assignment]
+src\orchestrator.py: note: In function "dispatch_task":
+src\orchestrator.py:437: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py: note: In function "handle_webhook":
+src\orchestrator.py:489: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py: note: In function "process_webhook":
+src\orchestrator.py:537: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py: note: In function "get_job_events":
+src\orchestrator.py:557: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py: note: In function "update_job":
+src\orchestrator.py:565: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py: note: In function "cleanup_task":
+src\orchestrator.py:612: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py:612: note: Use "-> None" if function does not return a value
+src\orchestrator.py:616: error: Call to untyped function "cleanup_expired_locks" in typed context  [no-untyped-call]
+src\orchestrator.py: note: In function "update_job_status":
+src\orchestrator.py:631: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py: note: In function "main":
+src\orchestrator.py:687: error: Function is missing a return type annotation  [no-untyped-def]
+src\orchestrator.py:687: note: Use "-> None" if function does not return a value
+src\orchestrator.py: note: At top level:
+src\orchestrator.py:693: error: Call to untyped function "main" in typed context  [no-untyped-call]
+Found 358 errors in 18 files (checked 20 source files)

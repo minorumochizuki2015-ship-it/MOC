@@ -5,8 +5,7 @@ Ensures token-based authentication reliability across different scenarios
 """
 
 import time
-from datetime import datetime, timedelta, timezone
-from typing import Any, Dict
+from datetime import datetime, timedelta
 
 import jwt
 import pytest

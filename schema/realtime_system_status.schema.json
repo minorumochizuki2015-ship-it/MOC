@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Realtime System Status",
+  "type": "object",
+  "properties": {
+    "monitoring_active": { "type": "boolean" },
+    "active_connections": { "type": "integer", "minimum": 0 },
+    "predictor_ready": { "type": "boolean" },
+    "automation_enabled": { "type": "boolean" },
+    "uptime": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "required": [
+    "monitoring_active",
+    "active_connections",
+    "predictor_ready",
+    "automation_enabled",
+    "uptime",
+    "timestamp"
+  ],
+  "additionalProperties": false
+}

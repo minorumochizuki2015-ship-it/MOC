@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="/static/css/orion.css" rel="stylesheet">
+    <link href="/static/css/dynamic_overrides.css" rel="stylesheet">
+    <script>
+        function buildTable(list) {
+            const tableEl = document.getElementById('tasksTable');
+            const tbodyEl = document.getElementById('tasksBody');
+            tableEl.innerHTML = '';
+            tbodyEl.innerHTML = '';
+            if (!Array.isArray(list) || list.length === 0 || typeof list[0] !== 'object') return;
+            const keys = Object.keys(list[0]);
+            const thead = tableEl.createTHead();
+            const hrow = thead.insertRow();
+            keys.forEach(k => { const th = document.createElement('th'); th.textContent = k; hrow.appendChild(th); });
+            list.forEach(item => {
+                const tr = document.createElement('tr');
+                keys.forEach(k => {
+                    const td = document.createElement('td');
+                    const val = item[k];
+                    td.textContent = (val === null || val === undefined) ? '' : (typeof val === 'object' ? JSON.stringify(val) : String(val));
+                    tr.appendChild(td);
+                });
+                tbodyEl.appendChild(tr);
+            });
+        }
+
+        async function loadTasks() {
+            const countEl = document.getElementById('tasksCount');
+            const rawEl = document.getElementById('tasksRaw');
+            try {
+                const res = await fetch('/api/tasks');
+                const json = await res.json();
+                const list = Array.isArray(json?.tasks) ? json.tasks : [];
+                window.__tasksData = list;
+                countEl.textContent = (typeof json.count === 'number') ? json.count : list.length;
+                buildTable(list);
+                rawEl.textContent = '';
+            } catch (e) {
+                rawEl.textContent = '読み込みに失敗しました: ' + e;
+            }
+        }
+
+        function applyFilter() {
+            const q = (document.getElementById('q')?.value || '').toLowerCase();
+            const list = (window.__tasksData || []).filter(row => {
+                const s = (typeof row === 'object') ? JSON.stringify(row) : String(row ?? '');
+                return (s || '').toLowerCase().includes(q);
+            });
+            buildTable(list);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTasks();
+            document.getElementById('q')?.addEventListener('input', applyFilter);
+        });
+    </script>
+</head>
+<body class="orion">
+    <div class="container">
+        <div class="header">
+            <h1>{{ title }}</h1>
+            <div class="muted">一覧は <code>/api/tasks</code> より取得</div>
+        </div>
+        <div class="nav">
+            <a href="/">ダッシュボード</a>
+            <a class="active" href="/tasks">タスク</a>
+            <a href="/approvals">承認</a>
+            <a href="/agents">エージェント</a>
+            <a href="/style-manager">🎨 スタイル管理</a>
+        </div>
+        <div class="row space-md">
+            <div class="card" style="flex:2;">
+                <div class="space-sm">
+                    <input id="q" class="input" placeholder="検索（全文）" />
+                    <button class="btn" onclick="loadTasks()">再読み込み</button>
+                </div>
+                <p class="space-sm">総数: <strong id="tasksCount">—</strong></p>
+                <table id="tasksTable"><tbody id="tasksBody"></tbody></table>
+            </div>
+            <div class="card" style="flex:1;">
+                <div class="muted">Raw</div>
+                <pre id="tasksRaw" class="muted" style="min-height: 120px;"></pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

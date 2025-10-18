@@ -304,7 +304,11 @@ class MonitoringSystem:
                 "url": "http://localhost:8080/alerts",
                 "headers": {"Content-Type": "application/json"},
             },
-            "anomaly_detection": {"enabled": True, "window_size": 50, "z_score_threshold": 2.5},
+            "anomaly_detection": {
+                "enabled": True,
+                "window_size": 50,
+                "z_score_threshold": 2.5,
+            },
             "data_retention_days": 30,
         }
 

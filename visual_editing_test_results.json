@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-10-13 15:43:30",
+  "summary": {
+    "passed": 3,
+    "failed": 3,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "test": "Style Manager Page Load",
+      "status": "FAIL",
+      "message": "Missing elements: ['styleManagerApp']"
+    },
+    {
+      "test": "Color Tools Presence",
+      "status": "PASS",
+      "message": "Found 1 color tool elements"
+    },
+    {
+      "test": "Font Tools Presence",
+      "status": "PASS",
+      "message": "Found 4 font tool elements"
+    },
+    {
+      "test": "Layout Tools Presence",
+      "status": "PASS",
+      "message": "Found 6 layout tool elements"
+    },
+    {
+      "test": "Preview Functionality",
+      "status": "FAIL",
+      "message": "HTTP 404"
+    },
+    {
+      "test": "Style Persistence",
+      "status": "FAIL",
+      "message": "Failed to update style: HTTP 500"
+    }
+  ]
+}

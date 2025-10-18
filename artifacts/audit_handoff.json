@@ -1,0 +1,137 @@
+{
+  "handoff_id": "phase4_ui_audit_2025_01_11",
+  "timestamp": "2025-01-11T12:00:00Z",
+  "source_agent": "Design-UI",
+  "target_agent": "UI-Audit",
+  "project": "ORCH-Next",
+  "phase": "Phase 4 - UI Audit & Quality Gate",
+  "preview_config": {
+    "preview_url": "http://localhost:5000",
+    "preview_dir": "artifacts/preview/",
+    "entry_point": "index.html",
+    "server_status": "running",
+    "server_port": 5000,
+    "server_type": "Flask Dashboard"
+  },
+  "audit_routes": [
+    {
+      "route": "/",
+      "name": "Main Dashboard",
+      "priority": "high",
+      "description": "メインダッシュボード - システム品質指標とメトリクス",
+      "expected_elements": ["dashboard-grid", "metrics-cards", "status-indicators"]
+    },
+    {
+      "route": "/style-manager",
+      "name": "Style Manager",
+      "priority": "high", 
+      "description": "要素選択・スタイル管理システム",
+      "expected_elements": ["element-selector", "style-controls", "preview-panel"]
+    },
+    {
+      "route": "/metrics",
+      "name": "Metrics & Monitoring",
+      "priority": "medium",
+      "description": "リアルタイム監視とパフォーマンス指標",
+      "expected_elements": ["metrics-charts", "performance-indicators", "alert-panel"]
+    },
+    {
+      "route": "/events",
+      "name": "Events & Logs",
+      "priority": "medium",
+      "description": "システムイベントと監査ログ",
+      "expected_elements": ["event-log", "filter-controls", "export-options"]
+    },
+    {
+      "route": "/api/styles",
+      "name": "Styles API",
+      "priority": "low",
+      "description": "スタイル管理API エンドポイント",
+      "expected_elements": ["api-response", "json-data"]
+    }
+  ],
+  "audit_requirements": {
+    "accessibility": {
+      "axe_core": true,
+      "wcag_level": "AA",
+      "max_violations": 0,
+      "check_keyboard_navigation": true,
+      "check_screen_reader": true
+    },
+    "performance": {
+      "lcp_threshold_ms": 2500,
+      "tti_threshold_ms": 3000,
+      "cls_threshold": 0.1,
+      "fcp_threshold_ms": 1800
+    },
+    "visual_regression": {
+      "enabled": true,
+      "baseline_dir": "observability/ui/screens/baseline/",
+      "diff_threshold_percent": 0.1,
+      "viewports": [
+        {"name": "desktop", "width": 1920, "height": 1080},
+        {"name": "tablet", "width": 768, "height": 1024},
+        {"name": "mobile", "width": 375, "height": 667}
+      ]
+    },
+    "responsive": {
+      "test_viewports": true,
+      "check_layout_shifts": true,
+      "verify_mobile_usability": true
+    }
+  },
+  "output_requirements": {
+    "report_format": "html",
+    "report_path": "observability/ui/report/ui_audit_report.html",
+    "summary_path": "observability/ui/report/summary.json",
+    "screenshots_dir": "observability/ui/screens/",
+    "traces_dir": "observability/ui/traces/",
+    "videos_dir": "observability/ui/videos/",
+    "performance_dir": "observability/ui/performance/"
+  },
+  "gate_criteria": {
+    "pass_conditions": [
+      "axe_violations == 0",
+      "lcp_ms <= 2500",
+      "tti_ms <= 3000", 
+      "cls <= 0.1",
+      "visual_diff_percent <= 0.1",
+      "responsive_issues == 0"
+    ],
+    "fail_conditions": [
+      "axe_violations > 0",
+      "lcp_ms > 2500",
+      "tti_ms > 3000",
+      "cls > 0.1",
+      "visual_diff_percent > 0.1",
+      "responsive_issues > 0"
+    ]
+  },
+  "environment": {
+    "os": "Windows",
+    "browser": "Chromium",
+    "playwright_version": "latest",
+    "node_version": "18+",
+    "python_version": "3.9+",
+    "workspace_root": "C:\\Users\\User\\Trae\\ORCH-Next"
+  },
+  "dependencies": {
+    "required_tools": ["playwright", "axe-core", "lighthouse"],
+    "required_packages": ["pytest-playwright", "axe-playwright-python"],
+    "server_dependencies": ["Flask", "Python 3.9+"]
+  },
+  "notes": [
+    "Dashboard server is running on port 5000",
+    "Preview template created with Sci-Fi dashboard design",
+    "All routes are accessible via localhost:5000",
+    "Orchestrator API available on port 8000 (if needed)",
+    "UI elements follow modern responsive design patterns"
+  ],
+  "validation": {
+    "schema_version": "1.0",
+    "required_fields_present": true,
+    "routes_accessible": true,
+    "preview_generated": true,
+    "handoff_ready": true
+  }
+}

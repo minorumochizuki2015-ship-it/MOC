@@ -4,7 +4,6 @@ ORCH-Next 簡易統合テスト - AI予測機能とダッシュボード
 リリース前の最終品質チェック
 """
 
-import json
 import sys
 from datetime import datetime
 
@@ -52,7 +51,7 @@ def test_monitoring_system():
 
         monitor = MonitoringSystem()
         status = monitor.get_status()
-        print(f"   ✓ 設定読み込み: OK")
+        print("   ✓ 設定読み込み: OK")
         print(f'   ✓ 監視間隔: {status["config"]["monitoring_interval"]}秒')
         print(
             f'   ✓ 緊急モード: {"有効" if status["config"]["emergency_mode"]["enabled"] else "無効"}'
@@ -70,7 +69,7 @@ def test_dashboard():
         # IPv6/IPv4解決差異による接続拒否を避けるため、明示的にIPv4ループバックを使用
         response = requests.get("http://127.0.0.1:5000", timeout=5)
         print(f"   ✓ 接続: HTTP {response.status_code}")
-        print(f"   ✓ URL: http://127.0.0.1:5000")
+        print("   ✓ URL: http://127.0.0.1:5000")
         return True
     except Exception as e:
         print(f"   ⚠ ダッシュボード未起動または接続エラー: {e}")
@@ -94,14 +93,14 @@ def test_data_generation():
         count = cursor.fetchone()[0]
         conn.close()
 
-        print(f"   ✓ データベース接続: OK")
+        print("   ✓ データベース接続: OK")
         print(f"   ✓ 生成済みデータ: {count}件")
 
         if count >= 100:
-            print(f"   ✓ 十分なデータ量: 学習可能")
+            print("   ✓ 十分なデータ量: 学習可能")
             return True
         else:
-            print(f"   ⚠ データ不足: 追加生成推奨")
+            print("   ⚠ データ不足: 追加生成推奨")
             return False
 
     except Exception as e:

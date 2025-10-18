@@ -10,7 +10,6 @@ import logging
 import os
 import statistics
 import time
-from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -18,6 +17,12 @@ from typing import Any, Dict, List
 
 import aiohttp
 import pytest
+
+# Skip SSE load tests in CI or constrained environments
+pytestmark = pytest.mark.skipif(
+    os.getenv("SKIP_LOADTEST") == "1",
+    reason="Load tests skipped in CI via SKIP_LOADTEST=1",
+)
 
 logger = logging.getLogger(__name__)
 
@@ -260,7 +265,10 @@ def load_monitoring_config():
 
 
 async def precheck_sse(
-    session: aiohttp.ClientSession, base_url: str, event_endpoint: str, timeout_sec: int = 3
+    session: aiohttp.ClientSession,
+    base_url: str,
+    event_endpoint: str,
+    timeout_sec: int = 3,
 ):
     """SSEエンドポイントの事前到達チェック。200を返せばOK、それ以外は除外。"""
     try:
@@ -367,7 +375,7 @@ class TestSSELoad:
         ), f"Error rate should be < 5%, got {analysis['error_rate']:.2%}"
         assert (
             analysis["message_metrics"]["avg_messages_per_connection"] > 10
-        ), f"Should receive > 10 messages per connection on average"
+        ), "Should receive > 10 messages per connection on average"
 
         # Log results for debugging
         logger.info(f"100 connections test results: {json.dumps(analysis, indent=2)}")
@@ -518,7 +526,7 @@ class TestSSELoad:
         ), f"Long-running success rate should be >= 90%, got {analysis['success_rate']:.2%}"
         assert (
             analysis["message_metrics"]["avg_messages_per_connection"] > 50
-        ), f"Should receive > 50 messages per connection over 2 minutes"
+        ), "Should receive > 50 messages per connection over 2 minutes"
 
         # Latency should remain stable over time
         assert (
@@ -644,7 +652,8 @@ if __name__ == "__main__":
             ]
         else:
             targets = cfg.get(
-                "sse_targets", [{"base_url": "http://127.0.0.1:5000", "event_endpoint": "/events"}]
+                "sse_targets",
+                [{"base_url": "http://127.0.0.1:5000", "event_endpoint": "/events"}],
             )
 
         concurrency = int(os.environ.get("SSE_CONCURRENCY", "100"))
@@ -653,7 +662,11 @@ if __name__ == "__main__":
         # セッション共通設定
         connector = aiohttp.TCPConnector(limit=concurrency)
         timeout = aiohttp.ClientTimeout(total=8, sock_connect=3, sock_read=5)
-        headers = {"Cache-Control": "no-cache", "Pragma": "no-cache", "Connection": "keep-alive"}
+        headers = {
+            "Cache-Control": "no-cache",
+            "Pragma": "no-cache",
+            "Connection": "keep-alive",
+        }
 
         combined_metrics: List[SSEMetrics] = []
         async with aiohttp.ClientSession(

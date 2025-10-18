@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Preview Rewrite Extended Fixture</title>
+  <!-- preload/modulepreload/icon -->
+  <link rel="preload" href="/static/assets/app.css" as="style">
+  <link rel="modulepreload" href="/static/assets/app.mjs" crossorigin="anonymous">
+  <link rel="icon" href="/static/images/favicon.ico">
+  <!-- 追加フィクスチャ: 単一引用と無引用属性 -->
+  <link rel="stylesheet" href='/static/a.css'>
+  <script src=/static/a.js></script>
+  <!-- script module with integrity/crossorigin -->
+  <script type="module" src="/static/assets/app.mjs" integrity="sha256-abc" crossorigin="anonymous"></script>
+  <!-- CSS with url() and @import -->
+  <style>
+    @import url('/static/assets/imp.css');
+    @import url('./assets/imp.css');
+    .icon { background-image: url('./images/logo.png'); }
+    /* SVG fragment reference should stay intact */
+    .svgref { background: url(#marker); }
+  </style>
+  <!-- meta refresh with quotes -->
+  <meta http-equiv="refresh" content="0;url='/static/next.html'">
+  <!-- 追加フィクスチャ: script内のurl()は不変であること -->
+  <script>const s="url(/x.png)"</script>
+</head>
+<body>
+  <h1>Rewrite Fixture</h1>
+  <!-- iframe/object/embed -->
+  <iframe src="/static/frame/page.html"></iframe>
+  <!-- NOTE: PDF フィクスチャは 404 ノイズ回避のため一時停止。必要時にのみ有効化する。
+  <object data="/static/obj/doc.pdf"></object>
+  -->
+  <embed src="/static/media/sample.mp4">
+  <!-- form action -->
+  <form action="/static/submit" method="post"><input type="text" name="q"><button>送信</button></form>
+  <!-- exceptions: fragment links should remain -->
+  <a href="#section">Jump</a>
+  <!-- svg use with fragment -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <symbol id="marker"><circle cx="5" cy="5" r="5"/></symbol>
+    </defs>
+  </svg>
+  <svg width="10" height="10">
+    <use href="#marker" />
+  </svg>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "patch.test",
+  "type": "object",
+  "properties": {
+    "diff_id": { "type": "string" },
+    "gates": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["html", "a11y", "perf", "visual"] },
+      "minItems": 1
+    }
+  },
+  "required": ["diff_id", "gates"],
+  "additionalProperties": false
+}

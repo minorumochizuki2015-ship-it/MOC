@@ -1,0 +1,81 @@
+{
+  "timestamp": "2025-10-12T12:28:28.149351",
+  "flask_optimizations": [
+    {
+      "type": "response_caching",
+      "description": "レスポンスキャッシュの実装",
+      "impact": "high",
+      "code": "\nfrom flask_caching import Cache\n\ncache = Cache()\ncache.init_app(app, config={'CACHE_TYPE': 'simple'})\n\n@app.route('/api/status')\n@cache.cached(timeout=60)  # 60秒キャッシュ\ndef api_status():\n    # 既存のコード\n"
+    },
+    {
+      "type": "gzip_compression",
+      "description": "Gzip圧縮の有効化",
+      "impact": "medium",
+      "code": "\nfrom flask_compress import Compress\n\nCompress(app)\n"
+    },
+    {
+      "type": "static_file_optimization",
+      "description": "静的ファイルの最適化",
+      "impact": "medium",
+      "implementation": "CDN使用、ファイル圧縮、キャッシュヘッダー設定"
+    },
+    {
+      "type": "async_processing",
+      "description": "非同期処理の実装",
+      "impact": "high",
+      "code": "\nfrom concurrent.futures import ThreadPoolExecutor\nimport asyncio\n\nexecutor = ThreadPoolExecutor(max_workers=4)\n\n@app.route('/api/heavy-task')\ndef heavy_task():\n    future = executor.submit(process_heavy_task)\n    return jsonify({'task_id': 'async_task_id'})\n"
+    }
+  ],
+  "database_optimizations": [
+    {
+      "type": "connection_pooling",
+      "description": "データベース接続プールの実装",
+      "impact": "high",
+      "implementation": "SQLAlchemy connection poolingの使用"
+    },
+    {
+      "type": "query_caching",
+      "description": "クエリ結果のキャッシュ",
+      "impact": "medium",
+      "implementation": "Redis/Memcachedによるクエリキャッシュ"
+    },
+    {
+      "type": "index_optimization",
+      "description": "データベースインデックスの最適化",
+      "impact": "high",
+      "implementation": "頻繁にクエリされるカラムにインデックス追加"
+    },
+    {
+      "type": "batch_operations",
+      "description": "バッチ操作の実装",
+      "impact": "medium",
+      "implementation": "複数のINSERT/UPDATEをバッチで実行"
+    }
+  ],
+  "memory_optimizations": [
+    {
+      "type": "object_pooling",
+      "description": "オブジェクトプールの実装",
+      "impact": "medium",
+      "implementation": "頻繁に作成/破棄されるオブジェクトのプール化"
+    },
+    {
+      "type": "garbage_collection",
+      "description": "ガベージコレクション最適化",
+      "impact": "low",
+      "code": "\nimport gc\n\n# 定期的なガベージコレクション\ngc.collect()\ngc.set_threshold(700, 10, 10)  # デフォルトより頻繁に実行\n"
+    },
+    {
+      "type": "memory_profiling",
+      "description": "メモリプロファイリングの実装",
+      "impact": "low",
+      "code": "\nimport tracemalloc\n\ntracemalloc.start()\n# アプリケーション実行\ncurrent, peak = tracemalloc.get_traced_memory()\ntracemalloc.stop()\n"
+    }
+  ],
+  "summary": {
+    "total_suggestions": 11,
+    "high_impact": 4,
+    "medium_impact": 5,
+    "low_impact": 2
+  }
+}

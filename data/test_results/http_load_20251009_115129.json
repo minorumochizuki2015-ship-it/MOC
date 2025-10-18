@@ -1,0 +1,19 @@
+{
+  "summary": {
+    "total_requests": 7168,
+    "success_rate": 1.0,
+    "latency_mean_ms": 419.5015345982143,
+    "latency_p95_ms": 480.0,
+    "latency_max_ms": 590,
+    "per_endpoint": {
+      "/": {
+        "requests": 7168,
+        "success_rate": 1.0,
+        "latency_mean_ms": 419.5015345982143,
+        "latency_p95_ms": 480.0,
+        "latency_max_ms": 590
+      }
+    }
+  },
+  "raw_count": 7168
+}

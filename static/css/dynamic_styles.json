@@ -1,0 +1,10 @@
+{
+  "table_text_color": "#ffffff",
+  "table_bg_color": "rgba(255,255,255,0.03)",
+  "table_header_color": "#ffffff",
+  "table_header_bg": "rgba(255,255,255,0.08)",
+  "button_text_color": "#ffffff",
+  "nav_text_color": "#d8e1ff",
+  "accent_color": "rgba(0, 234, 255, 1)",
+  "muted_text_color": "#8aa0c8"
+}

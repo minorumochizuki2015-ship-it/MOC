@@ -1,0 +1,18 @@
+{
+  "alerts": [
+    {
+      "id": "ALERT-001",
+      "timestamp": "2025-10-09T03:22:00Z",
+      "level": "warning",
+      "category": "system",
+      "title": "High CPU Usage",
+      "message": "CPU usage exceeded 85% for 2 minutes",
+      "source": "monitoring",
+      "acknowledged": false,
+      "auto_resolved": false
+    }
+  ],
+  "total_count": 1,
+  "active_count": 1,
+  "timestamp": "2025-10-09T03:22:30Z"
+}

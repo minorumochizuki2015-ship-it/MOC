@@ -13,6 +13,10 @@
   - `MAX_WAIT_SEC`
   - `SUCCESS_REQUIRED`
 
+### 既定エンドポイント
+- Windows（Waitress/NSSM）運用の既定 Base URL は `http://127.0.0.1:5001`
+- `HEALTHCHECK_URL` を未指定の場合はこの既定を採用する運用ルールとします（CI/運用ドキュメントに準拠）。
+
 ## 使用例
 ```powershell
 pwsh scripts/ops/deploy.ps1 -Env staging

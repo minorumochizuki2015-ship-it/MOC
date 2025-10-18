@@ -1,0 +1,15 @@
+HTTP/1.1 200 OK
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: Content-Type, Authorization, X-Style-Base-Url
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+Access-Control-Allow-Origin: http://127.0.0.1:5000
+Access-Control-Expose-Headers: X-Preview-Origin, X-Preview-Target, X-Upstream-Status, X-Disable-ServiceWorker, X-Preview-Same-Origin, ETag
+Cache-Control: private, max-age=0, must-revalidate
+Content-Length: 285
+Content-Type: application/json; charset=utf-8
+Date: Fri, 17 Oct 2025 14:52:29 GMT
+Etag: "63ed71de02fe40ec5951ca0f1483818abac344219c35962268cfb06f1730fe44"
+Server: waitress
+Vary: Origin
+X-Source: dashboard
+

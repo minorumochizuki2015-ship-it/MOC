@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 BASE = Path("data/validation/benchmarks/trae_credit_bench_20251009")
