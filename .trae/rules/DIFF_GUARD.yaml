@@ -1,0 +1,33 @@
+# Diff Governance Guard (DIFF_GUARD)
+name: DIFF_GUARD
+version: 1
+
+# Minimal guard configuration. This file intentionally keeps scope small to adhere to micro-patch guidelines.
+# Documentation: emergency hotfix procedure
+# See: ./docs/operations.md#emergency-hotfix
+
+description: "Minimal guard that documents emergency hotfix and standard gates."
+
+documentation:
+  emergency_hotfix: "./docs/operations.md#emergency-hotfix"
+
+gates:
+  - id: compare-gate
+    required: true
+    notes: "Verify only files changed; prefer minimal unified diff in PRs."
+  - id: eol-check
+    required: true
+    notes: "LF normalization enforced; exceptions: *.bat may use CRLF."
+
+required_checks:
+  must:
+    - compare-gate
+    - eol-check
+
+policy:
+  change_budget_lines_max: 50
+  waive_allowed: true
+  waive_requirements:
+    approvals: 2
+    expires_days: 14
+    scope: "documentation-only changes"
