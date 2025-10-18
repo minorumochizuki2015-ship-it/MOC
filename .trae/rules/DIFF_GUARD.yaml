@@ -1,0 +1,11 @@
+name: DIFF_GUARD
+version: 1
+documentation: { emergency_hotfix: "./docs/operations.md#emergency-hotfix" }
+gates:
+  - { id: compare-gate, required: true }
+  - { id: eol-check, required: true }
+required_checks: { must: [compare-gate, eol-check] }
+policy:
+  change_budget_lines_max: 50
+  waive_allowed: true
+  waive_requirements: { approvals: 2, expires_days: 14, scope: "documentation-only changes" }
